@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { BookOpen, ArrowLeft, Crown } from "lucide-react";
+import { LanguageSelector } from "@/components/LanguageSelector";
 
 const History = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [summaries, setSummaries] = useState<any[]>([]);
   const [subscription, setSubscription] = useState<any>(null);
@@ -58,7 +61,7 @@ const History = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Carregando...</p>
+        <p>{t("history.loading")}</p>
       </div>
     );
   }
@@ -68,21 +71,22 @@ const History = () => {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Button variant="ghost" onClick={() => navigate("/")}>
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Voltar
+            {t("history.title").split(" ")[0]}
           </Button>
+          <LanguageSelector />
         </div>
       </header>
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold">Histórico de Resumos</h1>
+          <h1 className="text-3xl font-bold">{t("history.title")}</h1>
           {isFree && (
             <Button onClick={() => navigate("/plans")} size="sm">
               <Crown className="w-4 h-4 mr-2" />
-              Upgrade
+              {t("history.upgrade")}
             </Button>
           )}
         </div>
@@ -90,8 +94,7 @@ const History = () => {
         {isFree && (
           <Card className="p-4 mb-6 bg-muted">
             <p className="text-sm text-muted-foreground">
-              📌 Usuários Free podem ver apenas os últimos 3 resumos. Faça upgrade para
-              Premium e tenha histórico completo!
+              📌 {t("history.freeNotice")}
             </p>
           </Card>
         )}
@@ -99,11 +102,14 @@ const History = () => {
         {summaries.length === 0 ? (
           <Card className="p-12 text-center">
             <BookOpen className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-            <p className="text-muted-foreground">
-              Você ainda não gerou nenhum resumo.
+            <p className="text-muted-foreground mb-2">
+              {t("history.empty")}
             </p>
-            <Button onClick={() => navigate("/")} className="mt-4">
-              Gerar primeiro resumo
+            <p className="text-sm text-muted-foreground mb-4">
+              {t("history.emptyDesc")}
+            </p>
+            <Button onClick={() => navigate("/")}>
+              {t("history.generateFirst")}
             </Button>
           </Card>
         ) : (
@@ -128,7 +134,7 @@ const History = () => {
                       </p>
                     )}
                     <p className="text-xs text-muted-foreground">
-                      {new Date(summary.created_at).toLocaleDateString("pt-BR")}
+                      {new Date(summary.created_at).toLocaleDateString()}
                     </p>
                   </div>
                   <Button variant="outline" size="sm">

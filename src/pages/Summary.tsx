@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { BookOpen, Copy, Download, Share2, ArrowLeft } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { LanguageSelector } from "@/components/LanguageSelector";
 
 const Summary = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const [summary, setSummary] = useState<any>(null);
@@ -29,8 +32,8 @@ const Summary = () => {
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Erro",
-        description: "Não foi possível carregar o resumo",
+        title: t("toast.error"),
+        description: error.message,
       });
       navigate("/");
     } finally {
@@ -39,26 +42,21 @@ const Summary = () => {
   };
 
   const handleCopy = () => {
-    const text = `${summary.book_title}\n\n${summary.summary_text}\n\nPrincipais Ideias:\n${summary.main_ideas.join("\n")}\n\nAplicações Práticas:\n${summary.practical_applications}`;
+    const text = `${summary.book_title}\n\n${summary.summary_text}\n\n${t("summary.mainIdeas")}:\n${summary.main_ideas.join("\n")}\n\n${t("summary.practicalApplications")}:\n${summary.practical_applications}`;
     navigator.clipboard.writeText(text);
     toast({
-      title: "Copiado!",
-      description: "Resumo copiado para a área de transferência",
+      title: t("summary.copied"),
     });
   };
 
   const handleDownload = () => {
-    const text = `${summary.book_title}\n\n${summary.summary_text}\n\nPrincipais Ideias:\n${summary.main_ideas.join("\n")}\n\nAplicações Práticas:\n${summary.practical_applications}`;
+    const text = `${summary.book_title}\n\n${summary.summary_text}\n\n${t("summary.mainIdeas")}:\n${summary.main_ideas.join("\n")}\n\n${t("summary.practicalApplications")}:\n${summary.practical_applications}`;
     const blob = new Blob([text], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = `${summary.book_title}.txt`;
     a.click();
-    toast({
-      title: "Download iniciado!",
-      description: "Seu resumo está sendo baixado",
-    });
   };
 
   const handleShare = async () => {
@@ -67,6 +65,9 @@ const Summary = () => {
         await navigator.share({
           title: summary.book_title,
           text: summary.summary_text,
+        });
+        toast({
+          title: t("summary.shared"),
         });
       } catch (error) {
         console.log("Share cancelled");
@@ -79,7 +80,7 @@ const Summary = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Carregando...</p>
+        <p>{t("summary.loading")}</p>
       </div>
     );
   }
@@ -89,11 +90,12 @@ const Summary = () => {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Button variant="ghost" onClick={() => navigate("/")}>
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Voltar
+            {t("summary.back")}
           </Button>
+          <LanguageSelector />
         </div>
       </header>
 
@@ -113,14 +115,14 @@ const Summary = () => {
 
           <div className="space-y-6">
             <section>
-              <h2 className="text-xl font-semibold mb-3">Resumo Geral</h2>
+              <h2 className="text-xl font-semibold mb-3">{t("summary.mainIdeas").replace(":", "")}</h2>
               <p className="text-foreground leading-relaxed whitespace-pre-wrap">
                 {summary.summary_text}
               </p>
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold mb-3">Principais Ideias</h2>
+              <h2 className="text-xl font-semibold mb-3">{t("summary.mainIdeas")}</h2>
               <ul className="space-y-2">
                 {summary.main_ideas.map((idea: string, index: number) => (
                   <li key={index} className="flex gap-3">
@@ -132,7 +134,7 @@ const Summary = () => {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold mb-3">Aplicações Práticas</h2>
+              <h2 className="text-xl font-semibold mb-3">{t("summary.practicalApplications")}</h2>
               <p className="text-foreground leading-relaxed whitespace-pre-wrap">
                 {summary.practical_applications}
               </p>
@@ -142,15 +144,15 @@ const Summary = () => {
           <div className="flex gap-3 mt-8 pt-6 border-t border-border">
             <Button onClick={handleCopy} variant="outline" className="flex-1">
               <Copy className="w-4 h-4 mr-2" />
-              Copiar
+              {t("summary.copy")}
             </Button>
             <Button onClick={handleDownload} variant="outline" className="flex-1">
               <Download className="w-4 h-4 mr-2" />
-              Baixar PDF
+              {t("summary.download")}
             </Button>
             <Button onClick={handleShare} variant="outline" className="flex-1">
               <Share2 className="w-4 h-4 mr-2" />
-              Compartilhar
+              {t("summary.share")}
             </Button>
           </div>
         </Card>

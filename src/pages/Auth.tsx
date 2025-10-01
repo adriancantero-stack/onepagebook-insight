@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,8 +8,10 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { BookOpen } from "lucide-react";
+import { LanguageSelector } from "@/components/LanguageSelector";
 
 const Auth = () => {
+  const { t } = useTranslation();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,8 +41,7 @@ const Auth = () => {
         if (error) throw error;
         
         toast({
-          title: "Login realizado!",
-          description: "Bem-vindo de volta.",
+          title: t("toast.success"),
         });
         navigate("/");
       } else {
@@ -57,15 +59,14 @@ const Auth = () => {
         if (error) throw error;
 
         toast({
-          title: "Conta criada!",
-          description: "Você já pode começar a usar o app.",
+          title: t("toast.success"),
         });
         navigate("/");
       }
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Erro",
+        title: t("toast.error"),
         description: error.message,
       });
     } finally {
@@ -75,6 +76,10 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <div className="absolute top-4 right-4">
+        <LanguageSelector />
+      </div>
+      
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
@@ -84,14 +89,14 @@ const Auth = () => {
           </div>
           <CardTitle className="text-2xl">Livro em 1 Página</CardTitle>
           <CardDescription>
-            {isLogin ? "Entre na sua conta" : "Crie sua conta grátis"}
+            {t("auth.subtitle")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleAuth} className="space-y-4">
             {!isLogin && (
               <div className="space-y-2">
-                <Label htmlFor="fullName">Nome completo</Label>
+                <Label htmlFor="fullName">{t("auth.fullName")}</Label>
                 <Input
                   id="fullName"
                   type="text"
@@ -102,7 +107,7 @@ const Auth = () => {
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t("auth.email")}</Label>
               <Input
                 id="email"
                 type="email"
@@ -112,7 +117,7 @@ const Auth = () => {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Senha</Label>
+              <Label htmlFor="password">{t("auth.password")}</Label>
               <Input
                 id="password"
                 type="password"
@@ -123,7 +128,7 @@ const Auth = () => {
               />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Aguarde..." : isLogin ? "Entrar" : "Criar conta"}
+              {loading ? t("auth.loading") : isLogin ? t("auth.loginButton") : t("auth.signupButton")}
             </Button>
           </form>
           <div className="mt-4 text-center text-sm">
@@ -132,9 +137,7 @@ const Auth = () => {
               onClick={() => setIsLogin(!isLogin)}
               className="text-primary hover:underline"
             >
-              {isLogin
-                ? "Não tem conta? Cadastre-se"
-                : "Já tem conta? Entre"}
+              {isLogin ? t("auth.switchToSignup") : t("auth.switchToLogin")}
             </button>
           </div>
         </CardContent>

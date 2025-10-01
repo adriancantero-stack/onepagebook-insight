@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { BookOpen, History, Crown, LogOut, Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { LanguageSelector } from "@/components/LanguageSelector";
 
 const Home = () => {
+  const { t, i18n } = useTranslation();
   const [user, setUser] = useState<any>(null);
   const [bookTitle, setBookTitle] = useState("");
   const [bookAuthor, setBookAuthor] = useState("");
@@ -38,8 +41,8 @@ const Home = () => {
     if (!bookTitle.trim()) {
       toast({
         variant: "destructive",
-        title: "Erro",
-        description: "Digite o título do livro",
+        title: t("toast.error"),
+        description: t("toast.bookTitleRequired"),
       });
       return;
     }
@@ -65,8 +68,8 @@ const Home = () => {
       if (plan?.type === "free" && summaries && summaries.length >= 3) {
         toast({
           variant: "destructive",
-          title: "Limite atingido",
-          description: "Você já gerou 3 resumos. Faça upgrade para Premium!",
+          title: t("toast.usageLimitReached"),
+          description: t("toast.upgradePrompt"),
         });
         setLoading(false);
         return;
@@ -77,21 +80,22 @@ const Home = () => {
         body: {
           bookTitle,
           bookAuthor,
+          language: i18n.language,
         },
       });
 
       if (error) throw error;
 
       toast({
-        title: "Resumo gerado!",
-        description: "Seu resumo está pronto.",
+        title: t("toast.success"),
+        description: t("toast.summaryGenerated"),
       });
 
       navigate(`/summary/${data.summaryId}`);
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Erro",
+        title: t("toast.error"),
         description: error.message,
       });
     } finally {
@@ -101,6 +105,9 @@ const Home = () => {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
+    toast({
+      title: t("toast.logoutSuccess"),
+    });
     navigate("/auth");
   };
 
@@ -115,13 +122,14 @@ const Home = () => {
             <h1 className="text-xl font-bold">Livro em 1 Página</h1>
           </div>
           <div className="flex items-center gap-2">
+            <LanguageSelector />
             <Button variant="ghost" size="sm" onClick={() => navigate("/history")}>
               <History className="w-4 h-4 mr-2" />
-              Histórico
+              {t("header.history")}
             </Button>
             <Button variant="ghost" size="sm" onClick={() => navigate("/plans")}>
               <Crown className="w-4 h-4 mr-2" />
-              Premium
+              {t("header.premium")}
             </Button>
             <Button variant="ghost" size="sm" onClick={handleLogout}>
               <LogOut className="w-4 h-4" />
@@ -133,10 +141,10 @@ const Home = () => {
       <main className="container mx-auto px-4 py-16">
         <div className="max-w-2xl mx-auto text-center mb-12">
           <h2 className="text-4xl font-bold mb-4">
-            Transforme qualquer livro em um resumo prático
+            {t("home.title")}
           </h2>
           <p className="text-muted-foreground text-lg">
-            Extraia as principais ideias e aplicações práticas em apenas 1 página
+            {t("home.subtitle")}
           </p>
         </div>
 
@@ -144,10 +152,10 @@ const Home = () => {
           <div className="space-y-6">
             <div>
               <label className="block text-sm font-medium mb-2">
-                Título do livro *
+                {t("home.bookTitle")} *
               </label>
               <Input
-                placeholder="Ex: Hábitos Atômicos"
+                placeholder={t("home.bookTitlePlaceholder")}
                 value={bookTitle}
                 onChange={(e) => setBookTitle(e.target.value)}
                 disabled={loading}
@@ -156,10 +164,10 @@ const Home = () => {
 
             <div>
               <label className="block text-sm font-medium mb-2">
-                Autor (opcional)
+                {t("home.bookAuthor")}
               </label>
               <Input
-                placeholder="Ex: James Clear"
+                placeholder={t("home.bookAuthorPlaceholder")}
                 value={bookAuthor}
                 onChange={(e) => setBookAuthor(e.target.value)}
                 disabled={loading}
@@ -174,15 +182,15 @@ const Home = () => {
               {loading ? (
                 <>
                   <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Gerando resumo...
+                  {t("home.generating")}
                 </>
               ) : (
-                "Gerar Resumo em 1 Página"
+                t("home.generateButton")
               )}
             </Button>
 
             <p className="text-xs text-center text-muted-foreground">
-              📌 Usuários Free: 3 resumos/mês • Premium: ilimitado
+              📌 {t("home.freeLimit")} • {t("home.premiumUnlimited")}
             </p>
           </div>
         </Card>

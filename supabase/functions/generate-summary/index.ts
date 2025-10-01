@@ -26,23 +26,14 @@ serve(async (req) => {
       throw new Error("Não autenticado");
     }
 
-    const { bookTitle, bookAuthor } = await req.json();
+    const { bookTitle, bookAuthor, language = "pt" } = await req.json();
 
-    console.log("Generating summary for:", bookTitle, bookAuthor);
+    console.log("Generating summary for:", bookTitle, bookAuthor, "in", language);
 
-    // Generate summary using Lovable AI
-    const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${lovableApiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: [
-          {
-            role: "system",
-            content: `Você é um especialista em resumir livros de forma simples e acessível. 
+    // Language-specific prompts
+    const prompts: Record<string, { system: string; user: string }> = {
+      pt: {
+        system: `Você é um especialista em resumir livros de forma simples e acessível. 
 
 REGRAS DE LINGUAGEM:
 - Use linguagem coloquial e simples, como se estivesse conversando com um amigo
@@ -58,10 +49,67 @@ Sempre responda no formato JSON:
   "mainIdeas": ["Ideia 1 explicada de forma simples", "Ideia 2 explicada de forma simples", "Ideia 3", "Ideia 4", "Ideia 5"],
   "practicalApplications": "Como aplicar as ideias no dia a dia (2-3 parágrafos). Use exemplos concretos e situações cotidianas que qualquer pessoa vive."
 }`,
+        user: `Crie um resumo prático do livro "${bookTitle}"${bookAuthor ? ` de ${bookAuthor}` : ""}.`
+      },
+      en: {
+        system: `You are an expert at summarizing books in a simple and accessible way.
+
+LANGUAGE RULES:
+- Use simple, conversational English, as if talking to a friend
+- AVOID technical jargon, academic terms, and difficult words
+- Explain complex concepts using everyday analogies
+- Use practical examples that anyone can understand
+- Write directly and objectively
+- Prefer short, clear sentences
+
+Always respond in JSON format:
+{
+  "summary": "General book summary in 2-3 paragraphs (400-600 words). Use simple, conversational language.",
+  "mainIdeas": ["Idea 1 explained simply", "Idea 2 explained simply", "Idea 3", "Idea 4", "Idea 5"],
+  "practicalApplications": "How to apply the ideas in daily life (2-3 paragraphs). Use concrete examples and everyday situations that anyone experiences."
+}`,
+        user: `Create a practical summary of the book "${bookTitle}"${bookAuthor ? ` by ${bookAuthor}` : ""}.`
+      },
+      es: {
+        system: `Eres un experto en resumir libros de forma simple y accesible.
+
+REGLAS DE LENGUAJE:
+- Usa lenguaje coloquial y simple, como si hablaras con un amigo
+- EVITA jerga técnica, términos académicos y palabras difíciles
+- Explica conceptos complejos usando analogías cotidianas
+- Usa ejemplos prácticos que cualquiera pueda entender
+- Escribe de forma directa y objetiva
+- Prefiere frases cortas y claras
+
+Siempre responde en formato JSON:
+{
+  "summary": "Resumen general del libro en 2-3 párrafos (400-600 palabras). Usa lenguaje simple y conversacional.",
+  "mainIdeas": ["Idea 1 explicada de forma simple", "Idea 2 explicada de forma simple", "Idea 3", "Idea 4", "Idea 5"],
+  "practicalApplications": "Cómo aplicar las ideas en el día a día (2-3 párrafos). Usa ejemplos concretos y situaciones cotidianas que cualquier persona vive."
+}`,
+        user: `Crea un resumen práctico del libro "${bookTitle}"${bookAuthor ? ` de ${bookAuthor}` : ""}.`
+      }
+    };
+
+    const prompt = prompts[language] || prompts.pt;
+
+    // Generate summary using Lovable AI
+    const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${lovableApiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-flash",
+        messages: [
+          {
+            role: "system",
+            content: prompt.system,
           },
           {
             role: "user",
-            content: `Crie um resumo prático do livro "${bookTitle}"${bookAuthor ? ` de ${bookAuthor}` : ""}.`,
+            content: prompt.user,
           },
         ],
       }),
@@ -94,6 +142,7 @@ Sempre responda no formato JSON:
         summary_text: summaryData.summary,
         main_ideas: summaryData.mainIdeas,
         practical_applications: summaryData.practicalApplications,
+        language: language,
       })
       .select()
       .single();
