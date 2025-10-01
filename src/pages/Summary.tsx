@@ -16,7 +16,7 @@ const Summary = () => {
   const [summary, setSummary] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
-  const [audioSrc, setAudioSrc] = useState<string | null>(null);
+  const [audioSrc, setAudioSrc] = useState<string | string[] | null>(null);
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
 
   useEffect(() => {
@@ -132,33 +132,53 @@ const Summary = () => {
 
       if (error) {
         console.error('Error generating audio:', error);
-        throw error;
+        throw new Error(error.message || 'Failed to generate audio');
       }
 
-      if (!data?.audioContent) {
-        throw new Error('No audio content received');
+      // Handle both new format (audioChunks) and old format (audioContent)
+      if (data?.audioChunks && Array.isArray(data.audioChunks)) {
+        // New chunked format
+        console.log(`Received ${data.audioChunks.length} audio chunks`);
+        
+        const audioUrls = data.audioChunks.map((chunk: string) => {
+          const audioBlob = new Blob(
+            [Uint8Array.from(atob(chunk), c => c.charCodeAt(0))],
+            { type: data.mimeType || 'audio/mpeg' }
+          );
+          return URL.createObjectURL(audioBlob);
+        });
+        
+        setAudioSrc(audioUrls);
+        setShowAudioPlayer(true);
+
+        toast({
+          title: "Áudio gerado!",
+          description: `Resumo dividido em ${audioUrls.length} parte(s).`,
+        });
+      } else if (data?.audioContent) {
+        // Old single audio format (backward compatibility)
+        const audioBlob = new Blob(
+          [Uint8Array.from(atob(data.audioContent), c => c.charCodeAt(0))],
+          { type: 'audio/mpeg' }
+        );
+        const audioUrl = URL.createObjectURL(audioBlob);
+        
+        setAudioSrc(audioUrl);
+        setShowAudioPlayer(true);
+
+        toast({
+          title: "Áudio gerado!",
+          description: "Você pode ouvir o resumo agora.",
+        });
+      } else {
+        throw new Error('No audio content received from server');
       }
-
-      // Convert base64 to audio URL
-      const audioBlob = new Blob(
-        [Uint8Array.from(atob(data.audioContent), c => c.charCodeAt(0))],
-        { type: 'audio/mpeg' }
-      );
-      const audioUrl = URL.createObjectURL(audioBlob);
-      
-      setAudioSrc(audioUrl);
-      setShowAudioPlayer(true);
-
-      toast({
-        title: "Áudio gerado!",
-        description: "Você pode ouvir o resumo agora.",
-      });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error generating audio:', error);
       toast({
         variant: "destructive",
-        title: "Erro",
-        description: "Não foi possível gerar o áudio. Tente novamente.",
+        title: "Erro ao gerar áudio",
+        description: error.message || "Não foi possível gerar o áudio. Tente novamente.",
       });
     } finally {
       setIsGeneratingAudio(false);

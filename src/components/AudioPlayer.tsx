@@ -4,7 +4,7 @@ import { Play, Pause, Square, Volume2 } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 
 interface AudioPlayerProps {
-  audioSrc: string;
+  audioSrc: string | string[];
   onEnded?: () => void;
 }
 
@@ -14,6 +14,10 @@ const AudioPlayer = ({ audioSrc, onEnded }: AudioPlayerProps) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+
+  const playlist = Array.isArray(audioSrc) ? audioSrc : [audioSrc];
+  const currentAudioSrc = playlist[currentTrackIndex];
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -22,9 +26,21 @@ const AudioPlayer = ({ audioSrc, onEnded }: AudioPlayerProps) => {
     const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
     const handleDurationChange = () => setDuration(audio.duration);
     const handleEnded = () => {
-      setIsPlaying(false);
-      setCurrentTime(0);
-      if (onEnded) onEnded();
+      // Check if there are more tracks in the playlist
+      if (currentTrackIndex < playlist.length - 1) {
+        setCurrentTrackIndex(currentTrackIndex + 1);
+        setCurrentTime(0);
+        // Keep playing if we were playing
+        if (isPlaying && audio) {
+          setTimeout(() => audio.play(), 100);
+        }
+      } else {
+        // End of playlist
+        setIsPlaying(false);
+        setCurrentTime(0);
+        setCurrentTrackIndex(0);
+        if (onEnded) onEnded();
+      }
     };
 
     audio.addEventListener('timeupdate', handleTimeUpdate);
@@ -90,7 +106,13 @@ const AudioPlayer = ({ audioSrc, onEnded }: AudioPlayerProps) => {
 
   return (
     <div className="w-full bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-      <audio ref={audioRef} src={audioSrc} />
+      <audio ref={audioRef} src={currentAudioSrc} key={currentTrackIndex} />
+      
+      {playlist.length > 1 && (
+        <div className="text-sm text-muted-foreground mb-2">
+          Parte {currentTrackIndex + 1} de {playlist.length}
+        </div>
+      )}
       
       <div className="flex items-center gap-4 mb-4">
         <Button
