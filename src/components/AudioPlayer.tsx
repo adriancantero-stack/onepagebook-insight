@@ -19,23 +19,53 @@ const AudioPlayer = ({ audioSrc, onEnded }: AudioPlayerProps) => {
   const playlist = Array.isArray(audioSrc) ? audioSrc : [audioSrc];
   const currentAudioSrc = playlist[currentTrackIndex];
 
+  // Reset state when audioSrc changes (new summary loaded)
+  useEffect(() => {
+    setCurrentTrackIndex(0);
+    setCurrentTime(0);
+    setDuration(0);
+    setIsPlaying(false);
+  }, [audioSrc]);
+
+  // Auto-play next track when currentTrackIndex changes
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || currentTrackIndex === 0) return;
+
+    // Small delay to ensure audio element is ready
+    const timer = setTimeout(() => {
+      if (isPlaying) {
+        audio.play().catch(err => console.error('Autoplay failed:', err));
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [currentTrackIndex, isPlaying]);
+
+  // Setup audio event listeners
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
-    const handleDurationChange = () => setDuration(audio.duration);
+    const handleTimeUpdate = () => {
+      if (audio) setCurrentTime(audio.currentTime);
+    };
+
+    const handleDurationChange = () => {
+      if (audio) setDuration(audio.duration);
+    };
+
     const handleEnded = () => {
+      console.log(`Track ${currentTrackIndex + 1} of ${playlist.length} ended`);
+      
       // Check if there are more tracks in the playlist
       if (currentTrackIndex < playlist.length - 1) {
-        setCurrentTrackIndex(currentTrackIndex + 1);
+        console.log(`Moving to track ${currentTrackIndex + 2}`);
+        setCurrentTrackIndex(prev => prev + 1);
         setCurrentTime(0);
-        // Keep playing if we were playing
-        if (isPlaying && audio) {
-          setTimeout(() => audio.play(), 100);
-        }
       } else {
         // End of playlist
+        console.log('Playlist ended');
         setIsPlaying(false);
         setCurrentTime(0);
         setCurrentTrackIndex(0);
@@ -52,7 +82,7 @@ const AudioPlayer = ({ audioSrc, onEnded }: AudioPlayerProps) => {
       audio.removeEventListener('loadedmetadata', handleDurationChange);
       audio.removeEventListener('ended', handleEnded);
     };
-  }, [onEnded]);
+  }, [currentTrackIndex, playlist.length, onEnded]);
 
   const togglePlay = () => {
     const audio = audioRef.current;
