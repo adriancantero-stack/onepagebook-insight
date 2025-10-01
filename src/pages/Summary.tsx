@@ -4,9 +4,10 @@ import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { BookOpen, Copy, Download, Share2, ArrowLeft } from "lucide-react";
+import { BookOpen, Copy, Download, Share2, ArrowLeft, Volume2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import AudioPlayer from "@/components/AudioPlayer";
 
 const Summary = () => {
   const { t } = useTranslation();
@@ -14,6 +15,9 @@ const Summary = () => {
   const navigate = useNavigate();
   const [summary, setSummary] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
+  const [audioSrc, setAudioSrc] = useState<string | null>(null);
+  const [showAudioPlayer, setShowAudioPlayer] = useState(false);
 
   useEffect(() => {
     loadSummary();
@@ -77,6 +81,90 @@ const Summary = () => {
     }
   };
 
+  const detectLanguage = (text: string): string => {
+    // Simple language detection based on common words
+    const portugueseWords = ['resumo', 'ideias', 'aplicações', 'principais', 'práticas', 'por'];
+    const englishWords = ['summary', 'ideas', 'applications', 'main', 'practical', 'by'];
+    const spanishWords = ['resumen', 'ideas', 'aplicaciones', 'principales', 'prácticas', 'por'];
+    
+    const lowerText = text.toLowerCase();
+    
+    const ptCount = portugueseWords.filter(word => lowerText.includes(word)).length;
+    const enCount = englishWords.filter(word => lowerText.includes(word)).length;
+    const esCount = spanishWords.filter(word => lowerText.includes(word)).length;
+    
+    if (ptCount >= enCount && ptCount >= esCount) return 'pt';
+    if (esCount >= enCount) return 'es';
+    return 'en';
+  };
+
+  const handleListenSummary = async () => {
+    if (!summary || isGeneratingAudio) return;
+
+    try {
+      setIsGeneratingAudio(true);
+      
+      // Combine all text content
+      const fullText = `
+        ${summary.book_title} por ${summary.book_author || 'autor desconhecido'}.
+        
+        ${summary.summary_text}
+        
+        Ideias Principais:
+        ${summary.main_ideas.join('. ')}
+        
+        Aplicações Práticas:
+        ${summary.practical_applications}
+      `.trim();
+
+      // Detect language
+      const language = detectLanguage(fullText);
+      
+      console.log('Generating audio for language:', language);
+
+      // Call edge function to generate audio
+      const { data, error } = await supabase.functions.invoke('text-to-speech', {
+        body: { 
+          text: fullText,
+          language: language
+        }
+      });
+
+      if (error) {
+        console.error('Error generating audio:', error);
+        throw error;
+      }
+
+      if (!data?.audioContent) {
+        throw new Error('No audio content received');
+      }
+
+      // Convert base64 to audio URL
+      const audioBlob = new Blob(
+        [Uint8Array.from(atob(data.audioContent), c => c.charCodeAt(0))],
+        { type: 'audio/mpeg' }
+      );
+      const audioUrl = URL.createObjectURL(audioBlob);
+      
+      setAudioSrc(audioUrl);
+      setShowAudioPlayer(true);
+
+      toast({
+        title: "Áudio gerado!",
+        description: "Você pode ouvir o resumo agora.",
+      });
+    } catch (error) {
+      console.error('Error generating audio:', error);
+      toast({
+        variant: "destructive",
+        title: "Erro",
+        description: "Não foi possível gerar o áudio. Tente novamente.",
+      });
+    } finally {
+      setIsGeneratingAudio(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -114,6 +202,18 @@ const Summary = () => {
           </div>
 
           <div className="space-y-6">
+            {showAudioPlayer && audioSrc && (
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold mb-3 text-foreground">
+                  🔊 Player de Áudio
+                </h3>
+                <AudioPlayer 
+                  audioSrc={audioSrc} 
+                  onEnded={() => console.log('Audio playback ended')}
+                />
+              </div>
+            )}
+
             <section>
               <h2 className="text-xl font-semibold mb-3">{t("summary.mainIdeas").replace(":", "")}</h2>
               <p className="text-foreground leading-relaxed whitespace-pre-wrap">
@@ -141,16 +241,24 @@ const Summary = () => {
             </section>
           </div>
 
-          <div className="flex gap-3 mt-8 pt-6 border-t border-border">
-            <Button onClick={handleCopy} variant="outline" className="flex-1">
+          <div className="flex gap-3 mt-8 pt-6 border-t border-border flex-wrap">
+            <Button 
+              onClick={handleListenSummary} 
+              disabled={isGeneratingAudio}
+              className="flex-1 min-w-[150px] bg-primary hover:bg-primary/90"
+            >
+              <Volume2 className="w-4 h-4 mr-2" />
+              {isGeneratingAudio ? "Gerando..." : "Escutar Resumo"}
+            </Button>
+            <Button onClick={handleCopy} variant="outline" className="flex-1 min-w-[150px]">
               <Copy className="w-4 h-4 mr-2" />
               {t("summary.copy")}
             </Button>
-            <Button onClick={handleDownload} variant="outline" className="flex-1">
+            <Button onClick={handleDownload} variant="outline" className="flex-1 min-w-[150px]">
               <Download className="w-4 h-4 mr-2" />
               {t("summary.download")}
             </Button>
-            <Button onClick={handleShare} variant="outline" className="flex-1">
+            <Button onClick={handleShare} variant="outline" className="flex-1 min-w-[150px]">
               <Share2 className="w-4 h-4 mr-2" />
               {t("summary.share")}
             </Button>
