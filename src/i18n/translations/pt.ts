@@ -61,6 +61,7 @@ export const pt = {
     "plans.basicSupport": "Suporte básico",
     "plans.prioritySupport": "Suporte prioritário",
     "plans.loading": "Carregando...",
+    "plans.perMonth": "mês",
     
     // Toasts
     "toast.error": "Erro",

@@ -7,10 +7,12 @@ import { Card } from "@/components/ui/card";
 import { Check, Crown, ArrowLeft } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import { usePricing } from "@/hooks/usePricing";
 
 const Plans = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const pricing = usePricing();
   const [currentPlan, setCurrentPlan] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -79,8 +81,8 @@ const Plans = () => {
             <div className="text-center mb-6">
               <h3 className="text-2xl font-bold mb-2">{t("plans.free")}</h3>
               <div className="text-4xl font-bold mb-4">
-                R$ 0
-                <span className="text-lg text-muted-foreground font-normal">/mês</span>
+                {pricing.free}
+                <span className="text-lg text-muted-foreground font-normal">/{t("plans.perMonth")}</span>
               </div>
             </div>
 
@@ -112,8 +114,8 @@ const Plans = () => {
             <div className="text-center mb-6">
               <h3 className="text-2xl font-bold mb-2">{t("plans.premium")}</h3>
               <div className="text-4xl font-bold mb-4">
-                R$ 9,99
-                <span className="text-lg text-muted-foreground font-normal">/mês</span>
+                {pricing.premium}
+                <span className="text-lg text-muted-foreground font-normal">/{t("plans.perMonth")}</span>
               </div>
             </div>
 
