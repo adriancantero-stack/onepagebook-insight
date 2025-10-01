@@ -20,6 +20,7 @@ export type Database = {
           book_title: string
           created_at: string
           id: string
+          language: string
           main_ideas: string[]
           practical_applications: string
           summary_text: string
@@ -30,6 +31,7 @@ export type Database = {
           book_title: string
           created_at?: string
           id?: string
+          language?: string
           main_ideas: string[]
           practical_applications: string
           summary_text: string
@@ -40,6 +42,7 @@ export type Database = {
           book_title?: string
           created_at?: string
           id?: string
+          language?: string
           main_ideas?: string[]
           practical_applications?: string
           summary_text?: string
@@ -61,6 +64,7 @@ export type Database = {
           email: string | null
           full_name: string | null
           id: string
+          preferred_language: string
           updated_at: string
         }
         Insert: {
@@ -68,6 +72,7 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id: string
+          preferred_language?: string
           updated_at?: string
         }
         Update: {
@@ -75,6 +80,7 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+          preferred_language?: string
           updated_at?: string
         }
         Relationships: []
