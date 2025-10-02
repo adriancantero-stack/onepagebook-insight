@@ -340,8 +340,8 @@ const Explore = () => {
             <span className="hidden sm:inline">Home</span>
           </Button>
           <div className="flex items-center gap-2 absolute left-1/2 transform -translate-x-1/2">
-            <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />
-            <h1 className="text-lg sm:text-xl font-bold">OnePageBook</h1>
+            <BookOpen className="w-6 h-6 text-primary" />
+            <h1 className="text-lg sm:text-xl font-bold text-foreground">OnePageBook</h1>
           </div>
           <LanguageSelector />
         </div>

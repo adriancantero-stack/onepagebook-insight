@@ -319,8 +319,8 @@ const Home = () => {
       <header className="border-b border-border">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between relative">
           <div className="flex items-center gap-2">
-            <BookOpen className="w-6 h-6" />
-            <h1 className="text-xl font-bold hidden sm:block">OnePageBook</h1>
+            <BookOpen className="w-6 h-6 text-primary" />
+            <h1 className="text-xl font-bold text-foreground hidden sm:block">OnePageBook</h1>
           </div>
           <div className="flex items-center gap-1 sm:gap-2">
             <Button variant="ghost" size="sm" onClick={() => navigate("/explore")} className="gap-1 sm:gap-2">

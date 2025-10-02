@@ -85,11 +85,11 @@ const Auth = () => {
         <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="p-3 bg-primary rounded-lg">
-              <BookOpen className="w-8 h-8 text-primary-foreground" />
+            <div className="flex items-center gap-2">
+              <BookOpen className="w-8 h-8 text-primary" />
+              <h1 className="text-2xl font-bold text-foreground">OnePageBook</h1>
             </div>
           </div>
-          <CardTitle className="text-2xl mb-2">OnePageBook</CardTitle>
           <p className="text-sm text-primary font-medium mb-3">{t("auth.tagline")}</p>
           <p className="text-base sm:text-lg text-foreground/80 mb-6 max-w-[60ch] mx-auto leading-relaxed">
             {t("hero.sub")}

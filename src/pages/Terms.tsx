@@ -146,7 +146,7 @@ const Terms = () => {
         <div className="flex justify-center mb-8">
           <div className="flex items-center gap-2">
             <BookOpen className="w-8 h-8 text-primary" />
-            <h1 className="text-2xl font-bold">OnePageBook</h1>
+            <h1 className="text-2xl font-bold text-foreground">OnePageBook</h1>
           </div>
         </div>
         <Card className="p-8">
