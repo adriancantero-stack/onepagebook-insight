@@ -161,6 +161,18 @@ const Home = () => {
       return;
     }
 
+    // Ensure user is authenticated
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      toast({
+        variant: "destructive",
+        title: t("toast.error"),
+        description: "Faça login para gerar um resumo.",
+      });
+      navigate("/auth");
+      return;
+    }
+
     setLoading(true);
     setGenState({ open: true, step: "resolve", message: "" });
 
@@ -201,6 +213,9 @@ const Home = () => {
           bookTitle,
           bookAuthor,
           language: i18n.language,
+        },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
         },
       });
 
