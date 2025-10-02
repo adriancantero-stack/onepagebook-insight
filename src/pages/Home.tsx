@@ -32,7 +32,6 @@ const Home = () => {
   const [bookAuthor, setBookAuthor] = useState("");
   const [loading, setLoading] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-  const [countdown, setCountdown] = useState(30);
   const [genState, setGenState] = useState<GenState>({
     open: false,
     step: "resolve",
@@ -40,6 +39,17 @@ const Home = () => {
   });
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Calculate progress percentage based on step
+  const getProgressPercentage = () => {
+    switch (genState.step) {
+      case "resolve": return 25;
+      case "summarize": return 50;
+      case "polish": return 75;
+      case "done": return 100;
+      default: return 0;
+    }
+  };
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -65,7 +75,6 @@ const Home = () => {
   useEffect(() => {
     if (genState.open) {
       document.body.style.overflow = "hidden";
-      setCountdown(30); // Reset countdown when overlay opens
     } else {
       document.body.style.overflow = "auto";
     }
@@ -73,17 +82,6 @@ const Home = () => {
       document.body.style.overflow = "auto";
     };
   }, [genState.open]);
-
-  // Countdown timer
-  useEffect(() => {
-    if (!genState.open || countdown <= 0) return;
-    
-    const timer = setInterval(() => {
-      setCountdown((prev) => Math.max(0, prev - 1));
-    }, 1000);
-    
-    return () => clearInterval(timer);
-  }, [genState.open, countdown]);
 
   // Load book data from Explore page navigation
   useEffect(() => {
@@ -216,9 +214,17 @@ const Home = () => {
         hidden={!genState.open}
       >
         <div className="gen-box">
-          <div className="gen-spinner" aria-hidden="true"></div>
-          <div className="gen-countdown">{countdown}s</div>
           <div className="gen-title">{t("gen.loading")}</div>
+          <div className="gen-progress-container">
+            <div className="gen-progress-track">
+              <div 
+                className="gen-progress-bar" 
+                style={{ width: `${getProgressPercentage()}%` }}
+                aria-hidden="true"
+              ></div>
+            </div>
+            <div className="gen-progress-percentage">{getProgressPercentage()}%</div>
+          </div>
           <ol className="gen-steps" role="list">
             <li className={isStep("resolve") ? "active" : ""}>
               {t("gen.step.resolve")}
