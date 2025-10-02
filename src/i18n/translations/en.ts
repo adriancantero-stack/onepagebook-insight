@@ -179,6 +179,7 @@ export const en = {
     "cats.education": "Learning & Education",
     "cats.bio": "Biographies & History",
     "cats.tech": "Technology & AI",
+    "cats.crypto": "Cryptocurrency & Blockchain",
     "header.explore": "Explore",
     
     // Footer
