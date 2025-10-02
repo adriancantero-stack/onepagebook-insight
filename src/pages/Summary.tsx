@@ -522,22 +522,22 @@ const Summary = () => {
             <Button 
               onClick={handleListenSummary} 
               disabled={isGeneratingAudio}
-              className="flex-1 min-w-[120px] sm:min-w-[150px] bg-primary hover:bg-primary/90 text-sm sm:text-base"
+              className="flex-1 min-w-[140px] sm:min-w-[160px] bg-primary hover:bg-primary/90 text-xs sm:text-sm px-3 sm:px-4"
             >
-              <Volume2 className="w-4 h-4 mr-1 sm:mr-2" />
-              {isGeneratingAudio ? t("summary.generating") : t("summary.listen")}
+              <Volume2 className="w-4 h-4 mr-1 sm:mr-2 shrink-0" />
+              <span className="truncate">{isGeneratingAudio ? t("summary.generating") : t("summary.listen")}</span>
             </Button>
-            <Button onClick={handleCopy} variant="outline" className="flex-1 min-w-[120px] sm:min-w-[150px] text-sm sm:text-base">
-              <Copy className="w-4 h-4 mr-1 sm:mr-2" />
-              {t("summary.copy")}
+            <Button onClick={handleCopy} variant="outline" className="flex-1 min-w-[140px] sm:min-w-[160px] text-xs sm:text-sm px-3 sm:px-4">
+              <Copy className="w-4 h-4 mr-1 sm:mr-2 shrink-0" />
+              <span className="truncate">{t("summary.copy")}</span>
             </Button>
-            <Button onClick={handleDownload} variant="outline" className="flex-1 min-w-[120px] sm:min-w-[150px] text-sm sm:text-base">
-              <Download className="w-4 h-4 mr-1 sm:mr-2" />
-              {t("summary.download")}
+            <Button onClick={handleDownload} variant="outline" className="flex-1 min-w-[140px] sm:min-w-[160px] text-xs sm:text-sm px-3 sm:px-4">
+              <Download className="w-4 h-4 mr-1 sm:mr-2 shrink-0" />
+              <span className="truncate">{t("summary.download")}</span>
             </Button>
-            <Button onClick={handleShare} variant="outline" className="flex-1 min-w-[120px] sm:min-w-[150px] text-sm sm:text-base">
-              <Share2 className="w-4 h-4 mr-1 sm:mr-2" />
-              {t("summary.share")}
+            <Button onClick={handleShare} variant="outline" className="flex-1 min-w-[140px] sm:min-w-[160px] text-xs sm:text-sm px-3 sm:px-4">
+              <Share2 className="w-4 h-4 mr-1 sm:mr-2 shrink-0" />
+              <span className="truncate">{t("summary.share")}</span>
             </Button>
           </div>
         </Card>
