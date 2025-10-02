@@ -16,37 +16,82 @@ export type Database = {
     Tables: {
       book_summaries: {
         Row: {
+          actions: string[] | null
           book_author: string | null
           book_title: string
+          canonical_author: string | null
+          canonical_title: string | null
+          closing: string | null
           created_at: string
           id: string
+          key_ideas: string[] | null
           language: string
           main_ideas: string[]
+          metrics: string | null
+          one_liner: string | null
+          pitfalls: string | null
+          plan_7_days: string | null
           practical_applications: string
+          routine: string | null
+          source: string | null
           summary_text: string
+          theme: string | null
+          user_author: string | null
           user_id: string
+          user_title: string | null
+          year: number | null
         }
         Insert: {
+          actions?: string[] | null
           book_author?: string | null
           book_title: string
+          canonical_author?: string | null
+          canonical_title?: string | null
+          closing?: string | null
           created_at?: string
           id?: string
+          key_ideas?: string[] | null
           language?: string
           main_ideas: string[]
+          metrics?: string | null
+          one_liner?: string | null
+          pitfalls?: string | null
+          plan_7_days?: string | null
           practical_applications: string
+          routine?: string | null
+          source?: string | null
           summary_text: string
+          theme?: string | null
+          user_author?: string | null
           user_id: string
+          user_title?: string | null
+          year?: number | null
         }
         Update: {
+          actions?: string[] | null
           book_author?: string | null
           book_title?: string
+          canonical_author?: string | null
+          canonical_title?: string | null
+          closing?: string | null
           created_at?: string
           id?: string
+          key_ideas?: string[] | null
           language?: string
           main_ideas?: string[]
+          metrics?: string | null
+          one_liner?: string | null
+          pitfalls?: string | null
+          plan_7_days?: string | null
           practical_applications?: string
+          routine?: string | null
+          source?: string | null
           summary_text?: string
+          theme?: string | null
+          user_author?: string | null
           user_id?: string
+          user_title?: string | null
+          year?: number | null
         }
         Relationships: [
           {

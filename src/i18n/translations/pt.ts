@@ -50,6 +50,16 @@ export const pt = {
     "summary.loading": "Carregando resumo...",
     "summary.unknownAuthor": "autor desconhecido",
     
+    // Sections
+    "sections.oneLiner": "Em uma frase",
+    "sections.keyIdeas": "Ideias-chave",
+    "sections.actions": "Aplicações práticas",
+    "sections.routine": "Exemplo de rotina",
+    "sections.plan7": "Plano de 7 dias",
+    "sections.metrics": "Métricas",
+    "sections.pitfalls": "Armadilhas & limites",
+    "sections.closing": "Fechamento",
+    
     // History
     "history.title": "Histórico de Resumos",
     "history.upgrade": "Fazer Upgrade",

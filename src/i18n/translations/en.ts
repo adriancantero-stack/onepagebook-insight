@@ -50,6 +50,16 @@ export const en = {
     "summary.loading": "Loading summary...",
     "summary.unknownAuthor": "unknown author",
     
+    // Sections
+    "sections.oneLiner": "In one sentence",
+    "sections.keyIdeas": "Key ideas",
+    "sections.actions": "Action steps",
+    "sections.routine": "Sample routine",
+    "sections.plan7": "7-day plan",
+    "sections.metrics": "Metrics",
+    "sections.pitfalls": "Pitfalls & limits",
+    "sections.closing": "Closing",
+    
     // History
     "history.title": "Summary History",
     "history.upgrade": "Upgrade",

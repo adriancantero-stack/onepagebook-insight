@@ -48,7 +48,47 @@ const Summary = () => {
   };
 
   const handleCopy = () => {
-    const text = `${summary.book_title}\n\n${summary.summary_text}\n\n${t("summary.mainIdeas")}:\n${summary.main_ideas.join("\n")}\n\n${t("summary.practicalApplications")}:\n${summary.practical_applications}`;
+    let text = `${summary.canonical_title || summary.book_title}\n`;
+    text += `${t("summary.by")} ${summary.canonical_author || summary.book_author || t("summary.unknownAuthor")}`;
+    if (summary.year) text += ` (${summary.year})`;
+    text += '\n\n';
+    
+    if (summary.one_liner) {
+      text += `${t("sections.oneLiner")}:\n${summary.one_liner}\n\n`;
+    }
+    
+    if (summary.key_ideas && summary.key_ideas.length > 0) {
+      text += `${t("sections.keyIdeas")}:\n${summary.key_ideas.map((idea: string, i: number) => `${i + 1}. ${idea}`).join('\n')}\n\n`;
+    } else if (summary.main_ideas && summary.main_ideas.length > 0) {
+      text += `${t("sections.keyIdeas")}:\n${summary.main_ideas.map((idea: string, i: number) => `${i + 1}. ${idea}`).join('\n')}\n\n`;
+    }
+    
+    if (summary.actions && summary.actions.length > 0) {
+      text += `${t("sections.actions")}:\n${summary.actions.map((action: string, i: number) => `${i + 1}. ${action}`).join('\n')}\n\n`;
+    } else if (summary.practical_applications) {
+      text += `${t("sections.actions")}:\n${summary.practical_applications}\n\n`;
+    }
+    
+    if (summary.routine) {
+      text += `${t("sections.routine")}:\n${summary.routine}\n\n`;
+    }
+    
+    if (summary.plan_7_days) {
+      text += `${t("sections.plan7")}:\n${summary.plan_7_days}\n\n`;
+    }
+    
+    if (summary.metrics) {
+      text += `${t("sections.metrics")}:\n${summary.metrics}\n\n`;
+    }
+    
+    if (summary.pitfalls) {
+      text += `${t("sections.pitfalls")}:\n${summary.pitfalls}\n\n`;
+    }
+    
+    if (summary.closing) {
+      text += `${t("sections.closing")}:\n${summary.closing}`;
+    }
+    
     navigator.clipboard.writeText(text);
     toast({
       title: t("summary.copied"),
@@ -62,88 +102,165 @@ const Summary = () => {
     const maxWidth = pageWidth - (margin * 2);
     let yPosition = 20;
 
-    // Title
-    doc.setFontSize(16);
-    doc.setFont(undefined, "bold");
-    const titleLines = doc.splitTextToSize(summary.book_title, maxWidth);
-    doc.text(titleLines, margin, yPosition);
-    yPosition += titleLines.length * 7 + 5;
-
-    // Author
-    if (summary.book_author) {
-      doc.setFontSize(12);
-      doc.setFont(undefined, "normal");
-      doc.text(`${t("summary.by")} ${summary.book_author}`, margin, yPosition);
-      yPosition += 10;
-    }
-
-    // Summary text
-    doc.setFontSize(11);
-    doc.setFont(undefined, "normal");
-    const summaryLines = doc.splitTextToSize(summary.summary_text, maxWidth);
-    summaryLines.forEach((line: string) => {
-      if (yPosition > 280) {
-        doc.addPage();
-        yPosition = 20;
-      }
-      doc.text(line, margin, yPosition);
-      yPosition += 6;
-    });
-
-    yPosition += 5;
-
-    // Main Ideas
-    if (yPosition > 250) {
-      doc.addPage();
-      yPosition = 20;
-    }
-    doc.setFontSize(13);
-    doc.setFont(undefined, "bold");
-    doc.text(t("summary.mainIdeas"), margin, yPosition);
-    yPosition += 8;
-
-    doc.setFontSize(11);
-    doc.setFont(undefined, "normal");
-    summary.main_ideas.forEach((idea: string, index: number) => {
-      const ideaText = `${index + 1}. ${idea}`;
-      const ideaLines = doc.splitTextToSize(ideaText, maxWidth);
-      ideaLines.forEach((line: string) => {
+    // Helper to add text with page break
+    const addText = (text: string, fontSize: number = 11, fontStyle: string = "normal") => {
+      doc.setFontSize(fontSize);
+      doc.setFont(undefined, fontStyle);
+      const lines = doc.splitTextToSize(text, maxWidth);
+      lines.forEach((line: string) => {
         if (yPosition > 280) {
           doc.addPage();
           yPosition = 20;
         }
         doc.text(line, margin, yPosition);
-        yPosition += 6;
+        yPosition += fontSize === 11 ? 6 : 7;
       });
-      yPosition += 2;
-    });
+    };
 
-    yPosition += 5;
-
-    // Practical Applications
-    if (yPosition > 250) {
-      doc.addPage();
-      yPosition = 20;
-    }
-    doc.setFontSize(13);
+    // Title
+    doc.setFontSize(16);
     doc.setFont(undefined, "bold");
-    doc.text(t("summary.practicalApplications"), margin, yPosition);
-    yPosition += 8;
+    const titleLines = doc.splitTextToSize(summary.canonical_title || summary.book_title, maxWidth);
+    doc.text(titleLines, margin, yPosition);
+    yPosition += titleLines.length * 7 + 5;
 
-    doc.setFontSize(11);
+    // Author
+    doc.setFontSize(12);
     doc.setFont(undefined, "normal");
-    const applicationsLines = doc.splitTextToSize(summary.practical_applications, maxWidth);
-    applicationsLines.forEach((line: string) => {
-      if (yPosition > 280) {
+    let authorText = `${t("summary.by")} ${summary.canonical_author || summary.book_author || t("summary.unknownAuthor")}`;
+    if (summary.year) authorText += ` (${summary.year})`;
+    doc.text(authorText, margin, yPosition);
+    yPosition += 15;
+
+    // One-liner
+    if (summary.one_liner) {
+      if (yPosition > 250) {
         doc.addPage();
         yPosition = 20;
       }
-      doc.text(line, margin, yPosition);
-      yPosition += 6;
-    });
+      doc.setFontSize(13);
+      doc.setFont(undefined, "bold");
+      doc.text(t("sections.oneLiner"), margin, yPosition);
+      yPosition += 8;
+      addText(summary.one_liner);
+      yPosition += 5;
+    }
+
+    // Key Ideas
+    const keyIdeas = summary.key_ideas || summary.main_ideas || [];
+    if (keyIdeas.length > 0) {
+      if (yPosition > 250) {
+        doc.addPage();
+        yPosition = 20;
+      }
+      doc.setFontSize(13);
+      doc.setFont(undefined, "bold");
+      doc.text(t("sections.keyIdeas"), margin, yPosition);
+      yPosition += 8;
+
+      keyIdeas.forEach((idea: string, index: number) => {
+        const ideaText = `${index + 1}. ${idea}`;
+        addText(ideaText);
+        yPosition += 2;
+      });
+      yPosition += 5;
+    }
+
+    // Actions
+    const actions = summary.actions || (summary.practical_applications ? summary.practical_applications.split('\n').filter((s: string) => s.trim()) : []);
+    if (actions.length > 0) {
+      if (yPosition > 250) {
+        doc.addPage();
+        yPosition = 20;
+      }
+      doc.setFontSize(13);
+      doc.setFont(undefined, "bold");
+      doc.text(t("sections.actions"), margin, yPosition);
+      yPosition += 8;
+
+      if (Array.isArray(actions)) {
+        actions.forEach((action: string, index: number) => {
+          const actionText = `${index + 1}. ${action}`;
+          addText(actionText);
+          yPosition += 2;
+        });
+      } else {
+        addText(actions);
+      }
+      yPosition += 5;
+    }
+
+    // Routine
+    if (summary.routine) {
+      if (yPosition > 250) {
+        doc.addPage();
+        yPosition = 20;
+      }
+      doc.setFontSize(13);
+      doc.setFont(undefined, "bold");
+      doc.text(t("sections.routine"), margin, yPosition);
+      yPosition += 8;
+      addText(summary.routine);
+      yPosition += 5;
+    }
+
+    // 7-day Plan
+    if (summary.plan_7_days) {
+      if (yPosition > 250) {
+        doc.addPage();
+        yPosition = 20;
+      }
+      doc.setFontSize(13);
+      doc.setFont(undefined, "bold");
+      doc.text(t("sections.plan7"), margin, yPosition);
+      yPosition += 8;
+      addText(summary.plan_7_days);
+      yPosition += 5;
+    }
+
+    // Metrics
+    if (summary.metrics) {
+      if (yPosition > 250) {
+        doc.addPage();
+        yPosition = 20;
+      }
+      doc.setFontSize(13);
+      doc.setFont(undefined, "bold");
+      doc.text(t("sections.metrics"), margin, yPosition);
+      yPosition += 8;
+      addText(summary.metrics);
+      yPosition += 5;
+    }
+
+    // Pitfalls
+    if (summary.pitfalls) {
+      if (yPosition > 250) {
+        doc.addPage();
+        yPosition = 20;
+      }
+      doc.setFontSize(13);
+      doc.setFont(undefined, "bold");
+      doc.text(t("sections.pitfalls"), margin, yPosition);
+      yPosition += 8;
+      addText(summary.pitfalls);
+      yPosition += 5;
+    }
+
+    // Closing
+    if (summary.closing) {
+      if (yPosition > 250) {
+        doc.addPage();
+        yPosition = 20;
+      }
+      doc.setFontSize(13);
+      doc.setFont(undefined, "bold");
+      doc.text(t("sections.closing"), margin, yPosition);
+      yPosition += 8;
+      addText(summary.closing);
+    }
 
     // Save the PDF
-    doc.save(`${summary.book_title}.pdf`);
+    doc.save(`${summary.canonical_title || summary.book_title}.pdf`);
     
     toast({
       title: "PDF baixado!",
@@ -152,11 +269,20 @@ const Summary = () => {
   };
 
   const handleShare = async () => {
+    let shareText = `${summary.canonical_title || summary.book_title}\n`;
+    shareText += `${t("summary.by")} ${summary.canonical_author || summary.book_author || t("summary.unknownAuthor")}`;
+    if (summary.year) shareText += ` (${summary.year})`;
+    shareText += '\n\n';
+    
+    if (summary.one_liner) {
+      shareText += `${summary.one_liner}\n\n`;
+    }
+    
     if (navigator.share) {
       try {
         await navigator.share({
-          title: summary.book_title,
-          text: summary.summary_text,
+          title: summary.canonical_title || summary.book_title,
+          text: shareText,
         });
         toast({
           title: t("summary.shared"),
@@ -290,6 +416,37 @@ const Summary = () => {
 
   if (!summary) return null;
 
+  // Helper to render section if content exists
+  const renderSection = (title: string, content: string | string[] | null | undefined) => {
+    if (!content) return null;
+    
+    if (Array.isArray(content)) {
+      if (content.length === 0) return null;
+      return (
+        <section>
+          <h2 className="text-xl font-semibold mb-3">{title}</h2>
+          <ul className="space-y-2">
+            {content.map((item: string, index: number) => (
+              <li key={index} className="flex gap-3">
+                <span className="text-primary font-bold">{index + 1}.</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      );
+    }
+    
+    return (
+      <section>
+        <h2 className="text-xl font-semibold mb-3">{title}</h2>
+        <p className="text-foreground leading-relaxed whitespace-pre-wrap text-justify">
+          {content}
+        </p>
+      </section>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b border-border">
@@ -309,9 +466,12 @@ const Summary = () => {
               <BookOpen className="w-6 h-6 text-primary-foreground" />
             </div>
             <div className="flex-1">
-              <h1 className="text-3xl font-bold mb-2">{summary.book_title}</h1>
+              <h1 className="text-3xl font-bold mb-2">
+                {summary.canonical_title || summary.book_title}
+              </h1>
               <p className="text-muted-foreground">
-                {t("summary.by")} {summary.book_author || t("summary.unknownAuthor")}
+                {t("summary.by")} {summary.canonical_author || summary.book_author || t("summary.unknownAuthor")}
+                {summary.year && <span className="text-sm ml-2">({summary.year})</span>}
               </p>
             </div>
           </div>
@@ -320,7 +480,7 @@ const Summary = () => {
             {showAudioPlayer && audioSrc && (
               <div className="mb-6">
                 <h3 className="text-lg font-semibold mb-3 text-foreground">
-                  🔊 Player de Áudio
+                  🔊 {t("summary.audioPlayer")}
                 </h3>
                 <AudioPlayer 
                   audioSrc={audioSrc} 
@@ -329,31 +489,29 @@ const Summary = () => {
               </div>
             )}
 
-            <section>
-              <h2 className="text-xl font-semibold mb-3">{t("summary.mainIdeas").replace(":", "")}</h2>
-              <p className="text-foreground leading-relaxed whitespace-pre-wrap text-justify">
-                {summary.summary_text}
-              </p>
-            </section>
+            {/* One-liner */}
+            {renderSection(t("sections.oneLiner"), summary.one_liner)}
 
-            <section>
-              <h2 className="text-xl font-semibold mb-3">{t("summary.mainIdeas")}</h2>
-              <ul className="space-y-2">
-                {summary.main_ideas.map((idea: string, index: number) => (
-                  <li key={index} className="flex gap-3">
-                    <span className="text-primary font-bold">{index + 1}.</span>
-                    <span>{idea}</span>
-                  </li>
-                ))}
-              </ul>
-            </section>
+            {/* Key Ideas */}
+            {renderSection(t("sections.keyIdeas"), summary.key_ideas || summary.main_ideas)}
 
-            <section>
-              <h2 className="text-xl font-semibold mb-3">{t("summary.practicalApplications")}</h2>
-              <p className="text-foreground leading-relaxed whitespace-pre-wrap text-justify">
-                {summary.practical_applications}
-              </p>
-            </section>
+            {/* Actions */}
+            {renderSection(t("sections.actions"), summary.actions || (summary.practical_applications ? summary.practical_applications.split('\n').filter((s: string) => s.trim()) : null))}
+
+            {/* Routine */}
+            {renderSection(t("sections.routine"), summary.routine)}
+
+            {/* 7-day Plan */}
+            {renderSection(t("sections.plan7"), summary.plan_7_days)}
+
+            {/* Metrics */}
+            {renderSection(t("sections.metrics"), summary.metrics)}
+
+            {/* Pitfalls */}
+            {renderSection(t("sections.pitfalls"), summary.pitfalls)}
+
+            {/* Closing */}
+            {renderSection(t("sections.closing"), summary.closing)}
           </div>
 
           <div className="flex gap-3 mt-8 pt-6 border-t border-border flex-wrap">
@@ -363,7 +521,7 @@ const Summary = () => {
               className="flex-1 min-w-[150px] bg-primary hover:bg-primary/90"
             >
               <Volume2 className="w-4 h-4 mr-2" />
-              {isGeneratingAudio ? "Gerando..." : "Escutar Resumo"}
+              {isGeneratingAudio ? t("summary.generating") : t("summary.listen")}
             </Button>
             <Button onClick={handleCopy} variant="outline" className="flex-1 min-w-[150px]">
               <Copy className="w-4 h-4 mr-2" />
