@@ -6,8 +6,8 @@ export const es = {
     "header.logout": "Salir",
     
     // Home
-    "home.title": "Genera resúmenes prácticos de libros",
-    "home.titleLine2": "en 1 página",
+    "home.title": "Genera resúmenes prácticos",
+    "home.titleLine2": "de libros en 1 página",
     "home.subtitle": "Convierte cualquier libro en ideas prácticas que puedes aplicar hoy",
     "home.bookTitle": "Título del Libro",
     "home.bookTitlePlaceholder": "Ej: Hábitos Atómicos",
