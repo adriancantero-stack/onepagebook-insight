@@ -329,17 +329,54 @@ const Summary = () => {
       const terms = audioTerms[language] || audioTerms.pt;
       
       // Combine all text content with correct language terms
-      const fullText = `
-        ${summary.book_title} ${terms.by} ${summary.book_author || terms.unknownAuthor}.
-        
-        ${summary.summary_text}
-        
-        ${terms.mainIdeas}
-        ${summary.main_ideas.join('. ')}
-        
-        ${terms.practicalApplications}
-        ${summary.practical_applications}
-      `.trim();
+      let fullText = `${summary.book_title} ${terms.by} ${summary.book_author || terms.unknownAuthor}.`;
+      
+      // Add one-liner
+      if (summary.one_liner) {
+        fullText += `\n\n${summary.one_liner}`;
+      } else if (summary.summary_text) {
+        fullText += `\n\n${summary.summary_text}`;
+      }
+      
+      // Add key ideas
+      const keyIdeas = summary.key_ideas || summary.main_ideas || [];
+      if (keyIdeas.length > 0) {
+        fullText += `\n\n${terms.mainIdeas}\n${keyIdeas.join('. ')}.`;
+      }
+      
+      // Add practical actions
+      if (summary.actions && summary.actions.length > 0) {
+        fullText += `\n\n${terms.practicalApplications}\n${summary.actions.join('\n')}`;
+      } else if (summary.practical_applications) {
+        fullText += `\n\n${terms.practicalApplications}\n${summary.practical_applications}`;
+      }
+      
+      // Add routine
+      if (summary.routine) {
+        fullText += `\n\n${summary.routine}`;
+      }
+      
+      // Add 7-day plan
+      if (summary.plan_7_days) {
+        fullText += `\n\n${summary.plan_7_days}`;
+      }
+      
+      // Add metrics
+      if (summary.metrics) {
+        fullText += `\n\n${summary.metrics}`;
+      }
+      
+      // Add pitfalls
+      if (summary.pitfalls) {
+        fullText += `\n\n${summary.pitfalls}`;
+      }
+      
+      // Add closing (very important!)
+      if (summary.closing) {
+        fullText += `\n\n${summary.closing}`;
+      }
+      
+      fullText = fullText.trim();
       
       console.log('Generating audio for language:', language);
 
