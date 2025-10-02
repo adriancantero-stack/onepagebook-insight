@@ -9,6 +9,16 @@ export interface Category {
   books: Book[];
 }
 
+export interface FlatIndexItem {
+  id: string;
+  title: string;
+  author: string;
+  catId: string;
+  catNameKey: string;
+  nTitle: string;
+  nAuthor: string;
+}
+
 export const bookCatalog: Category[] = [
   {
     id: "habits",
@@ -60,10 +70,64 @@ export const bookCatalog: Category[] = [
   }
 ];
 
-// Helper function to normalize text for search (remove accents, lowercase)
-export const normalizeText = (text: string): string => {
-  return text
-    .toLowerCase()
+// Enhanced normalize function for better search matching
+export const normalize = (text: string): string => {
+  return (text || "")
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^\w\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+};
+
+// Create flat index for fast searching
+export const createFlatIndex = (): FlatIndexItem[] => {
+  return bookCatalog.flatMap((cat) =>
+    cat.books.map((book, index) => ({
+      id: `${cat.id}-${index}`,
+      title: book.title,
+      author: book.author,
+      catId: cat.id,
+      catNameKey: cat.nameKey,
+      nTitle: normalize(book.title),
+      nAuthor: normalize(book.author),
+    }))
+  );
+};
+
+// Suggestion ranking function
+export const suggestBooks = (
+  query: string,
+  flatIndex: FlatIndexItem[],
+  selectedCatId?: string
+): FlatIndexItem[] => {
+  const nq = normalize(query);
+  if (nq.length < 2) return [];
+
+  const scored: Array<{ item: FlatIndexItem; score: number }> = [];
+
+  for (const item of flatIndex) {
+    let score = 0;
+
+    // Title matching
+    if (item.nTitle.startsWith(nq)) score += 100;
+    else if (item.nTitle.includes(nq)) score += 60;
+
+    // Author matching
+    if (item.nAuthor.startsWith(nq)) score += 40;
+    else if (item.nAuthor.includes(nq)) score += 20;
+
+    // Boost if in selected category
+    if (selectedCatId && item.catId === selectedCatId) score += 10;
+
+    if (score > 0) {
+      scored.push({ item, score });
+    }
+  }
+
+  return scored
+    .sort((a, b) => b.score - a.score || a.item.title.localeCompare(b.item.title))
+    .slice(0, 8)
+    .map((x) => x.item);
 };

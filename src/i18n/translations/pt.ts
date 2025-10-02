@@ -142,6 +142,8 @@ export const pt = {
     // Explore
     "explore.title": "Explorar por categoria",
     "explore.search.placeholder": "Buscar por título ou autor…",
+    "explore.search.hint": "Pressione Enter para resumir o que digitou",
+    "explore.search.noResults": "Nenhum resultado",
     "explore.orType": "ou digite o livro que você quer",
     "explore.summarize": "Resumir",
     "explore.noResults": "Nenhum resultado encontrado",
