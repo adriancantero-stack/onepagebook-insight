@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { BookOpen, History, Crown, LogOut, Loader2 } from "lucide-react";
+import { BookOpen, History, Crown, LogOut, Loader2, Compass } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import Footer from "@/components/Footer";
@@ -25,6 +25,7 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -45,6 +46,16 @@ const Home = () => {
 
     return () => subscription.unsubscribe();
   }, [navigate]);
+
+  // Load book data from Explore page navigation
+  useEffect(() => {
+    if (location.state?.bookTitle) {
+      setBookTitle(location.state.bookTitle);
+      setBookAuthor(location.state.bookAuthor || "");
+      // Clear the state after loading
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   const handleGenerateSummary = async () => {
     if (!bookTitle.trim()) {
@@ -138,6 +149,10 @@ const Home = () => {
           </div>
           <div className="flex items-center gap-1 sm:gap-2">
             <LanguageSelector />
+            <Button variant="ghost" size="sm" onClick={() => navigate("/explore")} className="gap-1 sm:gap-2">
+              <Compass className="w-4 h-4" />
+              <span className="hidden sm:inline">{t("header.explore")}</span>
+            </Button>
             <Button variant="ghost" size="sm" onClick={() => navigate("/history")} className="gap-1 sm:gap-2">
               <History className="w-4 h-4" />
               <span className="hidden sm:inline">{t("header.history")}</span>

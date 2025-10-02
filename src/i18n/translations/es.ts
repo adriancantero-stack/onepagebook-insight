@@ -139,6 +139,17 @@ export const es = {
     "limit.modal.body": "Premium te da resúmenes y audios ilimitados, exportación a PDF, historial y traducción instantánea.",
     "limit.modal.btn": "Ir a Premium",
     
+    // Explore
+    "explore.title": "Explorar por categoría",
+    "explore.search.placeholder": "Buscar por título o autor…",
+    "explore.orType": "o escribe el libro que quieres",
+    "explore.summarize": "Resumir",
+    "explore.noResults": "No se encontraron resultados",
+    "cats.habits": "Hábitos y Productividad",
+    "cats.sleep": "Sueño y Salud",
+    "cats.psych": "Psicología y Mentalidad",
+    "header.explore": "Explorar",
+    
     // Footer
     "footer.terms": "Términos de Servicio",
     "footer.privacy": "Política de Privacidad",

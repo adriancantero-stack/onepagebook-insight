@@ -139,6 +139,17 @@ export const pt = {
     "limit.modal.body": "No plano Premium você tem resumos e áudios ilimitados, exportação em PDF, histórico e tradução instantânea.",
     "limit.modal.btn": "Ir para o Premium",
     
+    // Explore
+    "explore.title": "Explorar por categoria",
+    "explore.search.placeholder": "Buscar por título ou autor…",
+    "explore.orType": "ou digite o livro que você quer",
+    "explore.summarize": "Resumir",
+    "explore.noResults": "Nenhum resultado encontrado",
+    "cats.habits": "Hábitos & Produtividade",
+    "cats.sleep": "Sono & Saúde",
+    "cats.psych": "Psicologia & Mindset",
+    "header.explore": "Explorar",
+    
     // Footer
     "footer.terms": "Termos de Serviço",
     "footer.privacy": "Política de Privacidade",

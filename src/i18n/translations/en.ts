@@ -139,6 +139,17 @@ export const en = {
     "limit.modal.body": "Premium gives you unlimited summaries & audios, PDF export, history, and instant translation.",
     "limit.modal.btn": "Go Premium",
     
+    // Explore
+    "explore.title": "Explore by category",
+    "explore.search.placeholder": "Search by title or author…",
+    "explore.orType": "or type the book you want",
+    "explore.summarize": "Summarize",
+    "explore.noResults": "No results found",
+    "cats.habits": "Habits & Productivity",
+    "cats.sleep": "Sleep & Health",
+    "cats.psych": "Psychology & Mindset",
+    "header.explore": "Explore",
+    
     // Footer
     "footer.terms": "Terms of Service",
     "footer.privacy": "Privacy Policy",
