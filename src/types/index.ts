@@ -1,7 +1,7 @@
 /**
  * Generation step identifiers
  */
-export type GenStep = "resolve" | "summarize" | "polish" | "audio" | "done";
+export type GenStep = "resolve" | "summarize" | "polish" | "audio" | "done" | "error";
 
 /**
  * Current state of summary generation process
@@ -29,6 +29,7 @@ export interface BookSummary {
   id: string;
   user_id: string;
   book_title: string;
+  canonical_title?: string;
   author: string;
   one_liner?: string;
   key_concepts?: string[];
@@ -44,6 +45,7 @@ export interface BookSummary {
   writing_style?: string;
   cultural_impact?: string;
   bibliography?: string[];
+  closing?: string;
   audio_base64?: string;
   audio_chunks?: string[];
   created_at: string;

@@ -7,12 +7,13 @@ import { Card } from "@/components/ui/card";
 import { BookOpen, ArrowLeft, Crown } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import Footer from "@/components/Footer";
+import type { BookSummary, UserSubscription } from "@/types";
 
 const History = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [summaries, setSummaries] = useState<any[]>([]);
-  const [subscription, setSubscription] = useState<any>(null);
+  const [summaries, setSummaries] = useState<BookSummary[]>([]);
+  const [subscription, setSubscription] = useState<UserSubscription | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

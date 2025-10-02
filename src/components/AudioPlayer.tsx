@@ -56,16 +56,12 @@ const AudioPlayer = ({ audioSrc, onEnded }: AudioPlayerProps) => {
     };
 
     const handleEnded = () => {
-      console.log(`Track ${currentTrackIndex + 1} of ${playlist.length} ended`);
-      
       // Check if there are more tracks in the playlist
       if (currentTrackIndex < playlist.length - 1) {
-        console.log(`Moving to track ${currentTrackIndex + 2}`);
         setCurrentTrackIndex(prev => prev + 1);
         setCurrentTime(0);
       } else {
         // End of playlist
-        console.log('Playlist ended');
         setIsPlaying(false);
         setCurrentTime(0);
         setCurrentTrackIndex(0);

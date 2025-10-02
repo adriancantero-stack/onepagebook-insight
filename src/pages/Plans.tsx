@@ -8,11 +8,12 @@ import { Check, Crown, ArrowLeft, BookOpen } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import Footer from "@/components/Footer";
+import type { SubscriptionPlan } from "@/types";
 
 const Plans = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const [currentPlan, setCurrentPlan] = useState<any>(null);
+  const [currentPlan, setCurrentPlan] = useState<SubscriptionPlan | null>(null);
   const [loading, setLoading] = useState(true);
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
 

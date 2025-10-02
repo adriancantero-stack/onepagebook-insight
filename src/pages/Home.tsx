@@ -16,8 +16,7 @@ import {
   incrementSummary, 
   ensureMonth 
 } from "@/lib/usageManager";
-
-type GenStep = "resolve" | "summarize" | "polish" | "audio" | "done" | "error";
+import type { AuthUser, GenStep } from "@/types";
 
 interface GenState {
   open: boolean;
@@ -27,7 +26,7 @@ interface GenState {
 
 const Home = () => {
   const { t, i18n } = useTranslation();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [bookTitle, setBookTitle] = useState("");
   const [bookAuthor, setBookAuthor] = useState("");
   const [loading, setLoading] = useState(false);

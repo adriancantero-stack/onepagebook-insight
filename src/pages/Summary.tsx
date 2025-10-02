@@ -8,9 +8,9 @@ import { BookOpen, Copy, Download, Share2, ArrowLeft, Volume2 } from "lucide-rea
 import { toast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import AudioPlayer from "@/components/AudioPlayer";
-import Footer from "@/components/Footer";
-import { jsPDF } from "jspdf";
+import { Footer } from "@/components/Footer";
 import { UpgradeModal } from "@/components/UpgradeModal";
+import { AudioPlayer } from "@/components/AudioPlayer";
 import { 
   loadUsage, 
   canUseAudio, 
@@ -21,12 +21,13 @@ import { bookCatalog } from "@/data/bookCatalog";
 import type { Book } from "@/data/bookCatalog";
 import { getThemeCategoryId } from "@/config/themes";
 import { SummarySection } from "@/components/SummarySection";
+import type { BookSummary } from "@/types";
 
 const Summary = () => {
   const { t, i18n } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
-  const [summary, setSummary] = useState<any>(null);
+  const [summary, setSummary] = useState<BookSummary | null>(null);
   const [loading, setLoading] = useState(true);
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
   const [audioSrc, setAudioSrc] = useState<string | string[] | null>(null);
@@ -325,7 +326,7 @@ const Summary = () => {
           title: t("summary.shared"),
         });
       } catch (error) {
-        console.log("Share cancelled");
+        // Share cancelled by user - silent fail
       }
     } else {
       handleCopy();
@@ -481,8 +482,6 @@ const Summary = () => {
       }
       
       fullText = fullText.trim();
-      
-      console.log('Generating audio for language:', language);
 
       // Call edge function to generate audio
       const { data, error } = await supabase.functions.invoke('text-to-speech', {
@@ -493,14 +492,12 @@ const Summary = () => {
       });
 
       if (error) {
-        console.error('Error generating audio:', error);
         throw new Error(error.message || 'Failed to generate audio');
       }
 
       // Handle both new format (audioChunks) and old format (audioContent)
       if (data?.audioChunks && Array.isArray(data.audioChunks)) {
         // New chunked format
-        console.log(`Received ${data.audioChunks.length} audio chunks`);
         
         const audioUrls = data.audioChunks.map((chunk: string) => {
           const audioBlob = new Blob(
@@ -572,7 +569,6 @@ const Summary = () => {
         throw new Error('No audio content received from server');
       }
     } catch (error: any) {
-      console.error('Error generating audio:', error);
       toast({
         variant: "destructive",
         title: t("summary.audioError"),
