@@ -7,13 +7,17 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Function to capitalize book title (first letter of each word)
+// Function to capitalize book title (first letter of each word) - preserves accents
 function capitalizeTitle(title: string): string {
   return title
     .trim()
     .replace(/\s+/g, ' ')
     .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .map(word => {
+      if (word.length === 0) return word;
+      // Preserve accents - only uppercase first char, keep rest as is
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
     .join(' ');
 }
 
@@ -332,6 +336,7 @@ Gerar um resumo padronizado SEMPRE neste formato:
 
 ESTRUTURA JSON OBRIGATÓRIA:
 {
+  "title": "Título CORRIGIDO do livro com TODOS os acentos corretos em português (á, é, í, ó, ú, â, ê, ô, ã, õ, ç)",
   "author": "Nome COMPLETO do autor (ex: 'Augusto Cury', não apenas 'Cury')",
   "theme": "sleep|productivity|health|mindset|finance|default",
   "oneLiner": "2-3 parágrafos detalhados explicando o contexto, problema que resolve e principais insights do livro",
@@ -344,6 +349,7 @@ IMPORTANTE:
 - Cada seção deve ter conteúdo ÚNICO e complementar
 - REVISE toda ortografia, acentuação e gramática antes de retornar
 - Use tom humano e natural, como uma conversa entre amigos
+- ⚠️ CRÍTICO: Sempre retorne o campo "title" com o título CORRIGIDO com TODOS os acentos em português
 - Detecte o tema corretamente baseado nas palavras-chave do livro
 - Se o livro for sobre sono/circadiano: theme="sleep"
 - Se for sobre produtividade/foco/hábitos: theme="productivity"
@@ -352,6 +358,8 @@ IMPORTANTE:
 - Se for sobre finanças/dinheiro: theme="finance"
 - Caso contrário: theme="default"`,
         user: `Crie um resumo prático do livro "${metadata.canonicalTitle}"${metadata.canonicalAuthor ? ` de ${metadata.canonicalAuthor}` : ""}${metadata.year ? ` (${metadata.year})` : ""}.
+
+⚠️ IMPORTANTE: Corrija o título com todos os acentos corretos em português no campo "title" do JSON.
 
 Responda APENAS com o JSON, sem texto adicional.`
       },
@@ -388,6 +396,7 @@ Generate a standardized summary ALWAYS in this format:
 
 MANDATORY JSON STRUCTURE:
 {
+  "title": "CORRECTED book title with proper spelling and accents",
   "author": "COMPLETE author name (e.g., 'Augusto Cury', not just 'Cury')",
   "theme": "sleep|productivity|health|mindset|finance|default",
   "oneLiner": "2-3 detailed paragraphs explaining context, problem it solves, and main insights of the book",
@@ -400,6 +409,7 @@ IMPORTANT:
 - Each section must have UNIQUE and complementary content
 - REVIEW all spelling, punctuation, and grammar before returning
 - Use human and natural tone, like a conversation between friends
+- ⚠️ CRITICAL: Always return the "title" field with the CORRECTED title with proper spelling
 - Detect the theme correctly based on book keywords
 - If about sleep/circadian: theme="sleep"
 - If about productivity/focus/habits: theme="productivity"
@@ -408,6 +418,8 @@ IMPORTANT:
 - If about finance/money: theme="finance"
 - Otherwise: theme="default"`,
         user: `Create a practical summary of the book "${metadata.canonicalTitle}"${metadata.canonicalAuthor ? ` by ${metadata.canonicalAuthor}` : ""}${metadata.year ? ` (${metadata.year})` : ""}.
+
+⚠️ IMPORTANT: Correct the title with proper spelling in the "title" field of the JSON.
 
 Respond ONLY with the JSON, no additional text.`
       },
@@ -444,6 +456,7 @@ Generar un resumen estandarizado SIEMPRE en este formato:
 
 ESTRUCTURA JSON OBLIGATORIA:
 {
+  "title": "Título CORREGIDO del libro con TODOS los acentos correctos en español (á, é, í, ó, ú, ñ)",
   "author": "Nombre COMPLETO del autor (ej: 'Augusto Cury', no solo 'Cury')",
   "theme": "sleep|productivity|health|mindset|finance|default",
   "oneLiner": "2-3 párrafos detallados explicando contexto, problema que resuelve y principales insights del libro",
@@ -456,6 +469,7 @@ IMPORTANTE:
 - Cada sección debe tener contenido ÚNICO y complementario
 - REVISA toda ortografía, acentuación y gramática antes de retornar
 - Usa tono humano y natural, como una conversación entre amigos
+- ⚠️ CRÍTICO: Siempre retorna el campo "title" con el título CORREGIDO con TODOS los acentos en español
 - Detecta el tema correctamente basándote en las palabras clave del libro
 - Si es sobre sueño/circadiano: theme="sleep"
 - Si es sobre productividad/foco/hábitos: theme="productivity"
@@ -464,6 +478,8 @@ IMPORTANTE:
 - Si es sobre finanzas/dinero: theme="finance"
 - De lo contrario: theme="default"`,
         user: `Crea un resumen práctico del libro "${metadata.canonicalTitle}"${metadata.canonicalAuthor ? ` de ${metadata.canonicalAuthor}` : ""}${metadata.year ? ` (${metadata.year})` : ""}.
+
+⚠️ IMPORTANTE: Corrige el título con todos los acentos correctos en español en el campo "title" del JSON.
 
 Responde SOLO con el JSON, sin texto adicional.`
       }
@@ -579,6 +595,12 @@ Responde SOLO con el JSON, sin texto adicional.`
     if (finalAuthor) {
       finalAuthor = capitalizeName(finalAuthor);
     }
+    
+    // Use AI-corrected title with proper accents if available
+    let finalTitle = metadata.canonicalTitle;
+    if (summaryData.title && summaryData.title.trim()) {
+      finalTitle = summaryData.title.trim();
+    }
 
     // Save to database
     const { data: summary, error: dbError } = await supabase
@@ -587,9 +609,9 @@ Responde SOLO con el JSON, sin texto adicional.`
         user_id: user.id,
         user_title: bookTitle,
         user_author: bookAuthor || null,
-        book_title: metadata.canonicalTitle,
+        book_title: finalTitle,
         book_author: finalAuthor,
-        canonical_title: metadata.canonicalTitle,
+        canonical_title: finalTitle,
         canonical_author: finalAuthor,
         year: metadata.year,
         source: metadata.source,
