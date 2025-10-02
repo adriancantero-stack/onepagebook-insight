@@ -655,7 +655,7 @@ const Summary = () => {
                 {summary.canonical_title || summary.book_title}
               </h1>
               <p className="text-sm sm:text-base text-muted-foreground">
-                {t("summary.by")} {summary.canonical_author || summary.book_author || t("summary.unknownAuthor")}
+                {t("summary.by")} {summary.user_author || summary.canonical_author || summary.book_author || t("summary.unknownAuthor")}
                 {summary.year && <span className="text-sm ml-2">({summary.year})</span>}
               </p>
             </div>
