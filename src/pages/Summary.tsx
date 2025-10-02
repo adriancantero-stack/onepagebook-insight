@@ -81,44 +81,51 @@ const Summary = () => {
     }
   };
 
-  const detectLanguage = (text: string): string => {
-    // Simple language detection based on common words
-    const portugueseWords = ['resumo', 'ideias', 'aplicações', 'principais', 'práticas', 'por'];
-    const englishWords = ['summary', 'ideas', 'applications', 'main', 'practical', 'by'];
-    const spanishWords = ['resumen', 'ideas', 'aplicaciones', 'principales', 'prácticas', 'por'];
-    
-    const lowerText = text.toLowerCase();
-    
-    const ptCount = portugueseWords.filter(word => lowerText.includes(word)).length;
-    const enCount = englishWords.filter(word => lowerText.includes(word)).length;
-    const esCount = spanishWords.filter(word => lowerText.includes(word)).length;
-    
-    if (ptCount >= enCount && ptCount >= esCount) return 'pt';
-    if (esCount >= enCount) return 'es';
-    return 'en';
-  };
-
   const handleListenSummary = async () => {
     if (!summary || isGeneratingAudio) return;
 
     try {
       setIsGeneratingAudio(true);
       
-      // Combine all text content
+      // Use the language stored in the database
+      const language = summary.language || 'pt';
+      
+      // Translation map for audio terms
+      const audioTerms: Record<string, { by: string; mainIdeas: string; practicalApplications: string; unknownAuthor: string }> = {
+        pt: {
+          by: 'por',
+          mainIdeas: 'Ideias Principais:',
+          practicalApplications: 'Aplicações Práticas:',
+          unknownAuthor: 'autor desconhecido'
+        },
+        en: {
+          by: 'by',
+          mainIdeas: 'Main Ideas:',
+          practicalApplications: 'Practical Applications:',
+          unknownAuthor: 'unknown author'
+        },
+        es: {
+          by: 'por',
+          mainIdeas: 'Ideas Principales:',
+          practicalApplications: 'Aplicaciones Prácticas:',
+          unknownAuthor: 'autor desconocido'
+        }
+      };
+
+      const terms = audioTerms[language] || audioTerms.pt;
+      
+      // Combine all text content with correct language terms
       const fullText = `
-        ${summary.book_title} por ${summary.book_author || 'autor desconhecido'}.
+        ${summary.book_title} ${terms.by} ${summary.book_author || terms.unknownAuthor}.
         
         ${summary.summary_text}
         
-        Ideias Principais:
+        ${terms.mainIdeas}
         ${summary.main_ideas.join('. ')}
         
-        Aplicações Práticas:
+        ${terms.practicalApplications}
         ${summary.practical_applications}
       `.trim();
-
-      // Detect language
-      const language = detectLanguage(fullText);
       
       console.log('Generating audio for language:', language);
 
