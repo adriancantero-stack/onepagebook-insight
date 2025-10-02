@@ -304,76 +304,112 @@ const Summary = () => {
       // Use the language stored in the database
       const language = summary.language || 'pt';
       
-      // Translation map for audio terms
-      const audioTerms: Record<string, { by: string; mainIdeas: string; practicalApplications: string; unknownAuthor: string }> = {
+      // Translation map for audio section titles
+      const audioTerms: Record<string, { 
+        by: string; 
+        summary: string;
+        keyIdeas: string; 
+        practicalApplications: string; 
+        routine: string;
+        plan7Days: string;
+        metrics: string;
+        pitfalls: string;
+        closing: string;
+        unknownAuthor: string 
+      }> = {
         pt: {
           by: 'por',
-          mainIdeas: 'Ideias Principais:',
-          practicalApplications: 'Aplicações Práticas:',
+          summary: 'Resumo:',
+          keyIdeas: 'Ideias-chave:',
+          practicalApplications: 'Aplicações práticas:',
+          routine: 'Rotina:',
+          plan7Days: 'Plano de 7 dias:',
+          metrics: 'Métricas:',
+          pitfalls: 'Armadilhas:',
+          closing: 'Fechamento:',
           unknownAuthor: 'autor desconhecido'
         },
         en: {
           by: 'by',
-          mainIdeas: 'Main Ideas:',
-          practicalApplications: 'Practical Applications:',
+          summary: 'Summary:',
+          keyIdeas: 'Key ideas:',
+          practicalApplications: 'Practical applications:',
+          routine: 'Routine:',
+          plan7Days: '7-day plan:',
+          metrics: 'Metrics:',
+          pitfalls: 'Pitfalls:',
+          closing: 'Closing:',
           unknownAuthor: 'unknown author'
         },
         es: {
           by: 'por',
-          mainIdeas: 'Ideas Principales:',
-          practicalApplications: 'Aplicaciones Prácticas:',
+          summary: 'Resumen:',
+          keyIdeas: 'Ideas clave:',
+          practicalApplications: 'Aplicaciones prácticas:',
+          routine: 'Rutina:',
+          plan7Days: 'Plan de 7 días:',
+          metrics: 'Métricas:',
+          pitfalls: 'Trampas:',
+          closing: 'Cierre:',
           unknownAuthor: 'autor desconocido'
         }
       };
 
       const terms = audioTerms[language] || audioTerms.pt;
       
-      // Combine all text content with correct language terms
+      // Helper to capitalize first letter of sentences
+      const capitalizeSentences = (text: string): string => {
+        return text.replace(/(^\w|[.!?]\s+\w)/g, (match) => match.toUpperCase());
+      };
+      
+      // Combine all text content with section titles
       let fullText = `${summary.book_title} ${terms.by} ${summary.book_author || terms.unknownAuthor}.`;
       
-      // Add one-liner
+      // Add summary/one-liner
       if (summary.one_liner) {
-        fullText += `\n\n${summary.one_liner}`;
+        fullText += `\n\n${terms.summary}\n${capitalizeSentences(summary.one_liner)}`;
       } else if (summary.summary_text) {
-        fullText += `\n\n${summary.summary_text}`;
+        fullText += `\n\n${terms.summary}\n${capitalizeSentences(summary.summary_text)}`;
       }
       
       // Add key ideas
       const keyIdeas = summary.key_ideas || summary.main_ideas || [];
       if (keyIdeas.length > 0) {
-        fullText += `\n\n${terms.mainIdeas}\n${keyIdeas.join('. ')}.`;
+        const capitalizedIdeas = keyIdeas.map((idea: string) => capitalizeSentences(idea)).join('. ');
+        fullText += `\n\n${terms.keyIdeas}\n${capitalizedIdeas}.`;
       }
       
       // Add practical actions
       if (summary.actions && summary.actions.length > 0) {
-        fullText += `\n\n${terms.practicalApplications}\n${summary.actions.join('\n')}`;
+        const capitalizedActions = summary.actions.map((action: string) => capitalizeSentences(action)).join('\n');
+        fullText += `\n\n${terms.practicalApplications}\n${capitalizedActions}`;
       } else if (summary.practical_applications) {
-        fullText += `\n\n${terms.practicalApplications}\n${summary.practical_applications}`;
+        fullText += `\n\n${terms.practicalApplications}\n${capitalizeSentences(summary.practical_applications)}`;
       }
       
       // Add routine
       if (summary.routine) {
-        fullText += `\n\n${summary.routine}`;
+        fullText += `\n\n${terms.routine}\n${capitalizeSentences(summary.routine)}`;
       }
       
       // Add 7-day plan
       if (summary.plan_7_days) {
-        fullText += `\n\n${summary.plan_7_days}`;
+        fullText += `\n\n${terms.plan7Days}\n${capitalizeSentences(summary.plan_7_days)}`;
       }
       
       // Add metrics
       if (summary.metrics) {
-        fullText += `\n\n${summary.metrics}`;
+        fullText += `\n\n${terms.metrics}\n${capitalizeSentences(summary.metrics)}`;
       }
       
       // Add pitfalls
       if (summary.pitfalls) {
-        fullText += `\n\n${summary.pitfalls}`;
+        fullText += `\n\n${terms.pitfalls}\n${capitalizeSentences(summary.pitfalls)}`;
       }
       
-      // Add closing (very important!)
+      // Add closing
       if (summary.closing) {
-        fullText += `\n\n${summary.closing}`;
+        fullText += `\n\n${terms.closing}\n${capitalizeSentences(summary.closing)}`;
       }
       
       fullText = fullText.trim();

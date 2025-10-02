@@ -299,6 +299,7 @@ Gerar um resumo padronizado SEMPRE neste formato:
 ⚠️ REGRAS DE LINGUAGEM (CRÍTICO):
 - Linguagem SIMPLES, NATURAL, COLOQUIAL (nível 6º–8º ano)
 - Frases CURTAS (máx. 20 palavras por frase)
+- SEMPRE começar frases com letra MAIÚSCULA
 - ZERO jargão técnico, termos acadêmicos ou palavras difíceis
 - Use analogias do dia a dia para conceitos complexos
 - Exemplos práticos que qualquer pessoa entenda
@@ -346,6 +347,7 @@ Generate a standardized summary ALWAYS in this format:
 ⚠️ LANGUAGE RULES (CRITICAL):
 - SIMPLE, NATURAL, CONVERSATIONAL language (6th–8th grade level)
 - SHORT sentences (max. 20 words per sentence)
+- ALWAYS start sentences with CAPITAL letter
 - ZERO technical jargon, academic terms, or difficult words
 - Use everyday analogies for complex concepts
 - Practical examples that anyone can understand
@@ -393,6 +395,7 @@ Generar un resumen estandarizado SIEMPRE en este formato:
 ⚠️ REGLAS DE LENGUAJE (CRÍTICO):
 - Lenguaje SIMPLE, NATURAL, COLOQUIAL (nivel 6º–8º grado)
 - Frases CORTAS (máx. 20 palabras por frase)
+- SIEMPRE comenzar frases con letra MAYÚSCULA
 - CERO jerga técnica, términos académicos o palabras difíciles
 - Usa analogías cotidianas para conceptos complejos
 - Ejemplos prácticos que cualquiera pueda entender
