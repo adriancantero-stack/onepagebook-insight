@@ -94,12 +94,12 @@ const Auth = () => {
           <p className="text-base sm:text-lg text-foreground/80 mb-6 max-w-[60ch] mx-auto leading-relaxed">
             {t("hero.sub")}
           </p>
-          <CardDescription className="mt-4 mb-6 py-[4px]">
+          <CardDescription className="mt-8 mb-3 py-[4px]">
             {t("auth.subtitle")}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleAuth} className="space-y-4">
+          <form onSubmit={handleAuth} className="space-y-3">
             {!isLogin && <div className="space-y-2">
                 <Label htmlFor="fullName">{t("auth.fullName")}</Label>
                 <Input id="fullName" type="text" value={fullName} onChange={e => setFullName(e.target.value)} required />
