@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { BookOpen, Copy, Download, Share2, ArrowLeft, Volume2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { BookOpen, Copy, Download, Share2, ArrowLeft, Volume2, Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import AudioPlayer from "@/components/AudioPlayer";
@@ -623,18 +624,6 @@ const Summary = () => {
           </div>
 
           <div className="space-y-6">
-            {showAudioPlayer && audioSrc && (
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold mb-3 text-foreground">
-                  🔊 {t("summary.audioPlayer")}
-                </h3>
-                <AudioPlayer 
-                  audioSrc={audioSrc} 
-                  onEnded={() => setShowAudioPlayer(false)}
-                />
-              </div>
-            )}
-
             <SummarySection title={t("sections.oneLiner")} content={summary.one_liner} />
             <SummarySection title={t("sections.keyIdeas")} content={summary.key_ideas || summary.main_ideas} />
             <SummarySection title={t("sections.actions")} content={summary.actions || (summary.practical_applications ? summary.practical_applications.split('\n').filter((s: string) => s.trim()) : null)} />
@@ -645,14 +634,51 @@ const Summary = () => {
             <SummarySection title={t("sections.closing")} content={summary.closing} />
           </div>
 
+          {/* Audio Player Section - appears above buttons after generation */}
+          {isGeneratingAudio && (
+            <div className="mt-6 sm:mt-8 pt-6 border-t border-border animate-fade-in">
+              <div className="flex items-center gap-3 mb-4">
+                <Loader2 className="w-5 h-5 animate-spin text-primary" />
+                <h3 className="text-lg font-semibold text-foreground">
+                  {t("summary.generating")}...
+                </h3>
+              </div>
+              <div className="space-y-2">
+                <Skeleton className="h-16 w-full" />
+                <Skeleton className="h-4 w-3/4" />
+              </div>
+            </div>
+          )}
+
+          {showAudioPlayer && audioSrc && (
+            <div className="mt-6 sm:mt-8 pt-6 border-t border-border animate-fade-in">
+              <h3 className="text-lg font-semibold mb-3 text-foreground">
+                🔊 {t("summary.audioPlayer")}
+              </h3>
+              <AudioPlayer 
+                audioSrc={audioSrc} 
+                onEnded={() => setShowAudioPlayer(false)}
+              />
+            </div>
+          )}
+
           <div className="flex flex-wrap gap-2 sm:gap-3 mt-6 sm:mt-8 pt-6 border-t border-border">
             <Button 
               onClick={handleListenSummary} 
               disabled={isGeneratingAudio}
               className="flex-1 min-w-[140px] sm:min-w-[160px] bg-primary hover:bg-primary/90 text-xs sm:text-sm px-3 sm:px-4"
             >
-              <Volume2 className="w-4 h-4 mr-1 sm:mr-2 shrink-0" />
-              <span className="truncate">{isGeneratingAudio ? t("summary.generating") : t("summary.listen")}</span>
+              {isGeneratingAudio ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-1 sm:mr-2 shrink-0 animate-spin" />
+                  <span className="truncate">{t("summary.generating")}</span>
+                </>
+              ) : (
+                <>
+                  <Volume2 className="w-4 h-4 mr-1 sm:mr-2 shrink-0" />
+                  <span className="truncate">{t("summary.listen")}</span>
+                </>
+              )}
             </Button>
             <Button onClick={handleCopy} variant="outline" className="flex-1 min-w-[140px] sm:min-w-[160px] text-xs sm:text-sm px-3 sm:px-4">
               <Copy className="w-4 h-4 mr-1 sm:mr-2 shrink-0" />
