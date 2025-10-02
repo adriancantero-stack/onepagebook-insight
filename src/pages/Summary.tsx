@@ -319,38 +319,38 @@ const Summary = () => {
       }> = {
         pt: {
           by: 'por',
-          summary: 'Resumo:',
-          keyIdeas: 'Ideias-chave:',
-          practicalApplications: 'Aplicações práticas:',
-          routine: 'Rotina:',
-          plan7Days: 'Plano de 7 dias:',
-          metrics: 'Métricas:',
-          pitfalls: 'Armadilhas:',
-          closing: 'Fechamento:',
+          summary: 'O essencial em 1 frase',
+          keyIdeas: 'Sacadas que importam',
+          practicalApplications: 'Plano de ação',
+          routine: 'Exemplo de rotina',
+          plan7Days: 'Plano de 7 dias',
+          metrics: 'Métricas',
+          pitfalls: 'Armadilhas e limites',
+          closing: 'Faça acontecer',
           unknownAuthor: 'autor desconhecido'
         },
         en: {
           by: 'by',
-          summary: 'Summary:',
-          keyIdeas: 'Key ideas:',
-          practicalApplications: 'Practical applications:',
-          routine: 'Routine:',
-          plan7Days: '7-day plan:',
-          metrics: 'Metrics:',
-          pitfalls: 'Pitfalls:',
-          closing: 'Closing:',
+          summary: 'The essential in 1 sentence',
+          keyIdeas: 'Insights that matter',
+          practicalApplications: 'Action plan',
+          routine: 'Sample routine',
+          plan7Days: '7-day plan',
+          metrics: 'Metrics',
+          pitfalls: 'Pitfalls and limits',
+          closing: 'Make it happen',
           unknownAuthor: 'unknown author'
         },
         es: {
           by: 'por',
-          summary: 'Resumen:',
-          keyIdeas: 'Ideas clave:',
-          practicalApplications: 'Aplicaciones prácticas:',
-          routine: 'Rutina:',
-          plan7Days: 'Plan de 7 días:',
-          metrics: 'Métricas:',
-          pitfalls: 'Trampas:',
-          closing: 'Cierre:',
+          summary: 'Lo esencial en 1 frase',
+          keyIdeas: 'Ideas que importan',
+          practicalApplications: 'Plan de acción',
+          routine: 'Rutina de ejemplo',
+          plan7Days: 'Plan de 7 días',
+          metrics: 'Métricas',
+          pitfalls: 'Trampas y límites',
+          closing: 'Hazlo realidad',
           unknownAuthor: 'autor desconocido'
         }
       };
@@ -362,54 +362,56 @@ const Summary = () => {
         return text.replace(/(^\w|[.!?]\s+\w)/g, (match) => match.toUpperCase());
       };
       
-      // Combine all text content with section titles
-      let fullText = `${summary.book_title} ${terms.by} ${summary.book_author || terms.unknownAuthor}.`;
+      // Combine all text content with section titles - use canonical_title for proper accents
+      const bookTitle = summary.canonical_title || summary.book_title;
+      const bookAuthor = summary.canonical_author || summary.book_author || terms.unknownAuthor;
+      let fullText = `${bookTitle} ${terms.by} ${bookAuthor}.`;
       
-      // Add summary/one-liner
+      // Add summary/one-liner with pause
       if (summary.one_liner) {
-        fullText += `\n\n${terms.summary}\n${capitalizeSentences(summary.one_liner)}`;
+        fullText += `\n\n\n${terms.summary}.\n\n${capitalizeSentences(summary.one_liner)}`;
       } else if (summary.summary_text) {
-        fullText += `\n\n${terms.summary}\n${capitalizeSentences(summary.summary_text)}`;
+        fullText += `\n\n\n${terms.summary}.\n\n${capitalizeSentences(summary.summary_text)}`;
       }
       
-      // Add key ideas
+      // Add key ideas with pause
       const keyIdeas = summary.key_ideas || summary.main_ideas || [];
       if (keyIdeas.length > 0) {
         const capitalizedIdeas = keyIdeas.map((idea: string) => capitalizeSentences(idea)).join('. ');
-        fullText += `\n\n${terms.keyIdeas}\n${capitalizedIdeas}.`;
+        fullText += `\n\n\n${terms.keyIdeas}.\n\n${capitalizedIdeas}.`;
       }
       
-      // Add practical actions
+      // Add practical actions with pause
       if (summary.actions && summary.actions.length > 0) {
-        const capitalizedActions = summary.actions.map((action: string) => capitalizeSentences(action)).join('\n');
-        fullText += `\n\n${terms.practicalApplications}\n${capitalizedActions}`;
+        const capitalizedActions = summary.actions.map((action: string) => capitalizeSentences(action)).join('. ');
+        fullText += `\n\n\n${terms.practicalApplications}.\n\n${capitalizedActions}.`;
       } else if (summary.practical_applications) {
-        fullText += `\n\n${terms.practicalApplications}\n${capitalizeSentences(summary.practical_applications)}`;
+        fullText += `\n\n\n${terms.practicalApplications}.\n\n${capitalizeSentences(summary.practical_applications)}`;
       }
       
-      // Add routine
+      // Add routine with pause
       if (summary.routine) {
-        fullText += `\n\n${terms.routine}\n${capitalizeSentences(summary.routine)}`;
+        fullText += `\n\n\n${terms.routine}.\n\n${capitalizeSentences(summary.routine)}`;
       }
       
-      // Add 7-day plan
+      // Add 7-day plan with pause
       if (summary.plan_7_days) {
-        fullText += `\n\n${terms.plan7Days}\n${capitalizeSentences(summary.plan_7_days)}`;
+        fullText += `\n\n\n${terms.plan7Days}.\n\n${capitalizeSentences(summary.plan_7_days)}`;
       }
       
-      // Add metrics
+      // Add metrics with pause
       if (summary.metrics) {
-        fullText += `\n\n${terms.metrics}\n${capitalizeSentences(summary.metrics)}`;
+        fullText += `\n\n\n${terms.metrics}.\n\n${capitalizeSentences(summary.metrics)}`;
       }
       
-      // Add pitfalls
+      // Add pitfalls with pause
       if (summary.pitfalls) {
-        fullText += `\n\n${terms.pitfalls}\n${capitalizeSentences(summary.pitfalls)}`;
+        fullText += `\n\n\n${terms.pitfalls}.\n\n${capitalizeSentences(summary.pitfalls)}`;
       }
       
-      // Add closing
+      // Add closing with pause
       if (summary.closing) {
-        fullText += `\n\n${terms.closing}\n${capitalizeSentences(summary.closing)}`;
+        fullText += `\n\n\n${terms.closing}.\n\n${capitalizeSentences(summary.closing)}`;
       }
       
       fullText = fullText.trim();
