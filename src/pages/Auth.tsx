@@ -10,57 +10,59 @@ import { toast } from "@/hooks/use-toast";
 import { BookOpen } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import Footer from "@/components/Footer";
-
 const Auth = () => {
-  const { t } = useTranslation();
+  const {
+    t
+  } = useTranslation();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({
+      data: {
+        session
+      }
+    }) => {
       if (session) {
         navigate("/");
       }
     });
   }, [navigate]);
-
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
     try {
       if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({
+        const {
+          error
+        } = await supabase.auth.signInWithPassword({
           email,
-          password,
+          password
         });
-
         if (error) throw error;
-        
         toast({
-          title: t("toast.success"),
+          title: t("toast.success")
         });
         navigate("/");
       } else {
-        const { error } = await supabase.auth.signUp({
+        const {
+          error
+        } = await supabase.auth.signUp({
           email,
           password,
           options: {
             data: {
-              full_name: fullName,
+              full_name: fullName
             },
-            emailRedirectTo: `${window.location.origin}/`,
-          },
+            emailRedirectTo: `${window.location.origin}/`
+          }
         });
-
         if (error) throw error;
-
         toast({
-          title: t("toast.success"),
+          title: t("toast.success")
         });
         navigate("/");
       }
@@ -68,15 +70,13 @@ const Auth = () => {
       toast({
         variant: "destructive",
         title: t("toast.error"),
-        description: error.message,
+        description: error.message
       });
     } finally {
       setLoading(false);
     }
   };
-
-  return (
-    <div className="min-h-screen flex flex-col">
+  return <div className="min-h-screen flex flex-col">
       <div className="flex-1 flex items-center justify-center bg-background p-4">
         <div className="absolute top-4 right-4">
           <LanguageSelector />
@@ -94,55 +94,30 @@ const Auth = () => {
           <p className="text-base sm:text-lg text-foreground/80 mb-6 max-w-[60ch] mx-auto leading-relaxed">
             {t("hero.sub")}
           </p>
-          <CardDescription className="mt-4 mb-6">
+          <CardDescription className="mt-4 mb-6 py-[4px]">
             {t("auth.subtitle")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleAuth} className="space-y-4">
-            {!isLogin && (
-              <div className="space-y-2">
+            {!isLogin && <div className="space-y-2">
                 <Label htmlFor="fullName">{t("auth.fullName")}</Label>
-                <Input
-                  id="fullName"
-                  type="text"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  required
-                />
-              </div>
-            )}
+                <Input id="fullName" type="text" value={fullName} onChange={e => setFullName(e.target.value)} required />
+              </div>}
             <div className="space-y-2">
               <Label htmlFor="email">{t("auth.email")}</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+              <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">{t("auth.password")}</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={6}
-              />
+              <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required minLength={6} />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? t("auth.loading") : isLogin ? t("auth.loginButton") : t("auth.signupButton")}
             </Button>
           </form>
           <div className="mt-4 text-center text-sm">
-            <button
-              type="button"
-              onClick={() => setIsLogin(!isLogin)}
-              className="text-primary hover:underline"
-            >
+            <button type="button" onClick={() => setIsLogin(!isLogin)} className="text-primary hover:underline">
               {isLogin ? t("auth.switchToSignup") : t("auth.switchToLogin")}
             </button>
           </div>
@@ -151,8 +126,6 @@ const Auth = () => {
       </div>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Auth;
