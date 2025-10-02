@@ -60,7 +60,7 @@ export const en = {
     "summary.pdfDesc": "The summary has been saved as PDF.",
     
     // Sections
-    "sections.oneLiner": "The essential in 1 sentence",
+    "sections.oneLiner": "The essential in one sentence",
     "sections.keyIdeas": "Insights that matter",
     "sections.actions": "Action plan",
     "sections.routine": "Sample routine",

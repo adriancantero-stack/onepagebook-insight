@@ -60,7 +60,7 @@ export const pt = {
     "summary.pdfDesc": "O resumo foi salvo em PDF.",
     
     // Sections
-    "sections.oneLiner": "O essencial em 1 frase",
+    "sections.oneLiner": "O essencial em uma frase",
     "sections.keyIdeas": "Sacadas que importam",
     "sections.actions": "Plano de ação",
     "sections.routine": "Exemplo de rotina",
