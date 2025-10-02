@@ -77,6 +77,10 @@ const History = () => {
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t("history.title").split(" ")[0]}
           </Button>
+          <div className="flex items-center gap-2 absolute left-1/2 transform -translate-x-1/2">
+            <BookOpen className="w-6 h-6" />
+            <h1 className="text-xl font-bold">OnePageBook</h1>
+          </div>
           <LanguageSelector />
         </div>
       </header>
