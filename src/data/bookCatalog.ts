@@ -3,6 +3,10 @@ export interface Book {
   author: string;
   locale: string; // 'pt' | 'en' | 'es'
   originalTitle?: string; // For reference
+  level?: "basic" | "intermediate";
+  langs?: string[];
+  badge?: "editors" | "trending" | "starter";
+  id?: string;
 }
 
 export interface Category {
@@ -20,6 +24,14 @@ export interface FlatIndexItem {
   nTitle: string;
   nAuthor: string;
   locale: string;
+  level?: "basic" | "intermediate";
+  badge?: "editors" | "trending" | "starter";
+}
+
+export interface StarterPack {
+  id: string;
+  name: { pt: string; en: string; es: string };
+  books: string[]; // book ids
 }
 
 export const bookCatalog: Category[] = [
@@ -28,14 +40,14 @@ export const bookCatalog: Category[] = [
     nameKey: "cats.habits",
     books: [
       // Portuguese
-      { title: "Hábitos Atômicos", author: "James Clear", locale: "pt", originalTitle: "Atomic Habits" },
-      { title: "Trabalho Focado", author: "Cal Newport", locale: "pt", originalTitle: "Deep Work" },
-      { title: "O Poder do Hábito", author: "Charles Duhigg", locale: "pt", originalTitle: "The Power of Habit" },
+      { title: "Hábitos Atômicos", author: "James Clear", locale: "pt", originalTitle: "Atomic Habits", level: "basic", badge: "editors", id: "habits-0" },
+      { title: "Trabalho Focado", author: "Cal Newport", locale: "pt", originalTitle: "Deep Work", level: "intermediate", id: "habits-1" },
+      { title: "O Poder do Hábito", author: "Charles Duhigg", locale: "pt", originalTitle: "The Power of Habit", level: "basic", badge: "starter", id: "habits-2" },
       { title: "Essencialismo", author: "Greg McKeown", locale: "pt", originalTitle: "Essentialism" },
       { title: "A Única Coisa", author: "Gary Keller; Jay Papasan", locale: "pt", originalTitle: "The One Thing" },
       { title: "Indistraível", author: "Nir Eyal", locale: "pt", originalTitle: "Indistractable" },
       { title: "Tenha Tempo", author: "Jake Knapp; John Zeratsky", locale: "pt", originalTitle: "Make Time" },
-      { title: "Hábitos Minúsculos", author: "BJ Fogg", locale: "pt", originalTitle: "Tiny Habits" },
+      { title: "Hábitos Minúsculos", author: "BJ Fogg", locale: "pt", originalTitle: "Tiny Habits", level: "basic", badge: "starter", id: "habits-7" },
       { title: "Quatro Mil Semanas", author: "Oliver Burkeman", locale: "pt", originalTitle: "Four Thousand Weeks" },
       { title: "A Arte de Fazer Acontecer", author: "David Allen", locale: "pt", originalTitle: "Getting Things Done" },
       
@@ -69,10 +81,10 @@ export const bookCatalog: Category[] = [
     nameKey: "cats.sleep",
     books: [
       // Portuguese
-      { title: "Por Que Nós Dormimos", author: "Matthew Walker", locale: "pt", originalTitle: "Why We Sleep" },
-      { title: "O Código Circadiano", author: "Satchin Panda", locale: "pt", originalTitle: "The Circadian Code" },
+      { title: "Por Que Nós Dormimos", author: "Matthew Walker", locale: "pt", originalTitle: "Why We Sleep", level: "basic", badge: "editors", id: "sleep-0" },
+      { title: "O Código Circadiano", author: "Satchin Panda", locale: "pt", originalTitle: "The Circadian Code", level: "intermediate", id: "sleep-1" },
       { title: "Mude Sua Rotina, Mude Sua Vida", author: "Suhas Kshirsagar", locale: "pt", originalTitle: "Change Your Schedule, Change Your Life" },
-      { title: "Durma Melhor", author: "Shawn Stevenson", locale: "pt", originalTitle: "Sleep Smarter" },
+      { title: "Durma Melhor", author: "Shawn Stevenson", locale: "pt", originalTitle: "Sleep Smarter", level: "basic", id: "sleep-3" },
       { title: "Viva Mais e Melhor", author: "Peter Attia", locale: "pt", originalTitle: "Outlive" },
       { title: "Respire", author: "James Nestor", locale: "pt", originalTitle: "Breath" },
       { title: "Spark", author: "John J. Ratey", locale: "pt" },
@@ -115,7 +127,7 @@ export const bookCatalog: Category[] = [
       { title: "Garra", author: "Angela Duckworth", locale: "pt", originalTitle: "Grit" },
       { title: "O Jeito Harvard de Ser Feliz", author: "Shawn Achor", locale: "pt", originalTitle: "The Happiness Advantage" },
       { title: "Em Busca de Sentido", author: "Viktor E. Frankl", locale: "pt", originalTitle: "Man's Search for Meaning" },
-      { title: "Flow", author: "Mihaly Csikszentmihalyi", locale: "pt" },
+      { title: "Flow", author: "Mihaly Csikszentmihalyi", locale: "pt", level: "intermediate", id: "psych-5" },
       { title: "O Obstáculo é o Caminho", author: "Ryan Holiday", locale: "pt", originalTitle: "The Obstacle Is the Way" },
       { title: "Drive", author: "Daniel H. Pink", locale: "pt" },
       { title: "Tropeçando na Felicidade", author: "Daniel Gilbert", locale: "pt", originalTitle: "Stumbling on Happiness" },
@@ -160,7 +172,7 @@ export const bookCatalog: Category[] = [
       { title: "Boa Estratégia, Má Estratégia", author: "Richard Rumelt", locale: "pt", originalTitle: "Good Strategy Bad Strategy" },
       { title: "7 Powers", author: "Hamilton Helmer", locale: "pt" },
       { title: "Jogue para Vencer", author: "A.G. Lafley; Roger L. Martin", locale: "pt", originalTitle: "Playing to Win" },
-      { title: "Meça o Que Importa", author: "John Doerr", locale: "pt", originalTitle: "Measure What Matters" },
+      { title: "Meça o Que Importa", author: "John Doerr", locale: "pt", originalTitle: "Measure What Matters", id: "strategy-9" },
       
       // English
       { title: "Good to Great", author: "Jim Collins", locale: "en" },
@@ -640,6 +652,37 @@ export const bookCatalog: Category[] = [
   }
 ];
 
+// Starter packs
+export const starterPacks: StarterPack[] = [
+  {
+    id: "start-habits",
+    name: { 
+      pt: "Começar hábitos", 
+      en: "Start habits", 
+      es: "Empezar hábitos" 
+    },
+    books: ["habits-0", "habits-2", "habits-7"]
+  },
+  {
+    id: "sleep-better",
+    name: { 
+      pt: "Dormir melhor", 
+      en: "Sleep better", 
+      es: "Dormir mejor" 
+    },
+    books: ["sleep-0", "sleep-1", "sleep-3"]
+  },
+  {
+    id: "deep-work",
+    name: { 
+      pt: "Foco profundo", 
+      en: "Deep work", 
+      es: "Trabajo profundo" 
+    },
+    books: ["habits-1", "psych-5", "strategy-9"]
+  }
+];
+
 // Enhanced normalize function for better search matching
 export const normalize = (text: string): string => {
   return (text || "")
@@ -662,7 +705,7 @@ export const createFlatIndex = (locale: string): FlatIndexItem[] => {
     cat.books
       .filter(book => book.locale === locale)
       .map((book, index) => ({
-        id: `${cat.id}-${book.locale}-${index}`,
+        id: book.id || `${cat.id}-${book.locale}-${index}`,
         title: book.title,
         author: book.author,
         catId: cat.id,
@@ -670,6 +713,8 @@ export const createFlatIndex = (locale: string): FlatIndexItem[] => {
         nTitle: normalize(book.title),
         nAuthor: normalize(book.author),
         locale: book.locale,
+        level: book.level,
+        badge: book.badge,
       }))
   );
 };

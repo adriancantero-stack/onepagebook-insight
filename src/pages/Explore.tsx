@@ -4,17 +4,40 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { BookOpen, ArrowLeft, Sparkles } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { BookOpen, ArrowLeft, Sparkles, Shuffle, Filter } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import Footer from "@/components/Footer";
 import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { 
   bookCatalog, 
+  starterPacks,
   createFlatIndex, 
   suggestBooks, 
   getBooksByLocale,
   FlatIndexItem,
   Book
 } from "@/data/bookCatalog";
+
+// Trending storage helpers
+const getTrendingData = (): Record<string, number> => {
+  const data = localStorage.getItem("ob_clicks");
+  return data ? JSON.parse(data) : {};
+};
+
+const incrementTrending = (bookId: string) => {
+  const data = getTrendingData();
+  data[bookId] = (data[bookId] || 0) + 1;
+  localStorage.setItem("ob_clicks", JSON.stringify(data));
+};
 
 const Explore = () => {
   const { t, i18n } = useTranslation();
@@ -27,6 +50,12 @@ const Explore = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const debounceTimerRef = useRef<NodeJS.Timeout>();
+
+  // Filters and sorting
+  const [sortBy, setSortBy] = useState<"recommended" | "trending" | "alpha">("recommended");
+  const [filterLevel, setFilterLevel] = useState<string[]>([]);
+  const [filterLang, setFilterLang] = useState<string[]>([]);
+  const [showFilters, setShowFilters] = useState(false);
 
   // Create flat index filtered by current locale
   const flatIndex = useMemo(() => createFlatIndex(i18n.language), [i18n.language]);
@@ -83,6 +112,9 @@ const Explore = () => {
         source: "typeahead",
       });
     }
+
+    // Increment trending
+    incrementTrending(item.id);
 
     // Navigate to home with book data
     navigate("/", {
@@ -161,17 +193,21 @@ const Explore = () => {
     }
   };
 
-  const handleSummarize = (book: Book) => {
+  const handleSummarize = (book: Book, bookId: string, source: string = "grid") => {
     // Track analytics event
     if (typeof window !== "undefined" && (window as any).gtag) {
-      (window as any).gtag("event", "catalog_select", {
+      (window as any).gtag("event", "catalog_click", {
+        bookId,
         categoryId: selectedCategory,
         title: book.title,
         author: book.author,
         locale: i18n.language,
-        source: "grid",
+        source,
       });
     }
+
+    // Increment trending
+    incrementTrending(bookId);
 
     // Navigate to home with book data
     navigate("/", {
@@ -182,9 +218,109 @@ const Explore = () => {
     });
   };
 
+  const handleRandomBook = () => {
+    const filtered = getFilteredAndSortedBooks();
+    if (filtered.length === 0) return;
+
+    const randomBook = filtered[Math.floor(Math.random() * filtered.length)];
+    
+    // Track analytics event
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      (window as any).gtag("event", "random_click", {
+        fromCategory: selectedCategory,
+        title: randomBook.title,
+        locale: i18n.language,
+      });
+    }
+
+    handleSummarize(randomBook, randomBook.id || `${selectedCategory}-random`, "random");
+  };
+
+  const handlePackOpen = (packId: string) => {
+    // Track analytics event
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      (window as any).gtag("event", "pack_open", {
+        packId,
+        locale: i18n.language,
+      });
+    }
+
+    const pack = starterPacks.find(p => p.id === packId);
+    if (!pack || pack.books.length === 0) return;
+
+    // Find first book in the pack
+    const firstBookId = pack.books[0];
+    const allBooksFlat = flatIndex;
+    const firstBook = allBooksFlat.find(b => b.id === firstBookId);
+
+    if (firstBook) {
+      handleSummarize(
+        { title: firstBook.title, author: firstBook.author, locale: firstBook.locale },
+        firstBook.id,
+        "pack"
+      );
+    }
+  };
+
   // Get current category books filtered by locale
   const currentCategory = bookCatalog.find(cat => cat.id === selectedCategory);
-  const allBooks = currentCategory ? getBooksByLocale(currentCategory, i18n.language) : [];
+  const categoryBooks = currentCategory ? getBooksByLocale(currentCategory, i18n.language) : [];
+
+  const getFilteredAndSortedBooks = () => {
+    let filtered = categoryBooks.map((book, index) => {
+      const bookId = book.id || `${selectedCategory}-${book.locale}-${index}`;
+      return { ...book, id: bookId };
+    });
+
+    // Apply level filter
+    if (filterLevel.length > 0) {
+      filtered = filtered.filter(book => book.level && filterLevel.includes(book.level));
+    }
+
+    // Apply lang filter (if book has langs array)
+    if (filterLang.length > 0) {
+      filtered = filtered.filter(book => 
+        !book.langs || book.langs.some(lang => filterLang.includes(lang))
+      );
+    }
+
+    // Sort
+    const trendingData = getTrendingData();
+    
+    if (sortBy === "recommended") {
+      filtered.sort((a, b) => {
+        // Editors pick first
+        if (a.badge === "editors" && b.badge !== "editors") return -1;
+        if (b.badge === "editors" && a.badge !== "editors") return 1;
+        // Then alpha
+        return a.title.localeCompare(b.title);
+      });
+    } else if (sortBy === "trending") {
+      filtered.sort((a, b) => {
+        const scoreA = trendingData[a.id!] || 0;
+        const scoreB = trendingData[b.id!] || 0;
+        if (scoreB !== scoreA) return scoreB - scoreA;
+        return a.title.localeCompare(b.title);
+      });
+    } else if (sortBy === "alpha") {
+      filtered.sort((a, b) => a.title.localeCompare(b.title));
+    }
+
+    return filtered;
+  };
+
+  const allBooks = getFilteredAndSortedBooks();
+
+  // Track filter changes
+  useEffect(() => {
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      (window as any).gtag("event", "filter_apply", {
+        level: filterLevel.length > 0 ? filterLevel : undefined,
+        langs: filterLang.length > 0 ? filterLang : undefined,
+        sort: sortBy,
+      });
+    }
+  }, [filterLevel, filterLang, sortBy]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -282,6 +418,32 @@ const Explore = () => {
           </p>
         </div>
 
+        {/* Starter Packs Carousel */}
+        <div className="mb-6 sm:mb-8">
+          <h2 className="text-xl font-bold mb-4">Starter Packs</h2>
+          <div className="flex gap-4 overflow-x-auto pb-4">
+            {starterPacks.map(pack => (
+              <Card 
+                key={pack.id}
+                className="p-4 min-w-[280px] cursor-pointer hover:border-primary transition-colors"
+                onClick={() => handlePackOpen(pack.id)}
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="p-2 bg-primary/10 rounded-lg shrink-0">
+                    <Sparkles className="w-5 h-5 text-primary" />
+                  </div>
+                  <h3 className="font-bold text-base">
+                    {pack.name[i18n.language as keyof typeof pack.name] || pack.name.en}
+                  </h3>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {pack.books.length} {t("explore.summarize").toLowerCase()}s
+                </p>
+              </Card>
+            ))}
+          </div>
+        </div>
+
         <div className="flex flex-wrap gap-2 mb-6 sm:mb-8">
           {bookCatalog.map(category => (
             <Button
@@ -300,6 +462,95 @@ const Explore = () => {
           ))}
         </div>
 
+        {/* Filters and Sort */}
+        <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          <div className="flex items-center gap-2 flex-wrap">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              <Filter className="w-4 h-4 mr-2" />
+              {t("filters.title")}
+            </Button>
+
+            <Select value={sortBy} onValueChange={(v: any) => setSortBy(v)}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder={t("sort.label")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="recommended">{t("sort.recommended")}</SelectItem>
+                <SelectItem value="trending">{t("sort.trending")}</SelectItem>
+                <SelectItem value="alpha">{t("sort.alpha")}</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleRandomBook}
+              disabled={allBooks.length === 0}
+            >
+              <Shuffle className="w-4 h-4 mr-2" />
+              {t("explore.random")}
+            </Button>
+          </div>
+        </div>
+
+        {showFilters && (
+          <Card className="p-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <h3 className="font-semibold mb-2">{t("filters.level")}</h3>
+                <div className="space-y-2">
+                  {["basic", "intermediate"].map(level => (
+                    <div key={level} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`level-${level}`}
+                        checked={filterLevel.includes(level)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setFilterLevel([...filterLevel, level]);
+                          } else {
+                            setFilterLevel(filterLevel.filter(l => l !== level));
+                          }
+                        }}
+                      />
+                      <Label htmlFor={`level-${level}`}>
+                        {t(`filters.level.${level}`)}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-semibold mb-2">{t("filters.lang")}</h3>
+                <div className="space-y-2">
+                  {["pt", "en", "es"].map(lang => (
+                    <div key={lang} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`lang-${lang}`}
+                        checked={filterLang.includes(lang)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setFilterLang([...filterLang, lang]);
+                          } else {
+                            setFilterLang(filterLang.filter(l => l !== lang));
+                          }
+                        }}
+                      />
+                      <Label htmlFor={`lang-${lang}`}>
+                        {t(`filters.lang.${lang}`)}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Card>
+        )}
+
         <div className="flex flex-col gap-3">
           {allBooks.map((book, index) => (
             <Card 
@@ -311,16 +562,28 @@ const Explore = () => {
                   <BookOpen className="w-5 h-5 text-primary" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-base mb-1 line-clamp-2">
-                    {book.title}
-                  </h3>
+                  <div className="flex items-start gap-2 mb-1">
+                    <h3 className="font-bold text-base line-clamp-2 flex-1">
+                      {book.title}
+                    </h3>
+                    {book.badge && (
+                      <Badge variant="secondary" className="shrink-0 text-xs">
+                        {t(`badges.${book.badge}`)}
+                      </Badge>
+                    )}
+                  </div>
                   <p className="text-sm text-muted-foreground line-clamp-1">
                     {book.author}
                   </p>
+                  {book.level && (
+                    <Badge variant="outline" className="mt-1 text-xs">
+                      {t(`filters.level.${book.level}`)}
+                    </Badge>
+                  )}
                 </div>
               </div>
               <Button
-                onClick={() => handleSummarize(book)}
+                onClick={() => handleSummarize(book, book.id!, "grid")}
                 size="sm"
                 className="w-full sm:w-auto shrink-0 focus-visible:ring-2 focus-visible:ring-[#5A54E6]"
                 aria-label={`${t("explore.summarize")} ${book.title} — ${book.author}`}
