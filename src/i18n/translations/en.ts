@@ -21,6 +21,7 @@ export const en = {
     
     // Auth
     "auth.title": "Welcome",
+    "auth.tagline": "1 Book in 1 Page",
     "auth.subtitle": "Login or create your account",
     "auth.email": "Email",
     "auth.password": "Password",

@@ -21,6 +21,7 @@ export const pt = {
     
     // Auth
     "auth.title": "Bem-vindo",
+    "auth.tagline": "1 Livro em 1 Página",
     "auth.subtitle": "Faça login ou crie sua conta",
     "auth.email": "Email",
     "auth.password": "Senha",
