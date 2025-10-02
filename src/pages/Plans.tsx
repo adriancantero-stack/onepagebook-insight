@@ -171,7 +171,7 @@ const Plans = () => {
                 }
               </div>
               {billingCycle === "yearly" && (
-                <p className="text-sm text-muted-foreground">{t("plans.premium.hint")}</p>
+                <p className="text-sm text-primary font-medium">{t("plans.premium.hint")}</p>
               )}
             </div>
 
