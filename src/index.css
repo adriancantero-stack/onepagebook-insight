@@ -160,3 +160,194 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+/* Generation overlay and progress */
+#gen-overlay[hidden] { 
+  display: none; 
+}
+
+#gen-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  z-index: 60;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.gen-box {
+  background: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border: 1px solid hsl(var(--border));
+  border-radius: 16px;
+  padding: 24px;
+  width: min(480px, 92vw);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gen-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 12px 0 16px;
+  opacity: 0.95;
+}
+
+.gen-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.gen-steps li {
+  opacity: 0.5;
+  font-size: 14px;
+  padding-left: 24px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.gen-steps li::before {
+  content: "○";
+  position: absolute;
+  left: 0;
+  transition: all 0.2s ease;
+}
+
+.gen-steps li.active {
+  opacity: 1;
+  font-weight: 600;
+}
+
+.gen-steps li.active::before {
+  content: "●";
+  color: hsl(var(--primary));
+}
+
+.gen-steps li.done {
+  opacity: 1;
+  color: hsl(120 60% 50%);
+}
+
+.gen-steps li.done::before {
+  content: "✓";
+  color: hsl(120 60% 50%);
+}
+
+.gen-error {
+  margin-top: 12px;
+  padding: 12px;
+  background: hsl(var(--destructive) / 0.1);
+  color: hsl(var(--destructive-foreground));
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.gen-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid hsl(var(--border));
+  border-top-color: hsl(var(--primary));
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.gen-cancel {
+  margin-top: 16px;
+  background: transparent;
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--muted-foreground));
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.gen-cancel:hover {
+  background: hsl(var(--muted));
+}
+
+/* Skeleton loading */
+.sk-title,
+.sk-paragraph,
+.sk-line {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 0%,
+    hsl(var(--muted) / 0.5) 50%,
+    hsl(var(--muted)) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+.sk-title {
+  height: 32px;
+  width: 70%;
+  margin: 12px 0;
+}
+
+.sk-paragraph {
+  height: 100px;
+  width: 100%;
+  margin: 16px 0;
+}
+
+.sk-bullets {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.sk-bullets .sk-line {
+  height: 16px;
+  width: 85%;
+}
+
+.sk-bullets .sk-line:nth-child(2) {
+  width: 92%;
+}
+
+.sk-bullets .sk-line:nth-child(3) {
+  width: 78%;
+}
+
+.sk-bullets .sk-line:nth-child(4) {
+  width: 88%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

@@ -189,5 +189,15 @@ export const pt = {
     "footer.privacy": "Política de Privacidade",
     "footer.contact": "Contato",
     "footer.copyright": "© {{year}} onepagebook.ai",
+    
+    // Generation overlay
+    "gen.loading": "Gerando resumo…",
+    "gen.step.resolve": "Checando título e autor",
+    "gen.step.summarize": "Criando o resumo",
+    "gen.step.polish": "Organizando e limpando",
+    "gen.step.audio": "Preparando o áudio",
+    "gen.step.done": "Pronto!",
+    "gen.error": "Algo deu errado. Tente novamente.",
+    "gen.cancel": "Cancelar",
   }
 };

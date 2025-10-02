@@ -17,6 +17,14 @@ import {
   ensureMonth 
 } from "@/lib/usageManager";
 
+type GenStep = "resolve" | "summarize" | "polish" | "audio" | "done" | "error";
+
+interface GenState {
+  open: boolean;
+  step: GenStep;
+  message: string;
+}
+
 const Home = () => {
   const { t, i18n } = useTranslation();
   const [user, setUser] = useState<any>(null);
@@ -24,6 +32,11 @@ const Home = () => {
   const [bookAuthor, setBookAuthor] = useState("");
   const [loading, setLoading] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [genState, setGenState] = useState<GenState>({
+    open: false,
+    step: "resolve",
+    message: "",
+  });
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -47,6 +60,18 @@ const Home = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
+  // Block scroll when overlay is open
+  useEffect(() => {
+    if (genState.open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [genState.open]);
+
   // Load book data from Explore page navigation
   useEffect(() => {
     if (location.state?.bookTitle) {
@@ -68,6 +93,7 @@ const Home = () => {
     }
 
     setLoading(true);
+    setGenState({ open: true, step: "resolve", message: "" });
 
     try {
       const { data: subscription } = await supabase
@@ -89,10 +115,14 @@ const Home = () => {
             title: t("limit.toasts.summary.hard"),
           });
           setLoading(false);
+          setGenState({ open: false, step: "error", message: "" });
           return;
         }
       }
 
+      // Step: Summarize
+      setGenState({ open: true, step: "summarize", message: "" });
+      
       // Generate summary
       const { data, error } = await supabase.functions.invoke("generate-summary", {
         body: {
@@ -103,6 +133,15 @@ const Home = () => {
       });
 
       if (error) throw error;
+
+      // Step: Polish
+      setGenState({ open: true, step: "polish", message: "" });
+      
+      // Small delay to show polish step
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      // Step: Done
+      setGenState({ open: true, step: "done", message: "" });
 
       // Increment counter only on success for free users
       if (plan?.type === "free") {
@@ -117,13 +156,25 @@ const Home = () => {
         });
       }
 
-      navigate(`/summary/${data.summaryId}`);
+      // Close overlay and navigate
+      setTimeout(() => {
+        setGenState({ open: false, step: "done", message: "" });
+        navigate(`/summary/${data.summaryId}`);
+      }, 600);
     } catch (error: any) {
+      setGenState({ 
+        open: true, 
+        step: "error", 
+        message: error.message || "" 
+      });
       toast({
         variant: "destructive",
         title: t("toast.error"),
         description: error.message,
       });
+      setTimeout(() => {
+        setGenState({ open: false, step: "error", message: "" });
+      }, 3000);
     } finally {
       setLoading(false);
     }
@@ -139,8 +190,40 @@ const Home = () => {
 
   if (!user) return null;
 
+  const isStep = (step: GenStep) => genState.step === step;
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      {/* Generation Progress Overlay */}
+      <div 
+        id="gen-overlay" 
+        role="dialog" 
+        aria-live="polite" 
+        aria-modal="true"
+        hidden={!genState.open}
+      >
+        <div className="gen-box">
+          <div className="gen-spinner" aria-hidden="true"></div>
+          <div className="gen-title">{t("gen.loading")}</div>
+          <ol className="gen-steps" role="list">
+            <li className={isStep("resolve") ? "active" : ""}>
+              {t("gen.step.resolve")}
+            </li>
+            <li className={isStep("summarize") ? "active" : ""}>
+              {t("gen.step.summarize")}
+            </li>
+            <li className={isStep("polish") ? "active" : ""}>
+              {t("gen.step.polish")}
+            </li>
+            <li className={`${isStep("done") ? "active done" : ""}`}>
+              {t("gen.step.done")}
+            </li>
+          </ol>
+          <div className="gen-error" hidden={genState.step !== "error"}>
+            {t("gen.error")} {genState.message}
+          </div>
+        </div>
+      </div>
       <header className="border-b border-border">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between relative">
           <div className="flex items-center gap-2">
