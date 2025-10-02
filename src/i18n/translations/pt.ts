@@ -6,8 +6,8 @@ export const pt = {
     "header.logout": "Sair",
     
     // Home
-    "home.title": "Gere resumos práticos de livros",
-    "home.titleLine2": "em 1 página",
+    "home.title": "Gere resumos práticos",
+    "home.titleLine2": "de livros em 1 página",
     "home.subtitle": "Transforme qualquer livro em insights práticos que você pode aplicar hoje",
     "home.bookTitle": "Título do Livro",
     "home.bookTitlePlaceholder": "Ex: Hábitos Atômicos",
