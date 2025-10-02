@@ -300,31 +300,27 @@ const Explore = () => {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="flex flex-col gap-3">
           {allBooks.map((book, index) => (
             <Card 
               key={`${book.title}-${index}`}
-              className="p-6 flex flex-col hover:border-primary transition-colors"
+              className="p-4 flex items-center gap-4 hover:border-primary transition-colors"
             >
-              <div className="flex-1 mb-4">
-                <div className="flex items-start gap-3 mb-3">
-                  <div className="p-2 bg-primary/10 rounded-lg shrink-0">
-                    <BookOpen className="w-5 h-5 text-primary" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-base sm:text-lg mb-1 line-clamp-2">
-                      {book.title}
-                    </h3>
-                    <p className="text-sm text-muted-foreground line-clamp-1">
-                      {book.author}
-                    </p>
-                  </div>
-                </div>
+              <div className="p-2 bg-primary/10 rounded-lg shrink-0">
+                <BookOpen className="w-5 h-5 text-primary" />
               </div>
-
+              <div className="flex-1 min-w-0">
+                <h3 className="font-bold text-base mb-1 line-clamp-1">
+                  {book.title}
+                </h3>
+                <p className="text-sm text-muted-foreground line-clamp-1">
+                  {book.author}
+                </p>
+              </div>
               <Button
                 onClick={() => handleSummarize(book)}
-                className="w-full focus-visible:ring-2 focus-visible:ring-[#5A54E6]"
+                size="sm"
+                className="shrink-0 focus-visible:ring-2 focus-visible:ring-[#5A54E6]"
                 aria-label={`${t("explore.summarize")} ${book.title} — ${book.author}`}
               >
                 <Sparkles className="w-4 h-4 mr-2" />
