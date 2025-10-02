@@ -248,7 +248,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      normalize_cache_text: {
+        Args: { text_input: string }
+        Returns: string
+      }
     }
     Enums: {
       subscription_type: "free" | "premium"
