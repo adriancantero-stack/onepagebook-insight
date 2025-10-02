@@ -9,6 +9,7 @@ export const pt = {
     "home.title": "Gere resumos práticos",
     "home.titleLine2": "de livros em 1 página",
     "home.subtitle": "Transforme qualquer livro em insights práticos que você pode aplicar hoje",
+    "hero.sub": "Transforme qualquer livro em ideias-chave e passos práticos, em minutos.",
     "home.bookTitle": "Título do Livro",
     "home.bookTitlePlaceholder": "Ex: Hábitos Atômicos",
     "home.bookAuthor": "Autor (opcional)",

@@ -146,6 +146,9 @@ const Home = () => {
             <br />
             {t("home.titleLine2")}
           </h2>
+          <p className="text-lg sm:text-xl text-foreground/80 mb-4 max-w-[60ch] mx-auto leading-relaxed">
+            {t("hero.sub")}
+          </p>
           <p className="text-muted-foreground text-base sm:text-lg">
             {t("home.subtitle")}
           </p>

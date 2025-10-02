@@ -9,6 +9,7 @@ export const es = {
     "home.title": "Genera resúmenes prácticos",
     "home.titleLine2": "de libros en 1 página",
     "home.subtitle": "Convierte cualquier libro en ideas prácticas que puedes aplicar hoy",
+    "hero.sub": "Convierte cualquier libro en ideas clave y pasos de acción, en minutos.",
     "home.bookTitle": "Título del Libro",
     "home.bookTitlePlaceholder": "Ej: Hábitos Atómicos",
     "home.bookAuthor": "Autor (opcional)",

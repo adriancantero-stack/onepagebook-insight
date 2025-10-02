@@ -9,6 +9,7 @@ export const en = {
     "home.title": "Generate practical one-page",
     "home.titleLine2": "book summaries",
     "home.subtitle": "Turn any book into practical insights you can apply today",
+    "hero.sub": "Turn any book into key ideas and action steps, in minutes.",
     "home.bookTitle": "Book Title",
     "home.bookTitlePlaceholder": "e.g. Atomic Habits",
     "home.bookAuthor": "Author (optional)",
