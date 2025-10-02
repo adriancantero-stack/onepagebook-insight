@@ -91,7 +91,7 @@ const Auth = () => {
             </div>
           </div>
           <p className="text-sm text-primary font-medium mb-3">{t("auth.tagline")}</p>
-          <p className="text-base sm:text-lg text-foreground/80 mb-6 max-w-[60ch] mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg text-foreground/80 mb-6 max-w-[60ch] mx-auto leading-relaxed my-[15px] py-0">
             {t("hero.sub")}
           </p>
           <CardDescription className="mt-8 mb-3 py-[4px]">
