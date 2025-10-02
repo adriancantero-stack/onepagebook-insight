@@ -57,7 +57,7 @@ const Faq = () => {
   };
 
   useEffect(() => {
-    document.title = `${t("faq.title")} | OnePageBook`;
+    document.title = `${t("faq.title_long")} | OnePageBook`;
     
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
@@ -88,7 +88,7 @@ const Faq = () => {
         </header>
 
         <main className="flex-1 container mx-auto px-4 py-12 max-w-3xl">
-          <h1 className="text-4xl font-bold mb-2 text-center">{t("faq.title")}</h1>
+          <h1 className="text-4xl font-bold mb-2 text-center">{t("faq.title_long")}</h1>
           
           <div className="relative mb-8 mt-8">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />

@@ -28,8 +28,9 @@ const Footer = () => {
             <Link 
               to="/faq" 
               className="hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-[#5A54E6] focus:ring-offset-2 rounded"
+              aria-label={t("faq.title_long")}
             >
-              {t("footer.faq")}
+              {t("nav.faq_short")}
             </Link>
             <span className="text-muted-foreground">•</span>
             <a 

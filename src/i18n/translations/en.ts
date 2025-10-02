@@ -5,6 +5,11 @@ export const en = {
     "header.premium": "Premium",
     "header.logout": "Logout",
     
+    // Navigation
+    "nav.faq": "FAQ",
+    "nav.faq_short": "FAQ",
+    "faq.title_long": "Frequently Asked Questions (FAQ)",
+    
     // Home
     "home.title": "Generate practical one-page",
     "home.titleLine2": "book summaries",
@@ -192,7 +197,6 @@ export const en = {
     "footer.copyright": "© {{year}} onepagebook.ai",
     
     // FAQ
-    "nav.faq": "FAQ",
     "faq.title": "Frequently Asked Questions",
     "faq.search.placeholder": "Search questions…",
     "faq.empty": "No results found.",

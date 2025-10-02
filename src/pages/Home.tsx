@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { BookOpen, History, Crown, LogOut, Loader2, Compass } from "lucide-react";
+import { BookOpen, History, Crown, LogOut, Loader2, Compass, HelpCircle } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import Footer from "@/components/Footer";
@@ -336,6 +336,16 @@ const Home = () => {
               <Crown className="w-4 h-4" />
               <span className="hidden sm:inline">{t("header.premium")}</span>
             </Button>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => navigate("/faq")} 
+              className="gap-1 sm:gap-2"
+              aria-label={t("faq.title_long")}
+            >
+              <HelpCircle className="w-4 h-4" />
+              <span className="hidden sm:inline">{t("nav.faq_short")}</span>
+            </Button>
             <LanguageSelector />
             <Button variant="ghost" size="sm" onClick={handleLogout}>
               <LogOut className="w-4 h-4" />
@@ -406,7 +416,20 @@ const Home = () => {
 
       <Footer />
       
-      <UpgradeModal 
+      {/* FAQ Floating Action Button (mobile only) */}
+      <a 
+        href="/faq" 
+        className="faq-fab" 
+        aria-label={t("faq.title_long")}
+        onClick={(e) => {
+          e.preventDefault();
+          navigate("/faq");
+        }}
+      >
+        ?
+      </a>
+      
+      <UpgradeModal
         open={showUpgradeModal}
         onOpenChange={setShowUpgradeModal}
         type="summary"

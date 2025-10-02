@@ -5,6 +5,11 @@ export const pt = {
     "header.premium": "Premium",
     "header.logout": "Sair",
     
+    // Navigation
+    "nav.faq": "FAQ",
+    "nav.faq_short": "FAQ",
+    "faq.title_long": "Perguntas frequentes (FAQ)",
+    
     // Home
     "home.title": "Gere resumos práticos",
     "home.titleLine2": "de livros em 1 página",
@@ -192,7 +197,6 @@ export const pt = {
     "footer.copyright": "© {{year}} onepagebook.ai",
     
     // FAQ
-    "nav.faq": "FAQ",
     "faq.title": "Perguntas Frequentes",
     "faq.search.placeholder": "Buscar pergunta…",
     "faq.empty": "Nenhum resultado encontrado.",
