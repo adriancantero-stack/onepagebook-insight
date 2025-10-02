@@ -49,6 +49,13 @@ export const es = {
     "summary.shared": "¡Resumen compartido!",
     "summary.loading": "Cargando resumen...",
     "summary.unknownAuthor": "autor desconocido",
+    "summary.audioGenerated": "¡Audio generado!",
+    "summary.audioChunks": "Resumen dividido en {{count}} parte(s).",
+    "summary.audioReady": "Puedes escuchar el resumen ahora.",
+    "summary.audioError": "Error al generar audio",
+    "summary.audioErrorDesc": "No se pudo generar el audio. Inténtalo de nuevo.",
+    "summary.pdfDownloaded": "¡PDF descargado!",
+    "summary.pdfDesc": "El resumen se guardó en PDF.",
     
     // Sections
     "sections.oneLiner": "En una frase",

@@ -49,6 +49,13 @@ export const en = {
     "summary.shared": "Summary shared!",
     "summary.loading": "Loading summary...",
     "summary.unknownAuthor": "unknown author",
+    "summary.audioGenerated": "Audio generated!",
+    "summary.audioChunks": "Summary split into {{count}} part(s).",
+    "summary.audioReady": "You can listen to the summary now.",
+    "summary.audioError": "Error generating audio",
+    "summary.audioErrorDesc": "Could not generate audio. Please try again.",
+    "summary.pdfDownloaded": "PDF downloaded!",
+    "summary.pdfDesc": "The summary has been saved as PDF.",
     
     // Sections
     "sections.oneLiner": "In one sentence",

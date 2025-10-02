@@ -263,8 +263,8 @@ const Summary = () => {
     doc.save(`${summary.canonical_title || summary.book_title}.pdf`);
     
     toast({
-      title: "PDF baixado!",
-      description: "O resumo foi salvo em PDF.",
+      title: t("summary.pdfDownloaded"),
+      description: t("summary.pdfDesc"),
     });
   };
 
@@ -373,8 +373,8 @@ const Summary = () => {
         setShowAudioPlayer(true);
 
         toast({
-          title: "Áudio gerado!",
-          description: `Resumo dividido em ${audioUrls.length} parte(s).`,
+          title: t("summary.audioGenerated"),
+          description: t("summary.audioChunks", { count: audioUrls.length }),
         });
       } else if (data?.audioContent) {
         // Old single audio format (backward compatibility)
@@ -388,8 +388,8 @@ const Summary = () => {
         setShowAudioPlayer(true);
 
         toast({
-          title: "Áudio gerado!",
-          description: "Você pode ouvir o resumo agora.",
+          title: t("summary.audioGenerated"),
+          description: t("summary.audioReady"),
         });
       } else {
         throw new Error('No audio content received from server');
@@ -398,8 +398,8 @@ const Summary = () => {
       console.error('Error generating audio:', error);
       toast({
         variant: "destructive",
-        title: "Erro ao gerar áudio",
-        description: error.message || "Não foi possível gerar o áudio. Tente novamente.",
+        title: t("summary.audioError"),
+        description: error.message || t("summary.audioErrorDesc"),
       });
     } finally {
       setIsGeneratingAudio(false);
