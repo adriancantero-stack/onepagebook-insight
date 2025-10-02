@@ -31,43 +31,32 @@ const Summary = () => {
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
-  // Get related book recommendations based on theme - ALWAYS from same category
+  // Get related book recommendations based on theme - ALWAYS from same category and locale
   const relatedBooks = useMemo(() => {
     if (!summary?.theme) {
-      console.log('No theme found in summary');
       return [];
     }
     
     // Find the exact category matching the summary's theme
     const category = bookCatalog.find(cat => cat.id === summary.theme);
     if (!category) {
-      console.log('Category not found for theme:', summary.theme);
       return [];
     }
     
-    console.log('Found category:', category.id, 'with', category.books.length, 'books');
-    
-    // First try: Filter books by current locale and exclude current book
-    let booksInLocale = category.books.filter(
+    // Filter books by current locale only - never show different language
+    const booksInLocale = category.books.filter(
       (book: Book) => 
         book.locale === i18n.language && 
         book.title !== summary.canonical_title &&
         book.title !== summary.user_title
     );
     
-    // Fallback: If not enough books in current locale, include other locales from same category
-    if (booksInLocale.length < 2) {
-      console.log('Not enough books in locale', i18n.language, 'using all locales from same category');
-      booksInLocale = category.books.filter(
-        (book: Book) => 
-          book.title !== summary.canonical_title &&
-          book.title !== summary.user_title
-      );
+    // Only return recommendations if we have books in the user's language
+    if (booksInLocale.length === 0) {
+      return [];
     }
     
-    console.log('Available books for recommendation:', booksInLocale.length);
-    
-    // Shuffle and take 2 random books from the SAME category
+    // Shuffle and take up to 2 random books from same category and locale
     const shuffled = [...booksInLocale].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, 2);
   }, [summary, i18n.language]);
