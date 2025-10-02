@@ -60,14 +60,14 @@ export const en = {
     "summary.pdfDesc": "The summary has been saved as PDF.",
     
     // Sections
-    "sections.oneLiner": "In one sentence",
-    "sections.keyIdeas": "Key ideas",
-    "sections.actions": "Action steps",
+    "sections.oneLiner": "The essential in 1 sentence",
+    "sections.keyIdeas": "Insights that matter",
+    "sections.actions": "Action plan",
     "sections.routine": "Sample routine",
     "sections.plan7": "7-day plan",
     "sections.metrics": "Metrics",
     "sections.pitfalls": "Pitfalls & limits",
-    "sections.closing": "Closing",
+    "sections.closing": "Make it happen",
     
     // History
     "history.title": "Summary History",

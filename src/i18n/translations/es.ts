@@ -60,14 +60,14 @@ export const es = {
     "summary.pdfDesc": "El resumen se guardó en PDF.",
     
     // Sections
-    "sections.oneLiner": "En una frase",
-    "sections.keyIdeas": "Ideas clave",
-    "sections.actions": "Acciones prácticas",
+    "sections.oneLiner": "Lo esencial en 1 frase",
+    "sections.keyIdeas": "Ideas que importan",
+    "sections.actions": "Plan de acción",
     "sections.routine": "Rutina de ejemplo",
     "sections.plan7": "Plan de 7 días",
     "sections.metrics": "Métricas",
     "sections.pitfalls": "Trampas y límites",
-    "sections.closing": "Cierre",
+    "sections.closing": "Hazlo realidad",
     
     // History
     "history.title": "Historial de Resúmenes",
