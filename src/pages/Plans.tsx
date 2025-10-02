@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Check, Crown, ArrowLeft } from "lucide-react";
+import { Check, Crown, ArrowLeft, BookOpen } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import Footer from "@/components/Footer";
@@ -80,6 +80,10 @@ const Plans = () => {
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t("summary.back")}
           </Button>
+          <div className="flex items-center gap-2 absolute left-1/2 transform -translate-x-1/2">
+            <BookOpen className="w-6 h-6" />
+            <h1 className="text-xl font-bold">OnePageBook</h1>
+          </div>
           <LanguageSelector />
         </div>
       </header>
