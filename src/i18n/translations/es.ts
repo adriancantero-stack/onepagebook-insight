@@ -284,5 +284,23 @@ export const es = {
     "fun.done": [
       "Tu 1-página está lista. Elige una acción y actúa."
     ],
-  }
+  },
+  audio: {
+    book: "Libro",
+    author: "Autor",
+    oneLiner: "En una línea",
+    keyConcepts: "Conceptos clave",
+    keyIdeas: "Ideas principales",
+    recommendedFor: "Recomendado para",
+    synopsis: "Sinopsis",
+    plot: "Trama",
+    themes: "Temas",
+    characters: "Personajes",
+    quotes: "Citas",
+    criticalReception: "Recepción crítica",
+    historicalContext: "Contexto histórico",
+    writingStyle: "Estilo de escritura",
+    culturalImpact: "Impacto cultural",
+    bibliography: "Bibliografía",
+  },
 };

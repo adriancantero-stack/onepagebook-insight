@@ -294,5 +294,23 @@ export const pt = {
       "Missão cumprida — seu 1-pager está servido.",
       "Agora é com você: ação em 3… 2… 1…"
     ],
-  }
+  },
+  audio: {
+    book: "Livro",
+    author: "Autor",
+    oneLiner: "Em uma linha",
+    keyConcepts: "Conceitos-chave",
+    keyIdeas: "Ideias principais",
+    recommendedFor: "Recomendado para",
+    synopsis: "Sinopse",
+    plot: "Enredo",
+    themes: "Temas",
+    characters: "Personagens",
+    quotes: "Citações",
+    criticalReception: "Recepção crítica",
+    historicalContext: "Contexto histórico",
+    writingStyle: "Estilo de escrita",
+    culturalImpact: "Impacto cultural",
+    bibliography: "Bibliografia",
+  },
 };

@@ -284,5 +284,23 @@ export const en = {
     "fun.done": [
       "Your one-pager is ready. Pick one action and go!"
     ],
-  }
+  },
+  audio: {
+    book: "Book",
+    author: "Author",
+    oneLiner: "In one line",
+    keyConcepts: "Key Concepts",
+    keyIdeas: "Key Ideas",
+    recommendedFor: "Recommended for",
+    synopsis: "Synopsis",
+    plot: "Plot",
+    themes: "Themes",
+    characters: "Characters",
+    quotes: "Quotes",
+    criticalReception: "Critical Reception",
+    historicalContext: "Historical Context",
+    writingStyle: "Writing Style",
+    culturalImpact: "Cultural Impact",
+    bibliography: "Bibliography",
+  },
 };
