@@ -65,9 +65,9 @@ async function resolveMetadata(userTitle: string, userAuthor: string | null, loc
     es: "Autor desconocido"
   };
 
-  // Try Open Library ONLY
+  // Try Open Library to get complete information
   try {
-    const olUrl = `https://openlibrary.org/search.json?title=${encodeURIComponent(userTitle)}&limit=1`;
+    const olUrl = `https://openlibrary.org/search.json?title=${encodeURIComponent(userTitle)}${userAuthor ? `&author=${encodeURIComponent(userAuthor)}` : ''}&limit=3`;
     console.log("Fetching from Open Library:", olUrl);
     const olResponse = await fetch(olUrl);
     if (olResponse.ok) {
@@ -86,11 +86,12 @@ async function resolveMetadata(userTitle: string, userAuthor: string | null, loc
           canonicalTitle = candidateTitle;
         }
         
-        // Prioritize user-provided author, then Open Library author, then fallback
-        if (normalizedAuthor) {
-          canonicalAuthor = normalizedAuthor;
-        } else if (candidateAuthor) {
+        // Always prefer Open Library author as it's usually complete (full name)
+        if (candidateAuthor) {
           canonicalAuthor = capitalizeName(candidateAuthor);
+          console.log("Using complete author from Open Library:", canonicalAuthor);
+        } else if (normalizedAuthor) {
+          canonicalAuthor = normalizedAuthor;
         } else {
           canonicalAuthor = fallbackAuthors[locale] || fallbackAuthors.en;
         }
@@ -739,26 +740,43 @@ Responde SOLO con el JSON, sin texto adicional.`
     // Generate closing
     const closing = generateClosing(theme, language, metadata.canonicalTitle);
 
-    // Use AI-identified author if more complete, otherwise use metadata
+    // Determine final author - prioritize AI response for complete names
     let finalAuthor = metadata.canonicalAuthor;
+    let finalCanonicalAuthor = metadata.canonicalAuthor;
     
-    // If ChatGPT identified a more complete author name, use it
-    if (summaryData.author) {
-      const aiAuthor = capitalizeName(summaryData.author);
-      // Use AI author if it's longer/more complete than metadata author
-      if (!finalAuthor || aiAuthor.length > finalAuthor.length) {
+    // AI often provides more complete author names (e.g., "Paulo Coelho" instead of just "Coelho")
+    if (summaryData.author && summaryData.author.trim()) {
+      const aiAuthor = capitalizeName(summaryData.author.trim());
+      
+      // Use AI author if:
+      // 1. We don't have a metadata author, OR
+      // 2. AI author is longer (likely more complete), OR
+      // 3. AI author contains the metadata author (e.g., "Paulo Coelho" contains "Coelho")
+      if (!finalAuthor || 
+          aiAuthor.length > finalAuthor.length || 
+          aiAuthor.toLowerCase().includes(finalAuthor.toLowerCase())) {
         finalAuthor = aiAuthor;
+        finalCanonicalAuthor = aiAuthor;
+        console.log("Using AI-provided complete author name:", aiAuthor);
       }
     }
     
     if (finalAuthor) {
       finalAuthor = capitalizeName(finalAuthor);
     }
+    if (finalCanonicalAuthor) {
+      finalCanonicalAuthor = capitalizeName(finalCanonicalAuthor);
+    }
     
-    // Use AI-corrected title with proper accents if available
+    // Determine final title - prioritize AI response for proper accents and formatting
     let finalTitle = metadata.canonicalTitle;
+    let finalCanonicalTitle = metadata.canonicalTitle;
+    
     if (summaryData.title && summaryData.title.trim()) {
-      finalTitle = summaryData.title.trim();
+      const aiTitle = capitalizeTitle(summaryData.title.trim());
+      finalTitle = aiTitle;
+      finalCanonicalTitle = aiTitle;
+      console.log("Using AI-provided title with proper formatting:", aiTitle);
     }
 
     // Check if user has 40 or more summaries, delete oldest if needed
@@ -795,8 +813,8 @@ Responde SOLO con el JSON, sin texto adicional.`
         user_author: bookAuthor || null,
         book_title: finalTitle,
         book_author: finalAuthor,
-        canonical_title: finalTitle,
-        canonical_author: finalAuthor,
+        canonical_title: finalCanonicalTitle,
+        canonical_author: finalCanonicalAuthor,
         year: metadata.year,
         source: metadata.source,
         one_liner: summaryData.oneLiner || null,
