@@ -417,17 +417,14 @@ const Home = () => {
       <Footer />
       
       {/* FAQ Floating Action Button (mobile only) */}
-      <a 
-        href="/faq" 
+      <Button 
         className="faq-fab" 
         aria-label={t("faq.title_long")}
-        onClick={(e) => {
-          e.preventDefault();
-          navigate("/faq");
-        }}
+        onClick={() => navigate("/faq")}
+        size="icon"
       >
         ?
-      </a>
+      </Button>
       
       <UpgradeModal
         open={showUpgradeModal}

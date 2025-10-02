@@ -13,21 +13,21 @@ const Footer = () => {
           <div className="flex flex-wrap items-center justify-center gap-2">
             <Link 
               to="/terms" 
-              className="hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-[#5A54E6] focus:ring-offset-2 rounded"
+              className="hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
             >
               {t("footer.terms")}
             </Link>
             <span className="text-muted-foreground">•</span>
             <Link 
               to="/privacy" 
-              className="hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-[#5A54E6] focus:ring-offset-2 rounded"
+              className="hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
             >
               {t("footer.privacy")}
             </Link>
             <span className="text-muted-foreground">•</span>
             <Link 
               to="/faq" 
-              className="hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-[#5A54E6] focus:ring-offset-2 rounded"
+              className="hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
               aria-label={t("faq.title_long")}
             >
               {t("nav.faq_short")}
@@ -35,7 +35,7 @@ const Footer = () => {
             <span className="text-muted-foreground">•</span>
             <a 
               href={`mailto:${contactEmail}`}
-              className="hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-[#5A54E6] focus:ring-offset-2 rounded"
+              className="hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
             >
               {t("footer.contact")}
             </a>

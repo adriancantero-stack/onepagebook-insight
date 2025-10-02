@@ -72,7 +72,7 @@ const Faq = () => {
     return () => {
       document.head.removeChild(script);
     };
-  }, [t, jsonLd]);
+  }, [t]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
