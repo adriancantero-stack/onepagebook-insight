@@ -32,6 +32,7 @@ const Home = () => {
   const [bookAuthor, setBookAuthor] = useState("");
   const [loading, setLoading] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [countdown, setCountdown] = useState(30);
   const [genState, setGenState] = useState<GenState>({
     open: false,
     step: "resolve",
@@ -64,6 +65,7 @@ const Home = () => {
   useEffect(() => {
     if (genState.open) {
       document.body.style.overflow = "hidden";
+      setCountdown(30); // Reset countdown when overlay opens
     } else {
       document.body.style.overflow = "auto";
     }
@@ -71,6 +73,17 @@ const Home = () => {
       document.body.style.overflow = "auto";
     };
   }, [genState.open]);
+
+  // Countdown timer
+  useEffect(() => {
+    if (!genState.open || countdown <= 0) return;
+    
+    const timer = setInterval(() => {
+      setCountdown((prev) => Math.max(0, prev - 1));
+    }, 1000);
+    
+    return () => clearInterval(timer);
+  }, [genState.open, countdown]);
 
   // Load book data from Explore page navigation
   useEffect(() => {
@@ -204,6 +217,7 @@ const Home = () => {
       >
         <div className="gen-box">
           <div className="gen-spinner" aria-hidden="true"></div>
+          <div className="gen-countdown">{countdown}s</div>
           <div className="gen-title">{t("gen.loading")}</div>
           <ol className="gen-steps" role="list">
             <li className={isStep("resolve") ? "active" : ""}>
