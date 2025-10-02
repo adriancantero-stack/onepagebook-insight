@@ -89,12 +89,12 @@ const Auth = () => {
               <BookOpen className="w-8 h-8 text-primary-foreground" />
             </div>
           </div>
-          <CardTitle className="text-2xl">OnePageBook</CardTitle>
-          <p className="text-base sm:text-lg text-foreground/80 mt-3 mb-2 max-w-[60ch] mx-auto leading-relaxed">
+          <CardTitle className="text-2xl mb-2">OnePageBook</CardTitle>
+          <p className="text-sm text-primary font-medium mb-3">{t("auth.tagline")}</p>
+          <p className="text-base sm:text-lg text-foreground/80 mb-6 max-w-[60ch] mx-auto leading-relaxed">
             {t("hero.sub")}
           </p>
-          <p className="text-sm text-primary font-medium mt-1">{t("auth.tagline")}</p>
-          <CardDescription>
+          <CardDescription className="mt-4">
             {t("auth.subtitle")}
           </CardDescription>
         </CardHeader>
