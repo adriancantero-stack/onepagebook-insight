@@ -9,6 +9,7 @@ import { toast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import AudioPlayer from "@/components/AudioPlayer";
 import Footer from "@/components/Footer";
+import { jsPDF } from "jspdf";
 
 const Summary = () => {
   const { t } = useTranslation();
@@ -55,13 +56,99 @@ const Summary = () => {
   };
 
   const handleDownload = () => {
-    const text = `${summary.book_title}\n\n${summary.summary_text}\n\n${t("summary.mainIdeas")}:\n${summary.main_ideas.join("\n")}\n\n${t("summary.practicalApplications")}:\n${summary.practical_applications}`;
-    const blob = new Blob([text], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${summary.book_title}.txt`;
-    a.click();
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 20;
+    const maxWidth = pageWidth - (margin * 2);
+    let yPosition = 20;
+
+    // Title
+    doc.setFontSize(16);
+    doc.setFont(undefined, "bold");
+    const titleLines = doc.splitTextToSize(summary.book_title, maxWidth);
+    doc.text(titleLines, margin, yPosition);
+    yPosition += titleLines.length * 7 + 5;
+
+    // Author
+    if (summary.book_author) {
+      doc.setFontSize(12);
+      doc.setFont(undefined, "normal");
+      doc.text(`${t("summary.by")} ${summary.book_author}`, margin, yPosition);
+      yPosition += 10;
+    }
+
+    // Summary text
+    doc.setFontSize(11);
+    doc.setFont(undefined, "normal");
+    const summaryLines = doc.splitTextToSize(summary.summary_text, maxWidth);
+    summaryLines.forEach((line: string) => {
+      if (yPosition > 280) {
+        doc.addPage();
+        yPosition = 20;
+      }
+      doc.text(line, margin, yPosition);
+      yPosition += 6;
+    });
+
+    yPosition += 5;
+
+    // Main Ideas
+    if (yPosition > 250) {
+      doc.addPage();
+      yPosition = 20;
+    }
+    doc.setFontSize(13);
+    doc.setFont(undefined, "bold");
+    doc.text(t("summary.mainIdeas"), margin, yPosition);
+    yPosition += 8;
+
+    doc.setFontSize(11);
+    doc.setFont(undefined, "normal");
+    summary.main_ideas.forEach((idea: string, index: number) => {
+      const ideaText = `${index + 1}. ${idea}`;
+      const ideaLines = doc.splitTextToSize(ideaText, maxWidth);
+      ideaLines.forEach((line: string) => {
+        if (yPosition > 280) {
+          doc.addPage();
+          yPosition = 20;
+        }
+        doc.text(line, margin, yPosition);
+        yPosition += 6;
+      });
+      yPosition += 2;
+    });
+
+    yPosition += 5;
+
+    // Practical Applications
+    if (yPosition > 250) {
+      doc.addPage();
+      yPosition = 20;
+    }
+    doc.setFontSize(13);
+    doc.setFont(undefined, "bold");
+    doc.text(t("summary.practicalApplications"), margin, yPosition);
+    yPosition += 8;
+
+    doc.setFontSize(11);
+    doc.setFont(undefined, "normal");
+    const applicationsLines = doc.splitTextToSize(summary.practical_applications, maxWidth);
+    applicationsLines.forEach((line: string) => {
+      if (yPosition > 280) {
+        doc.addPage();
+        yPosition = 20;
+      }
+      doc.text(line, margin, yPosition);
+      yPosition += 6;
+    });
+
+    // Save the PDF
+    doc.save(`${summary.book_title}.pdf`);
+    
+    toast({
+      title: "PDF baixado!",
+      description: "O resumo foi salvo em PDF.",
+    });
   };
 
   const handleShare = async () => {
