@@ -304,23 +304,25 @@ const Explore = () => {
           {allBooks.map((book, index) => (
             <Card 
               key={`${book.title}-${index}`}
-              className="p-4 flex items-center gap-4 hover:border-primary transition-colors"
+              className="p-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 hover:border-primary transition-colors"
             >
-              <div className="p-2 bg-primary/10 rounded-lg shrink-0">
-                <BookOpen className="w-5 h-5 text-primary" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="font-bold text-base mb-1 line-clamp-1">
-                  {book.title}
-                </h3>
-                <p className="text-sm text-muted-foreground line-clamp-1">
-                  {book.author}
-                </p>
+              <div className="flex items-start gap-3 flex-1 min-w-0 w-full sm:w-auto">
+                <div className="p-2 bg-primary/10 rounded-lg shrink-0">
+                  <BookOpen className="w-5 h-5 text-primary" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-bold text-base mb-1 line-clamp-2">
+                    {book.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground line-clamp-1">
+                    {book.author}
+                  </p>
+                </div>
               </div>
               <Button
                 onClick={() => handleSummarize(book)}
                 size="sm"
-                className="shrink-0 focus-visible:ring-2 focus-visible:ring-[#5A54E6]"
+                className="w-full sm:w-auto shrink-0 focus-visible:ring-2 focus-visible:ring-[#5A54E6]"
                 aria-label={`${t("explore.summarize")} ${book.title} — ${book.author}`}
               >
                 <Sparkles className="w-4 h-4 mr-2" />
