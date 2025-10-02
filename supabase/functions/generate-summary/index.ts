@@ -313,9 +313,9 @@ Gerar um resumo padronizado SEMPRE neste formato:
 
 ESTRUTURA JSON OBRIGATÓRIA:
 {
-  "author": "Nome completo do autor (capitalize corretamente)",
+  "author": "Nome COMPLETO do autor (ex: 'Augusto Cury', não apenas 'Cury')",
   "theme": "sleep|productivity|health|mindset|finance|default",
-  "oneLiner": "1-2 parágrafos claros e simples que capturam a ideia central do livro",
+  "oneLiner": "2-3 parágrafos detalhados explicando o contexto, problema que resolve e principais insights do livro",
   "keyIdeas": ["4-6 ideias principais, cada uma em 1 frase curta e única (máx. 16 palavras)"],
   "practicalSteps": ["3-5 passos práticos, específicos e mensuráveis que o leitor pode aplicar hoje"]
 }
@@ -360,9 +360,9 @@ Generate a standardized summary ALWAYS in this format:
 
 MANDATORY JSON STRUCTURE:
 {
-  "author": "Full author name (capitalize correctly)",
+  "author": "COMPLETE author name (e.g., 'Augusto Cury', not just 'Cury')",
   "theme": "sleep|productivity|health|mindset|finance|default",
-  "oneLiner": "1-2 clear, simple paragraphs capturing the book's central idea",
+  "oneLiner": "2-3 detailed paragraphs explaining context, problem it solves, and main insights of the book",
   "keyIdeas": ["4-6 main ideas, each in 1 short, unique sentence (max. 16 words)"],
   "practicalSteps": ["3-5 practical, specific, measurable steps the reader can apply today"]
 }
@@ -407,9 +407,9 @@ Generar un resumen estandarizado SIEMPRE en este formato:
 
 ESTRUCTURA JSON OBLIGATORIA:
 {
-  "author": "Nombre completo del autor (capitalizar correctamente)",
+  "author": "Nombre COMPLETO del autor (ej: 'Augusto Cury', no solo 'Cury')",
   "theme": "sleep|productivity|health|mindset|finance|default",
-  "oneLiner": "1-2 párrafos claros y simples que capturan la idea central del libro",
+  "oneLiner": "2-3 párrafos detallados explicando contexto, problema que resuelve y principales insights del libro",
   "keyIdeas": ["4-6 ideas principales, cada una en 1 frase corta y única (máx. 16 palabras)"],
   "practicalSteps": ["3-5 pasos prácticos, específicos y medibles que el lector puede aplicar hoy"]
 }
@@ -525,8 +525,18 @@ Responde SOLO con el JSON, sin texto adicional.`
     // Generate closing
     const closing = generateClosing(theme, language, metadata.canonicalTitle);
 
-    // Use AI-identified author if not provided by user, and capitalize it
-    let finalAuthor = metadata.canonicalAuthor || summaryData.author || null;
+    // Use AI-identified author if more complete, otherwise use metadata
+    let finalAuthor = metadata.canonicalAuthor;
+    
+    // If ChatGPT identified a more complete author name, use it
+    if (summaryData.author) {
+      const aiAuthor = capitalizeName(summaryData.author);
+      // Use AI author if it's longer/more complete than metadata author
+      if (!finalAuthor || aiAuthor.length > finalAuthor.length) {
+        finalAuthor = aiAuthor;
+      }
+    }
+    
     if (finalAuthor) {
       finalAuthor = capitalizeName(finalAuthor);
     }
