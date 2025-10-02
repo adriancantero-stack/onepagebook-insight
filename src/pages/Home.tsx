@@ -186,12 +186,12 @@ const Home = () => {
                   {t("home.generating")}
                 </>
               ) : (
-                t("home.generateButton")
+                t("home.button")
               )}
             </Button>
 
-            <p className="text-xs text-center text-muted-foreground">
-              📌 {t("home.freeLimit")} • {t("home.premiumUnlimited")}
+            <p className="text-sm text-center text-muted-foreground mt-4">
+              {t("home.note")}
             </p>
           </div>
         </Card>

@@ -13,7 +13,9 @@ export const pt = {
     "home.bookAuthor": "Autor (opcional)",
     "home.bookAuthorPlaceholder": "Ex: James Clear",
     "home.generateButton": "Gerar Resumo",
+    "home.button": "Gerar Resumo",
     "home.generating": "Gerando...",
+    "home.note": "Plano Gratuito: 3 resumos + 3 áudios/mês · Premium: resumos e áudios ilimitados",
     "home.freeLimit": "Plano Gratuito: 3 resumos por mês",
     "home.premiumUnlimited": "Premium: Resumos ilimitados",
     
@@ -54,7 +56,32 @@ export const pt = {
     "history.loading": "Carregando...",
     
     // Plans
-    "plans.title": "Escolha seu Plano",
+    "plans.title": "Escolha seu plano",
+    "plans.badge": "Recomendado",
+    "plans.toggle.monthly": "Mensal",
+    "plans.toggle.yearly": "Anual",
+    "plans.free.name": "Gratuito",
+    "plans.free.price.monthly": "R$ 0/mês",
+    "plans.free.bullets": [
+      "3 resumos/mês",
+      "3 áudios completos/mês",
+      "Suporte básico"
+    ],
+    "plans.free.cta": "Começar grátis",
+    "plans.premium.name": "Premium",
+    "plans.premium.price.monthly": "R$ 14,99/mês",
+    "plans.premium.price.yearly": "R$ 149/ano",
+    "plans.premium.hint": "2 meses grátis no anual",
+    "plans.premium.bullets": [
+      "Resumos ilimitados",
+      "Áudio completo ilimitado",
+      "Exportar PDF",
+      "Histórico ilimitado",
+      "Tradução instantânea (EN/PT/ES)",
+      "Suporte prioritário"
+    ],
+    "plans.premium.cta": "Assinar agora",
+    "plans.trust": "Cancele quando quiser · Garantia de 7 dias · Sem taxa de instalação",
     "plans.free": "Gratuito",
     "plans.premium": "Premium",
     "plans.recommended": "Recomendado",

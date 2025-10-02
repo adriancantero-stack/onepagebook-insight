@@ -7,13 +7,15 @@ export const es = {
     
     // Home
     "home.title": "Genera resúmenes prácticos de libros en 1 página",
-    "home.subtitle": "Transforma cualquier libro en conocimientos prácticos que puedes aplicar hoy",
+    "home.subtitle": "Convierte cualquier libro en ideas prácticas que puedes aplicar hoy",
     "home.bookTitle": "Título del Libro",
     "home.bookTitlePlaceholder": "Ej: Hábitos Atómicos",
     "home.bookAuthor": "Autor (opcional)",
     "home.bookAuthorPlaceholder": "Ej: James Clear",
     "home.generateButton": "Generar Resumen",
+    "home.button": "Generar Resumen",
     "home.generating": "Generando...",
+    "home.note": "Gratis: 3 resúmenes + 3 audios completos/mes · Premium: resúmenes y audios ilimitados",
     "home.freeLimit": "Plan Gratuito: 3 resúmenes por mes",
     "home.premiumUnlimited": "Premium: Resúmenes ilimitados",
     
@@ -54,7 +56,32 @@ export const es = {
     "history.loading": "Cargando...",
     
     // Plans
-    "plans.title": "Elige tu Plan",
+    "plans.title": "Elige tu plan",
+    "plans.badge": "Recomendado",
+    "plans.toggle.monthly": "Mensual",
+    "plans.toggle.yearly": "Anual",
+    "plans.free.name": "Gratis",
+    "plans.free.price.monthly": "$0 / mes",
+    "plans.free.bullets": [
+      "3 resúmenes/mes",
+      "3 audios completos/mes",
+      "Soporte básico"
+    ],
+    "plans.free.cta": "Empezar gratis",
+    "plans.premium.name": "Premium",
+    "plans.premium.price.monthly": "$4.99 / mes",
+    "plans.premium.price.yearly": "$49 / año",
+    "plans.premium.hint": "2 meses gratis en el anual",
+    "plans.premium.bullets": [
+      "Resúmenes ilimitados",
+      "Audio completo ilimitado",
+      "Exportar a PDF",
+      "Historial ilimitado",
+      "Traducción instantánea (ES/EN/PT)",
+      "Soporte prioritario"
+    ],
+    "plans.premium.cta": "Suscribirse ahora",
+    "plans.trust": "Cancela cuando quieras · Garantía de 7 días · Sin costos de instalación",
     "plans.free": "Gratuito",
     "plans.premium": "Premium",
     "plans.recommended": "Recomendado",
