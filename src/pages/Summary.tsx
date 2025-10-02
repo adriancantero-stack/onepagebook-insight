@@ -244,7 +244,7 @@ const Summary = () => {
 
             <section>
               <h2 className="text-xl font-semibold mb-3">{t("summary.mainIdeas").replace(":", "")}</h2>
-              <p className="text-foreground leading-relaxed whitespace-pre-wrap">
+              <p className="text-foreground leading-relaxed whitespace-pre-wrap text-justify">
                 {summary.summary_text}
               </p>
             </section>
