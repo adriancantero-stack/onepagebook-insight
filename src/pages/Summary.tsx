@@ -23,6 +23,7 @@ import type { Book } from "@/data/bookCatalog";
 import { getThemeCategoryId } from "@/config/themes";
 import { SummarySection } from "@/components/SummarySection";
 import type { BookSummary } from "@/types";
+import { getCachedAudio, saveAudioToCache } from "@/lib/cacheUtils";
 
 const Summary = () => {
   const { t, i18n } = useTranslation();
@@ -503,18 +504,48 @@ const Summary = () => {
         // New chunked format
         console.log(`✅ [TTS] Received ${data.audioChunks.length} audio chunks`);
         
-        const audioUrls = data.audioChunks.map((chunk: string, index: number) => {
-          const audioBlob = new Blob(
-            [Uint8Array.from(atob(chunk), c => c.charCodeAt(0))],
-            { type: data.mimeType || 'audio/mpeg' }
+        // Save to cache storage
+        try {
+          console.log('💾 [Cache] Saving audio to storage...');
+          await saveAudioToCache(
+            id!,
+            i18n.language,
+            data.audioChunks,
+            data.mimeType || 'audio/mpeg'
           );
-          const url = URL.createObjectURL(audioBlob);
-          console.log(`🎵 [TTS] Created blob URL ${index + 1}/${data.audioChunks.length}:`, url, 'size:', audioBlob.size);
-          return url;
-        });
+          
+          // Get the cached audio with signed URL
+          const savedAudio = await getCachedAudio(id!, i18n.language);
+          if (savedAudio?.signedUrl) {
+            console.log('✅ [Cache] Audio saved and loaded from storage');
+            setAudioSrc([savedAudio.signedUrl]);
+          } else {
+            // Fallback to blob URLs if cache fails
+            console.log('⚠️ [Cache] Failed to load from storage, using blob URLs');
+            const audioUrls = data.audioChunks.map((chunk: string, index: number) => {
+              const audioBlob = new Blob(
+                [Uint8Array.from(atob(chunk), c => c.charCodeAt(0))],
+                { type: data.mimeType || 'audio/mpeg' }
+              );
+              const url = URL.createObjectURL(audioBlob);
+              console.log(`🎵 [TTS] Created blob URL ${index + 1}/${data.audioChunks.length}:`, url, 'size:', audioBlob.size);
+              return url;
+            });
+            setAudioSrc(audioUrls);
+          }
+        } catch (cacheError) {
+          console.error('🚨 [Cache] Error saving to cache, using blob URLs:', cacheError);
+          // Fallback to blob URLs
+          const audioUrls = data.audioChunks.map((chunk: string) => {
+            const audioBlob = new Blob(
+              [Uint8Array.from(atob(chunk), c => c.charCodeAt(0))],
+              { type: data.mimeType || 'audio/mpeg' }
+            );
+            return URL.createObjectURL(audioBlob);
+          });
+          setAudioSrc(audioUrls);
+        }
         
-        console.log('🎵 [TTS] Setting audioSrc with', audioUrls.length, 'URLs');
-        setAudioSrc(audioUrls);
         console.log('🎵 [TTS] Setting showAudioPlayer to true');
         setShowAudioPlayer(true);
 
@@ -536,7 +567,7 @@ const Summary = () => {
           } else {
             toast({
               title: t("summary.audioGenerated"),
-              description: t("summary.audioChunks", { count: audioUrls.length }),
+              description: t("summary.cachedForFuture"),
             });
           }
         }

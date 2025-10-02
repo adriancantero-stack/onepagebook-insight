@@ -60,6 +60,8 @@ export const pt = {
     "summary.audioGenerated": "Áudio gerado!",
     "summary.audioChunks": "Resumo dividido em {{count}} parte(s).",
     "summary.audioReady": "Você pode ouvir o resumo agora.",
+    "summary.loadedFromCache": "Carregado do cache - sem custo de geração",
+    "summary.cachedForFuture": "Áudio salvo e disponível para uso futuro",
     "summary.audioError": "Erro ao gerar áudio",
     "summary.audioErrorDesc": "Não foi possível gerar o áudio. Tente novamente.",
     "summary.pdfDownloaded": "PDF baixado!",

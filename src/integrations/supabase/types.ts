@@ -14,6 +14,44 @@ export type Database = {
   }
   public: {
     Tables: {
+      book_audio: {
+        Row: {
+          audio_url: string
+          book_summary_id: string
+          created_at: string | null
+          duration_seconds: number | null
+          file_size: number | null
+          id: string
+          language: string
+        }
+        Insert: {
+          audio_url: string
+          book_summary_id: string
+          created_at?: string | null
+          duration_seconds?: number | null
+          file_size?: number | null
+          id?: string
+          language: string
+        }
+        Update: {
+          audio_url?: string
+          book_summary_id?: string
+          created_at?: string | null
+          duration_seconds?: number | null
+          file_size?: number | null
+          id?: string
+          language?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "book_audio_book_summary_id_fkey"
+            columns: ["book_summary_id"]
+            isOneToOne: false
+            referencedRelation: "book_summaries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       book_summaries: {
         Row: {
           actions: string[] | null
@@ -28,6 +66,7 @@ export type Database = {
           language: string
           main_ideas: string[]
           metrics: string | null
+          norm_key: string | null
           one_liner: string | null
           pitfalls: string | null
           plan_7_days: string | null
@@ -54,6 +93,7 @@ export type Database = {
           language?: string
           main_ideas: string[]
           metrics?: string | null
+          norm_key?: string | null
           one_liner?: string | null
           pitfalls?: string | null
           plan_7_days?: string | null
@@ -80,6 +120,7 @@ export type Database = {
           language?: string
           main_ideas?: string[]
           metrics?: string | null
+          norm_key?: string | null
           one_liner?: string | null
           pitfalls?: string | null
           plan_7_days?: string | null
