@@ -133,22 +133,20 @@ const Privacy = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b border-border">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between relative">
           <Button variant="ghost" onClick={() => navigate("/")}>
             <ArrowLeft className="w-4 h-4 mr-2" />
             Home
           </Button>
+          <div className="flex items-center gap-2 absolute left-1/2 transform -translate-x-1/2">
+            <BookOpen className="w-8 h-8 text-primary" />
+            <h1 className="text-xl font-bold text-foreground">OnePageBook</h1>
+          </div>
           <LanguageSelector />
         </div>
       </header>
 
       <main className="container mx-auto px-4 py-8 max-w-4xl flex-1">
-        <div className="flex justify-center mb-8">
-          <div className="flex items-center gap-2">
-            <BookOpen className="w-8 h-8 text-primary" />
-            <h1 className="text-2xl font-bold text-foreground">OnePageBook</h1>
-          </div>
-        </div>
         <Card className="p-8">
           <h1 className="text-3xl font-bold mb-4">{pageContent.title}</h1>
           <p className="text-sm text-muted-foreground mb-8">{pageContent.lastUpdated}</p>
