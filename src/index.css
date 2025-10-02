@@ -324,59 +324,61 @@ All colors MUST be HSL.
 }
 
 .gen-spinner {
-  width: 60px;
-  height: 45px;
+  width: 70px;
+  height: 50px;
   margin: 0 auto;
   position: relative;
-  background: hsl(var(--card));
-  border: 2px solid hsl(var(--primary));
-  border-radius: 2px;
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+  perspective: 1000px;
+  transform-style: preserve-3d;
 }
 
 .gen-spinner::before,
 .gen-spinner::after {
   content: '';
   position: absolute;
-  top: 0;
-  width: 50%;
-  height: 100%;
-  background: hsl(var(--primary) / 0.2);
-  border-right: 1px solid hsl(var(--primary) / 0.3);
-  transform-origin: right center;
+  width: 35px;
+  height: 50px;
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.9), hsl(var(--primary) / 0.6));
+  border: 2px solid hsl(var(--primary));
+  border-radius: 0 4px 4px 0;
+  box-shadow: 
+    inset -2px 0 4px rgba(0, 0, 0, 0.2),
+    4px 4px 12px rgba(0, 0, 0, 0.3);
+  transform-style: preserve-3d;
 }
 
 .gen-spinner::before {
   left: 0;
-  animation: pageFlipLeft 1.4s ease-in-out infinite;
+  transform-origin: left center;
+  border-radius: 4px 0 0 4px;
+  background: linear-gradient(225deg, hsl(var(--primary) / 0.9), hsl(var(--primary) / 0.6));
+  box-shadow: 
+    inset 2px 0 4px rgba(0, 0, 0, 0.2),
+    -4px 4px 12px rgba(0, 0, 0, 0.3);
+  animation: bookOpenLeft 2s ease-in-out infinite;
 }
 
 .gen-spinner::after {
   right: 0;
-  transform-origin: left center;
-  animation: pageFlipRight 1.4s ease-in-out infinite;
-  animation-delay: 0.7s;
+  transform-origin: right center;
+  animation: bookOpenRight 2s ease-in-out infinite;
 }
 
-@keyframes pageFlipLeft {
+@keyframes bookOpenLeft {
   0%, 100% {
     transform: rotateY(0deg);
-    opacity: 1;
   }
   50% {
-    transform: rotateY(-180deg);
-    opacity: 0.3;
+    transform: rotateY(-140deg);
   }
 }
 
-@keyframes pageFlipRight {
+@keyframes bookOpenRight {
   0%, 100% {
     transform: rotateY(0deg);
-    opacity: 1;
   }
   50% {
-    transform: rotateY(180deg);
-    opacity: 0.3;
+    transform: rotateY(140deg);
   }
 }
 
