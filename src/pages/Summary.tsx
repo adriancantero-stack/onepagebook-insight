@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,9 +17,11 @@ import {
   incrementAudio, 
   ensureMonth 
 } from "@/lib/usageManager";
+import { bookCatalog } from "@/data/bookCatalog";
+import type { Book } from "@/data/bookCatalog";
 
 const Summary = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const [summary, setSummary] = useState<any>(null);
@@ -28,6 +30,26 @@ const Summary = () => {
   const [audioSrc, setAudioSrc] = useState<string | string[] | null>(null);
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+
+  // Get related book recommendations based on theme
+  const relatedBooks = useMemo(() => {
+    if (!summary?.theme) return [];
+    
+    const category = bookCatalog.find(cat => cat.id === summary.theme);
+    if (!category) return [];
+    
+    // Filter books by current locale and exclude current book
+    const booksInLocale = category.books.filter(
+      (book: Book) => 
+        book.locale === i18n.language && 
+        book.title !== summary.canonical_title &&
+        book.title !== summary.user_title
+    );
+    
+    // Shuffle and take 2 random books
+    const shuffled = [...booksInLocale].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, 2);
+  }, [summary, i18n.language]);
 
   useEffect(() => {
     loadSummary();
@@ -688,6 +710,35 @@ const Summary = () => {
               <span className="truncate">{t("summary.share")}</span>
             </Button>
           </div>
+
+          {/* Related Books Section */}
+          {relatedBooks.length > 0 && (
+            <div className="mt-6 sm:mt-8 pt-6 border-t border-border">
+              <h3 className="text-lg font-semibold mb-4">{t("summary.relatedBooks")}</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                {relatedBooks.map((book: Book, index: number) => (
+                  <Card 
+                    key={index}
+                    className="p-4 hover:border-primary transition-colors cursor-pointer"
+                    onClick={() => navigate("/", { state: { bookTitle: book.title, bookAuthor: book.author } })}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 bg-primary/10 rounded-md shrink-0">
+                        <BookOpen className="w-4 h-4 text-primary" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold text-sm mb-1 line-clamp-2">{book.title}</h4>
+                        <p className="text-xs text-muted-foreground mb-2 line-clamp-1">{book.author}</p>
+                        <Button size="sm" variant="ghost" className="h-7 text-xs px-2">
+                          {t("summary.summarize")}
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
         </Card>
       </main>
 
