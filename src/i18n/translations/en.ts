@@ -48,6 +48,7 @@ export const en = {
     "summary.copied": "Summary copied!",
     "summary.shared": "Summary shared!",
     "summary.loading": "Loading summary...",
+    "summary.unknownAuthor": "unknown author",
     
     // History
     "history.title": "Summary History",

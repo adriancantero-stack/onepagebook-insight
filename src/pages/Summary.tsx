@@ -223,9 +223,9 @@ const Summary = () => {
             </div>
             <div className="flex-1">
               <h1 className="text-3xl font-bold mb-2">{summary.book_title}</h1>
-              {summary.book_author && (
-                <p className="text-muted-foreground">{t("summary.by")} {summary.book_author}</p>
-              )}
+              <p className="text-muted-foreground">
+                {t("summary.by")} {summary.book_author || t("summary.unknownAuthor")}
+              </p>
             </div>
           </div>
 

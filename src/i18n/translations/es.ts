@@ -48,6 +48,7 @@ export const es = {
     "summary.copied": "¡Resumen copiado!",
     "summary.shared": "¡Resumen compartido!",
     "summary.loading": "Cargando resumen...",
+    "summary.unknownAuthor": "autor desconocido",
     
     // History
     "history.title": "Historial de Resúmenes",
