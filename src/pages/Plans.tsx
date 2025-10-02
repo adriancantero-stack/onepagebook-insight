@@ -79,7 +79,7 @@ const Plans = () => {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between relative">
           <Button variant="ghost" onClick={() => navigate("/")} size="sm">
             <ArrowLeft className="w-4 h-4 mr-1 sm:mr-2" />
-            <span className="hidden sm:inline">{t("summary.back")}</span>
+            <span className="hidden sm:inline">Home</span>
           </Button>
           <div className="flex items-center gap-2 absolute left-1/2 transform -translate-x-1/2">
             <BookOpen className="w-6 h-6 text-primary" />

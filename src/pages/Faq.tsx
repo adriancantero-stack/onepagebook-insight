@@ -81,7 +81,7 @@ const Faq = () => {
             <Link to="/">
               <Button variant="ghost" size="sm" className="gap-2">
                 <ArrowLeft className="h-4 w-4" />
-                {t("summary.back")}
+                Home
               </Button>
             </Link>
           </div>
