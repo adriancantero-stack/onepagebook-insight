@@ -190,8 +190,8 @@ const Home = () => {
         }
       }
 
-      // Step: Resolve - 2.5s
-      await new Promise(resolve => setTimeout(resolve, 2500));
+      // Step: Resolve - 5s (mais tempo para ver as mensagens)
+      await new Promise(resolve => setTimeout(resolve, 5000));
 
       // Step: Summarize - start API call in background
       setGenState({ open: true, step: "summarize", message: "" });
@@ -205,12 +205,12 @@ const Home = () => {
         },
       });
 
-      // Continue showing progress while API processes
-      await new Promise(resolve => setTimeout(resolve, 8000)); // 8s for summarize
+      // Continue showing progress while API processes - 12s
+      await new Promise(resolve => setTimeout(resolve, 12000));
 
-      // Step: Polish - 5s
+      // Step: Polish - 10s
       setGenState({ open: true, step: "polish", message: "" });
-      await new Promise(resolve => setTimeout(resolve, 5000));
+      await new Promise(resolve => setTimeout(resolve, 10000));
 
       // Step: Done - wait for API to finish
       setGenState({ open: true, step: "done", message: "" });
@@ -221,7 +221,7 @@ const Home = () => {
       if (error) throw error;
 
       // Small delay on done before closing
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise(resolve => setTimeout(resolve, 2000));
 
       // Increment counter only on success for free users
       if (plan?.type === "free") {
