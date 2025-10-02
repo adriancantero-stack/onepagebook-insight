@@ -485,6 +485,7 @@ const Summary = () => {
       fullText = fullText.trim();
 
       // Call edge function to generate audio
+      console.log('🎵 [TTS] Calling edge function with language:', language);
       const { data, error } = await supabase.functions.invoke('text-to-speech', {
         body: { 
           text: fullText,
@@ -493,22 +494,28 @@ const Summary = () => {
       });
 
       if (error) {
+        console.error('🚨 [TTS] Edge function error:', error);
         throw new Error(error.message || 'Failed to generate audio');
       }
 
       // Handle both new format (audioChunks) and old format (audioContent)
       if (data?.audioChunks && Array.isArray(data.audioChunks)) {
         // New chunked format
+        console.log(`✅ [TTS] Received ${data.audioChunks.length} audio chunks`);
         
-        const audioUrls = data.audioChunks.map((chunk: string) => {
+        const audioUrls = data.audioChunks.map((chunk: string, index: number) => {
           const audioBlob = new Blob(
             [Uint8Array.from(atob(chunk), c => c.charCodeAt(0))],
             { type: data.mimeType || 'audio/mpeg' }
           );
-          return URL.createObjectURL(audioBlob);
+          const url = URL.createObjectURL(audioBlob);
+          console.log(`🎵 [TTS] Created blob URL ${index + 1}/${data.audioChunks.length}:`, url, 'size:', audioBlob.size);
+          return url;
         });
         
+        console.log('🎵 [TTS] Setting audioSrc with', audioUrls.length, 'URLs');
         setAudioSrc(audioUrls);
+        console.log('🎵 [TTS] Setting showAudioPlayer to true');
         setShowAudioPlayer(true);
 
         // Increment counter only on success for free users
@@ -656,8 +663,7 @@ const Summary = () => {
                 🔊 {t("summary.audioPlayer")}
               </h3>
               <AudioPlayer 
-                audioSrc={audioSrc} 
-                onEnded={() => setShowAudioPlayer(false)}
+                audioSrc={audioSrc}
               />
             </div>
           )}

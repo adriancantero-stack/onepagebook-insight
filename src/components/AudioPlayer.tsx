@@ -21,6 +21,7 @@ const AudioPlayer = ({ audioSrc, onEnded }: AudioPlayerProps) => {
 
   // Reset state when audioSrc changes (new summary loaded)
   useEffect(() => {
+    console.log('🎵 [AudioPlayer] audioSrc changed:', audioSrc);
     setCurrentTrackIndex(0);
     setCurrentTime(0);
     setDuration(0);
@@ -56,27 +57,53 @@ const AudioPlayer = ({ audioSrc, onEnded }: AudioPlayerProps) => {
     };
 
     const handleEnded = () => {
+      console.log('🎵 [AudioPlayer] Track ended. Current:', currentTrackIndex, 'Total:', playlist.length);
       // Check if there are more tracks in the playlist
       if (currentTrackIndex < playlist.length - 1) {
+        console.log('🎵 [AudioPlayer] Moving to next track');
         setCurrentTrackIndex(prev => prev + 1);
         setCurrentTime(0);
       } else {
         // End of playlist
+        console.log('🎵 [AudioPlayer] Playlist finished');
         setIsPlaying(false);
         setCurrentTime(0);
         setCurrentTrackIndex(0);
-        if (onEnded) onEnded();
+        if (onEnded) {
+          console.log('🎵 [AudioPlayer] Calling onEnded callback');
+          onEnded();
+        }
       }
+    };
+
+    const handleError = (e: Event) => {
+      console.error('🚨 [AudioPlayer] Audio error:', e);
+      console.error('🚨 [AudioPlayer] Current src:', audio?.src);
+      console.error('🚨 [AudioPlayer] Error details:', audio?.error);
+    };
+
+    const handleLoadStart = () => {
+      console.log('🎵 [AudioPlayer] Loading started for:', audio?.src);
+    };
+
+    const handleCanPlay = () => {
+      console.log('✅ [AudioPlayer] Audio can play:', audio?.src);
     };
 
     audio.addEventListener('timeupdate', handleTimeUpdate);
     audio.addEventListener('loadedmetadata', handleDurationChange);
     audio.addEventListener('ended', handleEnded);
+    audio.addEventListener('error', handleError);
+    audio.addEventListener('loadstart', handleLoadStart);
+    audio.addEventListener('canplay', handleCanPlay);
 
     return () => {
       audio.removeEventListener('timeupdate', handleTimeUpdate);
       audio.removeEventListener('loadedmetadata', handleDurationChange);
       audio.removeEventListener('ended', handleEnded);
+      audio.removeEventListener('error', handleError);
+      audio.removeEventListener('loadstart', handleLoadStart);
+      audio.removeEventListener('canplay', handleCanPlay);
     };
   }, [currentTrackIndex, playlist.length, onEnded]);
 
