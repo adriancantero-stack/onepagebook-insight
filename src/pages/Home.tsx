@@ -404,6 +404,12 @@ const Home = () => {
         </Card>
       </main>
 
+      <div className="py-8 text-center">
+        <p className="text-lg text-muted-foreground font-medium">
+          Nunca foi tão fácil aprender.
+        </p>
+      </div>
+
       <Footer />
       
       <UpgradeModal 
