@@ -31,22 +31,43 @@ const Summary = () => {
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
-  // Get related book recommendations based on theme
+  // Get related book recommendations based on theme - ALWAYS from same category
   const relatedBooks = useMemo(() => {
-    if (!summary?.theme) return [];
+    if (!summary?.theme) {
+      console.log('No theme found in summary');
+      return [];
+    }
     
+    // Find the exact category matching the summary's theme
     const category = bookCatalog.find(cat => cat.id === summary.theme);
-    if (!category) return [];
+    if (!category) {
+      console.log('Category not found for theme:', summary.theme);
+      return [];
+    }
     
-    // Filter books by current locale and exclude current book
-    const booksInLocale = category.books.filter(
+    console.log('Found category:', category.id, 'with', category.books.length, 'books');
+    
+    // First try: Filter books by current locale and exclude current book
+    let booksInLocale = category.books.filter(
       (book: Book) => 
         book.locale === i18n.language && 
         book.title !== summary.canonical_title &&
         book.title !== summary.user_title
     );
     
-    // Shuffle and take 2 random books
+    // Fallback: If not enough books in current locale, include other locales from same category
+    if (booksInLocale.length < 2) {
+      console.log('Not enough books in locale', i18n.language, 'using all locales from same category');
+      booksInLocale = category.books.filter(
+        (book: Book) => 
+          book.title !== summary.canonical_title &&
+          book.title !== summary.user_title
+      );
+    }
+    
+    console.log('Available books for recommendation:', booksInLocale.length);
+    
+    // Shuffle and take 2 random books from the SAME category
     const shuffled = [...booksInLocale].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, 2);
   }, [summary, i18n.language]);
