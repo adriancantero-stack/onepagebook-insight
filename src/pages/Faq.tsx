@@ -25,15 +25,21 @@ const Faq = () => {
     { q: t("faq.q6"), a: t("faq.a6") },
     { q: t("faq.q7"), a: t("faq.a7") },
     { q: t("faq.q8"), a: t("faq.a8") },
+    { q: t("faq.q9"), a: t("faq.a9") },
+    { q: t("faq.q10"), a: t("faq.a10") },
   ];
+
+  const removeAccents = (str: string) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
 
   const filteredFaqs = useMemo(() => {
     if (!searchQuery.trim()) return faqs;
-    const query = searchQuery.toLowerCase();
+    const query = removeAccents(searchQuery.toLowerCase());
     return faqs.filter(
       (faq) =>
-        faq.q.toLowerCase().includes(query) ||
-        faq.a.toLowerCase().includes(query)
+        removeAccents(faq.q.toLowerCase()).includes(query) ||
+        removeAccents(faq.a.toLowerCase()).includes(query)
     );
   }, [searchQuery, faqs]);
 

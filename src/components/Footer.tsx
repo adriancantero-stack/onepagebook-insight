@@ -10,25 +10,28 @@ const Footer = () => {
     <footer className="border-t border-border mt-auto">
       <div className="container mx-auto px-4 py-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <div className="flex flex-wrap items-center justify-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-2">
             <Link 
               to="/terms" 
               className="hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-[#5A54E6] focus:ring-offset-2 rounded"
             >
               {t("footer.terms")}
             </Link>
+            <span className="text-muted-foreground">•</span>
             <Link 
               to="/privacy" 
               className="hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-[#5A54E6] focus:ring-offset-2 rounded"
             >
               {t("footer.privacy")}
             </Link>
+            <span className="text-muted-foreground">•</span>
             <Link 
               to="/faq" 
               className="hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-[#5A54E6] focus:ring-offset-2 rounded"
             >
               {t("footer.faq")}
             </Link>
+            <span className="text-muted-foreground">•</span>
             <a 
               href={`mailto:${contactEmail}`}
               className="hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-[#5A54E6] focus:ring-offset-2 rounded"
