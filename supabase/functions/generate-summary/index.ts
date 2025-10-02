@@ -168,6 +168,13 @@ function postProcessSummary(data: any): any {
       .replace(/\s+/g, " ")
       .trim();
 
+  // Helper to capitalize first letter of sentences
+  const capitalizeSentences = (text: string): string => {
+    if (!text) return text;
+    // Capitalize first letter and after . ! ?
+    return text.replace(/(^\w|[.!?]\s+\w)/g, (match) => match.toUpperCase());
+  };
+
   // Helper to check similarity (70% threshold)
   const areSimilar = (a: string, b: string): boolean => {
     const normA = normalize(a);
@@ -197,27 +204,32 @@ function postProcessSummary(data: any): any {
     return (matches / maxLength) > 0.7;
   };
 
-  // Remove duplicate bullets in keyIdeas (limit 4-6)
+  // Capitalize oneLiner
+  if (data.oneLiner && typeof data.oneLiner === 'string') {
+    data.oneLiner = capitalizeSentences(data.oneLiner);
+  }
+
+  // Remove duplicate bullets in keyIdeas (limit 4-6) and capitalize
   if (data.keyIdeas && Array.isArray(data.keyIdeas)) {
     const unique: string[] = [];
     
     for (const idea of data.keyIdeas) {
       const isDuplicate = unique.some(existing => areSimilar(existing, idea));
       if (!isDuplicate) {
-        unique.push(idea);
+        unique.push(capitalizeSentences(idea));
       }
     }
     data.keyIdeas = unique.slice(0, 6); // Limit to 6 max
   }
 
-  // Remove duplicate bullets in practicalSteps (limit 3-5)
+  // Remove duplicate bullets in practicalSteps (limit 3-5) and capitalize
   if (data.practicalSteps && Array.isArray(data.practicalSteps)) {
     const unique: string[] = [];
     
     for (const step of data.practicalSteps) {
       const isDuplicate = unique.some(existing => areSimilar(existing, step));
       if (!isDuplicate) {
-        unique.push(step);
+        unique.push(capitalizeSentences(step));
       }
     }
     data.practicalSteps = unique.slice(0, 5); // Limit to 5 max

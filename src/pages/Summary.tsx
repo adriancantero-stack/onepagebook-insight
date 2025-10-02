@@ -501,8 +501,8 @@ const Summary = () => {
           <ul className="space-y-2">
             {content.map((item: string, index: number) => (
               <li key={index} className="flex gap-3">
-                <span className="text-primary font-bold">{index + 1}.</span>
-                <span>{item}</span>
+                <span className="text-primary font-bold shrink-0">{index + 1}.</span>
+                <span className="text-justify hyphens-auto">{item}</span>
               </li>
             ))}
           </ul>
@@ -513,7 +513,7 @@ const Summary = () => {
     return (
       <section>
         <h2 className="text-xl font-semibold mb-3">{title}</h2>
-        <p className="text-foreground leading-relaxed whitespace-pre-wrap text-justify">
+        <p className="text-foreground leading-relaxed whitespace-pre-wrap text-justify hyphens-auto">
           {content}
         </p>
       </section>
