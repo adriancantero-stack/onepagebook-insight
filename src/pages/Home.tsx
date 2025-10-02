@@ -324,7 +324,6 @@ const Home = () => {
             <h1 className="text-xl font-bold hidden sm:block">OnePageBook</h1>
           </div>
           <div className="flex items-center gap-1 sm:gap-2">
-            <LanguageSelector />
             <Button variant="ghost" size="sm" onClick={() => navigate("/explore")} className="gap-1 sm:gap-2">
               <Compass className="w-4 h-4" />
               <span className="hidden sm:inline">{t("header.explore")}</span>
@@ -337,6 +336,7 @@ const Home = () => {
               <Crown className="w-4 h-4" />
               <span className="hidden sm:inline">{t("header.premium")}</span>
             </Button>
+            <LanguageSelector />
             <Button variant="ghost" size="sm" onClick={handleLogout}>
               <LogOut className="w-4 h-4" />
             </Button>
