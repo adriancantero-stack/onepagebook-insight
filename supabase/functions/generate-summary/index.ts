@@ -110,24 +110,45 @@ async function resolveMetadata(userTitle: string, userAuthor: string | null) {
 // Infer theme from title/author
 function inferTheme(title: string): string {
   const t = title.toLowerCase();
-  if (t.includes('sleep') || t.includes('sono') || t.includes('dormir')) return 'sleep';
-  if (t.includes('produtiv') || t.includes('productivity') || t.includes('productividad')) return 'productivity';
-  if (t.includes('saúde') || t.includes('health') || t.includes('salud')) return 'health';
-  if (t.includes('dinheiro') || t.includes('finance') || t.includes('money') || t.includes('dinero')) return 'finance';
-  if (t.includes('hábito') || t.includes('habit') || t.includes('mind') || t.includes('mente')) return 'mindset';
-  return 'default';
+  
+  // Sleep/circadian patterns
+  if (/(sono|sleep|dormir|relógio biológico|circadian|horário|rotina de sono|insônia)/i.test(t)) {
+    return "sleep";
+  }
+  
+  // Productivity patterns
+  if (/(produtividade|productivity|foco|focus|hábito|habit|estudo|study|trabalho|work|eficiência|efficiency|tempo|time)/i.test(t)) {
+    return "productivity";
+  }
+  
+  // Health patterns
+  if (/(saúde|health|exercício|exercise|alimentação|nutrition|energia|energy|corpo|body|fitness)/i.test(t)) {
+    return "health";
+  }
+  
+  // Mindset patterns
+  if (/(mente|mind|mindset|mental|emocional|emotional|psicologia|psychology|hábitos mentais|pensamento|thinking)/i.test(t)) {
+    return "mindset";
+  }
+  
+  // Finance patterns
+  if (/(finanças|finance|dinheiro|money|gastos|expenses|investimento|investment|rico|rich|wealth)/i.test(t)) {
+    return "finance";
+  }
+  
+  return "default";
 }
 
 // Generate closing message by theme and locale
 function generateClosing(theme: string, locale: string, canonicalTitle: string): string {
   const closings: Record<string, Record<string, string>> = {
     pt: {
-      default: "Você não precisa mudar tudo de uma vez. Escolha um horário para começar — hoje — e faça o primeiro ajuste. Amanhã, repita. Rotina consistente vence força de vontade.",
+      default: "Você não precisa mudar tudo de uma vez. Escolha um ajuste pequeno — hoje — e dê o primeiro passo. Amanhã, repita: consistência vence força de vontade.",
       sleep: "Hoje, durma 30 minutos mais cedo e reduza telas 90 minutos antes. Seu relógio biológico agradece; a energia de amanhã começa agora.",
-      productivity: "Bloqueie 25 minutos para foco profundo ainda hoje. Um pequeno bloco diário, repetido, constrói resultados surpreendentes em semanas.",
-      health: "Marque sua primeira caminhada de 10 minutos nas próximas 24h. Saúde real nasce de microvitórias consistentes.",
+      productivity: "Reserve 25 minutos de foco profundo ainda hoje. Um bloco pequeno, repetido diariamente, gera resultados surpreendentes em semanas.",
+      health: "Agende uma caminhada de 10 minutos nas próximas 24 horas. Saúde real nasce de microvitórias consistentes.",
       mindset: "Antes de dormir, escreva uma linha: 'Qual foi meu pequeno avanço hoje?'. A mente segue aquilo que decidimos notar.",
-      finance: "Defina um horário fixo amanhã para revisar gastos dos últimos 7 dias. Clareza semanal evita surpresas mensais."
+      finance: "Amanhã, marque um horário fixo para revisar os gastos dos últimos 7 dias. Clareza semanal evita surpresas mensais."
     },
     en: {
       default: "You don't have to change everything at once. Pick one time to start—today—and make the first small shift. Tomorrow, repeat. Consistency beats willpower.",
@@ -151,7 +172,7 @@ function generateClosing(theme: string, locale: string, canonicalTitle: string):
   return localeClosings[theme] || localeClosings.default;
 }
 
-// Post-process summary to remove duplicates
+// Post-process summary to remove duplicates and format properly
 function postProcessSummary(data: any): any {
   const normalize = (text: string) => 
     text.toLowerCase()
@@ -161,52 +182,49 @@ function postProcessSummary(data: any): any {
       .replace(/\s+/g, " ")
       .trim();
 
-  // Remove duplicate paragraphs
-  if (data.summary) {
-    const paragraphs = data.summary.split('\n\n');
-    const seen = new Set<string>();
-    const unique: string[] = [];
-    
-    for (const p of paragraphs) {
-      const norm = normalize(p);
-      if (norm.length > 40 && !seen.has(norm)) {
-        seen.add(norm);
-        unique.push(p);
-      } else if (norm.length <= 40) {
-        unique.push(p);
-      }
+  // Helper to check similarity
+  const areSimilar = (a: string, b: string): boolean => {
+    const normA = normalize(a);
+    const normB = normalize(b);
+    if (normA === normB) return true;
+    if (normA.length > 40 && normB.length > 40) {
+      // Check if 70% of chars match
+      const shorter = normA.length < normB.length ? normA : normB;
+      const longer = normA.length >= normB.length ? normA : normB;
+      return longer.includes(shorter);
     }
-    data.summary = unique.join('\n\n');
-  }
+    return false;
+  };
 
   // Remove duplicate bullets in keyIdeas
   if (data.keyIdeas && Array.isArray(data.keyIdeas)) {
-    const seen = new Set<string>();
     const unique: string[] = [];
     
     for (const idea of data.keyIdeas) {
-      const norm = normalize(idea);
-      if (!seen.has(norm)) {
-        seen.add(norm);
+      const isDuplicate = unique.some(existing => areSimilar(existing, idea));
+      if (!isDuplicate) {
         unique.push(idea);
       }
     }
     data.keyIdeas = unique.slice(0, 5); // Limit to 5
   }
 
-  // Remove duplicate bullets in actions
-  if (data.actions && Array.isArray(data.actions)) {
-    const seen = new Set<string>();
+  // Remove duplicate bullets in practicalSteps (previously actions)
+  if (data.practicalSteps && Array.isArray(data.practicalSteps)) {
     const unique: string[] = [];
     
-    for (const action of data.actions) {
-      const norm = normalize(action);
-      if (!seen.has(norm)) {
-        seen.add(norm);
-        unique.push(action);
+    for (const step of data.practicalSteps) {
+      const isDuplicate = unique.some(existing => areSimilar(existing, step));
+      if (!isDuplicate) {
+        unique.push(step);
       }
     }
-    data.actions = unique;
+    data.practicalSteps = unique.slice(0, 7); // Limit to 7
+  }
+
+  // Backwards compatibility: map old field names to new
+  if (data.actions && !data.practicalSteps) {
+    data.practicalSteps = data.actions;
   }
 
   return data;
@@ -245,27 +263,38 @@ serve(async (req) => {
     // Language-specific prompts
     const prompts: Record<string, { system: string; user: string }> = {
       pt: {
-        system: `Você é um especialista em resumir livros de forma simples, prática e acionável.
+        system: `Você é um especialista em resumir livros de forma didática, prática e acionável.
+
+OBJETIVO:
+Criar um resumo estruturado seguindo EXATAMENTE este formato:
+1) Título do livro
+2) "por {Autor}"
+3) "Principais Ideias" (parágrafo introdutório + lista de até 5 pontos)
+4) "Aplicações Práticas" (passos práticos e acionáveis)
+5) "Fechamento" (1-2 frases motivacionais com micro-ação em 24h)
 
 REGRAS DE LINGUAGEM:
 - Use linguagem coloquial e simples, como se estivesse conversando com um amigo
 - EVITE jargões técnicos, termos acadêmicos e palavras difíceis
 - Explique conceitos complexos usando analogias do dia a dia
 - Use exemplos práticos que qualquer pessoa possa entender
+- Não repita informações entre seções
 
-ESTRUTURA OBRIGATÓRIA (JSON):
+ESTRUTURA JSON OBRIGATÓRIA:
 {
-  "author": "Nome do autor (se não fornecido, identificar baseado no livro)",
-  "oneLiner": "Uma frase de impacto que capture a essência do livro (20-30 palavras)",
-  "keyIdeas": ["5 ideias principais, cada uma em 1-2 frases claras"],
-  "actions": ["5-7 ações práticas e específicas que o leitor pode aplicar hoje"],
-  "routine": "Exemplo concreto de rotina diária aplicando as ideias (opcional, 2-3 parágrafos)",
-  "plan7Days": "Plano de 7 dias passo a passo para implementar as ideias (opcional)",
-  "metrics": "Como medir progresso e resultados (opcional, 1 parágrafo)",
-  "pitfalls": "Armadilhas comuns e limitações do método (opcional, 1 parágrafo)"
+  "author": "Nome completo do autor (capitalize nomes próprios)",
+  "theme": "detectar tema principal: sleep|productivity|health|mindset|finance|default",
+  "oneLiner": "Uma frase de impacto que capture a essência (20-30 palavras)",
+  "keyIdeasIntro": "Parágrafo introdutório explicando o contexto das ideias principais",
+  "keyIdeas": ["Máximo 5 ideias principais, cada uma em 1-2 frases claras e únicas"],
+  "practicalSteps": ["5-7 passos práticos e específicos que o leitor pode aplicar hoje"],
+  "closingAction": "Micro-ação específica que pode ser feita nas próximas 24h"
 }
 
-IMPORTANTE: Não repita seções. Cada seção deve ter conteúdo único e complementar.`,
+IMPORTANTE: 
+- Cada bullet deve ser único, sem repetições ou paráfrases
+- O fechamento deve incluir UMA ação concreta para hoje
+- Detecte o tema corretamente para gerar fechamento apropriado`,
         user: `Crie um resumo prático do livro "${metadata.canonicalTitle}"${metadata.canonicalAuthor ? ` de ${metadata.canonicalAuthor}` : ""}${metadata.year ? ` (${metadata.year})` : ""}.`
       },
       en: {
@@ -434,18 +463,18 @@ IMPORTANTE: No repitas secciones. Cada sección debe tener contenido único y co
         source: metadata.source,
         one_liner: summaryData.oneLiner || null,
         key_ideas: summaryData.keyIdeas || [],
-        actions: summaryData.actions || [],
-        routine: summaryData.routine || null,
-        plan_7_days: summaryData.plan7Days || null,
-        metrics: summaryData.metrics || null,
-        pitfalls: summaryData.pitfalls || null,
+        actions: summaryData.practicalSteps || summaryData.actions || [],
+        routine: summaryData.keyIdeasIntro || null,
+        plan_7_days: null,
+        metrics: null,
+        pitfalls: null,
         closing: closing,
-        theme: theme,
+        theme: summaryData.theme || theme,
         language: language,
         // Legacy fields for backwards compatibility
         summary_text: summaryData.oneLiner || "",
         main_ideas: summaryData.keyIdeas || [],
-        practical_applications: summaryData.actions?.join('\n') || "",
+        practical_applications: (summaryData.practicalSteps || summaryData.actions || []).join('\n'),
       })
       .select()
       .single();
