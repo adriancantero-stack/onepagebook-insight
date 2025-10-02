@@ -1,4 +1,3 @@
-import type { BookSummary } from "@/types";
 import i18n from "@/i18n/config";
 
 /**
@@ -7,7 +6,7 @@ import i18n from "@/i18n/config";
  * @param language - Target language (pt, en, es)
  * @returns Formatted text ready for TTS
  */
-export const buildAudioText = (summary: BookSummary, language: string): string => {
+export const buildAudioText = (summary: any, language: string): string => {
   // Get translation function for the specified language
   const t = (key: string) => i18n.getFixedT(language)(`audio.${key}`);
   const sections: string[] = [];

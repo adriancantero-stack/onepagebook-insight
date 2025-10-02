@@ -8,12 +8,12 @@ import { Check, Crown, ArrowLeft, BookOpen } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import Footer from "@/components/Footer";
-import type { SubscriptionPlan } from "@/types";
+import type { UserSubscription } from "@/types";
 
 const Plans = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const [currentPlan, setCurrentPlan] = useState<SubscriptionPlan | null>(null);
+  const [currentPlan, setCurrentPlan] = useState<UserSubscription | null>(null);
   const [loading, setLoading] = useState(true);
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
 
@@ -35,7 +35,7 @@ const Plans = () => {
         .eq("user_id", user.id)
         .single();
 
-      setCurrentPlan(data?.subscription_plans);
+      setCurrentPlan(data);
     } catch (error) {
       console.error("Error loading plan:", error);
     } finally {
@@ -71,7 +71,7 @@ const Plans = () => {
     );
   }
 
-  const isPremium = currentPlan?.type === "premium";
+  const isPremium = currentPlan?.subscription_plans?.type === "premium";
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -121,7 +121,7 @@ const Plans = () => {
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {/* Free Plan */}
           <Card 
-            className={`p-8 ${currentPlan?.type === "free" ? "border-primary" : ""}`}
+            className={`p-8 ${currentPlan?.subscription_plans?.type === "free" ? "border-primary" : ""}`}
             role="region"
             aria-label={t("plans.free.name")}
           >
@@ -141,7 +141,7 @@ const Plans = () => {
               ))}
             </ul>
 
-            {currentPlan?.type === "free" ? (
+            {currentPlan?.subscription_plans?.type === "free" ? (
               <Button className="w-full" disabled>
                 {t("plans.currentPlan")}
               </Button>

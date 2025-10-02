@@ -12,8 +12,8 @@ import type { BookSummary, UserSubscription } from "@/types";
 const History = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [summaries, setSummaries] = useState<BookSummary[]>([]);
-  const [subscription, setSubscription] = useState<UserSubscription | null>(null);
+  const [summaries, setSummaries] = useState<any[]>([]);
+  const [subscription, setSubscription] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

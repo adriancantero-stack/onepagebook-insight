@@ -8,9 +8,9 @@ import { BookOpen, Copy, Download, Share2, ArrowLeft, Volume2 } from "lucide-rea
 import { toast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import AudioPlayer from "@/components/AudioPlayer";
-import { Footer } from "@/components/Footer";
+import Footer from "@/components/Footer";
 import { UpgradeModal } from "@/components/UpgradeModal";
-import { AudioPlayer } from "@/components/AudioPlayer";
+import jsPDF from "jspdf";
 import { 
   loadUsage, 
   canUseAudio, 
@@ -27,7 +27,7 @@ const Summary = () => {
   const { t, i18n } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
-  const [summary, setSummary] = useState<BookSummary | null>(null);
+  const [summary, setSummary] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
   const [audioSrc, setAudioSrc] = useState<string | string[] | null>(null);
