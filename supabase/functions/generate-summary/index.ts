@@ -602,6 +602,31 @@ Responde SOLO con el JSON, sin texto adicional.`
       finalTitle = summaryData.title.trim();
     }
 
+    // Check if user has 40 or more summaries, delete oldest if needed
+    const { count } = await supabase
+      .from("book_summaries")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", user.id);
+
+    if (count && count >= 40) {
+      // Delete the oldest summary
+      const { data: oldestSummary } = await supabase
+        .from("book_summaries")
+        .select("id")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: true })
+        .limit(1)
+        .single();
+
+      if (oldestSummary) {
+        await supabase
+          .from("book_summaries")
+          .delete()
+          .eq("id", oldestSummary.id);
+        console.log("Deleted oldest summary to maintain 40 limit:", oldestSummary.id);
+      }
+    }
+
     // Save to database
     const { data: summary, error: dbError } = await supabase
       .from("book_summaries")
