@@ -27,8 +27,8 @@ function capitalizeName(name: string): string {
     .join(' ');
 }
 
-// Resolve metadata from Open Library and Google Books
-async function resolveMetadata(userTitle: string, userAuthor: string | null) {
+// Resolve metadata ONLY from Open Library (as per requirements)
+async function resolveMetadata(userTitle: string, userAuthor: string | null, locale: string) {
   const normalizedTitle = capitalizeTitle(userTitle);
   const normalizedAuthor = userAuthor ? capitalizeName(userAuthor) : null;
   
@@ -37,9 +37,17 @@ async function resolveMetadata(userTitle: string, userAuthor: string | null) {
   let year: number | null = null;
   let source: string | null = null;
 
-  // Try Open Library first
+  // Fallback authors by locale
+  const fallbackAuthors: Record<string, string> = {
+    pt: "Autor desconhecido",
+    en: "Unknown author",
+    es: "Autor desconocido"
+  };
+
+  // Try Open Library ONLY
   try {
     const olUrl = `https://openlibrary.org/search.json?title=${encodeURIComponent(userTitle)}&limit=1`;
+    console.log("Fetching from Open Library:", olUrl);
     const olResponse = await fetch(olUrl);
     if (olResponse.ok) {
       const olData = await olResponse.json();
@@ -49,7 +57,7 @@ async function resolveMetadata(userTitle: string, userAuthor: string | null) {
         const candidateAuthor = doc.author_name?.[0] || null;
         
         // Accept title if all relevant words from userTitle are in candidateTitle
-        const userWords = userTitle.toLowerCase().split(/\s+/).filter(w => w.length > 2);
+        const userWords = userTitle.toLowerCase().split(/\s+/).filter((w: string) => w.length > 2);
         const candidateLower = candidateTitle.toLowerCase();
         const allWordsFound = userWords.every((word: string) => candidateLower.includes(word));
         
@@ -57,51 +65,29 @@ async function resolveMetadata(userTitle: string, userAuthor: string | null) {
           canonicalTitle = candidateTitle;
         }
         
-        if (!normalizedAuthor && candidateAuthor) {
+        // Prioritize user-provided author, then Open Library author, then fallback
+        if (normalizedAuthor) {
+          canonicalAuthor = normalizedAuthor;
+        } else if (candidateAuthor) {
           canonicalAuthor = capitalizeName(candidateAuthor);
+        } else {
+          canonicalAuthor = fallbackAuthors[locale] || fallbackAuthors.en;
         }
         
         year = doc.first_publish_year || null;
         source = "openlibrary";
+        
+        console.log("Open Library result:", { canonicalTitle, canonicalAuthor, year });
+      } else {
+        console.log("No results from Open Library");
+        canonicalAuthor = normalizedAuthor || fallbackAuthors[locale] || fallbackAuthors.en;
+        source = "manual";
       }
     }
   } catch (error) {
     console.log("Open Library lookup failed:", error);
-  }
-
-  // Try Google Books if author not found
-  if (!canonicalAuthor) {
-    try {
-      const gbUrl = `https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(userTitle)}&maxResults=1`;
-      const gbResponse = await fetch(gbUrl);
-      if (gbResponse.ok) {
-        const gbData = await gbResponse.json();
-        if (gbData.items && gbData.items.length > 0) {
-          const vi = gbData.items[0].volumeInfo;
-          
-          if (!source && vi.title) {
-            const userWords = userTitle.toLowerCase().split(/\s+/).filter(w => w.length > 2);
-            const candidateLower = vi.title.toLowerCase();
-            const allWordsFound = userWords.every((word: string) => candidateLower.includes(word));
-            if (allWordsFound) {
-              canonicalTitle = vi.title;
-            }
-          }
-          
-          if (!canonicalAuthor && vi.authors && vi.authors[0]) {
-            canonicalAuthor = capitalizeName(vi.authors[0]);
-          }
-          
-          if (!year && vi.publishedDate) {
-            year = parseInt(vi.publishedDate.slice(0, 4)) || null;
-          }
-          
-          source = source || "googlebooks";
-        }
-      }
-    } catch (error) {
-      console.log("Google Books lookup failed:", error);
-    }
+    canonicalAuthor = normalizedAuthor || fallbackAuthors[locale] || fallbackAuthors.en;
+    source = "manual";
   }
 
   return { canonicalTitle, canonicalAuthor, year, source };
@@ -182,21 +168,36 @@ function postProcessSummary(data: any): any {
       .replace(/\s+/g, " ")
       .trim();
 
-  // Helper to check similarity
+  // Helper to check similarity (70% threshold)
   const areSimilar = (a: string, b: string): boolean => {
     const normA = normalize(a);
     const normB = normalize(b);
+    
+    // Exact match
     if (normA === normB) return true;
+    
+    // Check if one contains the other (for longer texts)
     if (normA.length > 40 && normB.length > 40) {
-      // Check if 70% of chars match
       const shorter = normA.length < normB.length ? normA : normB;
       const longer = normA.length >= normB.length ? normA : normB;
       return longer.includes(shorter);
     }
-    return false;
+    
+    // Calculate similarity ratio for shorter texts
+    const maxLength = Math.max(normA.length, normB.length);
+    if (maxLength === 0) return true;
+    
+    // Count matching characters
+    let matches = 0;
+    const minLength = Math.min(normA.length, normB.length);
+    for (let i = 0; i < minLength; i++) {
+      if (normA[i] === normB[i]) matches++;
+    }
+    
+    return (matches / maxLength) > 0.7;
   };
 
-  // Remove duplicate bullets in keyIdeas
+  // Remove duplicate bullets in keyIdeas (limit 4-6)
   if (data.keyIdeas && Array.isArray(data.keyIdeas)) {
     const unique: string[] = [];
     
@@ -206,10 +207,10 @@ function postProcessSummary(data: any): any {
         unique.push(idea);
       }
     }
-    data.keyIdeas = unique.slice(0, 5); // Limit to 5
+    data.keyIdeas = unique.slice(0, 6); // Limit to 6 max
   }
 
-  // Remove duplicate bullets in practicalSteps (previously actions)
+  // Remove duplicate bullets in practicalSteps (limit 3-5)
   if (data.practicalSteps && Array.isArray(data.practicalSteps)) {
     const unique: string[] = [];
     
@@ -219,7 +220,7 @@ function postProcessSummary(data: any): any {
         unique.push(step);
       }
     }
-    data.practicalSteps = unique.slice(0, 7); // Limit to 7
+    data.practicalSteps = unique.slice(0, 5); // Limit to 5 max
   }
 
   // Backwards compatibility: map old field names to new
@@ -252,98 +253,180 @@ serve(async (req) => {
 
     const { bookTitle, bookAuthor, language = "pt" } = await req.json();
     
-    // Resolve metadata
-    const metadata = await resolveMetadata(bookTitle, bookAuthor);
+    // Resolve metadata (ONLY Open Library)
+    const metadata = await resolveMetadata(bookTitle, bookAuthor, language);
     console.log("Resolved metadata:", metadata);
     
     // Infer theme
     const theme = inferTheme(metadata.canonicalTitle);
     console.log("Inferred theme:", theme);
 
-    // Language-specific prompts
+    // Language-specific labels (i18n)
+    const labels: Record<string, { summary: string; key: string; apply: string; closing: string }> = {
+      pt: {
+        summary: "Resumo (ideia central)",
+        key: "Ideias-chave",
+        apply: "Aplicações práticas",
+        closing: "Fechamento"
+      },
+      en: {
+        summary: "Summary (central idea)",
+        key: "Key ideas",
+        apply: "Practical applications",
+        closing: "Closing"
+      },
+      es: {
+        summary: "Resumen (idea central)",
+        key: "Ideas clave",
+        apply: "Aplicaciones prácticas",
+        closing: "Cierre"
+      }
+    };
+
+    const currentLabels = labels[language] || labels.pt;
+
+    // Language-specific prompts - USING CHATGPT (OpenAI) ONLY
     const prompts: Record<string, { system: string; user: string }> = {
       pt: {
-        system: `Você é um especialista em resumir livros de forma didática, prática e acionável.
+        system: `Você é um especialista em resumir livros de forma clara, prática e acionável.
 
 OBJETIVO:
-Criar um resumo estruturado seguindo EXATAMENTE este formato:
-1) Título do livro
-2) "por {Autor}"
-3) "Principais Ideias" (parágrafo introdutório + lista de até 5 pontos)
-4) "Aplicações Práticas" (passos práticos e acionáveis)
-5) "Fechamento" (1-2 frases motivacionais com micro-ação em 24h)
+Gerar um resumo padronizado SEMPRE neste formato:
+1) "${currentLabels.summary}" — 1-2 parágrafos simples e naturais
+2) "${currentLabels.key}" — 4-6 bullets, sem repetição
+3) "${currentLabels.apply}" — 3-5 passos práticos e acionáveis
 
-REGRAS DE LINGUAGEM:
-- Use linguagem coloquial e simples, como se estivesse conversando com um amigo
-- EVITE jargões técnicos, termos acadêmicos e palavras difíceis
-- Explique conceitos complexos usando analogias do dia a dia
-- Use exemplos práticos que qualquer pessoa possa entender
-- Não repita informações entre seções
+⚠️ REGRAS DE LINGUAGEM (CRÍTICO):
+- Linguagem SIMPLES, NATURAL, COLOQUIAL (nível 6º–8º ano)
+- Frases CURTAS (máx. 20 palavras por frase)
+- ZERO jargão técnico, termos acadêmicos ou palavras difíceis
+- Use analogias do dia a dia para conceitos complexos
+- Exemplos práticos que qualquer pessoa entenda
+- Tom conversacional, como se falasse com um amigo
+
+⚠️ DEDUPLICAÇÃO (OBRIGATÓRIO):
+- Normalizar texto: lowercase, sem acentos/pontuação duplicada
+- Eliminar bullets/parágrafos duplicados ou muito similares (>70% iguais)
+- Cada bullet deve ser ÚNICO, sem paráfrases
+- Máximo 16 palavras por bullet em "Ideias-chave"
+- Limitar a 4–6 bullets em "Ideias-chave"
 
 ESTRUTURA JSON OBRIGATÓRIA:
 {
-  "author": "Nome completo do autor (capitalize nomes próprios)",
-  "theme": "detectar tema principal: sleep|productivity|health|mindset|finance|default",
-  "oneLiner": "Uma frase de impacto que capture a essência (20-30 palavras)",
-  "keyIdeasIntro": "Parágrafo introdutório explicando o contexto das ideias principais",
-  "keyIdeas": ["Máximo 5 ideias principais, cada uma em 1-2 frases claras e únicas"],
-  "practicalSteps": ["5-7 passos práticos e específicos que o leitor pode aplicar hoje"],
-  "closingAction": "Micro-ação específica que pode ser feita nas próximas 24h"
+  "author": "Nome completo do autor (capitalize corretamente)",
+  "theme": "sleep|productivity|health|mindset|finance|default",
+  "oneLiner": "1-2 parágrafos claros e simples que capturam a ideia central do livro",
+  "keyIdeas": ["4-6 ideias principais, cada uma em 1 frase curta e única (máx. 16 palavras)"],
+  "practicalSteps": ["3-5 passos práticos, específicos e mensuráveis que o leitor pode aplicar hoje"]
 }
 
-IMPORTANTE: 
-- Cada bullet deve ser único, sem repetições ou paráfrases
-- O fechamento deve incluir UMA ação concreta para hoje
-- Detecte o tema corretamente para gerar fechamento apropriado`,
-        user: `Crie um resumo prático do livro "${metadata.canonicalTitle}"${metadata.canonicalAuthor ? ` de ${metadata.canonicalAuthor}` : ""}${metadata.year ? ` (${metadata.year})` : ""}.`
+IMPORTANTE:
+- NÃO invente fatos; apenas organize/clarifique
+- Cada seção deve ter conteúdo ÚNICO e complementar
+- Detecte o tema corretamente baseado nas palavras-chave do livro
+- Se o livro for sobre sono/circadiano: theme="sleep"
+- Se for sobre produtividade/foco/hábitos: theme="productivity"
+- Se for sobre saúde/exercício/alimentação: theme="health"
+- Se for sobre mentalidade/emoções: theme="mindset"
+- Se for sobre finanças/dinheiro: theme="finance"
+- Caso contrário: theme="default"`,
+        user: `Crie um resumo prático do livro "${metadata.canonicalTitle}"${metadata.canonicalAuthor ? ` de ${metadata.canonicalAuthor}` : ""}${metadata.year ? ` (${metadata.year})` : ""}.
+
+Responda APENAS com o JSON, sem texto adicional.`
       },
       en: {
-        system: `You are an expert at summarizing books in a simple, practical, and actionable way.
+        system: `You are an expert at summarizing books in a clear, practical, and actionable way.
 
-LANGUAGE RULES:
-- Use simple, conversational English, as if talking to a friend
-- AVOID technical jargon, academic terms, and difficult words
-- Explain complex concepts using everyday analogies
-- Use practical examples that anyone can understand
+OBJECTIVE:
+Generate a standardized summary ALWAYS in this format:
+1) "${currentLabels.summary}" — 1-2 simple, natural paragraphs
+2) "${currentLabels.key}" — 4-6 bullets, no repetition
+3) "${currentLabels.apply}" — 3-5 practical, actionable steps
 
-MANDATORY STRUCTURE (JSON):
+⚠️ LANGUAGE RULES (CRITICAL):
+- SIMPLE, NATURAL, CONVERSATIONAL language (6th–8th grade level)
+- SHORT sentences (max. 20 words per sentence)
+- ZERO technical jargon, academic terms, or difficult words
+- Use everyday analogies for complex concepts
+- Practical examples that anyone can understand
+- Conversational tone, as if talking to a friend
+
+⚠️ DEDUPLICATION (MANDATORY):
+- Normalize text: lowercase, no accents/duplicate punctuation
+- Eliminate duplicate or very similar bullets/paragraphs (>70% identical)
+- Each bullet must be UNIQUE, no paraphrasing
+- Maximum 16 words per bullet in "Key ideas"
+- Limit to 4–6 bullets in "Key ideas"
+
+MANDATORY JSON STRUCTURE:
 {
-  "author": "Author name (if not provided, identify based on the book)",
-  "oneLiner": "One impactful sentence capturing the book's essence (20-30 words)",
-  "keyIdeas": ["5 key ideas, each in 1-2 clear sentences"],
-  "actions": ["5-7 specific, practical actions the reader can apply today"],
-  "routine": "Concrete example of daily routine applying the ideas (optional, 2-3 paragraphs)",
-  "plan7Days": "Step-by-step 7-day plan to implement the ideas (optional)",
-  "metrics": "How to measure progress and results (optional, 1 paragraph)",
-  "pitfalls": "Common pitfalls and method limitations (optional, 1 paragraph)"
+  "author": "Full author name (capitalize correctly)",
+  "theme": "sleep|productivity|health|mindset|finance|default",
+  "oneLiner": "1-2 clear, simple paragraphs capturing the book's central idea",
+  "keyIdeas": ["4-6 main ideas, each in 1 short, unique sentence (max. 16 words)"],
+  "practicalSteps": ["3-5 practical, specific, measurable steps the reader can apply today"]
 }
 
-IMPORTANT: Don't repeat sections. Each section must have unique, complementary content.`,
-        user: `Create a practical summary of the book "${metadata.canonicalTitle}"${metadata.canonicalAuthor ? ` by ${metadata.canonicalAuthor}` : ""}${metadata.year ? ` (${metadata.year})` : ""}.`
+IMPORTANT:
+- Do NOT invent facts; only organize/clarify
+- Each section must have UNIQUE and complementary content
+- Detect the theme correctly based on book keywords
+- If about sleep/circadian: theme="sleep"
+- If about productivity/focus/habits: theme="productivity"
+- If about health/exercise/nutrition: theme="health"
+- If about mindset/emotions: theme="mindset"
+- If about finance/money: theme="finance"
+- Otherwise: theme="default"`,
+        user: `Create a practical summary of the book "${metadata.canonicalTitle}"${metadata.canonicalAuthor ? ` by ${metadata.canonicalAuthor}` : ""}${metadata.year ? ` (${metadata.year})` : ""}.
+
+Respond ONLY with the JSON, no additional text.`
       },
       es: {
-        system: `Eres un experto en resumir libros de forma simple, práctica y accionable.
+        system: `Eres un experto en resumir libros de forma clara, práctica y accionable.
 
-REGLAS DE LENGUAJE:
-- Usa lenguaje coloquial y simple, como si hablaras con un amigo
-- EVITA jerga técnica, términos académicos y palabras difíciles
-- Explica conceptos complejos usando analogías cotidianas
-- Usa ejemplos prácticos que cualquiera pueda entender
+OBJETIVO:
+Generar un resumen estandarizado SIEMPRE en este formato:
+1) "${currentLabels.summary}" — 1-2 párrafos simples y naturales
+2) "${currentLabels.key}" — 4-6 bullets, sin repetición
+3) "${currentLabels.apply}" — 3-5 pasos prácticos y accionables
 
-ESTRUCTURA OBLIGATORIA (JSON):
+⚠️ REGLAS DE LENGUAJE (CRÍTICO):
+- Lenguaje SIMPLE, NATURAL, COLOQUIAL (nivel 6º–8º grado)
+- Frases CORTAS (máx. 20 palabras por frase)
+- CERO jerga técnica, términos académicos o palabras difíciles
+- Usa analogías cotidianas para conceptos complejos
+- Ejemplos prácticos que cualquiera pueda entender
+- Tono conversacional, como si hablaras con un amigo
+
+⚠️ DEDUPLICACIÓN (OBLIGATORIO):
+- Normalizar texto: minúsculas, sin acentos/puntuación duplicada
+- Eliminar bullets/párrafos duplicados o muy similares (>70% iguales)
+- Cada bullet debe ser ÚNICO, sin paráfrasis
+- Máximo 16 palabras por bullet en "Ideas clave"
+- Limitar a 4–6 bullets en "Ideas clave"
+
+ESTRUCTURA JSON OBLIGATORIA:
 {
-  "author": "Nombre del autor (si no se proporciona, identificar basándote en el libro)",
-  "oneLiner": "Una frase de impacto que capture la esencia del libro (20-30 palabras)",
-  "keyIdeas": ["5 ideas clave, cada una en 1-2 frases claras"],
-  "actions": ["5-7 acciones prácticas y específicas que el lector puede aplicar hoy"],
-  "routine": "Ejemplo concreto de rutina diaria aplicando las ideas (opcional, 2-3 párrafos)",
-  "plan7Days": "Plan paso a paso de 7 días para implementar las ideas (opcional)",
-  "metrics": "Cómo medir progreso y resultados (opcional, 1 párrafo)",
-  "pitfalls": "Trampas comunes y limitaciones del método (opcional, 1 párrafo)"
+  "author": "Nombre completo del autor (capitalizar correctamente)",
+  "theme": "sleep|productivity|health|mindset|finance|default",
+  "oneLiner": "1-2 párrafos claros y simples que capturan la idea central del libro",
+  "keyIdeas": ["4-6 ideas principales, cada una en 1 frase corta y única (máx. 16 palabras)"],
+  "practicalSteps": ["3-5 pasos prácticos, específicos y medibles que el lector puede aplicar hoy"]
 }
 
-IMPORTANTE: No repitas secciones. Cada sección debe tener contenido único y complementario.`,
-        user: `Crea un resumen práctico del libro "${metadata.canonicalTitle}"${metadata.canonicalAuthor ? ` de ${metadata.canonicalAuthor}` : ""}${metadata.year ? ` (${metadata.year})` : ""}.`
+IMPORTANTE:
+- NO inventes hechos; solo organiza/clarifica
+- Cada sección debe tener contenido ÚNICO y complementario
+- Detecta el tema correctamente basándote en las palabras clave del libro
+- Si es sobre sueño/circadiano: theme="sleep"
+- Si es sobre productividad/foco/hábitos: theme="productivity"
+- Si es sobre salud/ejercicio/alimentación: theme="health"
+- Si es sobre mentalidad/emociones: theme="mindset"
+- Si es sobre finanzas/dinero: theme="finance"
+- De lo contrario: theme="default"`,
+        user: `Crea un resumen práctico del libro "${metadata.canonicalTitle}"${metadata.canonicalAuthor ? ` de ${metadata.canonicalAuthor}` : ""}${metadata.year ? ` (${metadata.year})` : ""}.
+
+Responde SOLO con el JSON, sin texto adicional.`
       }
     };
 
