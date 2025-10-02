@@ -157,6 +157,11 @@ export const es = {
     "cats.creative": "Creatividad y Trabajo Creativo",
     "cats.startup": "Emprendimiento y Startups",
     "cats.life": "Vida y Autoconocimiento",
+    "cats.marketing": "Marketing y Growth",
+    "cats.career": "Carrera y Trabajo",
+    "cats.education": "Aprendizaje y Educación",
+    "cats.bio": "Biografías e Historia",
+    "cats.tech": "Tecnología e IA",
     "header.explore": "Explorar",
     
     // Footer

@@ -432,6 +432,211 @@ export const bookCatalog: Category[] = [
       { title: "12 Reglas para Vivir", author: "Jordan B. Peterson", locale: "es", originalTitle: "12 Rules for Life" },
       { title: "El Poder del Ahora", author: "Eckhart Tolle", locale: "es", originalTitle: "The Power of Now" },
     ]
+  },
+  {
+    id: "marketing", 
+    nameKey: "cats.marketing",
+    books: [
+      // Portuguese
+      { title: "Contagioso", author: "Jonah Berger", locale: "pt", originalTitle: "Contagious" },
+      { title: "Posicionamento", author: "Al Ries; Jack Trout", locale: "pt", originalTitle: "Positioning" },
+      { title: "Roube Como um Artista", author: "Seth Godin", locale: "pt", originalTitle: "Purple Cow" },
+      { title: "Isso é Marketing", author: "Seth Godin", locale: "pt", originalTitle: "This Is Marketing" },
+      { title: "Construindo uma StoryBrand", author: "Donald Miller", locale: "pt", originalTitle: "Building a StoryBrand" },
+      { title: "Hackeando o Crescimento", author: "Sean Ellis; Morgan Brown", locale: "pt", originalTitle: "Hacking Growth" },
+      { title: "Alquimia", author: "Rory Sutherland", locale: "pt", originalTitle: "Alchemy" },
+      { title: "Fisgado", author: "Nir Eyal", locale: "pt", originalTitle: "Hooked" },
+      { title: "Ogilvy sobre Publicidade", author: "David Ogilvy", locale: "pt", originalTitle: "Ogilvy on Advertising" },
+      { title: "As 22 Leis Imutáveis do Marketing", author: "Al Ries; Jack Trout", locale: "pt", originalTitle: "The 22 Immutable Laws of Marketing" },
+      
+      // English
+      { title: "Contagious", author: "Jonah Berger", locale: "en" },
+      { title: "Positioning", author: "Al Ries; Jack Trout", locale: "en" },
+      { title: "Purple Cow", author: "Seth Godin", locale: "en" },
+      { title: "This Is Marketing", author: "Seth Godin", locale: "en" },
+      { title: "Building a StoryBrand", author: "Donald Miller", locale: "en" },
+      { title: "Hacking Growth", author: "Sean Ellis; Morgan Brown", locale: "en" },
+      { title: "Alchemy", author: "Rory Sutherland", locale: "en" },
+      { title: "Hooked", author: "Nir Eyal", locale: "en" },
+      { title: "Ogilvy on Advertising", author: "David Ogilvy", locale: "en" },
+      { title: "The 22 Immutable Laws of Marketing", author: "Al Ries; Jack Trout", locale: "en" },
+      
+      // Spanish
+      { title: "Contagioso", author: "Jonah Berger", locale: "es", originalTitle: "Contagious" },
+      { title: "Posicionamiento", author: "Al Ries; Jack Trout", locale: "es", originalTitle: "Positioning" },
+      { title: "Vaca Púrpura", author: "Seth Godin", locale: "es", originalTitle: "Purple Cow" },
+      { title: "Esto es Marketing", author: "Seth Godin", locale: "es", originalTitle: "This Is Marketing" },
+      { title: "Construyendo una StoryBrand", author: "Donald Miller", locale: "es", originalTitle: "Building a StoryBrand" },
+      { title: "Hackeando el Crecimiento", author: "Sean Ellis; Morgan Brown", locale: "es", originalTitle: "Hacking Growth" },
+      { title: "Alquimia", author: "Rory Sutherland", locale: "es", originalTitle: "Alchemy" },
+      { title: "Enganchado", author: "Nir Eyal", locale: "es", originalTitle: "Hooked" },
+      { title: "Ogilvy sobre Publicidad", author: "David Ogilvy", locale: "es", originalTitle: "Ogilvy on Advertising" },
+      { title: "Las 22 Leyes Inmutables del Marketing", author: "Al Ries; Jack Trout", locale: "es", originalTitle: "The 22 Immutable Laws of Marketing" },
+    ]
+  },
+  {
+    id: "career", 
+    nameKey: "cats.career",
+    books: [
+      // Portuguese
+      { title: "Tão Bom Que Não Podem Te Ignorar", author: "Cal Newport", locale: "pt", originalTitle: "So Good They Can't Ignore You" },
+      { title: "Desenhando Sua Vida", author: "Bill Burnett; Dave Evans", locale: "pt", originalTitle: "Designing Your Life" },
+      { title: "A Startup de Você", author: "Reid Hoffman; Ben Casnocha", locale: "pt", originalTitle: "The Start-up of You" },
+      { title: "De Que Cor é Seu Para-quedas?", author: "Richard N. Bolles", locale: "pt", originalTitle: "What Color Is Your Parachute?" },
+      { title: "Amplitude", author: "David Epstein", locale: "pt", originalTitle: "Range" },
+      { title: "Nunca Almoce Sozinho", author: "Keith Ferrazzi; Tahl Raz", locale: "pt", originalTitle: "Never Eat Alone" },
+      { title: "Dar e Receber", author: "Adam Grant", locale: "pt", originalTitle: "Give and Take" },
+      { title: "Pivô", author: "Jenny Blake", locale: "pt", originalTitle: "Pivot" },
+      { title: "A Busca de Emprego de 2 Horas", author: "Steve Dalton", locale: "pt", originalTitle: "The 2-Hour Job Search" },
+      { title: "A Década Decisiva", author: "Meg Jay", locale: "pt", originalTitle: "The Defining Decade" },
+      
+      // English
+      { title: "So Good They Can't Ignore You", author: "Cal Newport", locale: "en" },
+      { title: "Designing Your Life", author: "Bill Burnett; Dave Evans", locale: "en" },
+      { title: "The Start-up of You", author: "Reid Hoffman; Ben Casnocha", locale: "en" },
+      { title: "What Color Is Your Parachute?", author: "Richard N. Bolles", locale: "en" },
+      { title: "Range", author: "David Epstein", locale: "en" },
+      { title: "Never Eat Alone", author: "Keith Ferrazzi; Tahl Raz", locale: "en" },
+      { title: "Give and Take", author: "Adam Grant", locale: "en" },
+      { title: "Pivot", author: "Jenny Blake", locale: "en" },
+      { title: "The 2-Hour Job Search", author: "Steve Dalton", locale: "en" },
+      { title: "The Defining Decade", author: "Meg Jay", locale: "en" },
+      
+      // Spanish
+      { title: "Tan Bueno Que No Pueden Ignorarte", author: "Cal Newport", locale: "es", originalTitle: "So Good They Can't Ignore You" },
+      { title: "Diseñando Tu Vida", author: "Bill Burnett; Dave Evans", locale: "es", originalTitle: "Designing Your Life" },
+      { title: "La Startup Eres Tú", author: "Reid Hoffman; Ben Casnocha", locale: "es", originalTitle: "The Start-up of You" },
+      { title: "¿De Qué Color es Tu Paracaídas?", author: "Richard N. Bolles", locale: "es", originalTitle: "What Color Is Your Parachute?" },
+      { title: "Amplitud", author: "David Epstein", locale: "es", originalTitle: "Range" },
+      { title: "Nunca Almuerces Solo", author: "Keith Ferrazzi; Tahl Raz", locale: "es", originalTitle: "Never Eat Alone" },
+      { title: "Dar y Recibir", author: "Adam Grant", locale: "es", originalTitle: "Give and Take" },
+      { title: "Pivotar", author: "Jenny Blake", locale: "es", originalTitle: "Pivot" },
+      { title: "La Búsqueda de Empleo de 2 Horas", author: "Steve Dalton", locale: "es", originalTitle: "The 2-Hour Job Search" },
+      { title: "La Década Decisiva", author: "Meg Jay", locale: "es", originalTitle: "The Defining Decade" },
+    ]
+  },
+  {
+    id: "education", 
+    nameKey: "cats.education",
+    books: [
+      // Portuguese
+      { title: "Fixe o Conhecimento", author: "Peter C. Brown; Henry L. Roediger III; Mark A. McDaniel", locale: "pt", originalTitle: "Make It Stick" },
+      { title: "Ultraaprendizado", author: "Scott H Young", locale: "pt", originalTitle: "Ultralearning" },
+      { title: "Uma Mente para Números", author: "Barbara Oakley", locale: "pt", originalTitle: "A Mind for Numbers" },
+      { title: "Pico", author: "Anders Ericsson; Robert Pool", locale: "pt", originalTitle: "Peak" },
+      { title: "Caminhando na Lua com Einstein", author: "Joshua Foer", locale: "pt", originalTitle: "Moonwalking with Einstein" },
+      { title: "As Primeiras 20 Horas", author: "Josh Kaufman", locale: "pt", originalTitle: "The First 20 Hours" },
+      { title: "Ilimitado", author: "Jim Kwik", locale: "pt", originalTitle: "Limitless" },
+      { title: "A Arte de Aprender", author: "Josh Waitzkin", locale: "pt", originalTitle: "The Art of Learning" },
+      { title: "Como Ler um Livro", author: "Mortimer J. Adler; Charles Van Doren", locale: "pt", originalTitle: "How to Read a Book" },
+      { title: "Aprendendo a Aprender", author: "Barbara Oakley; Terrence Sejnowski", locale: "pt", originalTitle: "Learning How to Learn" },
+      
+      // English
+      { title: "Make It Stick", author: "Peter C. Brown; Henry L. Roediger III; Mark A. McDaniel", locale: "en" },
+      { title: "Ultralearning", author: "Scott H Young", locale: "en" },
+      { title: "A Mind for Numbers", author: "Barbara Oakley", locale: "en" },
+      { title: "Peak", author: "Anders Ericsson; Robert Pool", locale: "en" },
+      { title: "Moonwalking with Einstein", author: "Joshua Foer", locale: "en" },
+      { title: "The First 20 Hours", author: "Josh Kaufman", locale: "en" },
+      { title: "Limitless", author: "Jim Kwik", locale: "en" },
+      { title: "The Art of Learning", author: "Josh Waitzkin", locale: "en" },
+      { title: "How to Read a Book", author: "Mortimer J. Adler; Charles Van Doren", locale: "en" },
+      { title: "Learning How to Learn", author: "Barbara Oakley; Terrence Sejnowski", locale: "en" },
+      
+      // Spanish
+      { title: "Hazlo Pegar", author: "Peter C. Brown; Henry L. Roediger III; Mark A. McDaniel", locale: "es", originalTitle: "Make It Stick" },
+      { title: "Ultraaprendizaje", author: "Scott H Young", locale: "es", originalTitle: "Ultralearning" },
+      { title: "Una Mente para los Números", author: "Barbara Oakley", locale: "es", originalTitle: "A Mind for Numbers" },
+      { title: "Cumbre", author: "Anders Ericsson; Robert Pool", locale: "es", originalTitle: "Peak" },
+      { title: "Caminando en la Luna con Einstein", author: "Joshua Foer", locale: "es", originalTitle: "Moonwalking with Einstein" },
+      { title: "Las Primeras 20 Horas", author: "Josh Kaufman", locale: "es", originalTitle: "The First 20 Hours" },
+      { title: "Ilimitado", author: "Jim Kwik", locale: "es", originalTitle: "Limitless" },
+      { title: "El Arte de Aprender", author: "Josh Waitzkin", locale: "es", originalTitle: "The Art of Learning" },
+      { title: "Cómo Leer un Libro", author: "Mortimer J. Adler; Charles Van Doren", locale: "es", originalTitle: "How to Read a Book" },
+      { title: "Aprendiendo a Aprender", author: "Barbara Oakley; Terrence Sejnowski", locale: "es", originalTitle: "Learning How to Learn" },
+    ]
+  },
+  {
+    id: "bio", 
+    nameKey: "cats.bio",
+    books: [
+      // Portuguese
+      { title: "Shoe Dog", author: "Phil Knight", locale: "pt" },
+      { title: "Steve Jobs", author: "Walter Isaacson", locale: "pt" },
+      { title: "Elon Musk", author: "Walter Isaacson", locale: "pt" },
+      { title: "Titã: A Vida de John D. Rockefeller, Sr.", author: "Ron Chernow", locale: "pt", originalTitle: "Titan: The Life of John D. Rockefeller, Sr." },
+      { title: "Alexander Hamilton", author: "Ron Chernow", locale: "pt" },
+      { title: "Equipe de Rivais", author: "Doris Kearns Goodwin", locale: "pt", originalTitle: "Team of Rivals" },
+      { title: "Os Irmãos Wright", author: "David McCullough", locale: "pt", originalTitle: "The Wright Brothers" },
+      { title: "Genghis Khan e a Formação do Mundo Moderno", author: "Jack Weatherford", locale: "pt", originalTitle: "Genghis Khan and the Making of the Modern World" },
+      { title: "O Poder do Corretor", author: "Robert A. Caro", locale: "pt", originalTitle: "The Power Broker" },
+      { title: "Einstein: Sua Vida e Universo", author: "Walter Isaacson", locale: "pt", originalTitle: "Einstein: His Life and Universe" },
+      
+      // English
+      { title: "Shoe Dog", author: "Phil Knight", locale: "en" },
+      { title: "Steve Jobs", author: "Walter Isaacson", locale: "en" },
+      { title: "Elon Musk", author: "Walter Isaacson", locale: "en" },
+      { title: "Titan: The Life of John D. Rockefeller, Sr.", author: "Ron Chernow", locale: "en" },
+      { title: "Alexander Hamilton", author: "Ron Chernow", locale: "en" },
+      { title: "Team of Rivals", author: "Doris Kearns Goodwin", locale: "en" },
+      { title: "The Wright Brothers", author: "David McCullough", locale: "en" },
+      { title: "Genghis Khan and the Making of the Modern World", author: "Jack Weatherford", locale: "en" },
+      { title: "The Power Broker", author: "Robert A. Caro", locale: "en" },
+      { title: "Einstein: His Life and Universe", author: "Walter Isaacson", locale: "en" },
+      
+      // Spanish
+      { title: "Shoe Dog", author: "Phil Knight", locale: "es" },
+      { title: "Steve Jobs", author: "Walter Isaacson", locale: "es" },
+      { title: "Elon Musk", author: "Walter Isaacson", locale: "es" },
+      { title: "Titán: La Vida de John D. Rockefeller, Sr.", author: "Ron Chernow", locale: "es", originalTitle: "Titan: The Life of John D. Rockefeller, Sr." },
+      { title: "Alexander Hamilton", author: "Ron Chernow", locale: "es" },
+      { title: "Equipo de Rivales", author: "Doris Kearns Goodwin", locale: "es", originalTitle: "Team of Rivals" },
+      { title: "Los Hermanos Wright", author: "David McCullough", locale: "es", originalTitle: "The Wright Brothers" },
+      { title: "Genghis Khan y la Formación del Mundo Moderno", author: "Jack Weatherford", locale: "es", originalTitle: "Genghis Khan and the Making of the Modern World" },
+      { title: "El Poder del Corredor", author: "Robert A. Caro", locale: "es", originalTitle: "The Power Broker" },
+      { title: "Einstein: Su Vida y Universo", author: "Walter Isaacson", locale: "es", originalTitle: "Einstein: His Life and Universe" },
+    ]
+  },
+  {
+    id: "tech", 
+    nameKey: "cats.tech",
+    books: [
+      // Portuguese
+      { title: "Vida 3.0", author: "Max Tegmark", locale: "pt", originalTitle: "Life 3.0" },
+      { title: "Máquinas de Previsão", author: "Ajay Agrawal; Joshua Gans; Avi Goldfarb", locale: "pt", originalTitle: "Prediction Machines" },
+      { title: "IA Compatível com Humanos", author: "Stuart Russell", locale: "pt", originalTitle: "Human Compatible" },
+      { title: "Competindo na Era da IA", author: "Marco Iansiti; Karim R. Lakhani", locale: "pt", originalTitle: "Competing in the Age of AI" },
+      { title: "Inteligência Artificial: Um Guia para Humanos Pensantes", author: "Melanie Mitchell", locale: "pt", originalTitle: "Artificial Intelligence: A Guide for Thinking Humans" },
+      { title: "A Onda que Vem", author: "Mustafa Suleyman; Michael Bhaskar", locale: "pt", originalTitle: "The Coming Wave" },
+      { title: "Superinteligência", author: "Nick Bostrom", locale: "pt", originalTitle: "Superintelligence" },
+      { title: "Arquitetos da Inteligência", author: "Martin Ford", locale: "pt", originalTitle: "Architects of Intelligence" },
+      { title: "Aprendizado Profundo", author: "Ian Goodfellow; Yoshua Bengio; Aaron Courville", locale: "pt", originalTitle: "Deep Learning" },
+      { title: "A Singularidade Está Próxima", author: "Ray Kurzweil", locale: "pt", originalTitle: "The Singularity Is Near" },
+      
+      // English
+      { title: "Life 3.0", author: "Max Tegmark", locale: "en" },
+      { title: "Prediction Machines", author: "Ajay Agrawal; Joshua Gans; Avi Goldfarb", locale: "en" },
+      { title: "Human Compatible", author: "Stuart Russell", locale: "en" },
+      { title: "Competing in the Age of AI", author: "Marco Iansiti; Karim R. Lakhani", locale: "en" },
+      { title: "Artificial Intelligence: A Guide for Thinking Humans", author: "Melanie Mitchell", locale: "en" },
+      { title: "The Coming Wave", author: "Mustafa Suleyman; Michael Bhaskar", locale: "en" },
+      { title: "Superintelligence", author: "Nick Bostrom", locale: "en" },
+      { title: "Architects of Intelligence", author: "Martin Ford", locale: "en" },
+      { title: "Deep Learning", author: "Ian Goodfellow; Yoshua Bengio; Aaron Courville", locale: "en" },
+      { title: "The Singularity Is Near", author: "Ray Kurzweil", locale: "en" },
+      
+      // Spanish
+      { title: "Vida 3.0", author: "Max Tegmark", locale: "es", originalTitle: "Life 3.0" },
+      { title: "Máquinas de Predicción", author: "Ajay Agrawal; Joshua Gans; Avi Goldfarb", locale: "es", originalTitle: "Prediction Machines" },
+      { title: "IA Compatible con Humanos", author: "Stuart Russell", locale: "es", originalTitle: "Human Compatible" },
+      { title: "Compitiendo en la Era de la IA", author: "Marco Iansiti; Karim R. Lakhani", locale: "es", originalTitle: "Competing in the Age of AI" },
+      { title: "Inteligencia Artificial: Una Guía para Humanos Pensantes", author: "Melanie Mitchell", locale: "es", originalTitle: "Artificial Intelligence: A Guide for Thinking Humans" },
+      { title: "La Ola que Viene", author: "Mustafa Suleyman; Michael Bhaskar", locale: "es", originalTitle: "The Coming Wave" },
+      { title: "Superinteligencia", author: "Nick Bostrom", locale: "es", originalTitle: "Superintelligence" },
+      { title: "Arquitectos de la Inteligencia", author: "Martin Ford", locale: "es", originalTitle: "Architects of Intelligence" },
+      { title: "Aprendizaje Profundo", author: "Ian Goodfellow; Yoshua Bengio; Aaron Courville", locale: "es", originalTitle: "Deep Learning" },
+      { title: "La Singularidad Está Cerca", author: "Ray Kurzweil", locale: "es", originalTitle: "The Singularity Is Near" },
+    ]
   }
 ];
 
