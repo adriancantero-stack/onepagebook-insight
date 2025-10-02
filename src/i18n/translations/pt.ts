@@ -150,6 +150,13 @@ export const pt = {
     "cats.habits": "Hábitos & Produtividade",
     "cats.sleep": "Sono & Saúde",
     "cats.psych": "Psicologia & Mindset",
+    "cats.strategy": "Negócios & Estratégia",
+    "cats.finance": "Finanças Pessoais",
+    "cats.comm": "Comunicação & Persuasão",
+    "cats.lead": "Liderança & Gestão",
+    "cats.creative": "Criatividade & Trabalho Criativo",
+    "cats.startup": "Empreendedorismo & Startups",
+    "cats.life": "Vida & Autoconhecimento",
     "header.explore": "Explorar",
     
     // Footer
