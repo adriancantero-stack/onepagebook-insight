@@ -59,7 +59,7 @@ export const en = {
     "summary.audioErrorDesc": "Could not generate audio. Please try again.",
     "summary.pdfDownloaded": "PDF downloaded!",
     "summary.pdfDesc": "The summary has been saved as PDF.",
-    "summary.relatedBooks": "Keep learning",
+    "summary.relatedBooks": "Keep learning (recommended)",
     "summary.summarize": "Summarize this book",
     
     // Sections

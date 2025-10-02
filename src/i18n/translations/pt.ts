@@ -59,7 +59,7 @@ export const pt = {
     "summary.audioErrorDesc": "Não foi possível gerar o áudio. Tente novamente.",
     "summary.pdfDownloaded": "PDF baixado!",
     "summary.pdfDesc": "O resumo foi salvo em PDF.",
-    "summary.relatedBooks": "Continue aprendendo",
+    "summary.relatedBooks": "Continue aprendendo (recomendados)",
     "summary.summarize": "Resumir este livro",
     
     // Sections

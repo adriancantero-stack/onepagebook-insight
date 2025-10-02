@@ -59,7 +59,7 @@ export const es = {
     "summary.audioErrorDesc": "No se pudo generar el audio. Inténtalo de nuevo.",
     "summary.pdfDownloaded": "¡PDF descargado!",
     "summary.pdfDesc": "El resumen se guardó en PDF.",
-    "summary.relatedBooks": "Sigue aprendiendo",
+    "summary.relatedBooks": "Sigue aprendiendo (recomendados)",
     "summary.summarize": "Resumir este libro",
     
     // Sections
