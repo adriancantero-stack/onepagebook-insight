@@ -7,6 +7,23 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Cache utilities
+function normalizeText(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^\w\s]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function createCacheKey(title: string, author: string, lang: string): string {
+  const normTitle = normalizeText(title);
+  const normAuthor = normalizeText(author || "");
+  return `${normTitle}|${normAuthor}|${lang}`;
+}
+
 // Function to capitalize book title (first letter of each word) - preserves accents
 function capitalizeTitle(title: string): string {
   return title
@@ -268,6 +285,28 @@ serve(async (req) => {
     }
 
     const { bookTitle, bookAuthor, language = "pt" } = await req.json();
+    
+    // Check cache FIRST
+    const cacheKey = createCacheKey(bookTitle, bookAuthor || "", language);
+    console.log("Checking cache with key:", cacheKey);
+    
+    const { data: cachedSummary } = await supabase
+      .from("book_summaries")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("norm_key", cacheKey)
+      .eq("language", language)
+      .maybeSingle();
+    
+    if (cachedSummary) {
+      console.log("✅ Cache hit! Returning existing summary:", cachedSummary.id);
+      return new Response(
+        JSON.stringify({ summaryId: cachedSummary.id }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    
+    console.log("❌ Cache miss. Generating new summary...");
     
     // Resolve metadata (ONLY Open Library)
     const metadata = await resolveMetadata(bookTitle, bookAuthor, language);
@@ -630,7 +669,7 @@ Responde SOLO con el JSON, sin texto adicional.`
       }
     }
 
-    // Save to database
+    // Save to database with cache key
     const { data: summary, error: dbError } = await supabase
       .from("book_summaries")
       .insert({
@@ -653,6 +692,7 @@ Responde SOLO con el JSON, sin texto adicional.`
         closing: closing,
         theme: summaryData.theme || theme,
         language: language,
+        norm_key: cacheKey,  // Add cache key
         // Legacy fields for backwards compatibility
         summary_text: summaryData.oneLiner || "",
         main_ideas: summaryData.keyIdeas || [],
