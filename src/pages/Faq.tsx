@@ -43,7 +43,7 @@ const Faq = () => {
     );
   }, [searchQuery, faqs]);
 
-  const jsonLd = {
+  const jsonLd = useMemo(() => ({
     "@context": "https://schema.org",
     "@type": "FAQPage",
     mainEntity: faqs.map((faq) => ({
@@ -54,7 +54,7 @@ const Faq = () => {
         text: faq.a,
       },
     })),
-  };
+  }), [faqs]);
 
   useEffect(() => {
     document.title = `${t("faq.title_long")} | OnePageBook`;
@@ -72,7 +72,7 @@ const Faq = () => {
     return () => {
       document.head.removeChild(script);
     };
-  }, [t]);
+  }, [t, jsonLd]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
