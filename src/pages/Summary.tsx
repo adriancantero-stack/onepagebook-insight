@@ -8,6 +8,7 @@ import { BookOpen, Copy, Download, Share2, ArrowLeft, Volume2 } from "lucide-rea
 import { toast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import AudioPlayer from "@/components/AudioPlayer";
+import Footer from "@/components/Footer";
 
 const Summary = () => {
   const { t } = useTranslation();
@@ -203,7 +204,7 @@ const Summary = () => {
   if (!summary) return null;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b border-border">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Button variant="ghost" onClick={() => navigate("/")}>
@@ -214,7 +215,7 @@ const Summary = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+      <main className="container mx-auto px-4 py-8 max-w-4xl flex-1">
         <Card className="p-8">
           <div className="flex items-start gap-4 mb-6">
             <div className="p-3 bg-primary rounded-lg">
@@ -223,7 +224,7 @@ const Summary = () => {
             <div className="flex-1">
               <h1 className="text-3xl font-bold mb-2">{summary.book_title}</h1>
               {summary.book_author && (
-                <p className="text-muted-foreground">por {summary.book_author}</p>
+                <p className="text-muted-foreground">{t("summary.by")} {summary.book_author}</p>
               )}
             </div>
           </div>
@@ -292,6 +293,8 @@ const Summary = () => {
           </div>
         </Card>
       </main>
+
+      <Footer />
     </div>
   );
 };

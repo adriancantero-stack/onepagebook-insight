@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { BookOpen, ArrowLeft, Crown } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import Footer from "@/components/Footer";
 
 const History = () => {
   const { t } = useTranslation();
@@ -69,7 +70,7 @@ const History = () => {
   const isFree = subscription?.subscription_plans?.type === "free";
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b border-border">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Button variant="ghost" onClick={() => navigate("/")}>
@@ -80,7 +81,7 @@ const History = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+      <main className="container mx-auto px-4 py-8 max-w-4xl flex-1">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold">{t("history.title")}</h1>
           {isFree && (
@@ -130,7 +131,7 @@ const History = () => {
                     </h3>
                     {summary.book_author && (
                       <p className="text-sm text-muted-foreground mb-2">
-                        por {summary.book_author}
+                        {t("summary.by")} {summary.book_author}
                       </p>
                     )}
                     <p className="text-xs text-muted-foreground">
@@ -146,6 +147,8 @@ const History = () => {
           </div>
         )}
       </main>
+
+      <Footer />
     </div>
   );
 };

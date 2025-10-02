@@ -8,6 +8,7 @@ import { Check, Crown, ArrowLeft } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { usePricing } from "@/hooks/usePricing";
+import Footer from "@/components/Footer";
 
 const Plans = () => {
   const { t } = useTranslation();
@@ -59,7 +60,7 @@ const Plans = () => {
   const isPremium = currentPlan?.type === "premium";
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b border-border">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Button variant="ghost" onClick={() => navigate("/")}>
@@ -70,7 +71,7 @@ const Plans = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-16 max-w-5xl">
+      <main className="container mx-auto px-4 py-16 max-w-5xl flex-1">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4">{t("plans.title")}</h1>
         </div>
@@ -142,6 +143,8 @@ const Plans = () => {
           </Card>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 };

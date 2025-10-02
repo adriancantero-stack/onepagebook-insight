@@ -8,6 +8,8 @@ import Auth from "./pages/Auth";
 import Summary from "./pages/Summary";
 import History from "./pages/History";
 import Plans from "./pages/Plans";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +26,8 @@ const App = () => (
           <Route path="/summary/:id" element={<Summary />} />
           <Route path="/history" element={<History />} />
           <Route path="/plans" element={<Plans />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

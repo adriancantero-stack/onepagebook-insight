@@ -1,5 +1,11 @@
 # Welcome to your Lovable project
 
+## Official Domain
+
+**OnePageBook** - The official domain for this project is: **onepagebook.ai**
+
+Contact email: sac@onepagebook.ai
+
 ## Project info
 
 **URL**: https://lovable.dev/projects/c692a516-550d-44c5-bd07-a3ef769cd502

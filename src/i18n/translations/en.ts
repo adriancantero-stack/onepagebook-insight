@@ -31,6 +31,7 @@ export const en = {
     
     // Summary
     "summary.back": "Back",
+    "summary.by": "by",
     "summary.copy": "Copy",
     "summary.download": "Download",
     "summary.share": "Share",
@@ -76,5 +77,11 @@ export const en = {
     "toast.authError": "Authentication error",
     "toast.logoutSuccess": "Logged out successfully",
     "toast.paymentComingSoon": "Payment integration coming soon!",
+    
+    // Footer
+    "footer.terms": "Terms of Service",
+    "footer.privacy": "Privacy Policy",
+    "footer.contact": "Contact",
+    "footer.copyright": "© {{year}} onepagebook.ai",
   }
 };

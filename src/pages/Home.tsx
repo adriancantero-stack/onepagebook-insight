@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { BookOpen, History, Crown, LogOut, Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import Footer from "@/components/Footer";
 
 const Home = () => {
   const { t, i18n } = useTranslation();
@@ -114,12 +115,12 @@ const Home = () => {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b border-border">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <BookOpen className="w-6 h-6" />
-            <h1 className="text-xl font-bold">Livro em 1 Página</h1>
+            <h1 className="text-xl font-bold">OnePageBook</h1>
           </div>
           <div className="flex items-center gap-2">
             <LanguageSelector />
@@ -195,6 +196,8 @@ const Home = () => {
           </div>
         </Card>
       </main>
+
+      <Footer />
     </div>
   );
 };

@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { toast } from "@/hooks/use-toast";
 import { BookOpen } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import Footer from "@/components/Footer";
 
 const Auth = () => {
   const { t } = useTranslation();
@@ -75,19 +76,20 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="absolute top-4 right-4">
-        <LanguageSelector />
-      </div>
-      
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex flex-col">
+      <div className="flex-1 flex items-center justify-center bg-background p-4">
+        <div className="absolute top-4 right-4">
+          <LanguageSelector />
+        </div>
+        
+        <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             <div className="p-3 bg-primary rounded-lg">
               <BookOpen className="w-8 h-8 text-primary-foreground" />
             </div>
           </div>
-          <CardTitle className="text-2xl">Livro em 1 Página</CardTitle>
+          <CardTitle className="text-2xl">OnePageBook</CardTitle>
           <CardDescription>
             {t("auth.subtitle")}
           </CardDescription>
@@ -142,6 +144,9 @@ const Auth = () => {
           </div>
         </CardContent>
       </Card>
+      </div>
+      
+      <Footer />
     </div>
   );
 };
