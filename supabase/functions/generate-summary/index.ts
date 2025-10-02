@@ -94,6 +94,7 @@ Siempre responde en formato JSON:
     const prompt = prompts[language] || prompts.pt;
 
     // Generate summary using Lovable AI
+    console.log("Calling Lovable AI Gateway with model: google/gemini-2.5-flash");
     const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -117,9 +118,19 @@ Siempre responde en formato JSON:
 
     if (!aiResponse.ok) {
       const errorText = await aiResponse.text();
-      console.error("AI API error:", aiResponse.status, errorText);
-      throw new Error("Erro ao gerar resumo");
+      console.error("Lovable AI Gateway error:", aiResponse.status, errorText);
+      
+      // Handle specific error codes
+      if (aiResponse.status === 402) {
+        throw new Error("Créditos insuficientes. Por favor, adicione créditos em Settings → Workspace → Usage.");
+      }
+      if (aiResponse.status === 429) {
+        throw new Error("Limite de requisições excedido. Por favor, tente novamente em alguns instantes.");
+      }
+      throw new Error("Erro ao gerar resumo com IA");
     }
+
+    console.log("Lovable AI response received successfully");
 
     const aiData = await aiResponse.json();
     let content = aiData.choices[0].message.content;
