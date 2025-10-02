@@ -351,11 +351,8 @@ const Home = () => {
             <br />
             {t("home.titleLine2")}
           </h2>
-          <p className="text-muted-foreground text-base sm:text-lg mb-6">
+          <p className="text-muted-foreground text-base sm:text-lg">
             {t("home.subtitle")}
-          </p>
-          <p className="text-lg text-muted-foreground font-medium">
-            Nunca foi tão fácil aprender.
           </p>
         </div>
 
