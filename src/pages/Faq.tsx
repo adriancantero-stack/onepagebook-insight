@@ -16,7 +16,7 @@ const Faq = () => {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
 
-  const faqs = [
+  const faqs = useMemo(() => [
     { q: t("faq.q1"), a: t("faq.a1") },
     { q: t("faq.q2"), a: t("faq.a2") },
     { q: t("faq.q3"), a: t("faq.a3") },
@@ -27,7 +27,7 @@ const Faq = () => {
     { q: t("faq.q8"), a: t("faq.a8") },
     { q: t("faq.q9"), a: t("faq.a9") },
     { q: t("faq.q10"), a: t("faq.a10") },
-  ];
+  ], [t]);
 
   const removeAccents = (str: string) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");

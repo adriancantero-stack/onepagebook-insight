@@ -423,7 +423,7 @@ const Home = () => {
         onClick={() => navigate("/faq")}
         size="icon"
       >
-        ?
+        <HelpCircle className="w-5 h-5" />
       </Button>
       
       <UpgradeModal
