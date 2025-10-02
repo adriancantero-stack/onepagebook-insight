@@ -16,6 +16,8 @@ export const en = {
     "home.button": "Create Summary",
     "home.generating": "Generating...",
     "home.note": "Free: 3 summaries + 3 full audios/month · Premium: unlimited summaries & audios",
+    "home.freeInfo": "Free: 3 summaries + 3 full audios/month",
+    "home.premiumInfo": "Premium: unlimited summaries & audios",
     "home.freeLimit": "Free plan: 3 summaries/month",
     "home.premiumUnlimited": "Premium: unlimited",
     

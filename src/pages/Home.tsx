@@ -190,8 +190,8 @@ const Home = () => {
               )}
             </Button>
 
-            <p className="text-sm text-center text-primary font-medium mt-4">
-              {t("home.note")}
+            <p className="text-sm text-center text-muted-foreground mt-4">
+              {t("home.freeInfo")} · <span className="text-primary font-medium">{t("home.premiumInfo")}</span>
             </p>
           </div>
         </Card>

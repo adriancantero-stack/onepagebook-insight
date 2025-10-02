@@ -16,6 +16,8 @@ export const es = {
     "home.button": "Generar Resumen",
     "home.generating": "Generando...",
     "home.note": "Gratis: 3 resúmenes + 3 audios completos/mes · Premium: resúmenes y audios ilimitados",
+    "home.freeInfo": "Gratis: 3 resúmenes + 3 audios completos/mes",
+    "home.premiumInfo": "Premium: resúmenes y audios ilimitados",
     "home.freeLimit": "Plan Gratuito: 3 resúmenes por mes",
     "home.premiumUnlimited": "Premium: Resúmenes ilimitados",
     
