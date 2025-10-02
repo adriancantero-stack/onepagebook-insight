@@ -195,18 +195,12 @@ const Home = () => {
       // Step: Summarize - start API call in background
       setGenState({ open: true, step: "summarize", message: "" });
       
-      // Get current session token
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      // Start API call (don't await yet)
+      // Start API call (don't await yet) - supabase.functions.invoke already sends auth token
       const summaryPromise = supabase.functions.invoke("generate-summary", {
         body: {
           bookTitle,
           bookAuthor,
           language: i18n.language,
-        },
-        headers: {
-          Authorization: `Bearer ${session?.access_token}`,
         },
       });
 
