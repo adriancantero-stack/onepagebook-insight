@@ -321,7 +321,7 @@ IMPORTANTE: No repitas secciones. Cada sección debe tener contenido único y co
     const prompt = prompts[language] || prompts.pt;
 
     // Generate summary using OpenAI
-    console.log("Calling OpenAI with model: gpt-5-mini");
+    console.log("Calling OpenAI with model: gpt-5-mini-2025-08-07");
     const aiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -361,15 +361,51 @@ IMPORTANTE: No repitas secciones. Cada sección debe tener contenido único y co
     console.log("AI response received successfully");
 
     const aiData = await aiResponse.json();
-    let content = aiData.choices[0].message.content;
-    
-    console.log("AI response:", content);
+    try {
+      console.log("AI raw (preview):", JSON.stringify(aiData).slice(0, 600));
+    } catch {}
 
-    // Remove markdown code fences if present
-    content = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    // Extract content robustly
+    let content: string | undefined = aiData?.choices?.[0]?.message?.content;
 
-    // Parse the JSON response
-    let summaryData = JSON.parse(content);
+    // Some models may return content as an array of parts
+    if ((!content || typeof content !== "string") && Array.isArray(aiData?.choices?.[0]?.message?.content)) {
+      const parts = aiData.choices[0].message.content as any[];
+      const textPart = parts.find((p: any) => typeof p?.text === "string")?.text;
+      if (textPart) content = textPart;
+    }
+
+    // Some models may use tool_calls with function arguments as JSON
+    if (!content && aiData?.choices?.[0]?.message?.tool_calls?.length) {
+      const args = aiData.choices[0].message.tool_calls[0]?.function?.arguments;
+      if (typeof args === "string") content = args;
+    }
+
+    if (!content || typeof content !== "string" || !content.trim()) {
+      throw new Error("A resposta do modelo veio vazia. Tente novamente em instantes.");
+    }
+
+    console.log("AI response (text):", content);
+
+    // Remove markdown code fences if present and try to isolate JSON
+    let cleaned = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+
+    let summaryData: any;
+    try {
+      summaryData = JSON.parse(cleaned);
+    } catch {
+      const match = cleaned.match(/{[\s\S]*}/);
+      if (!match) {
+        console.error("Failed to parse JSON. Content preview:", cleaned.slice(0, 300));
+        throw new Error("Falha ao interpretar a resposta da IA. Tente novamente.");
+      }
+      try {
+        summaryData = JSON.parse(match[0]);
+      } catch (e) {
+        console.error("JSON parse error:", e, "Raw:", match[0].slice(0, 300));
+        throw new Error("Falha ao interpretar a resposta da IA. Tente novamente.");
+      }
+    }
     
     // Post-process to remove duplicates
     summaryData = postProcessSummary(summaryData);
