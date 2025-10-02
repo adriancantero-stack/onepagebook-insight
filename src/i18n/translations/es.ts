@@ -141,6 +141,7 @@ export const es = {
     
     // Explore
     "explore.title": "Explorar por categoría",
+    "explore.books": "Libros",
     "explore.search.placeholder": "Buscar por título o autor…",
     "explore.search.hint": "Presiona Enter para resumir lo que escribiste",
     "explore.search.noResults": "Sin resultados",
