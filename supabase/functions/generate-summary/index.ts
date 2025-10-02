@@ -286,11 +286,14 @@ serve(async (req) => {
 
     const { bookTitle, bookAuthor, language = "pt" } = await req.json();
     
-    // Check cache FIRST
+    // Check cache FIRST - with fallback for empty author
     const cacheKey = createCacheKey(bookTitle, bookAuthor || "", language);
-    console.log("Checking cache with key:", cacheKey);
+    console.log("🔍 [Cache] Checking cache with key:", cacheKey);
     
-    const { data: cachedSummary } = await supabase
+    let cachedSummary = null;
+    
+    // Primary lookup: user_id + norm_key + language
+    const { data: primaryHit } = await supabase
       .from("book_summaries")
       .select("*")
       .eq("user_id", user.id)
@@ -298,15 +301,36 @@ serve(async (req) => {
       .eq("language", language)
       .maybeSingle();
     
+    if (primaryHit) {
+      cachedSummary = primaryHit;
+      console.log("✅ [Cache] Primary hit! Returning existing summary:", cachedSummary.id);
+    } else if (!bookAuthor || bookAuthor.trim() === "") {
+      // Fallback: If author is empty, try to find by title + language only
+      console.log("🔄 [Cache] Author empty, trying fallback lookup by title + language...");
+      const normTitle = normalizeText(bookTitle);
+      
+      const { data: fallbackHit } = await supabase
+        .from("book_summaries")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("language", language)
+        .like("norm_key", `${normTitle}|%`)
+        .maybeSingle();
+      
+      if (fallbackHit) {
+        cachedSummary = fallbackHit;
+        console.log("✅ [Cache] Fallback hit! Returning existing summary:", cachedSummary.id);
+      }
+    }
+    
     if (cachedSummary) {
-      console.log("✅ Cache hit! Returning existing summary:", cachedSummary.id);
       return new Response(
         JSON.stringify({ summaryId: cachedSummary.id }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
     
-    console.log("❌ Cache miss. Generating new summary...");
+    console.log("❌ [Cache] No cache hit. Generating new summary...");
     
     // Resolve metadata (ONLY Open Library)
     const metadata = await resolveMetadata(bookTitle, bookAuthor, language);

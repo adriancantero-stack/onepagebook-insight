@@ -88,8 +88,9 @@ const Summary = () => {
   };
 
   const handleCopy = () => {
+    const authorName = summary.user_author || summary.canonical_author || summary.book_author || t("summary.unknownAuthor");
     let text = `${summary.canonical_title || summary.book_title}\n`;
-    text += `${t("summary.by")} ${summary.canonical_author || summary.book_author || t("summary.unknownAuthor")}`;
+    text += `${t("summary.by")} ${authorName}`;
     if (summary.year) text += ` (${summary.year})`;
     text += '\n\n';
     
@@ -167,7 +168,8 @@ const Summary = () => {
     // Author
     doc.setFontSize(12);
     doc.setFont(undefined, "normal");
-    let authorText = `${t("summary.by")} ${summary.canonical_author || summary.book_author || t("summary.unknownAuthor")}`;
+    const authorName = summary.user_author || summary.canonical_author || summary.book_author || t("summary.unknownAuthor");
+    let authorText = `${t("summary.by")} ${authorName}`;
     if (summary.year) authorText += ` (${summary.year})`;
     doc.text(authorText, margin, yPosition);
     yPosition += 15;
@@ -309,8 +311,9 @@ const Summary = () => {
   };
 
   const handleShare = async () => {
+    const authorName = summary.user_author || summary.canonical_author || summary.book_author || t("summary.unknownAuthor");
     let shareText = `${summary.canonical_title || summary.book_title}\n`;
-    shareText += `${t("summary.by")} ${summary.canonical_author || summary.book_author || t("summary.unknownAuthor")}`;
+    shareText += `${t("summary.by")} ${authorName}`;
     if (summary.year) shareText += ` (${summary.year})`;
     shareText += '\n\n';
     
@@ -347,6 +350,27 @@ const Summary = () => {
         throw new Error("User not authenticated");
       }
 
+      // Use the language stored in the database
+      const language = summary.language || 'pt';
+
+      // 🎯 CACHE FIRST: Check if audio already exists
+      console.log('🔍 [Audio] Checking cache for existing audio...');
+      const cachedAudio = await getCachedAudio(summary.id, language);
+      
+      if (cachedAudio?.signedUrl) {
+        console.log('✅ [Audio] Cache hit! Playing from storage');
+        setAudioSrc([cachedAudio.signedUrl]);
+        setShowAudioPlayer(true);
+        toast({
+          title: t("summary.audioPlayer"),
+          description: t("summary.cachedForFuture"),
+        });
+        setIsGeneratingAudio(false);
+        return;
+      }
+
+      console.log('❌ [Audio] No cache. Generating new audio...');
+
       const { data: subscription } = await supabase
         .from("user_subscriptions")
         .select("*, subscription_plans(*)")
@@ -369,9 +393,6 @@ const Summary = () => {
           return;
         }
       }
-      
-      // Use the language stored in the database
-      const language = summary.language || 'pt';
       
       // Translation map for audio section titles
       const audioTerms: Record<string, { 
@@ -433,7 +454,7 @@ const Summary = () => {
       
       // Combine all text content with section titles - use canonical_title for proper accents
       const bookTitle = summary.canonical_title || summary.book_title;
-      const bookAuthor = summary.canonical_author || summary.book_author || terms.unknownAuthor;
+      const bookAuthor = summary.user_author || summary.canonical_author || summary.book_author || terms.unknownAuthor;
       let fullText = `${bookTitle} ${terms.by} ${bookAuthor}.`;
       
       // Add summary/one-liner with pause
@@ -496,6 +517,18 @@ const Summary = () => {
 
       if (error) {
         console.error('🚨 [TTS] Edge function error:', error);
+        
+        // Handle specific error codes
+        if (error.message?.includes('429')) {
+          throw new Error(t("summary.audioError") + ': ' + 'Limite de requisições excedido. Tente novamente em alguns instantes.');
+        }
+        if (error.message?.includes('402')) {
+          throw new Error(t("summary.audioError") + ': ' + 'Créditos insuficientes.');
+        }
+        if (error.message?.includes('401')) {
+          throw new Error(t("summary.audioError") + ': ' + 'Erro de autenticação.');
+        }
+        
         throw new Error(error.message || 'Failed to generate audio');
       }
 
@@ -608,6 +641,12 @@ const Summary = () => {
         throw new Error('No audio content received from server');
       }
     } catch (error: any) {
+      console.error('🚨 [Audio] Error:', error);
+      
+      // Ensure UI doesn't stay in loading state or blank
+      setShowAudioPlayer(false);
+      setAudioSrc(null);
+      
       toast({
         variant: "destructive",
         title: t("summary.audioError"),
