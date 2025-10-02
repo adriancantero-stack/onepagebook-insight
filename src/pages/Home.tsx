@@ -256,16 +256,32 @@ const Home = () => {
         navigate(`/summary/${data.summaryId}`);
       }, 600);
     } catch (error: any) {
+      const msg = error?.message || "";
       setGenState({ 
         open: true, 
         step: "error", 
-        message: error.message || "" 
+        message: msg 
       });
-      toast({
-        variant: "destructive",
-        title: t("toast.error"),
-        description: error.message,
-      });
+
+      // Handle unauthenticated explicitly
+      if (msg.toLowerCase().includes("não autenticado")) {
+        toast({
+          variant: "destructive",
+          title: t("toast.error"),
+          description: t("auth.loginRequired") || "Faça login para gerar um resumo.",
+        });
+        navigate("/auth");
+      } else {
+        toast({
+          variant: "destructive",
+          title: t("toast.error"),
+          description: msg,
+        });
+      }
+
+      setTimeout(() => {
+        setGenState({ open: false, step: "error", message: "" });
+      }, 3000);
       setTimeout(() => {
         setGenState({ open: false, step: "error", message: "" });
       }, 3000);

@@ -370,12 +370,17 @@ serve(async (req) => {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const authHeader = req.headers.get("Authorization")!;
-    const token = authHeader.replace("Bearer ", "");
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    const authHeader = req.headers.get("Authorization") || "";
+    const token = authHeader.startsWith("Bearer ") ? authHeader.replace("Bearer ", "") : "";
+    const { data: { user }, error: authError } = token
+      ? await supabase.auth.getUser(token)
+      : { data: { user: null }, error: new Error("missing_token") } as any;
 
     if (authError || !user) {
-      throw new Error("Não autenticado");
+      return new Response(JSON.stringify({ error: "Não autenticado. Faça login novamente." }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     const { bookTitle, bookAuthor, language = "pt" } = await req.json();
