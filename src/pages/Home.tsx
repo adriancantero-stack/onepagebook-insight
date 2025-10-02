@@ -37,6 +37,14 @@ const Home = () => {
     step: "resolve",
     message: "",
   });
+  const [funMessages, setFunMessages] = useState<Record<GenStep, string>>({
+    resolve: "",
+    summarize: "",
+    polish: "",
+    audio: "",
+    done: "",
+    error: ""
+  });
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -49,6 +57,33 @@ const Home = () => {
       case "done": return 100;
       default: return 0;
     }
+  };
+
+  // Helper to get translation array
+  const getTranslationArray = (key: string): string[] => {
+    const result = t(key, { returnObjects: true });
+    if (Array.isArray(result)) {
+      return result.filter((item): item is string => typeof item === 'string');
+    }
+    return [];
+  };
+
+  // Pick random message from array
+  const pickRandom = (arr: string[]): string => {
+    return arr.length > 0 ? arr[Math.floor(Math.random() * arr.length)] : "";
+  };
+
+  // Prepare fun messages for all steps
+  const prepareFunMessages = () => {
+    const steps: GenStep[] = ["resolve", "summarize", "polish", "audio", "done"];
+    const newMessages: Record<GenStep, string> = { resolve: "", summarize: "", polish: "", audio: "", done: "", error: "" };
+    
+    steps.forEach(step => {
+      const arr = getTranslationArray(`fun.${step}`);
+      newMessages[step] = pickRandom(arr);
+    });
+    
+    setFunMessages(newMessages);
   };
 
   useEffect(() => {
@@ -71,10 +106,11 @@ const Home = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  // Block scroll when overlay is open
+  // Block scroll when overlay is open and prepare fun messages
   useEffect(() => {
     if (genState.open) {
       document.body.style.overflow = "hidden";
+      prepareFunMessages();
     } else {
       document.body.style.overflow = "auto";
     }
@@ -82,6 +118,29 @@ const Home = () => {
       document.body.style.overflow = "auto";
     };
   }, [genState.open]);
+
+  // Rotate fun messages every 2.5s
+  useEffect(() => {
+    if (!genState.open) return;
+    
+    const rotator = setInterval(() => {
+      const currentStep = genState.step;
+      const arr = getTranslationArray(`fun.${currentStep}`);
+      
+      if (arr.length > 1) {
+        setFunMessages(prev => {
+          const currentMsg = prev[currentStep];
+          const filtered = arr.filter(msg => msg !== currentMsg);
+          return {
+            ...prev,
+            [currentStep]: pickRandom(filtered.length > 0 ? filtered : arr)
+          };
+        });
+      }
+    }, 2500);
+    
+    return () => clearInterval(rotator);
+  }, [genState.open, genState.step, i18n.language]);
 
   // Load book data from Explore page navigation
   useEffect(() => {
@@ -227,16 +286,20 @@ const Home = () => {
           </div>
           <ol className="gen-steps" role="list">
             <li className={isStep("resolve") ? "active" : ""}>
-              {t("gen.step.resolve")}
+              <div>{t("gen.step.resolve")}</div>
+              {isStep("resolve") && <p className="gen-sub">{funMessages.resolve}</p>}
             </li>
             <li className={isStep("summarize") ? "active" : ""}>
-              {t("gen.step.summarize")}
+              <div>{t("gen.step.summarize")}</div>
+              {isStep("summarize") && <p className="gen-sub">{funMessages.summarize}</p>}
             </li>
             <li className={isStep("polish") ? "active" : ""}>
-              {t("gen.step.polish")}
+              <div>{t("gen.step.polish")}</div>
+              {isStep("polish") && <p className="gen-sub">{funMessages.polish}</p>}
             </li>
             <li className={`${isStep("done") ? "active done" : ""}`}>
-              {t("gen.step.done")}
+              <div>{t("gen.step.done")}</div>
+              {isStep("done") && <p className="gen-sub">{funMessages.done}</p>}
             </li>
           </ol>
           <div className="gen-error" hidden={genState.step !== "error"}>

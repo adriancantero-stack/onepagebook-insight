@@ -222,5 +222,34 @@ export const en = {
     "demo.close": "Block 25 minutes of deep work today. Small consistency, repeated, turns into big results.",
     "demo.cta": "Create your own summary",
     "demo.audio.generate": "Play example audio",
+    
+    // Fun loading messages
+    "fun.resolve": [
+      "Skimming the catalog…",
+      "Matching title and author…",
+      "Checking editions and translations…",
+      "Unpacking the book's metadata…"
+    ],
+    "fun.summarize": [
+      "Distilling chapters into clear ideas…",
+      "Compressing pages into minutes…",
+      "Sifting for golden takeaways…",
+      "Pulling the signal from the noise…"
+    ],
+    "fun.polish": [
+      "Polishing sentences to keep it light…",
+      "Trimming repeats and fluff…",
+      "Lining up headings and bullets…",
+      "Making it truly one page…"
+    ],
+    "fun.audio": [
+      "Warming up digital vocals…",
+      "Tuning voice and pacing…",
+      "Turning text into sound waves…",
+      "Exporting crisp narration…"
+    ],
+    "fun.done": [
+      "Your one-pager is ready. Pick one action and go!"
+    ],
   }
 };

@@ -222,5 +222,44 @@ export const pt = {
     "demo.close": "Reserve 25 minutos de foco ainda hoje. Consistência pequena, repetida, vira resultado grande em semanas.",
     "demo.cta": "Gerar o seu resumo",
     "demo.audio.generate": "Ouvir áudio do exemplo",
+    
+    // Fun loading messages
+    "fun.resolve": [
+      "Folheando o catálogo…",
+      "Conferindo a ficha catalográfica…",
+      "Amarrando título e autor certinho…",
+      "Caçando edições e traduções…",
+      "Desempacotando metadados do livro…",
+      "Achando a capa certa pra essa história…"
+    ],
+    "fun.summarize": [
+      "Destilando capítulos em ideias claras…",
+      "Comprimindo 300 páginas em 1 minuto…",
+      "Peneirando pepitas de ouro do texto…",
+      "Juntando pontos-chave sem enrolação…",
+      "Separando o essencial do 'depois eu vejo'…",
+      "Resumindo sem perder o suco…"
+    ],
+    "fun.polish": [
+      "Polindo frases pra ficar leve…",
+      "Cortando repetecos e redundâncias…",
+      "Alinhando títulos e bullets…",
+      "Deixando tudo caber em 1 página de verdade…",
+      "Passando um pano caprichado na formatação…",
+      "Encaixando o fluxo: ideia → ação."
+    ],
+    "fun.audio": [
+      "Aquecendo as cordas vocais digitais…",
+      "Afinando a voz e o ritmo…",
+      "Transformando texto em ondas sonoras…",
+      "Misturando clareza com narrativa…",
+      "Exportando em alta nitidez…",
+      "Pronto pra ouvir no caminho!"
+    ],
+    "fun.done": [
+      "Resumo no ponto. Bora aplicar 1 ideia hoje?",
+      "Missão cumprida — seu 1-pager está servido.",
+      "Agora é com você: ação em 3… 2… 1…"
+    ],
   }
 };

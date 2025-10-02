@@ -222,5 +222,34 @@ export const es = {
     "demo.close": "Reserva 25 minutos de enfoque hoy. La constancia pequeña, repetida, se convierte en grandes resultados.",
     "demo.cta": "Genera tu propio resumen",
     "demo.audio.generate": "Reproducir audio de ejemplo",
+    
+    // Fun loading messages
+    "fun.resolve": [
+      "Ojeando el catálogo…",
+      "Vinculando título y autor…",
+      "Revisando ediciones y traducciones…",
+      "Desempaquetando metadatos…"
+    ],
+    "fun.summarize": [
+      "Destilando capítulos en ideas claras…",
+      "Comprimiendo páginas en minutos…",
+      "Tamizando ideas clave…",
+      "Separando señal de ruido…"
+    ],
+    "fun.polish": [
+      "Puliendo frases para que fluyan…",
+      "Recortando repeticiones y relleno…",
+      "Alineando títulos y viñetas…",
+      "De verdad en 1 página…"
+    ],
+    "fun.audio": [
+      "Calentando la voz digital…",
+      "Ajustando voz y ritmo…",
+      "Convirtiendo texto en sonido…",
+      "Exportando narración nítida…"
+    ],
+    "fun.done": [
+      "Tu 1-página está lista. Elige una acción y actúa."
+    ],
   }
 };
