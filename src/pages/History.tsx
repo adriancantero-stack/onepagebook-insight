@@ -72,24 +72,24 @@ const History = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b border-border">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Button variant="ghost" onClick={() => navigate("/")}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            {t("history.title").split(" ")[0]}
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between relative">
+          <Button variant="ghost" onClick={() => navigate("/")} size="sm">
+            <ArrowLeft className="w-4 h-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">{t("history.title").split(" ")[0]}</span>
           </Button>
           <div className="flex items-center gap-2 absolute left-1/2 transform -translate-x-1/2">
-            <BookOpen className="w-6 h-6" />
-            <h1 className="text-xl font-bold">OnePageBook</h1>
+            <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />
+            <h1 className="text-lg sm:text-xl font-bold">OnePageBook</h1>
           </div>
           <LanguageSelector />
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl flex-1">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold">{t("history.title")}</h1>
+      <main className="container mx-auto px-4 py-6 sm:py-8 max-w-4xl flex-1">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold">{t("history.title")}</h1>
           {isFree && (
-            <Button onClick={() => navigate("/plans")} size="sm">
+            <Button onClick={() => navigate("/plans")} size="sm" className="w-full sm:w-auto">
               <Crown className="w-4 h-4 mr-2" />
               {t("history.upgrade")}
             </Button>

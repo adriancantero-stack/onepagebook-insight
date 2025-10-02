@@ -117,20 +117,20 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b border-border">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between relative">
           <div className="flex items-center gap-2">
             <BookOpen className="w-6 h-6" />
-            <h1 className="text-xl font-bold">OnePageBook</h1>
+            <h1 className="text-xl font-bold hidden sm:block">OnePageBook</h1>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <LanguageSelector />
-            <Button variant="ghost" size="sm" onClick={() => navigate("/history")}>
-              <History className="w-4 h-4 mr-2" />
-              {t("header.history")}
+            <Button variant="ghost" size="sm" onClick={() => navigate("/history")} className="gap-1 sm:gap-2">
+              <History className="w-4 h-4" />
+              <span className="hidden sm:inline">{t("header.history")}</span>
             </Button>
-            <Button variant="ghost" size="sm" onClick={() => navigate("/plans")}>
-              <Crown className="w-4 h-4 mr-2" />
-              {t("header.premium")}
+            <Button variant="ghost" size="sm" onClick={() => navigate("/plans")} className="gap-1 sm:gap-2">
+              <Crown className="w-4 h-4" />
+              <span className="hidden sm:inline">{t("header.premium")}</span>
             </Button>
             <Button variant="ghost" size="sm" onClick={handleLogout}>
               <LogOut className="w-4 h-4" />
@@ -139,19 +139,19 @@ const Home = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-16">
-        <div className="max-w-2xl mx-auto text-center mb-12">
-          <h2 className="text-4xl font-bold mb-4">
+      <main className="container mx-auto px-4 py-8 sm:py-16">
+        <div className="max-w-2xl mx-auto text-center mb-8 sm:mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
             {t("home.title")}
             <br />
             {t("home.titleLine2")}
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-base sm:text-lg">
             {t("home.subtitle")}
           </p>
         </div>
 
-        <Card className="max-w-2xl mx-auto p-8">
+        <Card className="max-w-2xl mx-auto p-4 sm:p-8">
           <div className="space-y-6">
             <div>
               <label className="block text-sm font-medium mb-2">

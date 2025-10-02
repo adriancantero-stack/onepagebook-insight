@@ -75,22 +75,22 @@ const Plans = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b border-border">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Button variant="ghost" onClick={() => navigate("/")}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            {t("summary.back")}
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between relative">
+          <Button variant="ghost" onClick={() => navigate("/")} size="sm">
+            <ArrowLeft className="w-4 h-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">{t("summary.back")}</span>
           </Button>
           <div className="flex items-center gap-2 absolute left-1/2 transform -translate-x-1/2">
-            <BookOpen className="w-6 h-6" />
-            <h1 className="text-xl font-bold">OnePageBook</h1>
+            <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />
+            <h1 className="text-lg sm:text-xl font-bold">OnePageBook</h1>
           </div>
           <LanguageSelector />
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-16 max-w-5xl flex-1">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">{t("plans.title")}</h1>
+      <main className="container mx-auto px-4 py-8 sm:py-16 max-w-4xl flex-1">
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-4">{t("plans.title")}</h1>
           
           {/* Billing Toggle */}
           <div className="inline-flex items-center gap-2 bg-muted p-1 rounded-lg mt-4">

@@ -450,26 +450,30 @@ const Summary = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b border-border">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Button variant="ghost" onClick={() => navigate("/")}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            {t("summary.back")}
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between relative">
+          <Button variant="ghost" onClick={() => navigate("/")} size="sm">
+            <ArrowLeft className="w-4 h-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">{t("summary.back")}</span>
           </Button>
+          <div className="flex items-center gap-2 absolute left-1/2 transform -translate-x-1/2">
+            <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />
+            <h1 className="text-lg sm:text-xl font-bold">OnePageBook</h1>
+          </div>
           <LanguageSelector />
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl flex-1">
-        <Card className="p-8">
-          <div className="flex items-start gap-4 mb-6">
-            <div className="p-3 bg-primary rounded-lg">
-              <BookOpen className="w-6 h-6 text-primary-foreground" />
+      <main className="container mx-auto px-4 py-6 sm:py-8 max-w-4xl flex-1">
+        <Card className="p-4 sm:p-8">
+          <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
+            <div className="p-2 sm:p-3 bg-primary rounded-lg">
+              <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 text-primary-foreground" />
             </div>
-            <div className="flex-1">
-              <h1 className="text-3xl font-bold mb-2">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-2xl sm:text-3xl font-bold mb-2 break-words">
                 {summary.canonical_title || summary.book_title}
               </h1>
-              <p className="text-muted-foreground">
+              <p className="text-sm sm:text-base text-muted-foreground">
                 {t("summary.by")} {summary.canonical_author || summary.book_author || t("summary.unknownAuthor")}
                 {summary.year && <span className="text-sm ml-2">({summary.year})</span>}
               </p>
@@ -514,25 +518,25 @@ const Summary = () => {
             {renderSection(t("sections.closing"), summary.closing)}
           </div>
 
-          <div className="flex gap-3 mt-8 pt-6 border-t border-border flex-wrap">
+          <div className="flex flex-wrap gap-2 sm:gap-3 mt-6 sm:mt-8 pt-6 border-t border-border">
             <Button 
               onClick={handleListenSummary} 
               disabled={isGeneratingAudio}
-              className="flex-1 min-w-[150px] bg-primary hover:bg-primary/90"
+              className="flex-1 min-w-[120px] sm:min-w-[150px] bg-primary hover:bg-primary/90 text-sm sm:text-base"
             >
-              <Volume2 className="w-4 h-4 mr-2" />
+              <Volume2 className="w-4 h-4 mr-1 sm:mr-2" />
               {isGeneratingAudio ? t("summary.generating") : t("summary.listen")}
             </Button>
-            <Button onClick={handleCopy} variant="outline" className="flex-1 min-w-[150px]">
-              <Copy className="w-4 h-4 mr-2" />
+            <Button onClick={handleCopy} variant="outline" className="flex-1 min-w-[120px] sm:min-w-[150px] text-sm sm:text-base">
+              <Copy className="w-4 h-4 mr-1 sm:mr-2" />
               {t("summary.copy")}
             </Button>
-            <Button onClick={handleDownload} variant="outline" className="flex-1 min-w-[150px]">
-              <Download className="w-4 h-4 mr-2" />
+            <Button onClick={handleDownload} variant="outline" className="flex-1 min-w-[120px] sm:min-w-[150px] text-sm sm:text-base">
+              <Download className="w-4 h-4 mr-1 sm:mr-2" />
               {t("summary.download")}
             </Button>
-            <Button onClick={handleShare} variant="outline" className="flex-1 min-w-[150px]">
-              <Share2 className="w-4 h-4 mr-2" />
+            <Button onClick={handleShare} variant="outline" className="flex-1 min-w-[120px] sm:min-w-[150px] text-sm sm:text-base">
+              <Share2 className="w-4 h-4 mr-1 sm:mr-2" />
               {t("summary.share")}
             </Button>
           </div>
