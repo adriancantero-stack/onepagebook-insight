@@ -317,6 +317,12 @@ Gerar um resumo padronizado SEMPRE neste formato:
 - Exemplos práticos que qualquer pessoa entenda
 - Tom conversacional, como se falasse com um amigo
 
+⚠️ CORREÇÃO ORTOGRÁFICA (OBRIGATÓRIO):
+- Revisar TODA ortografia e gramática em português BR
+- Aplicar TODOS os acentos corretamente (á, é, í, ó, ú, â, ê, ô, ã, õ, ç)
+- Verificar concordância verbal e nominal
+- Tom HUMANO, NATURAL e ACESSÍVEL (evitar tom robótico ou formal demais)
+
 ⚠️ DEDUPLICAÇÃO (OBRIGATÓRIO):
 - Normalizar texto: lowercase, sem acentos/pontuação duplicada
 - Eliminar bullets/parágrafos duplicados ou muito similares (>70% iguais)
@@ -336,6 +342,8 @@ ESTRUTURA JSON OBRIGATÓRIA:
 IMPORTANTE:
 - NÃO invente fatos; apenas organize/clarifique
 - Cada seção deve ter conteúdo ÚNICO e complementar
+- REVISE toda ortografia, acentuação e gramática antes de retornar
+- Use tom humano e natural, como uma conversa entre amigos
 - Detecte o tema corretamente baseado nas palavras-chave do livro
 - Se o livro for sobre sono/circadiano: theme="sleep"
 - Se for sobre produtividade/foco/hábitos: theme="productivity"
@@ -365,6 +373,12 @@ Generate a standardized summary ALWAYS in this format:
 - Practical examples that anyone can understand
 - Conversational tone, as if talking to a friend
 
+⚠️ SPELLING & GRAMMAR (MANDATORY):
+- Review ALL spelling and grammar in English
+- Apply proper punctuation and capitalization
+- Check subject-verb agreement
+- HUMAN, NATURAL, and ACCESSIBLE tone (avoid robotic or overly formal language)
+
 ⚠️ DEDUPLICATION (MANDATORY):
 - Normalize text: lowercase, no accents/duplicate punctuation
 - Eliminate duplicate or very similar bullets/paragraphs (>70% identical)
@@ -384,6 +398,8 @@ MANDATORY JSON STRUCTURE:
 IMPORTANT:
 - Do NOT invent facts; only organize/clarify
 - Each section must have UNIQUE and complementary content
+- REVIEW all spelling, punctuation, and grammar before returning
+- Use human and natural tone, like a conversation between friends
 - Detect the theme correctly based on book keywords
 - If about sleep/circadian: theme="sleep"
 - If about productivity/focus/habits: theme="productivity"
@@ -413,6 +429,12 @@ Generar un resumen estandarizado SIEMPRE en este formato:
 - Ejemplos prácticos que cualquiera pueda entender
 - Tono conversacional, como si hablaras con un amigo
 
+⚠️ CORRECCIÓN ORTOGRÁFICA (OBLIGATORIO):
+- Revisar TODA ortografía y gramática en español
+- Aplicar TODOS los acentos correctamente (á, é, í, ó, ú, ñ)
+- Verificar concordancia verbal y nominal
+- Tono HUMANO, NATURAL y ACCESIBLE (evitar tono robótico o demasiado formal)
+
 ⚠️ DEDUPLICACIÓN (OBLIGATORIO):
 - Normalizar texto: minúsculas, sin acentos/puntuación duplicada
 - Eliminar bullets/párrafos duplicados o muy similares (>70% iguales)
@@ -432,6 +454,8 @@ ESTRUCTURA JSON OBLIGATORIA:
 IMPORTANTE:
 - NO inventes hechos; solo organiza/clarifica
 - Cada sección debe tener contenido ÚNICO y complementario
+- REVISA toda ortografía, acentuación y gramática antes de retornar
+- Usa tono humano y natural, como una conversación entre amigos
 - Detecta el tema correctamente basándote en las palabras clave del libro
 - Si es sobre sueño/circadiano: theme="sleep"
 - Si es sobre productividad/foco/hábitos: theme="productivity"
