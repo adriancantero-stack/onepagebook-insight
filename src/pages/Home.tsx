@@ -190,6 +190,9 @@ const Home = () => {
         }
       }
 
+      // Step: Resolve - keep for 3s to show fun messages
+      await new Promise(resolve => setTimeout(resolve, 3000));
+
       // Step: Summarize
       setGenState({ open: true, step: "summarize", message: "" });
       
@@ -204,14 +207,13 @@ const Home = () => {
 
       if (error) throw error;
 
-      // Step: Polish
+      // Step: Polish - keep for 4s to balance timing
       setGenState({ open: true, step: "polish", message: "" });
-      
-      // Small delay to show polish step
-      await new Promise(resolve => setTimeout(resolve, 800));
+      await new Promise(resolve => setTimeout(resolve, 4000));
 
-      // Step: Done
+      // Step: Done - keep for 2s before closing
       setGenState({ open: true, step: "done", message: "" });
+      await new Promise(resolve => setTimeout(resolve, 2000));
 
       // Increment counter only on success for free users
       if (plan?.type === "free") {
