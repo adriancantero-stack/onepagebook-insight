@@ -3,16 +3,21 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { lazy, Suspense } from "react";
+
+// Eager load critical routes
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
-import Summary from "./pages/Summary";
-import History from "./pages/History";
-import Plans from "./pages/Plans";
-import Explore from "./pages/Explore";
-import Demo from "./pages/Demo";
-import Terms from "./pages/Terms";
-import Privacy from "./pages/Privacy";
-import NotFound from "./pages/NotFound";
+
+// Lazy load secondary routes
+const Summary = lazy(() => import("./pages/Summary"));
+const History = lazy(() => import("./pages/History"));
+const Plans = lazy(() => import("./pages/Plans"));
+const Explore = lazy(() => import("./pages/Explore"));
+const Demo = lazy(() => import("./pages/Demo"));
+const Terms = lazy(() => import("./pages/Terms"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
 
@@ -22,19 +27,23 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/summary/:id" element={<Summary />} />
-          <Route path="/history" element={<History />} />
-          <Route path="/plans" element={<Plans />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/demo" element={<Demo />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/privacy" element={<Privacy />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/summary/:id" element={<Summary />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/plans" element={<Plans />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/demo" element={<Demo />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

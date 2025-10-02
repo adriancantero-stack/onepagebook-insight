@@ -19,6 +19,8 @@ import {
 } from "@/lib/usageManager";
 import { bookCatalog } from "@/data/bookCatalog";
 import type { Book } from "@/data/bookCatalog";
+import { getThemeCategoryId } from "@/config/themes";
+import { SummarySection } from "@/components/SummarySection";
 
 const Summary = () => {
   const { t, i18n } = useTranslation();
@@ -33,37 +35,14 @@ const Summary = () => {
 
   // Get related book recommendations based on theme - ALWAYS from same category and locale
   const relatedBooks = useMemo(() => {
-    if (!summary?.theme) {
-      console.log("No theme found in summary");
-      return [];
-    }
+    if (!summary?.theme) return [];
     
     const locale = (i18n.language || "en").split("-")[0];
-    const themeCatMap: Record<string, string> = {
-      productivity: "habits",
-      mindset: "psych",
-      health: "sleep",
-      default: "habits",
-    };
-    const themeId = themeCatMap[summary.theme] || summary.theme;
+    const themeId = getThemeCategoryId(summary.theme);
     
-    console.log("Looking for recommendations:", {
-      theme: summary.theme,
-      themeId,
-      locale,
-      currentTitle: summary.canonical_title
-    });
-    
-    // Find the exact category matching the mapped theme id
     const category = bookCatalog.find(cat => cat.id === themeId);
-    if (!category) {
-      console.log("Category not found for theme:", summary.theme, "mapped:", themeId);
-      return [];
-    }
+    if (!category) return [];
     
-    console.log(`Found category ${category.id} with ${category.books.length} books`);
-    
-    // Filter books by normalized locale only - never show different language
     const booksInLocale = category.books.filter(
       (book: Book) => {
         const localeMatch = book.locale === locale;
@@ -73,17 +52,10 @@ const Summary = () => {
       }
     );
     
-    console.log(`Found ${booksInLocale.length} books in locale ${locale}`);
-    
-    if (booksInLocale.length === 0) {
-      console.log("No books found in current locale");
-      return [];
-    }
+    if (booksInLocale.length === 0) return [];
     
     const shuffled = [...booksInLocale].sort(() => Math.random() - 0.5);
-    const selected = shuffled.slice(0, 2);
-    console.log("Selected recommendations:", selected.map(b => b.title));
-    return selected;
+    return shuffled.slice(0, 2);
   }, [summary, i18n.language]);
 
   useEffect(() => {
@@ -621,37 +593,6 @@ const Summary = () => {
 
   if (!summary) return null;
 
-  // Helper to render section if content exists
-  const renderSection = (title: string, content: string | string[] | null | undefined) => {
-    if (!content) return null;
-    
-    if (Array.isArray(content)) {
-      if (content.length === 0) return null;
-      return (
-        <section>
-          <h2 className="text-xl font-semibold mb-3">{title}</h2>
-          <ul className="space-y-2">
-            {content.map((item: string, index: number) => (
-              <li key={index} className="flex gap-3">
-                <span className="text-primary font-bold shrink-0">{index + 1}.</span>
-                <span className="text-justify hyphens-auto">{item}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      );
-    }
-    
-    return (
-      <section>
-        <h2 className="text-xl font-semibold mb-3">{title}</h2>
-        <p className="text-foreground leading-relaxed whitespace-pre-wrap text-justify hyphens-auto">
-          {content}
-        </p>
-      </section>
-    );
-  };
-
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b border-border">
@@ -693,34 +634,19 @@ const Summary = () => {
                 </h3>
                 <AudioPlayer 
                   audioSrc={audioSrc} 
-                  onEnded={() => console.log('Audio playback ended')}
+                  onEnded={() => setShowAudioPlayer(false)}
                 />
               </div>
             )}
 
-            {/* One-liner */}
-            {renderSection(t("sections.oneLiner"), summary.one_liner)}
-
-            {/* Key Ideas */}
-            {renderSection(t("sections.keyIdeas"), summary.key_ideas || summary.main_ideas)}
-
-            {/* Actions */}
-            {renderSection(t("sections.actions"), summary.actions || (summary.practical_applications ? summary.practical_applications.split('\n').filter((s: string) => s.trim()) : null))}
-
-            {/* Routine */}
-            {renderSection(t("sections.routine"), summary.routine)}
-
-            {/* 7-day Plan */}
-            {renderSection(t("sections.plan7"), summary.plan_7_days)}
-
-            {/* Metrics */}
-            {renderSection(t("sections.metrics"), summary.metrics)}
-
-            {/* Pitfalls */}
-            {renderSection(t("sections.pitfalls"), summary.pitfalls)}
-
-            {/* Closing */}
-            {renderSection(t("sections.closing"), summary.closing)}
+            <SummarySection title={t("sections.oneLiner")} content={summary.one_liner} />
+            <SummarySection title={t("sections.keyIdeas")} content={summary.key_ideas || summary.main_ideas} />
+            <SummarySection title={t("sections.actions")} content={summary.actions || (summary.practical_applications ? summary.practical_applications.split('\n').filter((s: string) => s.trim()) : null)} />
+            <SummarySection title={t("sections.routine")} content={summary.routine} />
+            <SummarySection title={t("sections.plan7")} content={summary.plan_7_days} />
+            <SummarySection title={t("sections.metrics")} content={summary.metrics} />
+            <SummarySection title={t("sections.pitfalls")} content={summary.pitfalls} />
+            <SummarySection title={t("sections.closing")} content={summary.closing} />
           </div>
 
           <div className="flex flex-wrap gap-2 sm:gap-3 mt-6 sm:mt-8 pt-6 border-t border-border">
