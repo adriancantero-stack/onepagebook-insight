@@ -190,7 +190,7 @@ const Home = () => {
               )}
             </Button>
 
-            <p className="text-sm text-center text-muted-foreground mt-4">
+            <p className="text-sm text-center text-primary font-medium mt-4">
               {t("home.note")}
             </p>
           </div>
