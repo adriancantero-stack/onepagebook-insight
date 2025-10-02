@@ -60,6 +60,15 @@ const Explore = () => {
   // Create flat index filtered by current locale
   const flatIndex = useMemo(() => createFlatIndex(i18n.language), [i18n.language]);
 
+  // Sort categories alphabetically by translated name
+  const sortedCategories = useMemo(() => {
+    return [...bookCatalog].sort((a, b) => {
+      const nameA = t(a.nameKey);
+      const nameB = t(b.nameKey);
+      return nameA.localeCompare(nameB, i18n.language);
+    });
+  }, [t, i18n.language]);
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -447,7 +456,7 @@ const Explore = () => {
         </div>
 
         <div className="flex flex-wrap gap-2 mb-6 sm:mb-8">
-          {bookCatalog.map(category => (
+          {sortedCategories.map(category => (
             <Button
               key={category.id}
               variant={selectedCategory === category.id ? "default" : "outline"}
