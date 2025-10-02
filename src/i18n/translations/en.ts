@@ -6,7 +6,8 @@ export const en = {
     "header.logout": "Logout",
     
     // Home
-    "home.title": "Generate practical one-page book summaries",
+    "home.title": "Generate practical one-page",
+    "home.titleLine2": "book summaries",
     "home.subtitle": "Turn any book into practical insights you can apply today",
     "home.bookTitle": "Book Title",
     "home.bookTitlePlaceholder": "e.g. Atomic Habits",

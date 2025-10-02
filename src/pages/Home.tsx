@@ -143,6 +143,8 @@ const Home = () => {
         <div className="max-w-2xl mx-auto text-center mb-12">
           <h2 className="text-4xl font-bold mb-4">
             {t("home.title")}
+            <br />
+            {t("home.titleLine2")}
           </h2>
           <p className="text-muted-foreground text-lg">
             {t("home.subtitle")}
