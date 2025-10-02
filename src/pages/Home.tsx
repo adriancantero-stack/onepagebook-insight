@@ -190,14 +190,14 @@ const Home = () => {
         }
       }
 
-      // Step: Resolve - keep for 3s to show fun messages
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      // Step: Resolve - 2.5s
+      await new Promise(resolve => setTimeout(resolve, 2500));
 
-      // Step: Summarize
+      // Step: Summarize - start API call in background
       setGenState({ open: true, step: "summarize", message: "" });
       
-      // Generate summary
-      const { data, error } = await supabase.functions.invoke("generate-summary", {
+      // Start API call (don't await yet)
+      const summaryPromise = supabase.functions.invoke("generate-summary", {
         body: {
           bookTitle,
           bookAuthor,
@@ -205,15 +205,23 @@ const Home = () => {
         },
       });
 
+      // Continue showing progress while API processes
+      await new Promise(resolve => setTimeout(resolve, 8000)); // 8s for summarize
+
+      // Step: Polish - 5s
+      setGenState({ open: true, step: "polish", message: "" });
+      await new Promise(resolve => setTimeout(resolve, 5000));
+
+      // Step: Done - wait for API to finish
+      setGenState({ open: true, step: "done", message: "" });
+      
+      // Now wait for the actual API response
+      const { data, error } = await summaryPromise;
+
       if (error) throw error;
 
-      // Step: Polish - keep for 4s to balance timing
-      setGenState({ open: true, step: "polish", message: "" });
-      await new Promise(resolve => setTimeout(resolve, 4000));
-
-      // Step: Done - keep for 2s before closing
-      setGenState({ open: true, step: "done", message: "" });
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Small delay on done before closing
+      await new Promise(resolve => setTimeout(resolve, 1500));
 
       // Increment counter only on success for free users
       if (plan?.type === "free") {
