@@ -43,9 +43,9 @@ const History = () => {
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
-      // Limit to 3 for free users
+      // Limit to 40 for free users (backend also maintains this limit)
       if (sub?.subscription_plans?.type === "free") {
-        query = query.limit(3);
+        query = query.limit(40);
       }
 
       const { data, error } = await query;

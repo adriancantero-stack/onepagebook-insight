@@ -17,11 +17,12 @@ export const en = {
     "home.generateButton": "Create Summary",
     "home.button": "Create Summary",
     "home.generating": "Generating...",
-    "home.note": "Free: 3 summaries + 3 full audios/month · Premium: unlimited summaries & audios",
-    "home.freeInfo": "Free: 3 summaries + 3 full audios/month",
+    "home.note": "Free plan: 5 summaries/month + 5 audios/month",
+    "home.freeInfo": "Free plan: 5 summaries/month + 5 audios/month",
     "home.premiumInfo": "Premium: unlimited summaries & audios",
-    "home.freeLimit": "Free plan: 3 summaries/month",
+    "home.freeLimit": "Free plan: 5 summaries/month",
     "home.premiumUnlimited": "Premium: unlimited",
+    "hero.trust": "Free: 5 summaries + 5 audios/month",
     
     // Auth
     "auth.title": "Welcome",
@@ -72,7 +73,7 @@ export const en = {
     // History
     "history.title": "Summary History",
     "history.upgrade": "Upgrade",
-    "history.freeNotice": "Free users can see only the last 3 summaries",
+    "history.freeNotice": "Free users keep the last 40 summaries",
     "history.empty": "You don't have any summaries yet",
     "history.emptyDesc": "Generate your first summary to get started!",
     "history.generateFirst": "Generate First Summary",
@@ -86,8 +87,8 @@ export const en = {
     "plans.free.name": "Free",
     "plans.free.price.monthly": "$0 / month",
     "plans.free.bullets": [
-      "3 summaries/month",
-      "3 full audios/month",
+      "5 summaries/month",
+      "5 full audios/month",
       "Basic support"
     ],
     "plans.free.cta": "Start free",
@@ -127,6 +128,16 @@ export const en = {
     "toast.authError": "Authentication error",
     "toast.logoutSuccess": "Logged out successfully",
     "toast.paymentComingSoon": "Payment integration coming soon!",
+    
+    // Limits
+    "limit.toasts.summary.ok": "Summary generated! You've used {used}/5 this month.",
+    "limit.toasts.summary.hard": "You've reached the 5 summaries/month limit.",
+    "limit.toasts.audio.ok": "Audio generated! You've used {used}/5 this month.",
+    "limit.toasts.audio.hard": "You've reached the 5 audios/month limit.",
+    "limit.cta.upgrade": "Upgrade to Premium",
+    "limit.modal.title": "You've hit the Free plan limit",
+    "limit.modal.body": "Premium gives you unlimited summaries & audios, PDF export, history, and instant translation.",
+    "limit.modal.btn": "Go Premium",
     
     // Footer
     "footer.terms": "Terms of Service",

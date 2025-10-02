@@ -10,6 +10,13 @@ import { LanguageSelector } from "@/components/LanguageSelector";
 import AudioPlayer from "@/components/AudioPlayer";
 import Footer from "@/components/Footer";
 import { jsPDF } from "jspdf";
+import { UpgradeModal } from "@/components/UpgradeModal";
+import { 
+  loadUsage, 
+  canUseAudio, 
+  incrementAudio, 
+  ensureMonth 
+} from "@/lib/usageManager";
 
 const Summary = () => {
   const { t } = useTranslation();
@@ -20,6 +27,7 @@ const Summary = () => {
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
   const [audioSrc, setAudioSrc] = useState<string | string[] | null>(null);
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   useEffect(() => {
     loadSummary();
@@ -301,6 +309,35 @@ const Summary = () => {
     try {
       setIsGeneratingAudio(true);
       
+      // Get user info to check subscription
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        throw new Error("User not authenticated");
+      }
+
+      const { data: subscription } = await supabase
+        .from("user_subscriptions")
+        .select("*, subscription_plans(*)")
+        .eq("user_id", user.id)
+        .single();
+
+      const plan = subscription?.subscription_plans;
+      
+      // Check limits only for free users
+      if (plan?.type === "free") {
+        const usage = ensureMonth(await loadUsage(user.id));
+        
+        if (!canUseAudio(usage)) {
+          setShowUpgradeModal(true);
+          toast({
+            variant: "destructive",
+            title: t("limit.toasts.audio.hard"),
+          });
+          setIsGeneratingAudio(false);
+          return;
+        }
+      }
+      
       // Use the language stored in the database
       const language = summary.language || 'pt';
       
@@ -447,10 +484,28 @@ const Summary = () => {
         setAudioSrc(audioUrls);
         setShowAudioPlayer(true);
 
-        toast({
-          title: t("summary.audioGenerated"),
-          description: t("summary.audioChunks", { count: audioUrls.length }),
-        });
+        // Increment counter only on success for free users
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { data: subscription } = await supabase
+            .from("user_subscriptions")
+            .select("*, subscription_plans(*)")
+            .eq("user_id", user.id)
+            .single();
+
+          const plan = subscription?.subscription_plans;
+          if (plan?.type === "free") {
+            const used = await incrementAudio(user.id);
+            toast({
+              title: t("limit.toasts.audio.ok").replace("{used}", String(used)),
+            });
+          } else {
+            toast({
+              title: t("summary.audioGenerated"),
+              description: t("summary.audioChunks", { count: audioUrls.length }),
+            });
+          }
+        }
       } else if (data?.audioContent) {
         // Old single audio format (backward compatibility)
         const audioBlob = new Blob(
@@ -462,10 +517,28 @@ const Summary = () => {
         setAudioSrc(audioUrl);
         setShowAudioPlayer(true);
 
-        toast({
-          title: t("summary.audioGenerated"),
-          description: t("summary.audioReady"),
-        });
+        // Increment counter only on success for free users
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { data: subscription } = await supabase
+            .from("user_subscriptions")
+            .select("*, subscription_plans(*)")
+            .eq("user_id", user.id)
+            .single();
+
+          const plan = subscription?.subscription_plans;
+          if (plan?.type === "free") {
+            const used = await incrementAudio(user.id);
+            toast({
+              title: t("limit.toasts.audio.ok").replace("{used}", String(used)),
+            });
+          } else {
+            toast({
+              title: t("summary.audioGenerated"),
+              description: t("summary.audioReady"),
+            });
+          }
+        }
       } else {
         throw new Error('No audio content received from server');
       }
@@ -619,6 +692,12 @@ const Summary = () => {
       </main>
 
       <Footer />
+      
+      <UpgradeModal 
+        open={showUpgradeModal}
+        onOpenChange={setShowUpgradeModal}
+        type="audio"
+      />
     </div>
   );
 };

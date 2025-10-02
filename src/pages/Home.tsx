@@ -9,6 +9,13 @@ import { BookOpen, History, Crown, LogOut, Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import Footer from "@/components/Footer";
+import { UpgradeModal } from "@/components/UpgradeModal";
+import { 
+  loadUsage, 
+  canUseSummary, 
+  incrementSummary, 
+  ensureMonth 
+} from "@/lib/usageManager";
 
 const Home = () => {
   const { t, i18n } = useTranslation();
@@ -16,6 +23,7 @@ const Home = () => {
   const [bookTitle, setBookTitle] = useState("");
   const [bookAuthor, setBookAuthor] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,14 +59,6 @@ const Home = () => {
     setLoading(true);
 
     try {
-      // Check usage limit
-      const { data: summaries, error: countError } = await supabase
-        .from("book_summaries")
-        .select("id")
-        .eq("user_id", user.id);
-
-      if (countError) throw countError;
-
       const { data: subscription } = await supabase
         .from("user_subscriptions")
         .select("*, subscription_plans(*)")
@@ -66,14 +66,20 @@ const Home = () => {
         .single();
 
       const plan = subscription?.subscription_plans;
-      if (plan?.type === "free" && summaries && summaries.length >= 3) {
-        toast({
-          variant: "destructive",
-          title: t("toast.usageLimitReached"),
-          description: t("toast.upgradePrompt"),
-        });
-        setLoading(false);
-        return;
+      
+      // Check limits only for free users
+      if (plan?.type === "free") {
+        const usage = ensureMonth(await loadUsage(user.id));
+        
+        if (!canUseSummary(usage)) {
+          setShowUpgradeModal(true);
+          toast({
+            variant: "destructive",
+            title: t("limit.toasts.summary.hard"),
+          });
+          setLoading(false);
+          return;
+        }
       }
 
       // Generate summary
@@ -87,10 +93,18 @@ const Home = () => {
 
       if (error) throw error;
 
-      toast({
-        title: t("toast.success"),
-        description: t("toast.summaryGenerated"),
-      });
+      // Increment counter only on success for free users
+      if (plan?.type === "free") {
+        const used = await incrementSummary(user.id);
+        toast({
+          title: t("limit.toasts.summary.ok").replace("{used}", String(used)),
+        });
+      } else {
+        toast({
+          title: t("toast.success"),
+          description: t("toast.summaryGenerated"),
+        });
+      }
 
       navigate(`/summary/${data.summaryId}`);
     } catch (error: any) {
@@ -200,6 +214,12 @@ const Home = () => {
       </main>
 
       <Footer />
+      
+      <UpgradeModal 
+        open={showUpgradeModal}
+        onOpenChange={setShowUpgradeModal}
+        type="summary"
+      />
     </div>
   );
 };

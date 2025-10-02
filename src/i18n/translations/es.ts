@@ -17,11 +17,12 @@ export const es = {
     "home.generateButton": "Generar Resumen",
     "home.button": "Generar Resumen",
     "home.generating": "Generando...",
-    "home.note": "Gratis: 3 resúmenes + 3 audios completos/mes · Premium: resúmenes y audios ilimitados",
-    "home.freeInfo": "Gratis: 3 resúmenes + 3 audios completos/mes",
+    "home.note": "Plan Gratis: 5 resúmenes/mes + 5 audios/mes",
+    "home.freeInfo": "Plan Gratis: 5 resúmenes/mes + 5 audios/mes",
     "home.premiumInfo": "Premium: resúmenes y audios ilimitados",
-    "home.freeLimit": "Plan Gratuito: 3 resúmenes por mes",
+    "home.freeLimit": "Plan Gratuito: 5 resúmenes por mes",
     "home.premiumUnlimited": "Premium: Resúmenes ilimitados",
+    "hero.trust": "Gratis: 5 resúmenes + 5 audios/mes",
     
     // Auth
     "auth.title": "Bienvenido",
@@ -72,7 +73,7 @@ export const es = {
     // History
     "history.title": "Historial de Resúmenes",
     "history.upgrade": "Actualizar",
-    "history.freeNotice": "Los usuarios gratuitos solo pueden ver los últimos 3 resúmenes",
+    "history.freeNotice": "Los usuarios gratuitos mantienen los últimos 40 resúmenes",
     "history.empty": "Aún no tienes resúmenes",
     "history.emptyDesc": "¡Genera tu primer resumen para comenzar!",
     "history.generateFirst": "Generar Primer Resumen",
@@ -86,8 +87,8 @@ export const es = {
     "plans.free.name": "Gratis",
     "plans.free.price.monthly": "$0 / mes",
     "plans.free.bullets": [
-      "3 resúmenes/mes",
-      "3 audios completos/mes",
+      "5 resúmenes/mes",
+      "5 audios completos/mes",
       "Soporte básico"
     ],
     "plans.free.cta": "Empezar gratis",
@@ -127,6 +128,16 @@ export const es = {
     "toast.authError": "Error de autenticación",
     "toast.logoutSuccess": "Sesión cerrada con éxito",
     "toast.paymentComingSoon": "¡Integración de pago próximamente!",
+    
+    // Limits
+    "limit.toasts.summary.ok": "¡Resumen generado! Llevas {used}/5 este mes.",
+    "limit.toasts.summary.hard": "Alcanzaste el límite de 5 resúmenes/mes.",
+    "limit.toasts.audio.ok": "¡Audio generado! Llevas {used}/5 este mes.",
+    "limit.toasts.audio.hard": "Alcanzaste el límite de 5 audios/mes.",
+    "limit.cta.upgrade": "Suscribirse a Premium",
+    "limit.modal.title": "Llegaste al límite del plan Gratis",
+    "limit.modal.body": "Premium te da resúmenes y audios ilimitados, exportación a PDF, historial y traducción instantánea.",
+    "limit.modal.btn": "Ir a Premium",
     
     // Footer
     "footer.terms": "Términos de Servicio",
