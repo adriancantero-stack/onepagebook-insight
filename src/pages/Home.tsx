@@ -309,31 +309,20 @@ const Home = () => {
               />
             </div>
 
-            <div className="space-y-3">
-              <Button
-                onClick={handleGenerateSummary}
-                className="w-full h-12 text-lg"
-                disabled={loading}
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    {t("home.generating")}
-                  </>
-                ) : (
-                  t("home.button")
-                )}
-              </Button>
-              
-              <Button
-                onClick={() => navigate("/demo")}
-                variant="outline"
-                className="w-full h-12 text-lg"
-                disabled={loading}
-              >
-                {t("hero.cta.secondary")}
-              </Button>
-            </div>
+            <Button
+              onClick={handleGenerateSummary}
+              className="w-full h-12 text-lg"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                  {t("home.generating")}
+                </>
+              ) : (
+                t("home.button")
+              )}
+            </Button>
 
             <p className="text-sm text-center text-muted-foreground mt-4">
               {t("home.freeInfo")} · <span className="text-primary font-medium">{t("home.premiumInfo")}</span>
