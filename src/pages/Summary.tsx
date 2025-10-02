@@ -263,7 +263,7 @@ const Summary = () => {
 
             <section>
               <h2 className="text-xl font-semibold mb-3">{t("summary.practicalApplications")}</h2>
-              <p className="text-foreground leading-relaxed whitespace-pre-wrap">
+              <p className="text-foreground leading-relaxed whitespace-pre-wrap text-justify">
                 {summary.practical_applications}
               </p>
             </section>
