@@ -14,7 +14,7 @@ serve(async (req) => {
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const lovableApiKey = Deno.env.get("LOVABLE_API_KEY")!;
+    const openaiApiKey = Deno.env.get("OPENAI_API_KEY")!;
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -93,16 +93,16 @@ Siempre responde en formato JSON:
 
     const prompt = prompts[language] || prompts.pt;
 
-    // Generate summary using Lovable AI
-    console.log("Calling Lovable AI Gateway with model: google/gemini-2.5-flash");
-    const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    // Generate summary using OpenAI
+    console.log("Calling OpenAI API with model: gpt-4o-mini");
+    const aiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${lovableApiKey}`,
+        Authorization: `Bearer ${openaiApiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: "gpt-4o-mini",
         messages: [
           {
             role: "system",
@@ -118,11 +118,11 @@ Siempre responde en formato JSON:
 
     if (!aiResponse.ok) {
       const errorText = await aiResponse.text();
-      console.error("Lovable AI Gateway error:", aiResponse.status, errorText);
+      console.error("OpenAI API error:", aiResponse.status, errorText);
       
       // Handle specific error codes
-      if (aiResponse.status === 402) {
-        throw new Error("Créditos insuficientes. Por favor, adicione créditos em Settings → Workspace → Usage.");
+      if (aiResponse.status === 401) {
+        throw new Error("API key inválida. Verifique sua chave do OpenAI.");
       }
       if (aiResponse.status === 429) {
         throw new Error("Limite de requisições excedido. Por favor, tente novamente em alguns instantes.");
@@ -130,7 +130,7 @@ Siempre responde en formato JSON:
       throw new Error("Erro ao gerar resumo com IA");
     }
 
-    console.log("Lovable AI response received successfully");
+    console.log("OpenAI response received successfully");
 
     const aiData = await aiResponse.json();
     let content = aiData.choices[0].message.content;
