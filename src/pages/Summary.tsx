@@ -34,31 +34,48 @@ const Summary = () => {
   // Get related book recommendations based on theme - ALWAYS from same category and locale
   const relatedBooks = useMemo(() => {
     if (!summary?.theme) {
+      console.log("No theme found in summary");
       return [];
     }
+    
+    console.log("Looking for recommendations:", {
+      theme: summary.theme,
+      locale: i18n.language,
+      currentTitle: summary.canonical_title
+    });
     
     // Find the exact category matching the summary's theme
     const category = bookCatalog.find(cat => cat.id === summary.theme);
     if (!category) {
+      console.log("Category not found for theme:", summary.theme);
       return [];
     }
     
+    console.log(`Found category ${category.id} with ${category.books.length} books`);
+    
     // Filter books by current locale only - never show different language
     const booksInLocale = category.books.filter(
-      (book: Book) => 
-        book.locale === i18n.language && 
-        book.title !== summary.canonical_title &&
-        book.title !== summary.user_title
+      (book: Book) => {
+        const localeMatch = book.locale === i18n.language;
+        const notCurrentBook = book.title.toLowerCase() !== summary.canonical_title?.toLowerCase() &&
+                               book.title.toLowerCase() !== summary.user_title?.toLowerCase();
+        return localeMatch && notCurrentBook;
+      }
     );
+    
+    console.log(`Found ${booksInLocale.length} books in locale ${i18n.language}`);
     
     // Only return recommendations if we have books in the user's language
     if (booksInLocale.length === 0) {
+      console.log("No books found in current locale");
       return [];
     }
     
     // Shuffle and take up to 2 random books from same category and locale
     const shuffled = [...booksInLocale].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, 2);
+    const selected = shuffled.slice(0, 2);
+    console.log("Selected recommendations:", selected.map(b => b.title));
+    return selected;
   }, [summary, i18n.language]);
 
   useEffect(() => {
