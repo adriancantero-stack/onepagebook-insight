@@ -11,7 +11,9 @@ import {
   bookCatalog, 
   createFlatIndex, 
   suggestBooks, 
-  FlatIndexItem 
+  getBooksByLocale,
+  FlatIndexItem,
+  Book
 } from "@/data/bookCatalog";
 
 const Explore = () => {
@@ -26,8 +28,8 @@ const Explore = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const debounceTimerRef = useRef<NodeJS.Timeout>();
 
-  // Create flat index once
-  const flatIndex = useMemo(() => createFlatIndex(), []);
+  // Create flat index filtered by current locale
+  const flatIndex = useMemo(() => createFlatIndex(i18n.language), [i18n.language]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -45,6 +47,13 @@ const Explore = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Reset when language changes
+  useEffect(() => {
+    setQuery("");
+    setIsOpen(false);
+    setSuggestions([]);
+  }, [i18n.language]);
 
   const handleInputChange = (value: string) => {
     setQuery(value);
@@ -152,7 +161,7 @@ const Explore = () => {
     }
   };
 
-  const handleSummarize = (book: { title: string; author: string }) => {
+  const handleSummarize = (book: Book) => {
     // Track analytics event
     if (typeof window !== "undefined" && (window as any).gtag) {
       (window as any).gtag("event", "catalog_select", {
@@ -173,9 +182,9 @@ const Explore = () => {
     });
   };
 
-  // Get current category books
+  // Get current category books filtered by locale
   const currentCategory = bookCatalog.find(cat => cat.id === selectedCategory);
-  const allBooks = currentCategory?.books || [];
+  const allBooks = currentCategory ? getBooksByLocale(currentCategory, i18n.language) : [];
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -194,11 +203,9 @@ const Explore = () => {
       </header>
 
       <main className="container mx-auto px-4 py-6 sm:py-8 max-w-6xl flex-1">
-        {/* Title */}
         <div className="mb-6 sm:mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold mb-4">{t("explore.title")}</h1>
           
-          {/* Typeahead Search */}
           <div className="relative max-w-xl">
             <Input
               ref={inputRef}
@@ -219,7 +226,6 @@ const Explore = () => {
               className="w-full focus-visible:ring-2 focus-visible:ring-[#5A54E6]"
             />
             
-            {/* Dropdown suggestions */}
             {isOpen && (
               <div
                 ref={dropdownRef}
@@ -276,7 +282,6 @@ const Explore = () => {
           </p>
         </div>
 
-        {/* Category Chips */}
         <div className="flex flex-wrap gap-2 mb-6 sm:mb-8">
           {bookCatalog.map(category => (
             <Button
@@ -295,7 +300,6 @@ const Explore = () => {
           ))}
         </div>
 
-        {/* Books Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {allBooks.map((book, index) => (
             <Card 
