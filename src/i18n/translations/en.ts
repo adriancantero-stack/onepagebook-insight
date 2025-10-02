@@ -199,5 +199,28 @@ export const en = {
     "gen.step.done": "Done!",
     "gen.error": "Something went wrong. Please try again.",
     "gen.cancel": "Cancel",
+    
+    // Hero
+    "hero.cta.secondary": "See example",
+    
+    // Demo
+    "demo.title": "Atomic Habits — James Clear",
+    "demo.one": "Small daily habits, repeated consistently, create outsized change over time.",
+    "demo.keys": [
+      "Systems beat goals: focus on the process.",
+      "Make habits obvious, attractive, easy, and satisfying.",
+      "Align habits with identity: become the kind of person who does it.",
+      "Environment and cues shape actions: design for success.",
+      "Improve by 1% a day and let it compound."
+    ],
+    "demo.apply": [
+      "Pick one tiny habit (e.g., read 2 pages).",
+      "Use the 2-minute rule: start micro, every day.",
+      "Design your space: keep the book visible and handy.",
+      "Add a small reward + track daily for 30 days."
+    ],
+    "demo.close": "Block 25 minutes of deep work today. Small consistency, repeated, turns into big results.",
+    "demo.cta": "Create your own summary",
+    "demo.audio.generate": "Play example audio",
   }
 };

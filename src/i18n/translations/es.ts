@@ -199,5 +199,28 @@ export const es = {
     "gen.step.done": "¡Listo!",
     "gen.error": "Ocurrió un error. Intenta de nuevo.",
     "gen.cancel": "Cancelar",
+    
+    // Hero
+    "hero.cta.secondary": "Ver ejemplo",
+    
+    // Demo
+    "demo.title": "Atomic Habits — James Clear",
+    "demo.one": "Hábitos pequeños, repetidos a diario, producen cambios enormes con el tiempo.",
+    "demo.keys": [
+      "Los sistemas superan a las metas: enfócate en el proceso.",
+      "Haz el hábito obvio, atractivo, fácil y satisfactorio.",
+      "Alinea hábitos con identidad: sé el tipo de persona que lo hace.",
+      "El entorno y las señales moldean acciones: diseña para el éxito.",
+      "Mejora 1% al día y deja que se acumule."
+    ],
+    "demo.apply": [
+      "Elige un hábito diminuto (ej.: leer 2 páginas).",
+      "Regla de los 2 minutos: empieza micro, cada día.",
+      "Diseña tu espacio: deja el libro visible y a mano.",
+      "Pequeña recompensa + seguimiento diario por 30 días."
+    ],
+    "demo.close": "Reserva 25 minutos de enfoque hoy. La constancia pequeña, repetida, se convierte en grandes resultados.",
+    "demo.cta": "Genera tu propio resumen",
+    "demo.audio.generate": "Reproducir audio de ejemplo",
   }
 };
