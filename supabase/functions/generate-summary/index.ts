@@ -146,37 +146,130 @@ function inferTheme(title: string): string {
   return "default";
 }
 
-// Generate closing message by theme and locale
+// Generate closing message by theme and locale - MULTIPLE VARIATIONS
 function generateClosing(theme: string, locale: string, canonicalTitle: string): string {
-  const closings: Record<string, Record<string, string>> = {
+  const closings: Record<string, Record<string, string[]>> = {
     pt: {
-      default: "Você não precisa mudar tudo de uma vez. Escolha um ajuste pequeno — hoje — e dê o primeiro passo. Amanhã, repita: consistência vence força de vontade.",
-      sleep: "Hoje, durma 30 minutos mais cedo e reduza telas 90 minutos antes. Seu relógio biológico agradece; a energia de amanhã começa agora.",
-      productivity: "Reserve 25 minutos de foco profundo ainda hoje. Um bloco pequeno, repetido diariamente, gera resultados surpreendentes em semanas.",
-      health: "Agende uma caminhada de 10 minutos nas próximas 24 horas. Saúde real nasce de microvitórias consistentes.",
-      mindset: "Antes de dormir, escreva uma linha: 'Qual foi meu pequeno avanço hoje?'. A mente segue aquilo que decidimos notar.",
-      finance: "Amanhã, marque um horário fixo para revisar os gastos dos últimos 7 dias. Clareza semanal evita surpresas mensais."
+      default: [
+        "Você não precisa mudar tudo de uma vez. Escolha um ajuste pequeno — hoje — e dê o primeiro passo. Amanhã, repita: consistência vence força de vontade.",
+        "Comece agora com algo simples. Pequenas ações diárias se transformam em grandes conquistas ao longo do tempo.",
+        "O segredo não está em fazer tudo perfeito, mas em começar e manter a constância. Escolha uma ação pequena para hoje.",
+        "Transformação real vem de hábitos consistentes, não de mudanças radicais. Que tal começar com algo pequeno hoje mesmo?"
+      ],
+      sleep: [
+        "Hoje, durma 30 minutos mais cedo e reduza telas 90 minutos antes. Seu relógio biológico agradece; a energia de amanhã começa agora.",
+        "Experimente criar uma rotina de sono regular. Seu corpo e mente agradecem quando respeitamos nossos ritmos naturais.",
+        "Que tal desligar as telas 1 hora antes de dormir hoje? Seu descanso de qualidade começa com pequenos ajustes.",
+        "Comece hoje: defina um horário fixo para dormir. Consistência no sono é o combustível da sua energia diária."
+      ],
+      productivity: [
+        "Reserve 25 minutos de foco profundo ainda hoje. Um bloco pequeno, repetido diariamente, gera resultados surpreendentes em semanas.",
+        "Experimente a técnica Pomodoro: 25 minutos de foco total, sem distrações. Você vai se surpreender com os resultados.",
+        "Identifique sua tarefa mais importante hoje e dedique a ela sua primeira hora de trabalho, sem interrupções.",
+        "Crie blocos de tempo protegidos no seu dia. Foco profundo, mesmo que por períodos curtos, multiplica sua produtividade."
+      ],
+      health: [
+        "Agende uma caminhada de 10 minutos nas próximas 24 horas. Saúde real nasce de microvitórias consistentes.",
+        "Movimento é vida. Que tal dar uma volta de 10 minutos depois do almoço? Seu corpo agradece cada passo.",
+        "Comece hoje: escolha uma atividade física que você goste e reserve 15 minutos para ela. Constância é mais importante que intensidade.",
+        "Saúde se constrói todos os dias. Uma caminhada curta, feita com regularidade, vale mais que promessas de academia."
+      ],
+      mindset: [
+        "Antes de dormir, escreva uma linha: 'Qual foi meu pequeno avanço hoje?'. A mente segue aquilo que decidimos notar.",
+        "Pratique gratidão diária: escreva 3 coisas boas que aconteceram hoje. Sua mente se reprograma para enxergar oportunidades.",
+        "Comece um diário de reflexão. Alguns minutos de escrita por dia transformam sua autoconsciência e clareza mental.",
+        "Pergunte-se diariamente: 'O que aprendi hoje?'. Cultivar esta curiosidade transforma desafios em oportunidades de crescimento."
+      ],
+      finance: [
+        "Amanhã, marque um horário fixo para revisar os gastos dos últimos 7 dias. Clareza semanal evita surpresas mensais.",
+        "Comece hoje: anote todos os gastos por uma semana. Consciência é o primeiro passo para controle financeiro.",
+        "Defina um dia fixo do mês para revisar suas finanças. Regularidade nesta prática traz paz de espírito e segurança.",
+        "Experimente a regra 50/30/20: 50% necessidades, 30% desejos, 20% poupança. Simplicidade funciona melhor que complexidade."
+      ]
     },
     en: {
-      default: "You don't have to change everything at once. Pick one time to start—today—and make the first small shift. Tomorrow, repeat. Consistency beats willpower.",
-      sleep: "Tonight, go to bed 30 minutes earlier and dim screens 90 minutes before. Your circadian clock will thank you; tomorrow's energy starts now.",
-      productivity: "Block 25 minutes for deep work today. A small daily block, repeated, compounds into surprising results within weeks.",
-      health: "Schedule your first 10-minute walk within the next 24 hours. Real health is built on consistent micro-wins.",
-      mindset: "Before bed, write one line: 'What small win did I have today?'. The mind follows what we choose to notice.",
-      finance: "Set a fixed time tomorrow to review the last 7 days of expenses. Weekly clarity prevents monthly surprises."
+      default: [
+        "You don't have to change everything at once. Pick one time to start—today—and make the first small shift. Tomorrow, repeat. Consistency beats willpower.",
+        "Start now with something simple. Small daily actions transform into big achievements over time.",
+        "The secret isn't doing everything perfectly, but starting and staying consistent. Choose one small action for today.",
+        "Real transformation comes from consistent habits, not radical changes. How about starting with something small today?"
+      ],
+      sleep: [
+        "Tonight, go to bed 30 minutes earlier and dim screens 90 minutes before. Your circadian clock will thank you; tomorrow's energy starts now.",
+        "Try creating a regular sleep routine. Your body and mind appreciate when we respect our natural rhythms.",
+        "How about turning off screens 1 hour before bed tonight? Quality rest begins with small adjustments.",
+        "Start today: set a fixed bedtime. Sleep consistency is the fuel for your daily energy."
+      ],
+      productivity: [
+        "Block 25 minutes for deep work today. A small daily block, repeated, compounds into surprising results within weeks.",
+        "Try the Pomodoro technique: 25 minutes of total focus, no distractions. You'll be surprised by the results.",
+        "Identify your most important task today and dedicate your first work hour to it, without interruptions.",
+        "Create protected time blocks in your day. Deep focus, even for short periods, multiplies your productivity."
+      ],
+      health: [
+        "Schedule your first 10-minute walk within the next 24 hours. Real health is built on consistent micro-wins.",
+        "Movement is life. How about a 10-minute walk after lunch? Your body thanks you for every step.",
+        "Start today: choose a physical activity you enjoy and reserve 15 minutes for it. Consistency beats intensity.",
+        "Health is built every day. A short walk, done regularly, is worth more than gym promises."
+      ],
+      mindset: [
+        "Before bed, write one line: 'What small win did I have today?'. The mind follows what we choose to notice.",
+        "Practice daily gratitude: write down 3 good things that happened today. Your mind reprograms to see opportunities.",
+        "Start a reflection journal. A few minutes of writing daily transforms your self-awareness and mental clarity.",
+        "Ask yourself daily: 'What did I learn today?'. Cultivating this curiosity transforms challenges into growth opportunities."
+      ],
+      finance: [
+        "Set a fixed time tomorrow to review the last 7 days of expenses. Weekly clarity prevents monthly surprises.",
+        "Start today: track all expenses for one week. Awareness is the first step to financial control.",
+        "Define a fixed day of the month to review your finances. Regularity in this practice brings peace of mind and security.",
+        "Try the 50/30/20 rule: 50% needs, 30% wants, 20% savings. Simplicity works better than complexity."
+      ]
     },
     es: {
-      default: "No tienes que cambiarlo todo de golpe. Elige una hora para empezar—hoy—y da el primer paso. Mañana, repite. La constancia supera la fuerza de voluntad.",
-      sleep: "Esta noche, acuéstate 30 minutos antes y baja pantallas 90 minutos antes. Tu reloj biológico lo agradecerá; la energía de mañana empieza ahora.",
-      productivity: "Reserva 25 minutos de trabajo profundo hoy. Un bloque pequeño diario, repetido, se acumula en resultados sorprendentes en semanas.",
-      health: "Programa tu primera caminata de 10 minutos en las próximas 24 horas. La salud real nace de micro-victorias constantes.",
-      mindset: "Antes de dormir, escribe una línea: '¿Cuál fue mi pequeño avance de hoy?'. La mente sigue lo que decidimos notar.",
-      finance: "Fija una hora mañana para revisar tus gastos de los últimos 7 días. La claridad semanal evita sorpresas mensuales."
+      default: [
+        "No tienes que cambiarlo todo de golpe. Elige una hora para empezar—hoy—y da el primer paso. Mañana, repite. La constancia supera la fuerza de voluntad.",
+        "Comienza ahora con algo simple. Pequeñas acciones diarias se transforman en grandes logros con el tiempo.",
+        "El secreto no está en hacer todo perfecto, sino en comenzar y mantener la constancia. Elige una acción pequeña para hoy.",
+        "La transformación real viene de hábitos consistentes, no de cambios radicales. ¿Qué tal comenzar con algo pequeño hoy?"
+      ],
+      sleep: [
+        "Esta noche, acuéstate 30 minutos antes y baja pantallas 90 minutos antes. Tu reloj biológico lo agradecerá; la energía de mañana empieza ahora.",
+        "Intenta crear una rutina de sueño regular. Tu cuerpo y mente agradecen cuando respetamos nuestros ritmos naturales.",
+        "¿Qué tal apagar las pantallas 1 hora antes de dormir hoy? El descanso de calidad comienza con pequeños ajustes.",
+        "Empieza hoy: define una hora fija para dormir. La consistencia en el sueño es el combustible de tu energía diaria."
+      ],
+      productivity: [
+        "Reserva 25 minutos de trabajo profundo hoy. Un bloque pequeño diario, repetido, se acumula en resultados sorprendentes en semanas.",
+        "Prueba la técnica Pomodoro: 25 minutos de enfoque total, sin distracciones. Te sorprenderán los resultados.",
+        "Identifica tu tarea más importante hoy y dedícale tu primera hora de trabajo, sin interrupciones.",
+        "Crea bloques de tiempo protegidos en tu día. El enfoque profundo, incluso por períodos cortos, multiplica tu productividad."
+      ],
+      health: [
+        "Programa tu primera caminata de 10 minutos en las próximas 24 horas. La salud real nace de micro-victorias constantes.",
+        "El movimiento es vida. ¿Qué tal dar un paseo de 10 minutos después del almuerzo? Tu cuerpo agradece cada paso.",
+        "Comienza hoy: elige una actividad física que disfrutes y reserva 15 minutos para ella. La constancia supera la intensidad.",
+        "La salud se construye todos los días. Una caminata corta, hecha regularmente, vale más que promesas de gimnasio."
+      ],
+      mindset: [
+        "Antes de dormir, escribe una línea: '¿Cuál fue mi pequeño avance de hoy?'. La mente sigue lo que decidimos notar.",
+        "Practica gratitud diaria: escribe 3 cosas buenas que sucedieron hoy. Tu mente se reprograma para ver oportunidades.",
+        "Comienza un diario de reflexión. Unos minutos de escritura diaria transforman tu autoconciencia y claridad mental.",
+        "Pregúntate diariamente: '¿Qué aprendí hoy?'. Cultivar esta curiosidad transforma desafíos en oportunidades de crecimiento."
+      ],
+      finance: [
+        "Fija una hora mañana para revisar tus gastos de los últimos 7 días. La claridad semanal evita sorpresas mensuales.",
+        "Comienza hoy: anota todos los gastos durante una semana. La conciencia es el primer paso hacia el control financiero.",
+        "Define un día fijo del mes para revisar tus finanzas. La regularidad en esta práctica trae paz mental y seguridad.",
+        "Prueba la regla 50/30/20: 50% necesidades, 30% deseos, 20% ahorros. La simplicidad funciona mejor que la complejidad."
+      ]
     }
   };
 
   const localeClosings = closings[locale] || closings.en;
-  return localeClosings[theme] || localeClosings.default;
+  const themeClosings = localeClosings[theme] || localeClosings.default;
+  
+  // Pick a random closing message from the array
+  return themeClosings[Math.floor(Math.random() * themeClosings.length)];
 }
 
 // Post-process summary to remove duplicates and format properly
@@ -551,7 +644,7 @@ Responde SOLO con el JSON, sin texto adicional.`
     const prompt = prompts[language] || prompts.pt;
 
     // Generate summary using Lovable AI (Gemini)
-    console.log("Calling Lovable AI with model: google/gemini-2.5-flash-lite");
+    console.log("Calling Lovable AI with model: google/gemini-2.5-flash");
     const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -559,7 +652,7 @@ Responde SOLO con el JSON, sin texto adicional.`
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash-lite",
+        model: "google/gemini-2.5-flash",
         messages: [
           {
             role: "system",

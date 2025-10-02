@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { Search, ArrowLeft } from "lucide-react";
+import { Search, ArrowLeft, BookOpen } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Accordion,
@@ -88,6 +88,12 @@ const Faq = () => {
         </header>
 
         <main className="flex-1 container mx-auto px-4 py-12 max-w-3xl">
+          <div className="flex justify-center mb-8">
+            <div className="flex items-center gap-2">
+              <BookOpen className="w-8 h-8 text-primary" />
+              <h1 className="text-2xl font-bold">OnePageBook</h1>
+            </div>
+          </div>
           <h1 className="text-4xl font-bold mb-2 text-center">{t("faq.title_long")}</h1>
           
           <div className="relative mb-8 mt-8">

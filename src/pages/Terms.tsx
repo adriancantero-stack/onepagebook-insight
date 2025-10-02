@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, BookOpen } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import Footer from "@/components/Footer";
 
@@ -143,6 +143,12 @@ const Terms = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8 max-w-4xl flex-1">
+        <div className="flex justify-center mb-8">
+          <div className="flex items-center gap-2">
+            <BookOpen className="w-8 h-8 text-primary" />
+            <h1 className="text-2xl font-bold">OnePageBook</h1>
+          </div>
+        </div>
         <Card className="p-8">
           <h1 className="text-3xl font-bold mb-4">{pageContent.title}</h1>
           <p className="text-sm text-muted-foreground mb-8">{pageContent.lastUpdated}</p>
