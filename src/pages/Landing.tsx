@@ -64,7 +64,7 @@ export default function Landing({ lang }: LandingProps) {
               <Button
                 size="lg"
                 onClick={handleCTA}
-                className="w-full sm:w-auto text-lg md:text-xl px-8 md:px-12 py-6 md:py-7 bg-primary hover:bg-primary/90 transition-all hover:scale-105"
+                className="w-full sm:w-auto text-sm sm:text-base md:text-lg px-6 sm:px-8 md:px-12 py-4 sm:py-5 md:py-6 bg-primary hover:bg-primary/90 transition-all hover:scale-105"
               >
                 {t("landing.hero.cta")}
               </Button>
