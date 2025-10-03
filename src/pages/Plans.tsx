@@ -198,7 +198,14 @@ const Plans = () => {
                 className="w-full bg-[#5A54E6] hover:bg-[#4a44d6] focus:outline-none focus:ring-2 focus:ring-[#5A54E6] focus:ring-offset-2" 
                 asChild
               >
-                <a href="https://buy.stripe.com/fZu28r50YbE76fuaKv3oA00" target="_blank" rel="noopener noreferrer">
+                <a 
+                  href={billingCycle === "monthly" 
+                    ? "https://buy.stripe.com/fZu28r50YbE76fuaKv3oA00"
+                    : "https://buy.stripe.com/dRm4gzeByeQj0Va6uf3oA01"
+                  } 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >
                   {t("plans.premium.cta")}
                 </a>
               </Button>
