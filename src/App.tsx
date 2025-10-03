@@ -9,6 +9,7 @@ import { lazy, Suspense } from "react";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import Landing from "./pages/Landing";
+import LandingRedirect from "./pages/LandingRedirect";
 
 // Lazy load secondary routes
 const Summary = lazy(() => import("./pages/Summary"));
@@ -34,7 +35,7 @@ const App = () => (
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>}>
           <Routes>
-            <Route path="/" element={<Landing lang="pt" />} />
+            <Route path="/" element={<LandingRedirect />} />
             <Route path="/pt" element={<Landing lang="pt" />} />
             <Route path="/es" element={<Landing lang="es" />} />
             <Route path="/en" element={<Landing lang="en" />} />
