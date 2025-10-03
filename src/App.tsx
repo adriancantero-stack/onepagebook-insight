@@ -8,6 +8,7 @@ import { lazy, Suspense } from "react";
 // Eager load critical routes
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
+import Landing from "./pages/Landing";
 
 // Lazy load secondary routes
 const Summary = lazy(() => import("./pages/Summary"));
@@ -33,8 +34,15 @@ const App = () => (
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>}>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Landing lang="pt" />} />
+            <Route path="/pt" element={<Landing lang="pt" />} />
+            <Route path="/es" element={<Landing lang="es" />} />
+            <Route path="/en" element={<Landing lang="en" />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/pt/auth" element={<Auth />} />
+            <Route path="/es/auth" element={<Auth />} />
+            <Route path="/en/auth" element={<Auth />} />
             <Route path="/welcome" element={<Welcome />} />
             <Route path="/summary/:id" element={<Summary />} />
             <Route path="/history" element={<History />} />

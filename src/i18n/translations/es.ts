@@ -5,6 +5,50 @@ export const es = {
     "header.premium": "Premium",
     "header.logout": "Salir",
     
+    // Landing Page
+    "landing.hero.headline": "Lee 10 libros en 10 minutos.",
+    "landing.hero.subtitle": "Resúmenes inteligentes en solo 1 página — con ideas clave y pasos prácticos.",
+    "landing.hero.cta": "Quiero mi primer resumen gratis",
+    
+    "landing.benefits.time.title": "Ahorra tiempo",
+    "landing.benefits.time.desc": "Absorbe libros completos en minutos",
+    "landing.benefits.learn.title": "Aprende más",
+    "landing.benefits.learn.desc": "Ideas clave listas para aplicar",
+    "landing.benefits.apply.title": "Ponlo en práctica",
+    "landing.benefits.apply.desc": "Pasos concretos para actuar hoy",
+    
+    "landing.howItWorks.title": "Cómo Funciona",
+    "landing.howItWorks.step1.title": "Elige un libro",
+    "landing.howItWorks.step1.desc": "Escribe el título o navega por el catálogo",
+    "landing.howItWorks.step2.title": "Recibe el resumen en 1 página",
+    "landing.howItWorks.step2.desc": "Ideas principales + plan de acción práctico",
+    "landing.howItWorks.step3.title": "Ponlo en práctica",
+    "landing.howItWorks.step3.desc": "Aplica hoy lo que aprendiste",
+    "landing.howItWorks.cta": "Empezar ahora",
+    
+    "landing.social.title": "Inspirado en los mejores best-sellers del mundo",
+    
+    "landing.plans.title": "Elige tu plan",
+    "landing.plans.free.title": "Gratuito",
+    "landing.plans.free.price": "$0",
+    "landing.plans.free.period": "/mes",
+    "landing.plans.free.feature1": "1 resumen gratis",
+    "landing.plans.free.feature2": "Acceso al catálogo",
+    "landing.plans.free.feature3": "Soporte básico",
+    "landing.plans.free.cta": "Empezar gratis",
+    
+    "landing.plans.premium.title": "Premium",
+    "landing.plans.premium.price": "$4.99",
+    "landing.plans.premium.period": "/mes",
+    "landing.plans.premium.feature1": "Resúmenes ilimitados",
+    "landing.plans.premium.feature2": "Audio completo ilimitado",
+    "landing.plans.premium.feature3": "Exportar a PDF",
+    "landing.plans.premium.feature4": "Historial ilimitado",
+    "landing.plans.premium.feature5": "Soporte prioritario",
+    "landing.plans.premium.cta": "Suscribirse ahora",
+    
+    "footer.tagline": "Conocimiento a la velocidad que necesitas.",
+    
     // Navigation
     "nav.faq": "FAQ",
     "nav.faq_short": "FAQ",

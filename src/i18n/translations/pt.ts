@@ -208,6 +208,49 @@ export const pt = {
     "footer.contact": "Contato",
     "footer.faq": "FAQ",
     "footer.copyright": "© {{year}} onepagebook.ai",
+    "footer.tagline": "Conhecimento na velocidade que você precisa.",
+    
+    // Landing Page
+    "landing.hero.headline": "Leia 10 livros em 10 minutos.",
+    "landing.hero.subtitle": "Resumos inteligentes em apenas 1 página — com ideias-chave e passos práticos.",
+    "landing.hero.cta": "Quero meu primeiro resumo grátis",
+    
+    "landing.benefits.time.title": "Ganhe tempo",
+    "landing.benefits.time.desc": "Absorva livros completos em minutos",
+    "landing.benefits.learn.title": "Aprenda mais",
+    "landing.benefits.learn.desc": "Ideias-chave prontas para aplicar",
+    "landing.benefits.apply.title": "Aplique na prática",
+    "landing.benefits.apply.desc": "Passos concretos para agir hoje",
+    
+    "landing.howItWorks.title": "Como Funciona",
+    "landing.howItWorks.step1.title": "Escolha um livro",
+    "landing.howItWorks.step1.desc": "Digite o título ou navegue pelo catálogo",
+    "landing.howItWorks.step2.title": "Receba o resumo em 1 página",
+    "landing.howItWorks.step2.desc": "Ideias principais + plano de ação prático",
+    "landing.howItWorks.step3.title": "Coloque em prática",
+    "landing.howItWorks.step3.desc": "Aplique hoje o que aprendeu",
+    "landing.howItWorks.cta": "Começar agora",
+    
+    "landing.social.title": "Inspirado nos maiores best-sellers do mundo",
+    
+    "landing.plans.title": "Escolha seu plano",
+    "landing.plans.free.title": "Gratuito",
+    "landing.plans.free.price": "R$ 0",
+    "landing.plans.free.period": "/mês",
+    "landing.plans.free.feature1": "1 resumo grátis",
+    "landing.plans.free.feature2": "Acesso ao catálogo",
+    "landing.plans.free.feature3": "Suporte básico",
+    "landing.plans.free.cta": "Começar grátis",
+    
+    "landing.plans.premium.title": "Premium",
+    "landing.plans.premium.price": "R$ 14,99",
+    "landing.plans.premium.period": "/mês",
+    "landing.plans.premium.feature1": "Resumos ilimitados",
+    "landing.plans.premium.feature2": "Áudio completo ilimitado",
+    "landing.plans.premium.feature3": "Exportar PDF",
+    "landing.plans.premium.feature4": "Histórico ilimitado",
+    "landing.plans.premium.feature5": "Suporte prioritário",
+    "landing.plans.premium.cta": "Assinar agora",
     
     // FAQ
     "faq.title": "Perguntas Frequentes",

@@ -5,6 +5,50 @@ export const en = {
     "header.premium": "Premium",
     "header.logout": "Logout",
     
+    // Landing Page
+    "landing.hero.headline": "Read 10 books in 10 minutes.",
+    "landing.hero.subtitle": "Smart one-page summaries — with key ideas and practical steps.",
+    "landing.hero.cta": "Get my first summary free",
+    
+    "landing.benefits.time.title": "Save time",
+    "landing.benefits.time.desc": "Absorb complete books in minutes",
+    "landing.benefits.learn.title": "Learn more",
+    "landing.benefits.learn.desc": "Key ideas ready to apply",
+    "landing.benefits.apply.title": "Apply in practice",
+    "landing.benefits.apply.desc": "Concrete steps to act today",
+    
+    "landing.howItWorks.title": "How It Works",
+    "landing.howItWorks.step1.title": "Choose a book",
+    "landing.howItWorks.step1.desc": "Enter the title or browse our catalog",
+    "landing.howItWorks.step2.title": "Get your one-page summary",
+    "landing.howItWorks.step2.desc": "Main ideas + practical action plan",
+    "landing.howItWorks.step3.title": "Apply in practice",
+    "landing.howItWorks.step3.desc": "Apply what you learned today",
+    "landing.howItWorks.cta": "Start now",
+    
+    "landing.social.title": "Inspired by the world's greatest bestsellers",
+    
+    "landing.plans.title": "Choose your plan",
+    "landing.plans.free.title": "Free",
+    "landing.plans.free.price": "$0",
+    "landing.plans.free.period": "/month",
+    "landing.plans.free.feature1": "1 free summary",
+    "landing.plans.free.feature2": "Access to catalog",
+    "landing.plans.free.feature3": "Basic support",
+    "landing.plans.free.cta": "Start free",
+    
+    "landing.plans.premium.title": "Premium",
+    "landing.plans.premium.price": "$4.99",
+    "landing.plans.premium.period": "/month",
+    "landing.plans.premium.feature1": "Unlimited summaries",
+    "landing.plans.premium.feature2": "Unlimited full audio",
+    "landing.plans.premium.feature3": "Export to PDF",
+    "landing.plans.premium.feature4": "Unlimited history",
+    "landing.plans.premium.feature5": "Priority support",
+    "landing.plans.premium.cta": "Subscribe now",
+    
+    "footer.tagline": "Knowledge at the speed you need.",
+    
     // Navigation
     "nav.faq": "FAQ",
     "nav.faq_short": "FAQ",
