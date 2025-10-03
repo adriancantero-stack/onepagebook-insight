@@ -102,6 +102,8 @@ export const es = {
     "auth.login": "Entrar",
     "auth.startFree": "Prueba Gratis",
     "auth.checking": "Verificando…",
+    "auth.haveAccount": "¿Ya tienes cuenta? Inicia sesión",
+    "auth.noAccount": "¿No tienes cuenta? Regístrate",
     
     // Welcome
     "welcome.title": "¡Bienvenido a OnePageBook!",

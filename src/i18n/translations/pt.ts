@@ -44,6 +44,8 @@ export const pt = {
     "auth.login": "Entrar",
     "auth.startFree": "Teste Grátis",
     "auth.checking": "Verificando…",
+    "auth.haveAccount": "Já tem conta? Entrar",
+    "auth.noAccount": "Não tem conta? Criar conta",
     
     // Welcome
     "welcome.title": "Bem-vindo ao OnePageBook!",
