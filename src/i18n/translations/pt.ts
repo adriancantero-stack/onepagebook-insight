@@ -247,10 +247,10 @@ export const pt = {
     "landing.testimonials.testimonial1.author": "Maria Silva",
     "landing.testimonials.testimonial1.role": "Empreendedora",
     "landing.testimonials.testimonial2.quote": "Os resumos são diretos ao ponto. Perfeito para quem tem pouco tempo mas quer continuar aprendendo.",
-    "landing.testimonials.testimonial2.author": "João Santos",
+    "landing.testimonials.testimonial2.author": "Pedro Oliveira",
     "landing.testimonials.testimonial2.role": "Gerente de Projetos",
     "landing.testimonials.testimonial3.quote": "A função de áudio é sensacional! Ouço enquanto dirijo para o trabalho. Melhor investimento que fiz em educação.",
-    "landing.testimonials.testimonial3.author": "Ana Costa",
+    "landing.testimonials.testimonial3.author": "Ana Santos",
     "landing.testimonials.testimonial3.role": "Consultora",
     
     "landing.plans.premium.title": "Premium",

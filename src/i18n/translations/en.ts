@@ -39,13 +39,13 @@ export const en = {
     
     "landing.testimonials.title": "What our users say",
     "landing.testimonials.testimonial1.quote": "Amazing! I absorbed knowledge from 5 books in one week. Completely changed my learning routine.",
-    "landing.testimonials.testimonial1.author": "Maria Silva",
+    "landing.testimonials.testimonial1.author": "Sarah Johnson",
     "landing.testimonials.testimonial1.role": "Entrepreneur",
     "landing.testimonials.testimonial2.quote": "The summaries are straight to the point. Perfect for those with little time but wanting to keep learning.",
-    "landing.testimonials.testimonial2.author": "João Santos",
+    "landing.testimonials.testimonial2.author": "Michael Davis",
     "landing.testimonials.testimonial2.role": "Project Manager",
     "landing.testimonials.testimonial3.quote": "The audio feature is sensational! I listen while driving to work. Best investment I made in education.",
-    "landing.testimonials.testimonial3.author": "Ana Costa",
+    "landing.testimonials.testimonial3.author": "Emily Thompson",
     "landing.testimonials.testimonial3.role": "Consultant",
     
     "landing.plans.premium.title": "Premium",
