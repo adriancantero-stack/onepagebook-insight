@@ -196,9 +196,11 @@ const Plans = () => {
             ) : (
               <Button 
                 className="w-full bg-[#5A54E6] hover:bg-[#4a44d6] focus:outline-none focus:ring-2 focus:ring-[#5A54E6] focus:ring-offset-2" 
-                onClick={() => handlePlanSelect("premium", billingCycle)}
+                asChild
               >
-                {t("plans.premium.cta")}
+                <a href="https://buy.stripe.com/fZu28r50YbE76fuaKv3oA00" target="_blank" rel="noopener noreferrer">
+                  {t("plans.premium.cta")}
+                </a>
               </Button>
             )}
           </Card>
