@@ -41,6 +41,17 @@ export const en = {
     "auth.switchToSignup": "Don't have an account? Sign up",
     "auth.switchToLogin": "Already have an account? Login",
     "auth.loading": "Loading...",
+    "auth.login": "Login",
+    "auth.startFree": "Start free",
+    "auth.checking": "Checking…",
+    
+    // Welcome
+    "welcome.title": "Welcome to OnePageBook!",
+    "welcome.description": "Your account has been created successfully. You can now start generating book summaries.",
+    "welcome.freeplan": "Free Plan Activated",
+    "welcome.limits": "5 summaries + 5 audios per month",
+    "welcome.cta": "Start using",
+    "welcome.redirect": "Redirecting automatically in 5 seconds...",
     
     // Summary
     "summary.back": "Back",

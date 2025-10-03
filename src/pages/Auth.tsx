@@ -14,11 +14,13 @@ const Auth = () => {
   const {
     t
   } = useTranslation();
-  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [checking, setChecking] = useState(false);
+  const [emailExists, setEmailExists] = useState<boolean | null>(null);
+  const [error, setError] = useState<string>("");
   const navigate = useNavigate();
   useEffect(() => {
     supabase.auth.getSession().then(({
@@ -31,14 +33,61 @@ const Auth = () => {
       }
     });
   }, [navigate]);
+
+  // Check if email exists when user types
+  useEffect(() => {
+    const checkEmail = async () => {
+      if (!email || !email.includes("@")) {
+        setEmailExists(null);
+        return;
+      }
+
+      setChecking(true);
+      setError("");
+
+      try {
+        // Try to sign in with a fake password to check if user exists
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password: '__CHECK_ONLY__' + Math.random()
+        });
+
+        // If error is "Invalid login credentials", user exists
+        // If error is "Email not confirmed", user exists
+        // Any other error means user doesn't exist or other issue
+        if (signInError) {
+          const errorMsg = signInError.message.toLowerCase();
+          if (errorMsg.includes("invalid") || errorMsg.includes("credentials")) {
+            setEmailExists(true);
+          } else if (errorMsg.includes("confirm")) {
+            setEmailExists(true);
+          } else {
+            setEmailExists(false);
+          }
+        } else {
+          // No error means successful login (unlikely with random password)
+          setEmailExists(true);
+        }
+      } catch (err) {
+        console.error("Error checking email:", err);
+        setEmailExists(false);
+      } finally {
+        setChecking(false);
+      }
+    };
+
+    const timer = setTimeout(checkEmail, 800);
+    return () => clearTimeout(timer);
+  }, [email]);
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
+    
     try {
-      if (isLogin) {
-        const {
-          error
-        } = await supabase.auth.signInWithPassword({
+      if (emailExists) {
+        // Login
+        const { error } = await supabase.auth.signInWithPassword({
           email,
           password
         });
@@ -48,29 +97,30 @@ const Auth = () => {
         });
         navigate("/");
       } else {
-        const {
-          error
-        } = await supabase.auth.signUp({
+        // Signup
+        const { error } = await supabase.auth.signUp({
           email,
           password,
           options: {
             data: {
               full_name: fullName
             },
-            emailRedirectTo: `${window.location.origin}/`
+            emailRedirectTo: `${window.location.origin}/welcome`
           }
         });
         if (error) throw error;
         toast({
           title: t("toast.success")
         });
-        navigate("/");
+        navigate("/welcome");
       }
     } catch (error: any) {
+      const errorMessage = error.message || t("toast.authError");
+      setError(errorMessage);
       toast({
         variant: "destructive",
         title: t("toast.error"),
-        description: error.message
+        description: errorMessage
       });
     } finally {
       setLoading(false);
@@ -100,27 +150,57 @@ const Auth = () => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleAuth} className="space-y-3">
-            {!isLogin && <div className="space-y-2">
+            {emailExists === false && (
+              <div className="space-y-2">
                 <Label htmlFor="fullName">{t("auth.fullName")}</Label>
-                <Input id="fullName" type="text" value={fullName} onChange={e => setFullName(e.target.value)} required />
-              </div>}
+                <Input 
+                  id="fullName" 
+                  type="text" 
+                  value={fullName} 
+                  onChange={e => setFullName(e.target.value)} 
+                  required 
+                />
+              </div>
+            )}
             <div className="space-y-2">
               <Label htmlFor="email">{t("auth.email")}</Label>
-              <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+              <Input 
+                id="email" 
+                type="email" 
+                value={email} 
+                onChange={e => setEmail(e.target.value)} 
+                required 
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">{t("auth.password")}</Label>
-              <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required minLength={6} />
+              <Input 
+                id="password" 
+                type="password" 
+                value={password} 
+                onChange={e => setPassword(e.target.value)} 
+                required 
+                minLength={6} 
+              />
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? t("auth.loading") : isLogin ? t("auth.loginButton") : t("auth.signupButton")}
+            <Button 
+              type="submit" 
+              className="w-full" 
+              disabled={loading || checking || !email || !password}
+            >
+              {loading 
+                ? t("auth.loading") 
+                : checking 
+                  ? t("auth.checking")
+                  : emailExists 
+                    ? t("auth.login") 
+                    : t("auth.startFree")
+              }
             </Button>
+            {error && (
+              <p className="text-sm text-destructive text-center mt-2">{error}</p>
+            )}
           </form>
-          <div className="mt-4 text-center text-sm">
-            <button type="button" onClick={() => setIsLogin(!isLogin)} className="text-primary hover:underline">
-              {isLogin ? t("auth.switchToSignup") : t("auth.switchToLogin")}
-            </button>
-          </div>
         </CardContent>
       </Card>
       </div>

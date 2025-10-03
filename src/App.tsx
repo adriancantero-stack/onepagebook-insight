@@ -15,6 +15,7 @@ const History = lazy(() => import("./pages/History"));
 const Plans = lazy(() => import("./pages/Plans"));
 const Explore = lazy(() => import("./pages/Explore"));
 const Demo = lazy(() => import("./pages/Demo"));
+const Welcome = lazy(() => import("./pages/Welcome"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Faq = lazy(() => import("./pages/Faq"));
@@ -34,6 +35,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/welcome" element={<Welcome />} />
             <Route path="/summary/:id" element={<Summary />} />
             <Route path="/history" element={<History />} />
             <Route path="/plans" element={<Plans />} />
