@@ -60,13 +60,18 @@ export default function Landing({ lang }: LandingProps) {
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground">
               {t("landing.hero.subtitle")}
             </p>
-            <Button
-              size="lg"
-              onClick={handleCTA}
-              className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-5 md:py-6 bg-primary hover:bg-primary/90 transition-all hover:scale-105"
-            >
-              {t("landing.hero.cta")}
-            </Button>
+            <div className="flex flex-col items-center lg:items-start gap-2">
+              <Button
+                size="lg"
+                onClick={handleCTA}
+                className="w-full sm:w-auto text-lg md:text-xl px-8 md:px-12 py-6 md:py-7 bg-primary hover:bg-primary/90 transition-all hover:scale-105"
+              >
+                {t("landing.hero.cta")}
+              </Button>
+              <p className="text-sm text-muted-foreground">
+                {t("landing.hero.noCreditCard")}
+              </p>
+            </div>
           </div>
           
           {/* Hero Mockup */}

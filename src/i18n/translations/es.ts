@@ -9,6 +9,7 @@ export const es = {
     "landing.hero.headline": "Lee 10 libros en 10 minutos.",
     "landing.hero.subtitle": "Resúmenes inteligentes en solo 1 página — con ideas clave y pasos prácticos.",
     "landing.hero.cta": "Quiero mi primer resumen gratis",
+    "landing.hero.noCreditCard": "Sin tarjeta de crédito, pruébalo gratis",
     
     "landing.benefits.time.title": "Ahorra tiempo",
     "landing.benefits.time.desc": "Absorbe libros completos en minutos",

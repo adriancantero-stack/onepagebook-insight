@@ -214,6 +214,7 @@ export const pt = {
     "landing.hero.headline": "Leia 10 livros em 10 minutos.",
     "landing.hero.subtitle": "Resumos inteligentes em apenas 1 página — com ideias-chave e passos práticos.",
     "landing.hero.cta": "Quero meu primeiro resumo grátis",
+    "landing.hero.noCreditCard": "Sem cartão de crédito, experimente grátis",
     
     "landing.benefits.time.title": "Ganhe tempo",
     "landing.benefits.time.desc": "Absorva livros completos em minutos",
