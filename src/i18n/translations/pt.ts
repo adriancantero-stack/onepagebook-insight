@@ -255,6 +255,7 @@ export const pt = {
     "landing.plans.premium.feature4": "Histórico ilimitado",
     "landing.plans.premium.feature5": "Suporte prioritário",
     "landing.plans.premium.cta": "Assinar agora",
+    "landing.plans.premium.cancelAnytime": "Cancele quando quiser, sem burocracia",
     
     // FAQ
     "faq.title": "Perguntas Frequentes",

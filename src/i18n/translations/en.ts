@@ -59,6 +59,7 @@ export const en = {
     "landing.plans.premium.feature4": "Unlimited history",
     "landing.plans.premium.feature5": "Priority support",
     "landing.plans.premium.cta": "Subscribe now",
+    "landing.plans.premium.cancelAnytime": "Cancel anytime, no hassle",
     
     "footer.tagline": "Knowledge at the speed you need.",
     

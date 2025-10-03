@@ -291,9 +291,14 @@ export default function Landing({ lang }: LandingProps) {
                   <span className="text-sm md:text-base">{t("landing.plans.premium.feature5")}</span>
                 </li>
               </ul>
-              <Button onClick={handleCTA} className="w-full text-sm md:text-base">
-                {t("landing.plans.premium.cta")}
-              </Button>
+              <div className="space-y-2">
+                <Button onClick={handleCTA} className="w-full text-sm md:text-base">
+                  {t("landing.plans.premium.cta")}
+                </Button>
+                <p className="text-xs text-center text-muted-foreground">
+                  {t("landing.plans.premium.cancelAnytime")}
+                </p>
+              </div>
             </Card>
           </div>
         </div>
