@@ -8,6 +8,7 @@ import { Clock, BookOpen, Zap, CheckCircle2, Quote } from "lucide-react";
 import atomicHabits from "@/assets/books/atomic-habits.jpg";
 import richDadPoorDad from "@/assets/books/rich-dad-poor-dad.jpg";
 import powerOfHabit from "@/assets/books/power-of-habit.jpg";
+import heroMockup from "@/assets/hero-mockup.jpg";
 
 interface LandingProps {
   lang: "pt" | "es" | "en";
@@ -64,21 +65,15 @@ export default function Landing({ lang }: LandingProps) {
             </Button>
           </div>
           
-          {/* Mockup placeholder */}
+          {/* Hero Mockup */}
           <div className="hidden lg:block">
-            <Card className="p-8 bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
-              <div className="space-y-4">
-                <div className="h-8 bg-primary/20 rounded w-3/4"></div>
-                <div className="h-4 bg-muted rounded w-full"></div>
-                <div className="h-4 bg-muted rounded w-5/6"></div>
-                <div className="h-4 bg-muted rounded w-4/6"></div>
-                <div className="space-y-2 pt-4">
-                  <div className="h-3 bg-primary/30 rounded w-full"></div>
-                  <div className="h-3 bg-primary/30 rounded w-full"></div>
-                  <div className="h-3 bg-primary/30 rounded w-3/4"></div>
-                </div>
-              </div>
-            </Card>
+            <div className="rounded-lg overflow-hidden shadow-2xl">
+              <img 
+                src={heroMockup} 
+                alt="OnePageBook Summary Example"
+                className="w-full h-auto"
+              />
+            </div>
           </div>
         </div>
       </section>
