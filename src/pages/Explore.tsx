@@ -126,7 +126,7 @@ const Explore = () => {
     incrementTrending(item.id);
 
     // Navigate to home with book data
-    navigate("/", {
+    navigate("/home", {
       state: {
         bookTitle: item.title,
         bookAuthor: item.author,
@@ -156,7 +156,7 @@ const Explore = () => {
     }
 
     // Navigate to home with typed text
-    navigate("/", {
+    navigate("/home", {
       state: {
         bookTitle: trimmed,
         bookAuthor: "",
@@ -219,7 +219,7 @@ const Explore = () => {
     incrementTrending(bookId);
 
     // Navigate to home with book data
-    navigate("/", {
+    navigate("/home", {
       state: {
         bookTitle: book.title,
         bookAuthor: book.author,
