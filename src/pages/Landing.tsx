@@ -8,7 +8,9 @@ import { Clock, BookOpen, Zap, CheckCircle2, Quote } from "lucide-react";
 import atomicHabits from "@/assets/books/atomic-habits.jpg";
 import richDadPoorDad from "@/assets/books/rich-dad-poor-dad.jpg";
 import powerOfHabit from "@/assets/books/power-of-habit.jpg";
-import heroMockup from "@/assets/hero-mockup.jpg";
+import heroMockupPt from "@/assets/hero-mockup-pt.jpg";
+import heroMockupEn from "@/assets/hero-mockup-en.jpg";
+import heroMockupEs from "@/assets/hero-mockup-es.jpg";
 
 interface LandingProps {
   lang: "pt" | "es" | "en";
@@ -32,6 +34,8 @@ export default function Landing({ lang }: LandingProps) {
     { title: "Rich Dad Poor Dad", author: "Robert Kiyosaki", image: richDadPoorDad },
     { title: "The Power of Habit", author: "Charles Duhigg", image: powerOfHabit },
   ];
+
+  const heroMockup = lang === "pt" ? heroMockupPt : lang === "es" ? heroMockupEs : heroMockupEn;
 
   return (
     <div className="min-h-screen bg-background">
