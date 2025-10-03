@@ -254,7 +254,7 @@ export default function Landing({ lang }: LandingProps) {
                   <span className="text-sm md:text-base">{t("landing.plans.free.feature3")}</span>
                 </li>
               </ul>
-              <Button onClick={handleCTA} variant="outline" className="w-full text-sm md:text-base">
+              <Button onClick={handleCTA} variant="outline" className="w-full text-sm sm:text-base">
                 {t("landing.plans.free.cta")}
               </Button>
             </Card>
@@ -292,7 +292,7 @@ export default function Landing({ lang }: LandingProps) {
                 </li>
               </ul>
               <div className="space-y-2">
-                <Button onClick={handleCTA} className="w-full text-sm md:text-base">
+                <Button onClick={handleCTA} className="w-full text-sm sm:text-base">
                   {t("landing.plans.premium.cta")}
                 </Button>
                 <p className="text-xs text-center text-muted-foreground">
