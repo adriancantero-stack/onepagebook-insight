@@ -42,7 +42,7 @@ export const pt = {
     "auth.switchToLogin": "Já tem conta? Entrar",
     "auth.loading": "Carregando...",
     "auth.login": "Entrar",
-    "auth.startFree": "Teste grátis",
+    "auth.startFree": "Teste Grátis",
     "auth.checking": "Verificando…",
     
     // Welcome

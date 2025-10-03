@@ -42,7 +42,7 @@ export const en = {
     "auth.switchToLogin": "Already have an account? Login",
     "auth.loading": "Loading...",
     "auth.login": "Login",
-    "auth.startFree": "Start free",
+    "auth.startFree": "Start Free",
     "auth.checking": "Checking…",
     
     // Welcome

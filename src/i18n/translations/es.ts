@@ -42,7 +42,7 @@ export const es = {
     "auth.switchToLogin": "¿Ya tienes cuenta? Iniciar sesión",
     "auth.loading": "Cargando...",
     "auth.login": "Entrar",
-    "auth.startFree": "Prueba gratis",
+    "auth.startFree": "Prueba Gratis",
     "auth.checking": "Verificando…",
     
     // Welcome
