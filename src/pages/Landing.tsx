@@ -218,6 +218,12 @@ export default function Landing({ lang }: LandingProps) {
             </div>
           </Card>
         </div>
+        
+        <div className="text-center mt-12">
+          <p className="text-lg md:text-xl font-semibold text-foreground">
+            {t("landing.testimonials.socialProof")}
+          </p>
+        </div>
       </section>
 
       {/* Plans Section */}

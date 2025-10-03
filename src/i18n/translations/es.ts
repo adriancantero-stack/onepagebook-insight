@@ -48,6 +48,7 @@ export const es = {
     "landing.testimonials.testimonial3.quote": "¡La función de audio es sensacional! Escucho mientras conduzco al trabajo. Mejor inversión que hice en educación.",
     "landing.testimonials.testimonial3.author": "Ana Martínez",
     "landing.testimonials.testimonial3.role": "Consultora",
+    "landing.testimonials.socialProof": "+1.200 lectores ya están ahorrando tiempo todos los días con OnePageBook",
     
     "landing.plans.premium.title": "Premium",
     "landing.plans.premium.price": "$4.99",

@@ -48,6 +48,7 @@ export const en = {
     "landing.testimonials.testimonial3.quote": "The audio feature is sensational! I listen while driving to work. Best investment I made in education.",
     "landing.testimonials.testimonial3.author": "Emily Thompson",
     "landing.testimonials.testimonial3.role": "Consultant",
+    "landing.testimonials.socialProof": "+1,200 readers are already saving time every day with OnePageBook",
     
     "landing.plans.premium.title": "Premium",
     "landing.plans.premium.price": "$4.99",
