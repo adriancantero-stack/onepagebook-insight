@@ -23,6 +23,7 @@ import type { Book } from "@/data/bookCatalog";
 import { getThemeCategoryId } from "@/config/themes";
 import { SummarySection } from "@/components/SummarySection";
 import type { BookSummary } from "@/types";
+import logoGray from "@/assets/logo-gray.png";
 import { getCachedAudio, saveAudioToCache } from "@/lib/cacheUtils";
 
 const Summary = () => {
@@ -142,6 +143,12 @@ const Summary = () => {
     const margin = 20;
     const maxWidth = pageWidth - (margin * 2);
     let yPosition = 20;
+
+    // Add logo at the top center in gray
+    const logoSize = 15;
+    const logoX = (pageWidth - logoSize) / 2;
+    doc.addImage(logoGray, 'PNG', logoX, yPosition, logoSize, logoSize);
+    yPosition += logoSize + 10;
 
     // Helper to add text with page break
     const addText = (text: string, fontSize: number = 11, fontStyle: string = "normal") => {
