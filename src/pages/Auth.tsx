@@ -144,7 +144,7 @@ const Auth = () => {
           <p className="text-base sm:text-lg text-foreground/80 mb-6 max-w-[60ch] mx-auto leading-relaxed py-0 my-[5px]">
             {t("hero.sub")}
           </p>
-          <CardDescription className="mt-8 mb-3 py-[4px] underline animate-pulse">
+          <CardDescription className="mt-8 mb-3 py-[4px] underline animate-pulse text-foreground font-semibold">
             {t("auth.subtitle")}
           </CardDescription>
         </CardHeader>
