@@ -200,7 +200,9 @@ const Plans = () => {
               >
                 <a 
                   href={billingCycle === "monthly" 
-                    ? "https://buy.stripe.com/fZu28r50YbE76fuaKv3oA00"
+                    ? (i18n.language === "pt" 
+                        ? "https://buy.stripe.com/fZu28r50YbE76fuaKv3oA00"
+                        : "https://buy.stripe.com/7sY7sL2SQcIb6fu2dZ3oA02")
                     : "https://buy.stripe.com/dRm4gzeByeQj0Va6uf3oA01"
                   } 
                   target="_blank" 
