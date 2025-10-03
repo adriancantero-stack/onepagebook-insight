@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -293,15 +293,15 @@ export default function Landing({ lang }: LandingProps) {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
-              <a href={`/${lang}/faq`} className="hover:text-foreground transition-colors">
+              <Link to={`/${lang}/faq`} className="hover:text-foreground transition-colors">
                 {t("footer.faq")}
-              </a>
-              <a href={`/${lang}/terms`} className="hover:text-foreground transition-colors">
+              </Link>
+              <Link to={`/${lang}/terms`} className="hover:text-foreground transition-colors">
                 {t("footer.terms")}
-              </a>
-              <a href={`/${lang}/privacy`} className="hover:text-foreground transition-colors">
+              </Link>
+              <Link to={`/${lang}/privacy`} className="hover:text-foreground transition-colors">
                 {t("footer.privacy")}
-              </a>
+              </Link>
             </div>
             <div className="text-center md:text-right">
               <p className="text-sm text-muted-foreground mb-1">
