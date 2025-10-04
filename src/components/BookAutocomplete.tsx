@@ -17,7 +17,7 @@ interface Book {
 interface BookAutocompleteProps {
   value: string;
   onChange: (value: string) => void;
-  onBookSelect: (bookId: string | null, title: string, author: string) => void;
+  onBookSelect: (bookId: string | null, title: string, author: string, source?: 'catalog' | 'history') => void;
   disabled?: boolean;
   lang: string;
 }
@@ -92,7 +92,7 @@ export const BookAutocomplete = ({
   const handleSelectBook = (book: Book | null) => {
     if (book) {
       onChange(book.title);
-      onBookSelect(book.id, book.title, book.author);
+      onBookSelect(book.id, book.title, book.author, book.source);
     } else {
       // User chose "use exactly what I typed"
       onBookSelect(null, value, "");

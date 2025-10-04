@@ -155,9 +155,16 @@ const Home = () => {
     }
   }, [location]);
 
-  const handleBookSelect = (selectedBookId: string | null, title: string, author: string) => {
+  const handleBookSelect = (selectedBookId: string | null, title: string, author: string, source?: 'catalog' | 'history') => {
     setBookId(selectedBookId);
     setBookTitle(title);
+    
+    // If it's from history, navigate directly to the existing summary
+    if (source === 'history' && selectedBookId) {
+      console.log('✅ Navigating to existing summary from history:', selectedBookId);
+      navigate(`/summary/${selectedBookId}`);
+      return;
+    }
     
     if (!selectedBookId) {
       // User chose "use exactly what I typed" - need to ask for author
