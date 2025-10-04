@@ -191,11 +191,13 @@ const Home = () => {
       return;
     }
 
-    // If no bookId and no author, ask for details
-    if (!bookId && !bookAuthor.trim()) {
+    // If no author, ask for details
+    if (!bookAuthor.trim()) {
+      console.log('⚠️ Missing author, showing modal');
       setShowDetailsModal(true);
       return;
     }
+    console.log('✅ Ready to generate:', { bookTitle, bookAuthor, bookId });
 
     // Ensure user is authenticated
     const { data: { session } } = await supabase.auth.getSession();
