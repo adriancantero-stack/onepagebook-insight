@@ -355,7 +355,6 @@ export type Database = {
           id: string
           lang: string
           popularity: number
-          similarity_score: number
           title: string
         }[]
       }

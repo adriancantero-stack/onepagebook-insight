@@ -41,14 +41,12 @@ serve(async (req) => {
     if (error) {
       console.error("Database error:", error);
       
-      // Fallback to simple search if RPC fails
+      // Fallback to simple search if RPC fails - use normalized search
       const { data: fallbackBooks, error: fallbackError } = await supabase
         .from("books")
         .select("id, title, author, lang, cover_url, popularity")
         .eq("is_active", true)
         .eq("lang", lang)
-        .or(`title.ilike.%${query}%,author.ilike.%${query}%`)
-        .order("popularity", { ascending: false })
         .limit(limit);
 
       if (fallbackError) throw fallbackError;
