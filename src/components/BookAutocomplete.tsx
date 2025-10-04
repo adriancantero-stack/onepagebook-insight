@@ -162,22 +162,44 @@ export const BookAutocomplete = ({
 
   const getFallbackText = () => {
     switch (lang) {
-      case "en": return `Use exactly what I typed: "${value}"`;
-      case "es": return `Usar exactamente lo que escribí: "${value}"`;
-      default: return `Usar exatamente o que digitei: "${value}"`;
+      case "en": return (
+        <div>
+          <div className="font-medium">{value}</div>
+          <div className="text-xs text-muted-foreground">Not in catalog? We'll generate it for you!</div>
+        </div>
+      );
+      case "es": return (
+        <div>
+          <div className="font-medium">{value}</div>
+          <div className="text-xs text-muted-foreground">¿No está en el catálogo? ¡Lo generaremos para ti!</div>
+        </div>
+      );
+      default: return (
+        <div>
+          <div className="font-medium">{value}</div>
+          <div className="text-xs text-muted-foreground">Não está no catálogo? Vamos gerar para você!</div>
+        </div>
+      );
     }
   };
 
   return (
     <div ref={wrapperRef} className="relative">
-      <Input
-        placeholder={t("home.bookTitlePlaceholder")}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onKeyDown={handleKeyDown}
-        disabled={disabled}
-        autoComplete="off"
-      />
+      <div className="space-y-1">
+        <Input
+          placeholder={t("home.bookTitlePlaceholder")}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onKeyDown={handleKeyDown}
+          disabled={disabled}
+          autoComplete="off"
+        />
+        <p className="text-xs text-muted-foreground px-1">
+          {lang === "en" && "Search by book title or author"}
+          {lang === "es" && "Busca por título o autor"}
+          {lang === "pt" && "Busque por título ou autor"}
+        </p>
+      </div>
 
       {showDropdown && (
         <div className="absolute z-50 w-full mt-1 bg-background border border-border rounded-md shadow-lg max-h-80 overflow-y-auto">
