@@ -343,6 +343,22 @@ export type Database = {
         Args: { "": string }
         Returns: string
       }
+      search_books: {
+        Args: {
+          result_limit?: number
+          search_lang: string
+          search_query: string
+        }
+        Returns: {
+          author: string
+          cover_url: string
+          id: string
+          lang: string
+          popularity: number
+          similarity_score: number
+          title: string
+        }[]
+      }
       set_limit: {
         Args: { "": number }
         Returns: number
