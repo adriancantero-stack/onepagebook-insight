@@ -339,6 +339,10 @@ export type Database = {
         Args: { text_input: string }
         Returns: string
       }
+      normalize_text: {
+        Args: { "": string }
+        Returns: string
+      }
       set_limit: {
         Args: { "": number }
         Returns: number
@@ -350,6 +354,14 @@ export type Database = {
       show_trgm: {
         Args: { "": string }
         Returns: string[]
+      }
+      unaccent: {
+        Args: { "": string }
+        Returns: string
+      }
+      unaccent_init: {
+        Args: { "": unknown }
+        Returns: unknown
       }
     }
     Enums: {

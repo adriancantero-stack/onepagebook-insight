@@ -28,42 +28,43 @@ serve(async (req) => {
 
     console.log("Searching for:", query, "in language:", lang);
 
-    // Search with prefix match prioritized, then fuzzy match
-    const { data: books, error } = await supabase
-      .from("books")
-      .select("id, title, author, lang, cover_url, popularity")
-      .eq("is_active", true)
-      .eq("lang", lang)
-      .or(`title.ilike.${query}%,title.ilike.%${query}%,author.ilike.${query}%,author.ilike.%${query}%`)
-      .order("popularity", { ascending: false })
-      .limit(limit);
+    // Normalize the query (remove accents, lowercase)
+    const normalizedQuery = query.toLowerCase();
+
+    // Use RPC to call custom search function with fuzzy matching
+    const { data: books, error } = await supabase.rpc("search_books", {
+      search_query: normalizedQuery,
+      search_lang: lang,
+      result_limit: limit,
+    });
 
     if (error) {
       console.error("Database error:", error);
-      throw error;
+      
+      // Fallback to simple search if RPC fails
+      const { data: fallbackBooks, error: fallbackError } = await supabase
+        .from("books")
+        .select("id, title, author, lang, cover_url, popularity")
+        .eq("is_active", true)
+        .eq("lang", lang)
+        .or(`title.ilike.%${query}%,author.ilike.%${query}%`)
+        .order("popularity", { ascending: false })
+        .limit(limit);
+
+      if (fallbackError) throw fallbackError;
+      
+      console.log("Using fallback search, found books:", fallbackBooks?.length || 0);
+      
+      return new Response(
+        JSON.stringify({ books: fallbackBooks || [] }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     console.log("Found books:", books?.length || 0);
 
-    // Sort results: prefix match first, then fuzzy match
-    const sortedBooks = (books || []).sort((a, b) => {
-      const queryLower = query.toLowerCase();
-      const aTitleLower = a.title.toLowerCase();
-      const bTitleLower = b.title.toLowerCase();
-
-      // Prioritize exact prefix matches
-      const aStartsWith = aTitleLower.startsWith(queryLower);
-      const bStartsWith = bTitleLower.startsWith(queryLower);
-
-      if (aStartsWith && !bStartsWith) return -1;
-      if (!aStartsWith && bStartsWith) return 1;
-
-      // Then by popularity
-      return b.popularity - a.popularity;
-    });
-
     return new Response(
-      JSON.stringify({ books: sortedBooks }),
+      JSON.stringify({ books: books || [] }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
