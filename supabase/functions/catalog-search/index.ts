@@ -43,11 +43,12 @@ serve(async (req) => {
     }
 
     // Search in history (book_summaries table)
+    // Using textSearch with websearch_to_tsquery for better compatibility
     const { data: historyBooks, error: historyError } = await supabase
       .from("book_summaries")
       .select("id, book_title, book_author, language")
       .eq("language", lang)
-      .or(`book_title.ilike.%${query}%,book_author.ilike.%${query}%`)
+      .or(`book_title.ilike.*${normalizedQuery}*,book_author.ilike.*${normalizedQuery}*`)
       .limit(limit);
 
     if (historyError) {
