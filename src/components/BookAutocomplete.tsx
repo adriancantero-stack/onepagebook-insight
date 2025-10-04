@@ -11,6 +11,7 @@ interface Book {
   lang: string;
   cover_url?: string;
   popularity: number;
+  source?: 'catalog' | 'history'; // Para diferenciar de onde veio o resultado
 }
 
 interface BookAutocompleteProps {
@@ -162,24 +163,9 @@ export const BookAutocomplete = ({
 
   const getFallbackText = () => {
     switch (lang) {
-      case "en": return (
-        <div>
-          <div className="font-medium">{value}</div>
-          <div className="text-xs text-muted-foreground">Not in catalog? We'll generate it for you!</div>
-        </div>
-      );
-      case "es": return (
-        <div>
-          <div className="font-medium">{value}</div>
-          <div className="text-xs text-muted-foreground">¿No está en el catálogo? ¡Lo generaremos para ti!</div>
-        </div>
-      );
-      default: return (
-        <div>
-          <div className="font-medium">{value}</div>
-          <div className="text-xs text-muted-foreground">Não está no catálogo? Vamos gerar para você!</div>
-        </div>
-      );
+      case "en": return `Continue with: "${value}"`;
+      case "es": return `Continuar con: "${value}"`;
+      default: return `Continuar com: "${value}"`;
     }
   };
 
@@ -245,9 +231,16 @@ export const BookAutocomplete = ({
                       {book.author}
                     </div>
                   </div>
-                  <span className="text-xs px-2 py-1 bg-primary/10 rounded">
-                    {book.lang.toUpperCase()}
-                  </span>
+                  <div className="flex flex-col items-end gap-1">
+                    <span className="text-xs px-2 py-1 bg-primary/10 rounded">
+                      {book.lang.toUpperCase()}
+                    </span>
+                    {book.source === 'history' && (
+                      <span className="text-xs px-2 py-1 bg-green-500/10 text-green-600 rounded">
+                        {lang === "en" ? "Generated" : lang === "es" ? "Generado" : "Gerado"}
+                      </span>
+                    )}
+                  </div>
                 </button>
               ))}
               <button

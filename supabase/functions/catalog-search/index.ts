@@ -31,38 +31,57 @@ serve(async (req) => {
     // Normalize the query (remove accents, lowercase)
     const normalizedQuery = query.toLowerCase();
 
-    // Use RPC to call custom search function with fuzzy matching
-    const { data: books, error } = await supabase.rpc("search_books", {
+    // Search in catalog (books table)
+    const { data: catalogBooks, error: catalogError } = await supabase.rpc("search_books", {
       search_query: normalizedQuery,
       search_lang: lang,
       result_limit: limit,
     });
 
-    if (error) {
-      console.error("Database error:", error);
-      
-      // Fallback to simple search if RPC fails - use normalized search
-      const { data: fallbackBooks, error: fallbackError } = await supabase
-        .from("books")
-        .select("id, title, author, lang, cover_url, popularity")
-        .eq("is_active", true)
-        .eq("lang", lang)
-        .limit(limit);
-
-      if (fallbackError) throw fallbackError;
-      
-      console.log("Using fallback search, found books:", fallbackBooks?.length || 0);
-      
-      return new Response(
-        JSON.stringify({ books: fallbackBooks || [] }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+    if (catalogError) {
+      console.error("Catalog search error:", catalogError);
     }
 
-    console.log("Found books:", books?.length || 0);
+    // Search in history (book_summaries table)
+    const { data: historyBooks, error: historyError } = await supabase
+      .from("book_summaries")
+      .select("id, book_title, book_author, language")
+      .eq("language", lang)
+      .or(`book_title.ilike.%${query}%,book_author.ilike.%${query}%`)
+      .limit(limit);
+
+    if (historyError) {
+      console.error("History search error:", historyError);
+    }
+
+    // Combine results from catalog and history
+    const catalogResults = (catalogBooks || []).map((book: any) => ({
+      ...book,
+      source: 'catalog'
+    }));
+
+    const historyResults = (historyBooks || []).map((summary: any) => ({
+      id: summary.id,
+      title: summary.book_title,
+      author: summary.book_author,
+      lang: summary.language,
+      popularity: 0,
+      source: 'history'
+    }));
+
+    // Deduplicate by title+author combination (prefer catalog results)
+    const seen = new Set<string>();
+    const combinedBooks = [...catalogResults, ...historyResults].filter(book => {
+      const key = `${book.title.toLowerCase()}-${book.author?.toLowerCase() || ''}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }).slice(0, limit);
+
+    console.log("Found books - Catalog:", catalogResults.length, "History:", historyResults.length, "Combined:", combinedBooks.length);
 
     return new Response(
-      JSON.stringify({ books: books || [] }),
+      JSON.stringify({ books: combinedBooks }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
