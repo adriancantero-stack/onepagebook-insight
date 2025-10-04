@@ -521,7 +521,8 @@ const Summary = () => {
       const { data, error } = await supabase.functions.invoke('text-to-speech', {
         body: { 
           text: fullText,
-          language: language
+          language: language,
+          summaryId: id
         }
       });
 
@@ -542,110 +543,40 @@ const Summary = () => {
         throw new Error(error.message || 'Failed to generate audio');
       }
 
-      // Handle both new format (audioChunks) and old format (audioContent)
-      if (data?.audioChunks && Array.isArray(data.audioChunks)) {
-        // New chunked format
-        console.log(`✅ [TTS] Received ${data.audioChunks.length} audio chunks`);
-        
-        // Save to cache storage
-        try {
-          console.log('💾 [Cache] Saving audio to storage...');
-          await saveAudioToCache(
-            id!,
-            i18n.language,
-            data.audioChunks,
-            data.mimeType || 'audio/mpeg'
-          );
-          
-          // Get the cached audio with signed URL
-          const savedAudio = await getCachedAudio(id!, i18n.language);
-          if (savedAudio?.signedUrl) {
-            console.log('✅ [Cache] Audio saved and loaded from storage');
-            setAudioSrc([savedAudio.signedUrl]);
-          } else {
-            // Fallback to blob URLs if cache fails
-            console.log('⚠️ [Cache] Failed to load from storage, using blob URLs');
-            const audioUrls = data.audioChunks.map((chunk: string, index: number) => {
-              const audioBlob = new Blob(
-                [Uint8Array.from(atob(chunk), c => c.charCodeAt(0))],
-                { type: data.mimeType || 'audio/mpeg' }
-              );
-              const url = URL.createObjectURL(audioBlob);
-              console.log(`🎵 [TTS] Created blob URL ${index + 1}/${data.audioChunks.length}:`, url, 'size:', audioBlob.size);
-              return url;
-            });
-            setAudioSrc(audioUrls);
+      // Handle new URL-based format
+      if (data?.audioUrl) {
+        console.log(`✅ [TTS] Received audio URL (cached: ${data.cached})`);
+        setAudioSrc(data.audioUrl);
+        setShowAudioPlayer(true);
+
+        // Increment counter only if audio was newly generated (not cached)
+        if (!data.cached) {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            const { data: subscription } = await supabase
+              .from("user_subscriptions")
+              .select("*, subscription_plans(*)")
+              .eq("user_id", user.id)
+              .single();
+
+            const plan = subscription?.subscription_plans;
+            if (plan?.type === "free") {
+              const used = await incrementAudio(user.id);
+              toast({
+                title: t("limit.toasts.audio.ok").replace("{used}", String(used)),
+              });
+            } else {
+              toast({
+                title: t("summary.audioGenerated"),
+                description: t("summary.cachedForFuture"),
+              });
+            }
           }
-        } catch (cacheError) {
-          console.error('🚨 [Cache] Error saving to cache, using blob URLs:', cacheError);
-          // Fallback to blob URLs
-          const audioUrls = data.audioChunks.map((chunk: string) => {
-            const audioBlob = new Blob(
-              [Uint8Array.from(atob(chunk), c => c.charCodeAt(0))],
-              { type: data.mimeType || 'audio/mpeg' }
-            );
-            return URL.createObjectURL(audioBlob);
+        } else {
+          toast({
+            title: t("summary.audioReady"),
+            description: "Áudio recuperado do cache",
           });
-          setAudioSrc(audioUrls);
-        }
-        
-        console.log('🎵 [TTS] Setting showAudioPlayer to true');
-        setShowAudioPlayer(true);
-
-        // Increment counter only on success for free users
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          const { data: subscription } = await supabase
-            .from("user_subscriptions")
-            .select("*, subscription_plans(*)")
-            .eq("user_id", user.id)
-            .single();
-
-          const plan = subscription?.subscription_plans;
-          if (plan?.type === "free") {
-            const used = await incrementAudio(user.id);
-            toast({
-              title: t("limit.toasts.audio.ok").replace("{used}", String(used)),
-            });
-          } else {
-            toast({
-              title: t("summary.audioGenerated"),
-              description: t("summary.cachedForFuture"),
-            });
-          }
-        }
-      } else if (data?.audioContent) {
-        // Old single audio format (backward compatibility)
-        const audioBlob = new Blob(
-          [Uint8Array.from(atob(data.audioContent), c => c.charCodeAt(0))],
-          { type: 'audio/mpeg' }
-        );
-        const audioUrl = URL.createObjectURL(audioBlob);
-        
-        setAudioSrc(audioUrl);
-        setShowAudioPlayer(true);
-
-        // Increment counter only on success for free users
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          const { data: subscription } = await supabase
-            .from("user_subscriptions")
-            .select("*, subscription_plans(*)")
-            .eq("user_id", user.id)
-            .single();
-
-          const plan = subscription?.subscription_plans;
-          if (plan?.type === "free") {
-            const used = await incrementAudio(user.id);
-            toast({
-              title: t("limit.toasts.audio.ok").replace("{used}", String(used)),
-            });
-          } else {
-            toast({
-              title: t("summary.audioGenerated"),
-              description: t("summary.audioReady"),
-            });
-          }
         }
       } else {
         throw new Error('No audio content received from server');
@@ -743,7 +674,7 @@ const Summary = () => {
                 🔊 {t("summary.audioPlayer")}
               </h3>
               <AudioPlayer 
-                audioSrc={audioSrc}
+                audioUrl={audioSrc as string}
               />
             </div>
           )}

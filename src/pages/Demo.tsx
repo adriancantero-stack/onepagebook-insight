@@ -14,7 +14,7 @@ const Demo = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
-  const [audioSrc, setAudioSrc] = useState<string | string[] | null>(null);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
 
   const pickVoice = (locale: string): string => {
@@ -35,7 +35,7 @@ const Demo = () => {
     const cached = localStorage.getItem(cacheKey);
     
     if (cached) {
-      setAudioSrc(cached);
+      setAudioUrl(cached);
       setShowAudioPlayer(true);
       return;
     }
@@ -68,13 +68,13 @@ const Demo = () => {
       if (error) throw error;
 
       if (data?.audioContent) {
-        const audioUrl = `data:audio/mp3;base64,${data.audioContent}`;
-        setAudioSrc(audioUrl);
+        const url = `data:audio/mp3;base64,${data.audioContent}`;
+        setAudioUrl(url);
         setShowAudioPlayer(true);
         
         // Cache audio URL
         try {
-          localStorage.setItem(cacheKey, audioUrl);
+          localStorage.setItem(cacheKey, url);
         } catch (e) {
           console.warn('Could not cache audio:', e);
         }
@@ -151,8 +151,8 @@ const Demo = () => {
               {isGeneratingAudio ? t("summary.generating") : t("demo.audio.generate")}
             </Button>
 
-            {showAudioPlayer && audioSrc && (
-              <AudioPlayer audioSrc={audioSrc} />
+            {showAudioPlayer && audioUrl && (
+              <AudioPlayer audioUrl={audioUrl} />
             )}
           </div>
 

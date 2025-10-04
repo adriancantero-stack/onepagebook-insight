@@ -1,4 +1,5 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.58.0'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -80,13 +81,59 @@ serve(async (req) => {
   }
 
   try {
-    const { text, language } = await req.json()
-
-    if (!text) {
-      throw new Error('Text is required')
+    const { text, language, summaryId } = await req.json()
+    
+    // Get auth header
+    const authHeader = req.headers.get('Authorization')
+    if (!authHeader) {
+      throw new Error('No authorization header')
     }
 
-    console.log('Generating speech for text length:', text.length, 'language:', language)
+    // Initialize Supabase client
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    const supabase = createClient(supabaseUrl, supabaseKey, {
+      global: {
+        headers: { Authorization: authHeader }
+      }
+    })
+
+    if (!text || !summaryId) {
+      throw new Error('Text and summaryId are required')
+    }
+
+    console.log('Processing audio request for summary:', summaryId, 'language:', language)
+
+    // Check if audio already exists in cache
+    const { data: existingAudio, error: audioError } = await supabase
+      .from('book_audio')
+      .select('audio_url')
+      .eq('book_summary_id', summaryId)
+      .eq('language', language)
+      .single()
+
+    if (existingAudio && !audioError) {
+      console.log('Audio found in cache, returning URL')
+      
+      // Get signed URL for the audio file
+      const { data: signedUrl } = await supabase.storage
+        .from('book-audio')
+        .createSignedUrl(existingAudio.audio_url, 3600) // 1 hour expiry
+      
+      if (signedUrl) {
+        return new Response(
+          JSON.stringify({ 
+            audioUrl: signedUrl.signedUrl,
+            cached: true
+          }),
+          {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        )
+      }
+    }
+
+    console.log('Audio not in cache, generating new audio for text length:', text.length)
 
     // Map language to appropriate voice
     const voiceMap: { [key: string]: string } = {
@@ -142,10 +189,76 @@ serve(async (req) => {
       audioChunks.push(base64Audio);
     }
 
+    // Combine all audio chunks into a single file
+    console.log('Combining audio chunks...')
+    const combinedAudioData = audioChunks.map(chunk => {
+      const binary = atob(chunk)
+      const bytes = new Uint8Array(binary.length)
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i)
+      }
+      return bytes
+    })
+
+    // Calculate total size and combine
+    const totalSize = combinedAudioData.reduce((acc, chunk) => acc + chunk.length, 0)
+    const combinedAudio = new Uint8Array(totalSize)
+    let offset = 0
+    for (const chunk of combinedAudioData) {
+      combinedAudio.set(chunk, offset)
+      offset += chunk.length
+    }
+
+    // Upload to storage
+    const fileName = `${summaryId}/${language}.mp3`
+    console.log('Uploading to storage:', fileName)
+    
+    const { error: uploadError } = await supabase.storage
+      .from('book-audio')
+      .upload(fileName, combinedAudio, {
+        contentType: 'audio/mpeg',
+        upsert: true
+      })
+
+    if (uploadError) {
+      console.error('Error uploading to storage:', uploadError)
+      throw uploadError
+    }
+
+    // Save metadata to database
+    console.log('Saving metadata to database...')
+    const { error: dbError } = await supabase
+      .from('book_audio')
+      .upsert({
+        book_summary_id: summaryId,
+        language: language,
+        audio_url: fileName,
+        file_size: totalSize,
+        duration_seconds: null // We don't calculate duration
+      }, {
+        onConflict: 'book_summary_id,language'
+      })
+
+    if (dbError) {
+      console.error('Error saving to database:', dbError)
+      throw dbError
+    }
+
+    // Get signed URL for the uploaded file
+    const { data: signedUrl } = await supabase.storage
+      .from('book-audio')
+      .createSignedUrl(fileName, 3600) // 1 hour expiry
+
+    if (!signedUrl) {
+      throw new Error('Failed to generate signed URL')
+    }
+
+    console.log('Audio generated and cached successfully')
+
     return new Response(
       JSON.stringify({ 
-        audioChunks,
-        mimeType: 'audio/mpeg'
+        audioUrl: signedUrl.signedUrl,
+        cached: false
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

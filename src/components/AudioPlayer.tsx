@@ -4,44 +4,24 @@ import { Play, Pause, Square, Volume2 } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 
 interface AudioPlayerProps {
-  audioSrc: string | string[];
+  audioUrl: string;
   onEnded?: () => void;
 }
 
-const AudioPlayer = ({ audioSrc, onEnded }: AudioPlayerProps) => {
+const AudioPlayer = ({ audioUrl, onEnded }: AudioPlayerProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1);
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
 
-  const playlist = Array.isArray(audioSrc) ? audioSrc : [audioSrc];
-  const currentAudioSrc = playlist[currentTrackIndex];
-
-  // Reset state when audioSrc changes (new summary loaded)
+  // Reset state when audioUrl changes (new summary loaded)
   useEffect(() => {
-    console.log('🎵 [AudioPlayer] audioSrc changed:', audioSrc);
-    setCurrentTrackIndex(0);
+    console.log('🎵 [AudioPlayer] audioUrl changed:', audioUrl);
     setCurrentTime(0);
     setDuration(0);
     setIsPlaying(false);
-  }, [audioSrc]);
-
-  // Auto-play next track when currentTrackIndex changes
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio || currentTrackIndex === 0) return;
-
-    // Small delay to ensure audio element is ready
-    const timer = setTimeout(() => {
-      if (isPlaying) {
-        audio.play().catch(err => console.error('Autoplay failed:', err));
-      }
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, [currentTrackIndex, isPlaying]);
+  }, [audioUrl]);
 
   // Setup audio event listeners
   useEffect(() => {
@@ -57,22 +37,12 @@ const AudioPlayer = ({ audioSrc, onEnded }: AudioPlayerProps) => {
     };
 
     const handleEnded = () => {
-      console.log('🎵 [AudioPlayer] Track ended. Current:', currentTrackIndex, 'Total:', playlist.length);
-      // Check if there are more tracks in the playlist
-      if (currentTrackIndex < playlist.length - 1) {
-        console.log('🎵 [AudioPlayer] Moving to next track');
-        setCurrentTrackIndex(prev => prev + 1);
-        setCurrentTime(0);
-      } else {
-        // End of playlist
-        console.log('🎵 [AudioPlayer] Playlist finished');
-        setIsPlaying(false);
-        setCurrentTime(0);
-        setCurrentTrackIndex(0);
-        if (onEnded) {
-          console.log('🎵 [AudioPlayer] Calling onEnded callback');
-          onEnded();
-        }
+      console.log('🎵 [AudioPlayer] Audio playback finished');
+      setIsPlaying(false);
+      setCurrentTime(0);
+      if (onEnded) {
+        console.log('🎵 [AudioPlayer] Calling onEnded callback');
+        onEnded();
       }
     };
 
@@ -105,7 +75,7 @@ const AudioPlayer = ({ audioSrc, onEnded }: AudioPlayerProps) => {
       audio.removeEventListener('loadstart', handleLoadStart);
       audio.removeEventListener('canplay', handleCanPlay);
     };
-  }, [currentTrackIndex, playlist.length, onEnded]);
+  }, [onEnded]);
 
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -159,13 +129,7 @@ const AudioPlayer = ({ audioSrc, onEnded }: AudioPlayerProps) => {
 
   return (
     <div className="w-full bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-      <audio ref={audioRef} src={currentAudioSrc} key={currentTrackIndex} />
-      
-      {playlist.length > 1 && (
-        <div className="text-sm text-muted-foreground mb-2">
-          Parte {currentTrackIndex + 1} de {playlist.length}
-        </div>
-      )}
+      <audio ref={audioRef} src={audioUrl} />
       
       <div className="flex items-center gap-4 mb-4">
         <Button
