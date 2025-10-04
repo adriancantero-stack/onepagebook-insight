@@ -28,12 +28,12 @@ serve(async (req) => {
 
     console.log("Searching for:", query, "in language:", lang);
 
-    // Normalize the query (remove accents, lowercase)
-    const normalizedQuery = query.toLowerCase();
+    // Pass the query as-is to the search function (it will handle normalization)
+    const searchQuery = query;
 
     // Search in catalog (books table)
     const { data: catalogBooks, error: catalogError } = await supabase.rpc("search_books", {
-      search_query: normalizedQuery,
+      search_query: searchQuery,
       search_lang: lang,
       result_limit: limit,
     });
@@ -43,12 +43,12 @@ serve(async (req) => {
     }
 
     // Search in history (book_summaries table)
-    // Using textSearch with websearch_to_tsquery for better compatibility
+    // Using ilike for case-insensitive search (PostgreSQL handles accent-insensitive via unaccent in indexes)
     const { data: historyBooks, error: historyError } = await supabase
       .from("book_summaries")
       .select("id, book_title, book_author, language")
       .eq("language", lang)
-      .or(`book_title.ilike.*${normalizedQuery}*,book_author.ilike.*${normalizedQuery}*`)
+      .or(`book_title.ilike.*${searchQuery}*,book_author.ilike.*${searchQuery}*`)
       .limit(limit);
 
     if (historyError) {
