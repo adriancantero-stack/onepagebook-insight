@@ -26,6 +26,7 @@ import {
   FlatIndexItem,
   Book
 } from "@/data/bookCatalog";
+import { supabase } from "@/integrations/supabase/client";
 
 // Trending storage helpers
 const getTrendingData = (): Record<string, number> => {
@@ -56,9 +57,26 @@ const Explore = () => {
   const [filterLevel, setFilterLevel] = useState<string[]>([]);
   const [filterLang, setFilterLang] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
+  const [totalBooksCount, setTotalBooksCount] = useState(0);
 
   // Create flat index filtered by current locale
   const flatIndex = useMemo(() => createFlatIndex(i18n.language), [i18n.language]);
+
+  // Fetch total books count (catalog + user generated)
+  useEffect(() => {
+    const fetchTotalCount = async () => {
+      const catalogCount = flatIndex.length;
+      
+      const { count: userBooksCount } = await supabase
+        .from('book_summaries')
+        .select('*', { count: 'exact', head: true })
+        .eq('language', i18n.language);
+      
+      setTotalBooksCount(catalogCount + (userBooksCount || 0));
+    };
+
+    fetchTotalCount();
+  }, [flatIndex.length, i18n.language]);
 
   // Sort categories alphabetically by translated name
   const sortedCategories = useMemo(() => {
@@ -355,7 +373,7 @@ const Explore = () => {
       <main className="container mx-auto px-4 py-6 sm:py-8 max-w-6xl flex-1">
         <div className="mb-6 sm:mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold mb-4">
-            {t("explore.title")} <span className="text-xl sm:text-2xl text-muted-foreground">({flatIndex.length} {t("explore.books")})</span>
+            {t("explore.title")} <span className="text-xl sm:text-2xl text-muted-foreground">({totalBooksCount} {t("explore.books")})</span>
           </h1>
           
           <div className="relative max-w-xl">
