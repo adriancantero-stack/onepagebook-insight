@@ -144,6 +144,45 @@ export type Database = {
           },
         ]
       }
+      books: {
+        Row: {
+          author: string
+          cover_url: string | null
+          created_at: string
+          id: string
+          is_active: boolean | null
+          lang: string
+          popularity: number | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author: string
+          cover_url?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          lang: string
+          popularity?: number | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string
+          cover_url?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          lang?: string
+          popularity?: number | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -269,6 +308,26 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      gtrgm_compress: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      gtrgm_decompress: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      gtrgm_in: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      gtrgm_options: {
+        Args: { "": unknown }
+        Returns: undefined
+      }
+      gtrgm_out: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -279,6 +338,18 @@ export type Database = {
       normalize_cache_text: {
         Args: { text_input: string }
         Returns: string
+      }
+      set_limit: {
+        Args: { "": number }
+        Returns: number
+      }
+      show_limit: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
+      show_trgm: {
+        Args: { "": string }
+        Returns: string[]
       }
     }
     Enums: {

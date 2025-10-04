@@ -1,0 +1,245 @@
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useTranslation } from "react-i18next";
+import { Input } from "@/components/ui/input";
+import { Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Book {
+  id: string;
+  title: string;
+  author: string;
+  lang: string;
+  cover_url?: string;
+  popularity: number;
+}
+
+interface BookAutocompleteProps {
+  value: string;
+  onChange: (value: string) => void;
+  onBookSelect: (bookId: string | null, title: string, author: string) => void;
+  disabled?: boolean;
+  lang: string;
+}
+
+export const BookAutocomplete = ({ 
+  value, 
+  onChange, 
+  onBookSelect, 
+  disabled,
+  lang 
+}: BookAutocompleteProps) => {
+  const { t } = useTranslation();
+  const [suggestions, setSuggestions] = useState<Book[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const debounceRef = useRef<number>();
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const fetchSuggestions = useCallback(async (query: string) => {
+    if (query.length < 2) {
+      setSuggestions([]);
+      setShowDropdown(false);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("catalog-search", {
+        body: { query, lang, limit: 8 }
+      });
+
+      if (error) throw error;
+      
+      setSuggestions(data?.books || []);
+      setShowDropdown(true);
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+      setSuggestions([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [lang]);
+
+  useEffect(() => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    debounceRef.current = window.setTimeout(() => {
+      fetchSuggestions(value);
+    }, 200);
+
+    return () => {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+      }
+    };
+  }, [value, fetchSuggestions]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSelectBook = (book: Book | null) => {
+    if (book) {
+      onChange(book.title);
+      onBookSelect(book.id, book.title, book.author);
+    } else {
+      // User chose "use exactly what I typed"
+      onBookSelect(null, value, "");
+    }
+    setShowDropdown(false);
+    setSelectedIndex(-1);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!showDropdown) return;
+
+    const totalItems = suggestions.length + 1; // +1 for fallback option
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        setSelectedIndex((prev) => (prev + 1) % totalItems);
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setSelectedIndex((prev) => (prev - 1 + totalItems) % totalItems);
+        break;
+      case "Enter":
+        e.preventDefault();
+        if (selectedIndex === suggestions.length) {
+          // Fallback option selected
+          handleSelectBook(null);
+        } else if (selectedIndex >= 0 && selectedIndex < suggestions.length) {
+          handleSelectBook(suggestions[selectedIndex]);
+        }
+        break;
+      case "Escape":
+        e.preventDefault();
+        setShowDropdown(false);
+        setSelectedIndex(-1);
+        break;
+    }
+  };
+
+  const highlightMatch = (text: string, query: string) => {
+    const index = text.toLowerCase().indexOf(query.toLowerCase());
+    if (index === -1) return text;
+
+    return (
+      <>
+        {text.substring(0, index)}
+        <mark className="bg-primary/20 font-medium">{text.substring(index, index + query.length)}</mark>
+        {text.substring(index + query.length)}
+      </>
+    );
+  };
+
+  const getLoadingText = () => {
+    switch (lang) {
+      case "en": return "Searching…";
+      case "es": return "Buscando…";
+      default: return "Procurando…";
+    }
+  };
+
+  const getNoResultsText = () => {
+    switch (lang) {
+      case "en": return "No books found.";
+      case "es": return "No se encontró ningún libro.";
+      default: return "Nenhum livro encontrado.";
+    }
+  };
+
+  const getFallbackText = () => {
+    switch (lang) {
+      case "en": return `Use exactly what I typed: "${value}"`;
+      case "es": return `Usar exactamente lo que escribí: "${value}"`;
+      default: return `Usar exatamente o que digitei: "${value}"`;
+    }
+  };
+
+  return (
+    <div ref={wrapperRef} className="relative">
+      <Input
+        placeholder={t("home.bookTitlePlaceholder")}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyDown={handleKeyDown}
+        disabled={disabled}
+        autoComplete="off"
+      />
+
+      {showDropdown && (
+        <div className="absolute z-50 w-full mt-1 bg-background border border-border rounded-md shadow-lg max-h-80 overflow-y-auto">
+          {loading ? (
+            <div className="p-4 text-center text-muted-foreground flex items-center justify-center gap-2">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              {getLoadingText()}
+            </div>
+          ) : suggestions.length === 0 ? (
+            <>
+              <div className="p-4 text-center text-muted-foreground">
+                {getNoResultsText()}
+              </div>
+              <button
+                className="w-full p-3 text-left hover:bg-accent transition-colors border-t border-border text-sm"
+                onClick={() => handleSelectBook(null)}
+              >
+                {getFallbackText()}
+              </button>
+            </>
+          ) : (
+            <>
+              {suggestions.map((book, index) => (
+                <button
+                  key={book.id}
+                  className={`w-full p-3 text-left hover:bg-accent transition-colors flex items-center gap-3 ${
+                    index === selectedIndex ? "bg-accent" : ""
+                  }`}
+                  onClick={() => handleSelectBook(book)}
+                >
+                  {book.cover_url && (
+                    <img
+                      src={book.cover_url}
+                      alt={book.title}
+                      className="w-10 h-14 object-cover rounded"
+                    />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium truncate">
+                      {highlightMatch(book.title, value)}
+                    </div>
+                    <div className="text-sm text-muted-foreground truncate">
+                      {book.author}
+                    </div>
+                  </div>
+                  <span className="text-xs px-2 py-1 bg-primary/10 rounded">
+                    {book.lang.toUpperCase()}
+                  </span>
+                </button>
+              ))}
+              <button
+                className={`w-full p-3 text-left hover:bg-accent transition-colors border-t border-border text-sm ${
+                  selectedIndex === suggestions.length ? "bg-accent" : ""
+                }`}
+                onClick={() => handleSelectBook(null)}
+              >
+                {getFallbackText()}
+              </button>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};

@@ -3,13 +3,14 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { BookOpen, History, Crown, LogOut, Loader2, Compass, HelpCircle } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import Footer from "@/components/Footer";
 import { UpgradeModal } from "@/components/UpgradeModal";
+import { BookAutocomplete } from "@/components/BookAutocomplete";
+import { BookDetailsModal } from "@/components/BookDetailsModal";
 import { 
   loadUsage, 
   canUseSummary, 
@@ -29,8 +30,10 @@ const Home = () => {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [bookTitle, setBookTitle] = useState("");
   const [bookAuthor, setBookAuthor] = useState("");
+  const [bookId, setBookId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [genState, setGenState] = useState<GenState>({
     open: false,
     step: "resolve",
@@ -151,6 +154,25 @@ const Home = () => {
     }
   }, [location]);
 
+  const handleBookSelect = (selectedBookId: string | null, title: string, author: string) => {
+    setBookId(selectedBookId);
+    setBookTitle(title);
+    
+    if (!selectedBookId) {
+      // User chose "use exactly what I typed" - need to ask for author
+      setShowDetailsModal(true);
+    } else {
+      // Book from catalog selected - we have both title and author
+      setBookAuthor(author);
+    }
+  };
+
+  const handleDetailsConfirm = (title: string, author: string) => {
+    setBookTitle(title);
+    setBookAuthor(author);
+    setBookId(null);
+  };
+
   const handleGenerateSummary = async () => {
     if (!bookTitle.trim()) {
       toast({
@@ -158,6 +180,12 @@ const Home = () => {
         title: t("toast.error"),
         description: t("toast.bookTitleRequired"),
       });
+      return;
+    }
+
+    // If no bookId and no author, ask for details
+    if (!bookId && !bookAuthor.trim()) {
+      setShowDetailsModal(true);
       return;
     }
 
@@ -210,6 +238,7 @@ const Home = () => {
       // Start API call (don't await yet) - supabase.functions.invoke already sends auth token
       const summaryPromise = supabase.functions.invoke("generate-summary", {
         body: {
+          bookId,
           bookTitle,
           bookAuthor,
           language: i18n.language,
@@ -402,25 +431,25 @@ const Home = () => {
               <label className="block text-sm font-medium mb-2">
                 {t("home.bookTitle")} *
               </label>
-              <Input
-                placeholder={t("home.bookTitlePlaceholder")}
+              <BookAutocomplete
                 value={bookTitle}
-                onChange={(e) => setBookTitle(e.target.value)}
+                onChange={setBookTitle}
+                onBookSelect={handleBookSelect}
                 disabled={loading}
+                lang={i18n.language}
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                {t("home.bookAuthor")}
-              </label>
-              <Input
-                placeholder={t("home.bookAuthorPlaceholder")}
-                value={bookAuthor}
-                onChange={(e) => setBookAuthor(e.target.value)}
-                disabled={loading}
-              />
-            </div>
+            {bookAuthor && (
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  {t("home.bookAuthor")}
+                </label>
+                <div className="text-sm text-muted-foreground p-3 bg-muted rounded-md">
+                  {bookAuthor}
+                </div>
+              </div>
+            )}
 
             <Button
               onClick={handleGenerateSummary}
@@ -450,6 +479,14 @@ const Home = () => {
         open={showUpgradeModal}
         onOpenChange={setShowUpgradeModal}
         type="summary"
+      />
+
+      <BookDetailsModal
+        open={showDetailsModal}
+        onOpenChange={setShowDetailsModal}
+        initialTitle={bookTitle}
+        onConfirm={handleDetailsConfirm}
+        lang={i18n.language}
       />
     </div>
   );
