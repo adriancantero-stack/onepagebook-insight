@@ -17,6 +17,7 @@ import {
   incrementSummary, 
   ensureMonth 
 } from "@/lib/usageManager";
+import { getCachedSummary } from "@/lib/cacheUtils";
 import type { AuthUser, GenStep } from "@/types";
 
 interface GenState {
@@ -205,6 +206,21 @@ const Home = () => {
     setGenState({ open: true, step: "resolve", message: "" });
 
     try {
+      // Check cache first to avoid regenerating
+      const cachedSummary = await getCachedSummary(bookTitle, bookAuthor, i18n.language);
+      
+      if (cachedSummary) {
+        console.log('✅ Found cached summary, redirecting...');
+        toast({
+          title: t("toast.success"),
+          description: t("toast.summaryFound") || "Resumo encontrado!",
+        });
+        setLoading(false);
+        setGenState({ open: false, step: "done", message: "" });
+        navigate(`/summary/${cachedSummary.id}`);
+        return;
+      }
+
       const { data: subscription } = await supabase
         .from("user_subscriptions")
         .select("*, subscription_plans(*)")
