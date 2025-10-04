@@ -429,8 +429,61 @@ serve(async (req) => {
       );
     }
     
+    // Global cache lookup across all users (service role bypasses RLS)
+    const { data: globalHit } = await supabase
+      .from("book_summaries")
+      .select("*")
+      .eq("norm_key", cacheKey)
+      .eq("language", language)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (globalHit) {
+      console.log("✅ [Cache] Global hit! Cloning summary for user:", user.id, "from:", globalHit.id);
+      const { data: cloned, error: cloneError } = await supabase
+        .from("book_summaries")
+        .insert({
+          user_id: user.id,
+          user_title: bookTitle,
+          user_author: bookAuthor || null,
+          book_title: globalHit.book_title,
+          book_author: globalHit.book_author,
+          canonical_title: globalHit.canonical_title,
+          canonical_author: globalHit.canonical_author,
+          year: globalHit.year,
+          source: globalHit.source || "clone",
+          one_liner: globalHit.one_liner,
+          key_ideas: globalHit.key_ideas || [],
+          actions: globalHit.actions || [],
+          routine: globalHit.routine || null,
+          plan_7_days: globalHit.plan_7_days || null,
+          metrics: globalHit.metrics || null,
+          pitfalls: globalHit.pitfalls || null,
+          closing: globalHit.closing || null,
+          theme: globalHit.theme,
+          language: language,
+          norm_key: cacheKey,
+          summary_text: globalHit.summary_text || globalHit.one_liner || "",
+          main_ideas: globalHit.main_ideas || globalHit.key_ideas || [],
+          practical_applications: globalHit.practical_applications || (Array.isArray(globalHit.actions) ? globalHit.actions.join('\n') : null),
+        })
+        .select()
+        .single();
+
+      if (cloneError) {
+        console.error("🚨 [Cache] Failed to clone summary:", cloneError);
+      } else {
+        console.log("✅ [Cache] Cloned summary:", cloned.id);
+        return new Response(
+          JSON.stringify({ summaryId: cloned.id }),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+    }
+
     console.log("❌ [Cache] No cache hit. Generating new summary...");
-    
+
     // Resolve metadata (ONLY Open Library)
     const metadata = await resolveMetadata(bookTitle, bookAuthor, language);
     console.log("Resolved metadata:", metadata);

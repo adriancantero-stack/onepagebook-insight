@@ -245,14 +245,10 @@ const Home = () => {
         }
       }
 
-      // Step: Resolve - 5s (mais tempo para ver as mensagens)
-      await new Promise(resolve => setTimeout(resolve, 5000));
-
-      // Step: Summarize - start API call in background
+      // Fast path: call backend immediately (it will reuse cache or clone if available)
       setGenState({ open: true, step: "summarize", message: "" });
-      
-      // Start API call (don't await yet) - supabase.functions.invoke already sends auth token
-      const summaryPromise = supabase.functions.invoke("generate-summary", {
+
+      const { data, error } = await supabase.functions.invoke("generate-summary", {
         body: {
           bookId,
           bookTitle,
@@ -264,23 +260,10 @@ const Home = () => {
         },
       });
 
-      // Continue showing progress while API processes - 12s
-      await new Promise(resolve => setTimeout(resolve, 12000));
-
-      // Step: Polish - 10s
-      setGenState({ open: true, step: "polish", message: "" });
-      await new Promise(resolve => setTimeout(resolve, 10000));
-
-      // Step: Done - wait for API to finish
-      setGenState({ open: true, step: "done", message: "" });
-      
-      // Now wait for the actual API response
-      const { data, error } = await summaryPromise;
-
       if (error) throw error;
 
-      // Small delay on done before closing
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Mark done quickly
+      setGenState({ open: true, step: "done", message: "" });
 
       // Increment counter only on success for free users
       if (plan?.type === "free") {
@@ -299,7 +282,7 @@ const Home = () => {
       setTimeout(() => {
         setGenState({ open: false, step: "done", message: "" });
         navigate(`/summary/${data.summaryId}`);
-      }, 600);
+      }, 200);
     } catch (error: any) {
       const msg = error?.message || "";
       setGenState({ 
