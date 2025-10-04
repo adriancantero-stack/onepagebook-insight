@@ -837,30 +837,7 @@ Responde SOLO con el JSON, sin texto adicional.`
       console.log("Using AI-provided title with proper formatting:", aiTitle);
     }
 
-    // Check if user has 40 or more summaries, delete oldest if needed
-    const { count } = await supabase
-      .from("book_summaries")
-      .select("*", { count: "exact", head: true })
-      .eq("user_id", user.id);
-
-    if (count && count >= 40) {
-      // Delete the oldest summary
-      const { data: oldestSummary } = await supabase
-        .from("book_summaries")
-        .select("id")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: true })
-        .limit(1)
-        .single();
-
-      if (oldestSummary) {
-        await supabase
-          .from("book_summaries")
-          .delete()
-          .eq("id", oldestSummary.id);
-        console.log("Deleted oldest summary to maintain 40 limit:", oldestSummary.id);
-      }
-    }
+    // Note: Removed 40 summary limit - all summaries are now stored permanently
 
     // Save to database with cache key
     const { data: summary, error: dbError } = await supabase
@@ -900,6 +877,105 @@ Responde SOLO con el JSON, sin texto adicional.`
     }
 
     console.log("Summary saved:", summary.id);
+
+    // Add book to catalog if it doesn't exist
+    const { data: existingBook } = await supabase
+      .from("books")
+      .select("id")
+      .eq("title", finalCanonicalTitle)
+      .eq("author", finalCanonicalAuthor)
+      .eq("lang", language)
+      .maybeSingle();
+
+    if (!existingBook) {
+      console.log("📚 Adding new book to catalog:", finalCanonicalTitle, "by", finalCanonicalAuthor);
+      
+      // Use AI to categorize the book
+      const categorizationPrompt = `Categorize this book into relevant tags (choose 1-3 from this list): productivity, habits, health, mindset, finance, sleep, business, self-help, psychology, leadership, communication, creativity, success, motivation, time-management, focus, wellness, nutrition, exercise, relationships, parenting, education, career, investing, wealth, philosophy, spirituality, science, history, biography.
+
+Book: "${finalCanonicalTitle}" by ${finalCanonicalAuthor}
+
+Return ONLY a JSON array of 1-3 tags: ["tag1", "tag2"]`;
+
+      try {
+        const categorizationResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${lovableApiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "google/gemini-2.5-flash-lite",
+            messages: [
+              {
+                role: "user",
+                content: categorizationPrompt,
+              },
+            ],
+            response_format: { type: "json_object" },
+            max_completion_tokens: 100,
+          }),
+        });
+
+        let tags: string[] = [];
+        
+        if (categorizationResponse.ok) {
+          const categorizationData = await categorizationResponse.json();
+          const content = categorizationData?.choices?.[0]?.message?.content;
+          
+          if (content) {
+            try {
+              const parsed = JSON.parse(content);
+              if (Array.isArray(parsed)) {
+                tags = parsed;
+              } else if (parsed.tags && Array.isArray(parsed.tags)) {
+                tags = parsed.tags;
+              }
+            } catch (e) {
+              console.log("Failed to parse categorization, using theme as tag");
+              tags = [summaryData.theme || theme];
+            }
+          }
+        }
+        
+        // Fallback to theme if no tags
+        if (tags.length === 0) {
+          tags = [summaryData.theme || theme];
+        }
+
+        console.log("📋 Book tags:", tags);
+
+        // Insert into books catalog
+        const { error: bookInsertError } = await supabase
+          .from("books")
+          .insert({
+            title: finalCanonicalTitle,
+            author: finalCanonicalAuthor,
+            lang: language,
+            tags: tags,
+            is_active: true,
+            popularity: 1,
+          });
+
+        if (bookInsertError) {
+          console.error("Failed to add book to catalog:", bookInsertError);
+        } else {
+          console.log("✅ Book added to catalog successfully");
+        }
+      } catch (error) {
+        console.error("Error categorizing/adding book:", error);
+      }
+    } else {
+      // Book exists, increment popularity
+      const { error: updateError } = await supabase
+        .from("books")
+        .update({ popularity: supabase.rpc('increment', { x: 1 }) })
+        .eq("id", existingBook.id);
+        
+      if (!updateError) {
+        console.log("📈 Incremented book popularity");
+      }
+    }
 
     return new Response(
       JSON.stringify({ summaryId: summary.id }),

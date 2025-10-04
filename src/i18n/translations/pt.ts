@@ -95,7 +95,6 @@ export const pt = {
     // History
     "history.title": "Histórico de Resumos",
     "history.upgrade": "Fazer Upgrade",
-    "history.freeNotice": "Usuários gratuitos mantêm os últimos 40 resumos",
     "history.empty": "Você ainda não tem resumos",
     "history.emptyDesc": "Gere seu primeiro resumo para começar!",
     "history.generateFirst": "Gerar Primeiro Resumo",

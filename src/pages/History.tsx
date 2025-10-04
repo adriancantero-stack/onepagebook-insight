@@ -37,19 +37,12 @@ const History = () => {
 
       setSubscription(sub);
 
-      // Load summaries
-      let query = supabase
+      // Load summaries - no limit, all summaries are kept
+      const { data, error } = await supabase
         .from("book_summaries")
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
-
-      // Limit to 40 for free users (backend also maintains this limit)
-      if (sub?.subscription_plans?.type === "free") {
-        query = query.limit(40);
-      }
-
-      const { data, error } = await query;
 
       if (error) throw error;
       setSummaries(data || []);
@@ -97,13 +90,6 @@ const History = () => {
           )}
         </div>
 
-        {isFree && (
-          <Card className="p-4 mb-6 bg-muted">
-            <p className="text-sm text-muted-foreground">
-              📌 {t("history.freeNotice")}
-            </p>
-          </Card>
-        )}
 
         {summaries.length === 0 ? (
           <Card className="p-12 text-center">

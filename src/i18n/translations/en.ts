@@ -153,7 +153,6 @@ export const en = {
     // History
     "history.title": "Summary History",
     "history.upgrade": "Upgrade",
-    "history.freeNotice": "Free users keep the last 40 summaries",
     "history.empty": "You don't have any summaries yet",
     "history.emptyDesc": "Generate your first summary to get started!",
     "history.generateFirst": "Generate First Summary",

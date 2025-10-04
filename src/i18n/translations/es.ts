@@ -153,7 +153,6 @@ export const es = {
     // History
     "history.title": "Historial de Resúmenes",
     "history.upgrade": "Actualizar",
-    "history.freeNotice": "Los usuarios gratuitos mantienen los últimos 40 resúmenes",
     "history.empty": "Aún no tienes resúmenes",
     "history.emptyDesc": "¡Genera tu primer resumen para comenzar!",
     "history.generateFirst": "Generar Primer Resumen",
