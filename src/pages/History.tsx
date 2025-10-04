@@ -67,9 +67,14 @@ const History = () => {
     <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b border-border">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between relative">
-          <Button variant="ghost" onClick={() => navigate("/")} size="sm">
-            <ArrowLeft className="w-4 h-4 mr-1 sm:mr-2" />
-            <span className="hidden sm:inline">Home</span>
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate("/")} 
+            size="sm"
+            className="gap-0 sm:gap-2 flex-col sm:flex-row px-2 sm:px-4 h-auto sm:h-9 py-1 sm:py-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span className="text-[10px] sm:text-sm">Home</span>
           </Button>
           <div className="flex items-center gap-2 absolute left-1/2 transform -translate-x-1/2">
             <BookOpen className="w-6 h-6 text-primary" />

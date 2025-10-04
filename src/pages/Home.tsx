@@ -391,27 +391,42 @@ const Home = () => {
             <h1 className="text-xl font-bold text-foreground hidden sm:block">OnePageBook</h1>
           </div>
           <div className="flex items-center gap-1 sm:gap-2">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/explore")} className="gap-1 sm:gap-2">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => navigate("/explore")} 
+              className="gap-0 sm:gap-2 flex-col sm:flex-row px-2 sm:px-4 h-auto sm:h-9 py-1 sm:py-2"
+            >
               <Compass className="w-4 h-4" />
-              <span className="hidden sm:inline">{t("header.explore")}</span>
+              <span className="text-[10px] sm:text-sm">{t("header.explore")}</span>
             </Button>
-            <Button variant="ghost" size="sm" onClick={() => navigate("/history")} className="gap-1 sm:gap-2">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => navigate("/history")} 
+              className="gap-0 sm:gap-2 flex-col sm:flex-row px-2 sm:px-4 h-auto sm:h-9 py-1 sm:py-2"
+            >
               <History className="w-4 h-4" />
-              <span className="hidden sm:inline">{t("header.history")}</span>
+              <span className="text-[10px] sm:text-sm">{t("header.history")}</span>
             </Button>
-            <Button variant="ghost" size="sm" onClick={() => navigate("/plans")} className="gap-1 sm:gap-2">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => navigate("/plans")} 
+              className="gap-0 sm:gap-2 flex-col sm:flex-row px-2 sm:px-4 h-auto sm:h-9 py-1 sm:py-2"
+            >
               <Crown className="w-4 h-4" />
-              <span className="hidden sm:inline">{t("header.premium")}</span>
+              <span className="text-[10px] sm:text-sm">{t("header.premium")}</span>
             </Button>
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={() => navigate("/faq")} 
-              className="gap-1 sm:gap-2"
+              className="gap-0 sm:gap-2 flex-col sm:flex-row px-2 sm:px-4 h-auto sm:h-9 py-1 sm:py-2"
               aria-label={t("faq.title_long")}
             >
               <HelpCircle className="w-4 h-4" />
-              <span className="hidden sm:inline">{t("nav.faq_short")}</span>
+              <span className="text-[10px] sm:text-sm">{t("nav.faq_short")}</span>
             </Button>
             <LanguageSelector />
             <Button variant="ghost" size="sm" onClick={handleLogout}>
