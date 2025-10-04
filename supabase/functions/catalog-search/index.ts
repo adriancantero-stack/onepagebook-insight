@@ -12,10 +12,8 @@ serve(async (req) => {
   }
 
   try {
-    const url = new URL(req.url);
-    const query = url.searchParams.get("query") || "";
-    const lang = url.searchParams.get("lang") || "pt";
-    const limit = parseInt(url.searchParams.get("limit") || "8");
+    // Read from body for POST requests (from supabase.functions.invoke)
+    const { query = "", lang = "pt", limit = 8 } = await req.json();
 
     if (query.length < 2) {
       return new Response(
@@ -28,6 +26,8 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    console.log("Searching for:", query, "in language:", lang);
+
     // Search with prefix match prioritized, then fuzzy match
     const { data: books, error } = await supabase
       .from("books")
@@ -38,7 +38,12 @@ serve(async (req) => {
       .order("popularity", { ascending: false })
       .limit(limit);
 
-    if (error) throw error;
+    if (error) {
+      console.error("Database error:", error);
+      throw error;
+    }
+
+    console.log("Found books:", books?.length || 0);
 
     // Sort results: prefix match first, then fuzzy match
     const sortedBooks = (books || []).sort((a, b) => {
