@@ -52,6 +52,36 @@ export type Database = {
           },
         ]
       }
+      book_import_history: {
+        Row: {
+          books_imported: number | null
+          completed_at: string | null
+          created_at: string | null
+          error_message: string | null
+          id: string
+          started_at: string | null
+          status: string | null
+        }
+        Insert: {
+          books_imported?: number | null
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          started_at?: string | null
+          status?: string | null
+        }
+        Update: {
+          books_imported?: number | null
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          started_at?: string | null
+          status?: string | null
+        }
+        Relationships: []
+      }
       book_summaries: {
         Row: {
           actions: string[] | null
