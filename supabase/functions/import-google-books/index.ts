@@ -203,22 +203,32 @@ Deno.serve(async (req) => {
         }
       }
 
-      // Insert books in batches
+      // Insert books one by one to handle duplicates gracefully
       if (booksToImport.length > 0) {
         console.log(`Inserting ${booksToImport.length} books for ${currentLang}`);
-        
-        const { error } = await supabase
-          .from('books')
-          .insert(booksToImport);
+        let insertedCount = 0;
+        let errorCount = 0;
 
-        if (error) {
-          console.error(`Error inserting books for ${currentLang}:`, error);
-          totalErrors++;
-          importLog.push(`Error inserting ${currentLang} books: ${error.message}`);
-        } else {
-          totalInserted += booksToImport.length;
-          importLog.push(`✓ Imported ${booksToImport.length} books for ${currentLang.toUpperCase()}`);
+        for (const book of booksToImport) {
+          const { error } = await supabase
+            .from('books')
+            .insert([book]);
+
+          if (error) {
+            // Skip duplicates silently (code 23505), log other errors
+            if (error.code !== '23505') {
+              console.error(`Error inserting "${book.title}":`, error.message);
+              errorCount++;
+            }
+          } else {
+            insertedCount++;
+          }
         }
+
+        totalInserted += insertedCount;
+        totalErrors += errorCount;
+        importLog.push(`✓ Imported ${insertedCount} books for ${currentLang.toUpperCase()}`);
+        console.log(`Inserted ${insertedCount}/${booksToImport.length} for ${currentLang}`);
       } else {
         importLog.push(`No new books found for ${currentLang.toUpperCase()}`);
       }
