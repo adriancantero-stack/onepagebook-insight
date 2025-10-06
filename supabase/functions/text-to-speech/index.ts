@@ -125,49 +125,52 @@ serve(async (req) => {
 
     console.log('Audio not in cache, generating new audio for text length:', text.length)
 
-    // Map language to appropriate voice
+    // Map language to appropriate ElevenLabs voice ID
     const voiceMap: { [key: string]: string } = {
-      'pt': 'alloy',
-      'en': 'nova',
-      'es': 'shimmer',
+      'pt': '9BWtsMINqrJLrRacOk9x', // Aria - natural female voice
+      'en': 'EXAVITQu4vr4xnSDxMaL', // Sarah - clear female voice
+      'es': 'XB0fDUnXU5powFXDhCwa', // Charlotte - warm female voice
     }
 
-    const voice = voiceMap[language] || 'alloy'
+    const voiceId = voiceMap[language] || '9BWtsMINqrJLrRacOk9x'
 
-    // Initialize OpenAI
-    const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY')
-    if (!OPENAI_API_KEY) {
-      throw new Error('OPENAI_API_KEY is not configured')
+    // Get ElevenLabs API key
+    const ELEVEN_LABS_API_KEY = Deno.env.get('ELEVEN_LABS_API_KEY')
+    if (!ELEVEN_LABS_API_KEY) {
+      throw new Error('ELEVEN_LABS_API_KEY is not configured')
     }
 
-    // Split text into chunks if necessary
-    const textChunks = splitTextIntoChunks(text);
+    // Split text into chunks if necessary (ElevenLabs has a 5000 char limit)
+    const textChunks = splitTextIntoChunks(text, 4500);
     console.log(`Processing ${textChunks.length} chunk(s)`)
 
     const audioChunks: string[] = [];
 
-    // Generate speech for each chunk
+    // Generate speech for each chunk using ElevenLabs
     for (let i = 0; i < textChunks.length; i++) {
       const chunk = textChunks[i];
-      console.log(`Calling OpenAI TTS API for chunk ${i + 1}/${textChunks.length} with voice:`, voice)
+      console.log(`Calling ElevenLabs TTS API for chunk ${i + 1}/${textChunks.length} with voice ID:`, voiceId)
       
-      const response = await fetch('https://api.openai.com/v1/audio/speech', {
+      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${OPENAI_API_KEY}`,
+          'Accept': 'audio/mpeg',
+          'xi-api-key': ELEVEN_LABS_API_KEY,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'tts-1',
-          input: chunk,
-          voice: voice,
-          response_format: 'mp3',
+          text: chunk,
+          model_id: 'eleven_multilingual_v2',
+          voice_settings: {
+            stability: 0.5,
+            similarity_boost: 0.75,
+          }
         }),
       })
 
       if (!response.ok) {
         const errorText = await response.text()
-        console.error(`OpenAI API error for chunk ${i + 1}:`, response.status, errorText)
+        console.error(`ElevenLabs API error for chunk ${i + 1}:`, response.status, errorText)
         throw new Error(`Failed to generate speech for chunk ${i + 1}: ${errorText}`)
       }
 
