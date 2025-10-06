@@ -11,6 +11,7 @@ import Footer from "@/components/Footer";
 import { UpgradeModal } from "@/components/UpgradeModal";
 import { BookAutocomplete } from "@/components/BookAutocomplete";
 import { BookDetailsModal } from "@/components/BookDetailsModal";
+import { CatalogModal } from "@/components/CatalogModal";
 import { 
   loadUsage, 
   canUseSummary, 
@@ -35,6 +36,8 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showCatalogModal, setShowCatalogModal] = useState(false);
+  const [selectedBookFeedback, setSelectedBookFeedback] = useState("");
   const [genState, setGenState] = useState<GenState>({
     open: false,
     step: "resolve",
@@ -158,6 +161,9 @@ const Home = () => {
   const handleBookSelect = (selectedBookId: string | null, title: string, author: string, source?: 'catalog' | 'history') => {
     setBookId(selectedBookId);
     setBookTitle(title);
+    
+    // Clear feedback when new book selected
+    setSelectedBookFeedback("");
     
     // If it's from history, navigate directly to the existing summary
     if (source === 'history' && selectedBookId) {
@@ -461,6 +467,46 @@ const Home = () => {
                 disabled={loading}
                 lang={i18n.language}
               />
+              <div className="mt-2 text-xs text-muted-foreground text-left">
+                {i18n.language === 'pt' && (
+                  <>
+                    Não sabe o título?{" "}
+                    <button
+                      onClick={() => setShowCatalogModal(true)}
+                      className="text-primary hover:underline font-medium"
+                    >
+                      Explorar catálogo
+                    </button>
+                  </>
+                )}
+                {i18n.language === 'en' && (
+                  <>
+                    Don't know the title?{" "}
+                    <button
+                      onClick={() => setShowCatalogModal(true)}
+                      className="text-primary hover:underline font-medium"
+                    >
+                      Browse catalog
+                    </button>
+                  </>
+                )}
+                {i18n.language === 'es' && (
+                  <>
+                    ¿No sabes el título?{" "}
+                    <button
+                      onClick={() => setShowCatalogModal(true)}
+                      className="text-primary hover:underline font-medium"
+                    >
+                      Explorar catálogo
+                    </button>
+                  </>
+                )}
+              </div>
+              {selectedBookFeedback && (
+                <div className="mt-2 text-xs text-primary font-medium">
+                  {selectedBookFeedback}
+                </div>
+              )}
             </div>
 
             {bookAuthor && (
@@ -509,6 +555,21 @@ const Home = () => {
         onOpenChange={setShowDetailsModal}
         initialTitle={bookTitle}
         onConfirm={handleDetailsConfirm}
+        lang={i18n.language}
+      />
+
+      <CatalogModal
+        open={showCatalogModal}
+        onClose={() => setShowCatalogModal(false)}
+        onSelect={(bookId, title, author) => {
+          handleBookSelect(bookId, title, author, 'catalog');
+          const feedbackLabels = {
+            pt: `Livro selecionado: ${title}`,
+            en: `Selected book: ${title}`,
+            es: `Libro seleccionado: ${title}`
+          };
+          setSelectedBookFeedback(feedbackLabels[i18n.language as keyof typeof feedbackLabels] || feedbackLabels.pt);
+        }}
         lang={i18n.language}
       />
     </div>
