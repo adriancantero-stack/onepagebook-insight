@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import {
   Card,
   CardContent,
@@ -206,10 +206,8 @@ const Admin = () => {
       });
 
       if (error) {
-        toast({
-          title: "Erro na importação",
-          description: error.message,
-          variant: "destructive"
+        toast.error("Erro na importação", {
+          description: error.message
         });
         return;
       }
@@ -218,8 +216,7 @@ const Admin = () => {
         setImportProgress(data.log);
       }
 
-      toast({
-        title: "Importação concluída!",
+      toast.success("Importação concluída!", {
         description: `${data.stats.inserted} livros importados, ${data.stats.skipped} pulados`
       });
 
@@ -227,10 +224,8 @@ const Admin = () => {
       await loadAdminData();
     } catch (error) {
       console.error("Import error:", error);
-      toast({
-        title: "Erro",
-        description: "Falha ao importar livros",
-        variant: "destructive"
+      toast.error("Erro", {
+        description: "Falha ao importar livros"
       });
     } finally {
       setImporting(false);
