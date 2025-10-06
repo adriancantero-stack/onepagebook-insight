@@ -46,7 +46,7 @@ export const pt = {
     "auth.checking": "Verificando…",
     "auth.haveAccount": "Já tem conta? Entrar",
     "auth.noAccount": "Não tem conta? Criar conta",
-    "auth.continueWithGoogle": "Continuar com Google",
+    "auth.continueWithGoogle": "Fazer login com Google",
     "auth.signingIn": "Entrando…",
     "auth.googleError": "Falha ao entrar com Google. Tente novamente.",
     "auth.googlePrivacy": "Usaremos apenas seu nome e e-mail.",
