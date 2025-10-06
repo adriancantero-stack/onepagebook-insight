@@ -157,7 +157,7 @@ const Auth = () => {
             </span>
           </div>
 
-          <form onSubmit={handleAuth} className="space-y-3">
+          <form onSubmit={handleAuth} className="space-y-2">
             {isSignUp && (
               <div className="space-y-2">
                 <Label htmlFor="fullName">{t("auth.fullName")}</Label>
