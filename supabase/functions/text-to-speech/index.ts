@@ -125,14 +125,14 @@ serve(async (req) => {
 
     console.log('Audio not in cache, generating new audio for text length:', text.length)
 
-    // Map language to appropriate ElevenLabs voice ID
+    // Map language to the best ElevenLabs voice ID for each region
     const voiceMap: { [key: string]: string } = {
-      'pt': '9BWtsMINqrJLrRacOk9x', // Aria - natural female voice
-      'en': 'EXAVITQu4vr4xnSDxMaL', // Sarah - clear female voice
-      'es': 'XB0fDUnXU5powFXDhCwa', // Charlotte - warm female voice
+      'pt': 'XrExE9yKIg1WjnnlVkGX', // Matilda - warm, young female, works great for Brazilian Portuguese audiobooks
+      'en': '21m00Tcm4TlvDq8ikWAM', // Rachel - calm, natural American English female, most popular voice
+      'es': 'oWAxZDx7w5VEj9dCyTzz', // Grace - young American Southern female, optimized for Mexican/Latin American Spanish
     }
 
-    const voiceId = voiceMap[language] || '9BWtsMINqrJLrRacOk9x'
+    const voiceId = voiceMap[language] || 'XrExE9yKIg1WjnnlVkGX'
 
     // Get ElevenLabs API key
     const ELEVEN_LABS_API_KEY = Deno.env.get('ELEVEN_LABS_API_KEY')
