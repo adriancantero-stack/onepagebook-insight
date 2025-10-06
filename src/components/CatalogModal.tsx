@@ -7,6 +7,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Search, Loader2, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { bookCatalog, getBooksByLocale } from "@/data/bookCatalog";
 
 interface Book {
   id: string;
@@ -105,6 +106,19 @@ export const CatalogModal = ({ open, onClose, onSelect, lang }: CatalogModalProp
     const currentPage = reset ? 1 : page;
     
     try {
+      // Get hardcoded catalog books
+      const catalogBooks = bookCatalog.flatMap(category => 
+        category.books
+          .filter(book => book.locale === lang)
+          .map((book, index) => ({
+            id: `catalog-${category.id}-${index}`,
+            title: book.title,
+            author: book.author,
+            category: category.id
+          }))
+      );
+
+      // Get database books
       let query = supabase
         .from('books')
         .select('id, title, author, cover_url, category')
@@ -119,20 +133,39 @@ export const CatalogModal = ({ open, onClose, onSelect, lang }: CatalogModalProp
         query = query.ilike('category', `%${activeCategory}%`);
       }
 
-      const { data, error } = await query
+      const { data: dbBooks, error } = await query
         .order('popularity', { ascending: false })
         .range((currentPage - 1) * 20, currentPage * 20 - 1);
 
       if (error) throw error;
 
-      if (reset) {
-        setBooks(data || []);
-        setPage(1);
-      } else {
-        setBooks(prev => [...prev, ...(data || [])]);
+      // Combine catalog and database books
+      let allBooks = [...catalogBooks, ...(dbBooks || [])];
+
+      // Apply search filter to catalog books if needed
+      if (searchQuery.trim()) {
+        const lowerQuery = searchQuery.toLowerCase();
+        allBooks = allBooks.filter(book => 
+          book.title.toLowerCase().includes(lowerQuery) ||
+          book.author.toLowerCase().includes(lowerQuery)
+        );
       }
 
-      setHasMore((data || []).length === 20);
+      // Apply category filter to catalog books if needed
+      if (activeCategory !== "trending") {
+        allBooks = allBooks.filter(book => 
+          book.category?.toLowerCase().includes(activeCategory.toLowerCase())
+        );
+      }
+
+      if (reset) {
+        setBooks(allBooks.slice(0, 20));
+        setPage(1);
+      } else {
+        setBooks(prev => [...prev, ...allBooks.slice(currentPage * 20, (currentPage + 1) * 20)]);
+      }
+
+      setHasMore(allBooks.length > (currentPage * 20));
     } catch (error) {
       console.error('Error fetching books:', error);
       toast({
