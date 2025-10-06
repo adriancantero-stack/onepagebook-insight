@@ -26,38 +26,65 @@ interface CatalogModalProps {
 
 const CATEGORIES = {
   pt: [
-    { id: "trending", label: "Tendências" },
-    { id: "business", label: "Negócios" },
-    { id: "self-help", label: "Autoajuda" },
-    { id: "productivity", label: "Produtividade" },
-    { id: "biography", label: "Biografias" },
-    { id: "technology", label: "Tecnologia" },
-    { id: "health", label: "Saúde & Bem-estar" }
+    { id: "habits", label: "Hábitos & Produtividade" },
+    { id: "sleep", label: "Sono & Saúde" },
+    { id: "psych", label: "Psicologia & Mindset" },
+    { id: "strategy", label: "Negócios & Estratégia" },
+    { id: "finance", label: "Finanças Pessoais" },
+    { id: "comm", label: "Comunicação & Persuasão" },
+    { id: "lead", label: "Liderança & Gestão" },
+    { id: "creative", label: "Criatividade" },
+    { id: "startup", label: "Startups" },
+    { id: "life", label: "Vida & Autoconhecimento" },
+    { id: "marketing", label: "Marketing & Growth" },
+    { id: "career", label: "Carreira & Trabalho" },
+    { id: "education", label: "Aprendizado & Educação" },
+    { id: "bio", label: "Biografias & História" },
+    { id: "tech", label: "Tecnologia & IA" },
+    { id: "crypto", label: "Criptomoedas" }
   ],
   en: [
-    { id: "trending", label: "Trending" },
-    { id: "business", label: "Business" },
-    { id: "self-help", label: "Self-help" },
-    { id: "productivity", label: "Productivity" },
-    { id: "biography", label: "Biographies" },
-    { id: "technology", label: "Technology" },
-    { id: "health", label: "Health & Wellness" }
+    { id: "habits", label: "Habits & Productivity" },
+    { id: "sleep", label: "Sleep & Health" },
+    { id: "psych", label: "Psychology & Mindset" },
+    { id: "strategy", label: "Business & Strategy" },
+    { id: "finance", label: "Personal Finance" },
+    { id: "comm", label: "Communication" },
+    { id: "lead", label: "Leadership" },
+    { id: "creative", label: "Creativity" },
+    { id: "startup", label: "Startups" },
+    { id: "life", label: "Life & Self" },
+    { id: "marketing", label: "Marketing & Growth" },
+    { id: "career", label: "Career & Work" },
+    { id: "education", label: "Learning & Education" },
+    { id: "bio", label: "Biographies" },
+    { id: "tech", label: "Technology & AI" },
+    { id: "crypto", label: "Crypto & Blockchain" }
   ],
   es: [
-    { id: "trending", label: "Tendencias" },
-    { id: "business", label: "Negocios" },
-    { id: "self-help", label: "Autoayuda" },
-    { id: "productivity", label: "Productividad" },
-    { id: "biography", label: "Biografías" },
-    { id: "technology", label: "Tecnología" },
-    { id: "health", label: "Salud & Bienestar" }
+    { id: "habits", label: "Hábitos & Productividad" },
+    { id: "sleep", label: "Sueño & Salud" },
+    { id: "psych", label: "Psicología & Mentalidad" },
+    { id: "strategy", label: "Negocios & Estrategia" },
+    { id: "finance", label: "Finanzas Personales" },
+    { id: "comm", label: "Comunicación" },
+    { id: "lead", label: "Liderazgo" },
+    { id: "creative", label: "Creatividad" },
+    { id: "startup", label: "Startups" },
+    { id: "life", label: "Vida & Autoconocimiento" },
+    { id: "marketing", label: "Marketing & Crecimiento" },
+    { id: "career", label: "Carrera & Trabajo" },
+    { id: "education", label: "Aprendizaje & Educación" },
+    { id: "bio", label: "Biografías" },
+    { id: "tech", label: "Tecnología & IA" },
+    { id: "crypto", label: "Cripto & Blockchain" }
   ]
 };
 
 export const CatalogModal = ({ open, onClose, onSelect, lang }: CatalogModalProps) => {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState("trending");
+  const [activeCategory, setActiveCategory] = useState("habits");
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -129,8 +156,8 @@ export const CatalogModal = ({ open, onClose, onSelect, lang }: CatalogModalProp
         query = query.or(`title.ilike.%${searchQuery}%,author.ilike.%${searchQuery}%`);
       }
 
-      if (activeCategory !== "trending") {
-        query = query.ilike('category', `%${activeCategory}%`);
+      if (activeCategory) {
+        query = query.eq('category', activeCategory);
       }
 
       const { data: dbBooks, error } = await query
@@ -152,9 +179,9 @@ export const CatalogModal = ({ open, onClose, onSelect, lang }: CatalogModalProp
       }
 
       // Apply category filter to catalog books if needed
-      if (activeCategory !== "trending") {
+      if (activeCategory) {
         allBooks = allBooks.filter(book => 
-          book.category?.toLowerCase().includes(activeCategory.toLowerCase())
+          book.category === activeCategory
         );
       }
 
