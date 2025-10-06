@@ -82,21 +82,11 @@ serve(async (req) => {
 
   try {
     const { text, language, summaryId } = await req.json()
-    
-    // Get auth header
-    const authHeader = req.headers.get('Authorization')
-    if (!authHeader) {
-      throw new Error('No authorization header')
-    }
 
-    // Initialize Supabase client
+    // Initialize Supabase client with service role key (bypasses RLS)
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-    const supabase = createClient(supabaseUrl, supabaseKey, {
-      global: {
-        headers: { Authorization: authHeader }
-      }
-    })
+    const supabase = createClient(supabaseUrl, supabaseKey)
 
     if (!text || !summaryId) {
       throw new Error('Text and summaryId are required')
