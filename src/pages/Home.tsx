@@ -457,11 +457,11 @@ const Home = () => {
         <Card className="max-w-2xl mx-auto p-4 sm:p-8">
           <div className="space-y-6">
             <div>
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
+              <div className="flex items-center justify-between mb-2">
                 <label className="text-sm font-medium">
                   {t("home.bookTitle")} *
                 </label>
-                <div className="mt-2 sm:mt-0 text-xs text-muted-foreground">
+                <div className="hidden sm:block text-xs text-muted-foreground">
                   {i18n.language === 'pt' && (
                     <>
                       Não sabe o título?{" "}
@@ -504,6 +504,41 @@ const Home = () => {
                 disabled={loading}
                 lang={i18n.language}
               />
+              <div className="sm:hidden mt-2 text-xs text-muted-foreground">
+                {i18n.language === 'pt' && (
+                  <>
+                    Não sabe o título?{" "}
+                    <button
+                      onClick={() => setShowCatalogModal(true)}
+                      className="text-primary hover:underline font-medium"
+                    >
+                      Explorar catálogo
+                    </button>
+                  </>
+                )}
+                {i18n.language === 'en' && (
+                  <>
+                    Don't know the title?{" "}
+                    <button
+                      onClick={() => setShowCatalogModal(true)}
+                      className="text-primary hover:underline font-medium"
+                    >
+                      Browse catalog
+                    </button>
+                  </>
+                )}
+                {i18n.language === 'es' && (
+                  <>
+                    ¿No sabes el título?{" "}
+                    <button
+                      onClick={() => setShowCatalogModal(true)}
+                      className="text-primary hover:underline font-medium"
+                    >
+                      Explorar catálogo
+                    </button>
+                  </>
+                )}
+              </div>
               {selectedBookFeedback && (
                 <div className="mt-2 text-xs text-primary font-medium">
                   {selectedBookFeedback}
