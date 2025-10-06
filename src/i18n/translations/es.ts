@@ -104,6 +104,11 @@ export const es = {
     "auth.checking": "Verificando…",
     "auth.haveAccount": "¿Ya tienes cuenta? Inicia sesión",
     "auth.noAccount": "¿No tienes cuenta? Regístrate",
+    "auth.continueWithGoogle": "Continuar con Google",
+    "auth.signingIn": "Iniciando…",
+    "auth.googleError": "Error al iniciar con Google. Inténtalo de nuevo.",
+    "auth.googlePrivacy": "Usaremos solo tu nombre y correo.",
+    "auth.orDivider": "o",
     
     // Welcome
     "welcome.title": "¡Bienvenido a OnePageBook!",

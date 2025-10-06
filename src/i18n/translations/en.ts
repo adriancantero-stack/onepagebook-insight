@@ -104,6 +104,11 @@ export const en = {
     "auth.checking": "Checking…",
     "auth.haveAccount": "Already have an account? Log in",
     "auth.noAccount": "Don't have an account? Sign up",
+    "auth.continueWithGoogle": "Continue with Google",
+    "auth.signingIn": "Signing in…",
+    "auth.googleError": "Failed to sign in with Google. Please try again.",
+    "auth.googlePrivacy": "We'll use only your name and email.",
+    "auth.orDivider": "or",
     
     // Welcome
     "welcome.title": "Welcome to OnePageBook!",
