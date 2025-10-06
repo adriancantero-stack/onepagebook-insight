@@ -504,7 +504,7 @@ const Home = () => {
                 disabled={loading}
                 lang={i18n.language}
               />
-              <div className="sm:hidden mt-2 text-xs text-muted-foreground">
+              <div className="sm:hidden mt-2 text-xs text-muted-foreground text-center">
                 {i18n.language === 'pt' && (
                   <>
                     Não sabe o título?{" "}
