@@ -62,20 +62,22 @@ const Explore = () => {
   // Create flat index filtered by current locale
   const flatIndex = useMemo(() => createFlatIndex(i18n.language), [i18n.language]);
 
-  // Fetch total books count from database
+  // Fetch total books count (catalog + database books)
   useEffect(() => {
     const fetchTotalCount = async () => {
-      const { count } = await supabase
+      const catalogCount = flatIndex.length;
+      
+      const { count: dbBooksCount } = await supabase
         .from('books')
         .select('*', { count: 'exact', head: true })
         .eq('lang', i18n.language)
         .eq('is_active', true);
       
-      setTotalBooksCount(count || 0);
+      setTotalBooksCount(catalogCount + (dbBooksCount || 0));
     };
 
     fetchTotalCount();
-  }, [i18n.language]);
+  }, [flatIndex.length, i18n.language]);
 
   // Sort categories alphabetically by translated name
   const sortedCategories = useMemo(() => {
