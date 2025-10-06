@@ -15,19 +15,19 @@ export default function GenerateCovers() {
     setResults(null);
 
     try {
-      const { data, error } = await supabase.functions.invoke('generate-book-covers');
+      const { data, error } = await supabase.functions.invoke('update-book-covers');
 
       if (error) throw error;
 
       setResults(data);
       toast({
-        title: "Capas geradas com sucesso!",
-        description: `${data.results.success} capas criadas, ${data.results.failed} falhas`,
+        title: "Capas atualizadas com sucesso!",
+        description: `${data.results.success} capas atualizadas, ${data.results.skipped} sem alteração, ${data.results.failed} falhas`,
       });
     } catch (error) {
-      console.error('Error generating covers:', error);
+      console.error('Error updating covers:', error);
       toast({
-        title: "Erro ao gerar capas",
+        title: "Erro ao atualizar capas",
         description: error.message,
         variant: "destructive",
       });
@@ -40,9 +40,9 @@ export default function GenerateCovers() {
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-4xl mx-auto space-y-8">
         <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold">Gerador de Capas de Livros</h1>
+          <h1 className="text-4xl font-bold">Atualizar Capas de Livros</h1>
           <p className="text-muted-foreground">
-            Gera capas automaticamente para todos os livros que não possuem imagens
+            Busca capas originais no Google Books para todos os livros
           </p>
         </div>
 
@@ -57,12 +57,12 @@ export default function GenerateCovers() {
               {isGenerating ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Gerando capas...
+                  Atualizando capas...
                 </>
               ) : (
                 <>
                   <ImagePlus className="w-5 h-5" />
-                  Gerar Capas
+                  Atualizar Capas
                 </>
               )}
             </Button>
@@ -78,16 +78,16 @@ export default function GenerateCovers() {
                   <div className="text-sm text-muted-foreground">Sucesso</div>
                 </div>
                 <div className="p-4 bg-muted rounded-lg">
+                  <div className="text-2xl font-bold text-yellow-600">
+                    {results.results.skipped}
+                  </div>
+                  <div className="text-sm text-muted-foreground">Sem alteração</div>
+                </div>
+                <div className="p-4 bg-muted rounded-lg">
                   <div className="text-2xl font-bold text-red-600">
                     {results.results.failed}
                   </div>
                   <div className="text-sm text-muted-foreground">Falhas</div>
-                </div>
-                <div className="p-4 bg-muted rounded-lg">
-                  <div className="text-2xl font-bold">
-                    {results.total}
-                  </div>
-                  <div className="text-sm text-muted-foreground">Total</div>
                 </div>
               </div>
 
@@ -106,7 +106,8 @@ export default function GenerateCovers() {
         </Card>
 
         <div className="text-center text-sm text-muted-foreground">
-          <p>Esta ferramenta usa IA para gerar capas profissionais baseadas no título e autor de cada livro.</p>
+          <p>Esta ferramenta busca as capas originais no Google Books para todos os livros.</p>
+          <p className="mt-2">Quando não encontrar uma capa, será usado o ícone do site como placeholder.</p>
           <p className="mt-2">O processo pode levar alguns minutos dependendo da quantidade de livros.</p>
         </div>
       </div>
