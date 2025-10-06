@@ -143,11 +143,11 @@ const Summary = () => {
     const maxWidth = pageWidth - (margin * 2);
     let yPosition = 20;
 
-    // Add "OnePagBook" text at the top center in gray
+    // Add "OnePageBook" text at the top center in gray
     doc.setFontSize(12);
     doc.setFont(undefined, "normal");
     doc.setTextColor(128, 128, 128); // Gray color
-    const brandText = "OnePagBook";
+    const brandText = "OnePageBook";
     const textWidth = doc.getTextWidth(brandText);
     doc.text(brandText, (pageWidth - textWidth) / 2, yPosition);
     yPosition += 12;
