@@ -11,7 +11,7 @@ import Footer from "@/components/Footer";
 import { UpgradeModal } from "@/components/UpgradeModal";
 import { BookAutocomplete } from "@/components/BookAutocomplete";
 import { BookDetailsModal } from "@/components/BookDetailsModal";
-import { CatalogModal } from "@/components/CatalogModal";
+
 import { 
   loadUsage, 
   canUseSummary, 
@@ -36,7 +36,6 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [showCatalogModal, setShowCatalogModal] = useState(false);
   const [selectedBookFeedback, setSelectedBookFeedback] = useState("");
   const [genState, setGenState] = useState<GenState>({
     open: false,
@@ -466,7 +465,7 @@ const Home = () => {
                     <>
                       Não sabe o título?{" "}
                       <button
-                        onClick={() => setShowCatalogModal(true)}
+                        onClick={() => navigate("/explore")}
                         className="text-primary hover:underline font-medium"
                       >
                         Explorar catálogo
@@ -477,7 +476,7 @@ const Home = () => {
                     <>
                       Don't know the title?{" "}
                       <button
-                        onClick={() => setShowCatalogModal(true)}
+                        onClick={() => navigate("/explore")}
                         className="text-primary hover:underline font-medium"
                       >
                         Browse catalog
@@ -488,7 +487,7 @@ const Home = () => {
                     <>
                       ¿No sabes el título?{" "}
                       <button
-                        onClick={() => setShowCatalogModal(true)}
+                        onClick={() => navigate("/explore")}
                         className="text-primary hover:underline font-medium"
                       >
                         Explorar catálogo
@@ -509,7 +508,7 @@ const Home = () => {
                   <>
                     Não sabe o título?{" "}
                     <button
-                      onClick={() => setShowCatalogModal(true)}
+                      onClick={() => navigate("/explore")}
                       className="text-primary hover:underline font-medium"
                     >
                       Explorar catálogo
@@ -520,7 +519,7 @@ const Home = () => {
                   <>
                     Don't know the title?{" "}
                     <button
-                      onClick={() => setShowCatalogModal(true)}
+                      onClick={() => navigate("/explore")}
                       className="text-primary hover:underline font-medium"
                     >
                       Browse catalog
@@ -531,7 +530,7 @@ const Home = () => {
                   <>
                     ¿No sabes el título?{" "}
                     <button
-                      onClick={() => setShowCatalogModal(true)}
+                      onClick={() => navigate("/explore")}
                       className="text-primary hover:underline font-medium"
                     >
                       Explorar catálogo
@@ -595,20 +594,6 @@ const Home = () => {
         lang={i18n.language}
       />
 
-      <CatalogModal
-        open={showCatalogModal}
-        onClose={() => setShowCatalogModal(false)}
-        onSelect={(bookId, title, author) => {
-          handleBookSelect(bookId, title, author, 'catalog');
-          const feedbackLabels = {
-            pt: `Livro selecionado: ${title}`,
-            en: `Selected book: ${title}`,
-            es: `Libro seleccionado: ${title}`
-          };
-          setSelectedBookFeedback(feedbackLabels[i18n.language as keyof typeof feedbackLabels] || feedbackLabels.pt);
-        }}
-        lang={i18n.language}
-      />
     </div>
   );
 };
