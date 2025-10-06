@@ -58,25 +58,38 @@ const Explore = () => {
   const [filterLang, setFilterLang] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
   const [totalBooksCount, setTotalBooksCount] = useState(0);
+  const [bookCovers, setBookCovers] = useState<Record<string, string>>({});
 
   // Create flat index filtered by current locale
   const flatIndex = useMemo(() => createFlatIndex(i18n.language), [i18n.language]);
 
-  // Fetch total books count (catalog + database books)
+  // Fetch total books count (catalog + database books) and covers
   useEffect(() => {
-    const fetchTotalCount = async () => {
+    const fetchDataFromDB = async () => {
       const catalogCount = flatIndex.length;
       
-      const { count: dbBooksCount } = await supabase
+      const { data: dbBooks, count: dbBooksCount } = await supabase
         .from('books')
-        .select('*', { count: 'exact', head: true })
+        .select('title, author, cover_url', { count: 'exact' })
         .eq('lang', i18n.language)
         .eq('is_active', true);
       
       setTotalBooksCount(catalogCount + (dbBooksCount || 0));
+      
+      // Create a map of book covers by title-author key
+      if (dbBooks) {
+        const coversMap: Record<string, string> = {};
+        dbBooks.forEach(book => {
+          if (book.cover_url) {
+            const key = `${book.title.toLowerCase()}-${book.author.toLowerCase()}`;
+            coversMap[key] = book.cover_url;
+          }
+        });
+        setBookCovers(coversMap);
+      }
     };
 
-    fetchTotalCount();
+    fetchDataFromDB();
   }, [flatIndex.length, i18n.language]);
 
   // Sort categories alphabetically by translated name
@@ -587,47 +600,60 @@ const Explore = () => {
         )}
 
         <div className="flex flex-col gap-3">
-          {allBooks.map((book, index) => (
-            <Card 
-              key={`${book.title}-${index}`}
-              className="p-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 hover:border-primary transition-colors"
-            >
-              <div className="flex items-start gap-3 flex-1 min-w-0 w-full sm:w-auto">
-                <div className="p-2 bg-primary/10 rounded-lg shrink-0">
-                  <BookOpen className="w-5 h-5 text-primary" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start gap-2 mb-1">
-                    <h3 className="font-bold text-base line-clamp-2 flex-1">
-                      {book.title}
-                    </h3>
-                    {book.badge && (
-                      <Badge variant="secondary" className="shrink-0 text-xs">
-                        {t(`badges.${book.badge}`)}
+          {allBooks.map((book, index) => {
+            const coverKey = `${book.title.toLowerCase()}-${book.author.toLowerCase()}`;
+            const coverUrl = bookCovers[coverKey];
+            
+            return (
+              <Card 
+                key={`${book.title}-${index}`}
+                className="p-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 hover:border-primary transition-colors"
+              >
+                <div className="flex items-start gap-3 flex-1 min-w-0 w-full sm:w-auto">
+                  {coverUrl ? (
+                    <img 
+                      src={coverUrl} 
+                      alt={`${book.title} cover`}
+                      className="w-12 h-16 object-cover rounded shrink-0"
+                    />
+                  ) : (
+                    <div className="p-2 bg-primary/10 rounded-lg shrink-0">
+                      <BookOpen className="w-5 h-5 text-primary" />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start gap-2 mb-1">
+                      <h3 className="font-bold text-base line-clamp-2 flex-1">
+                        {book.title}
+                      </h3>
+                      {book.badge && (
+                        <Badge variant="secondary" className="shrink-0 text-xs">
+                          {t(`badges.${book.badge}`)}
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-sm text-muted-foreground line-clamp-1">
+                      {book.author}
+                    </p>
+                    {book.level && (
+                      <Badge variant="outline" className="mt-1 text-xs">
+                        {t(`filters.level.${book.level}`)}
                       </Badge>
                     )}
                   </div>
-                  <p className="text-sm text-muted-foreground line-clamp-1">
-                    {book.author}
-                  </p>
-                  {book.level && (
-                    <Badge variant="outline" className="mt-1 text-xs">
-                      {t(`filters.level.${book.level}`)}
-                    </Badge>
-                  )}
                 </div>
-              </div>
-              <Button
-                onClick={() => handleSummarize(book, book.id!, "grid")}
-                size="sm"
-                className="w-full sm:w-auto shrink-0 focus-visible:ring-2 focus-visible:ring-[#5A54E6]"
-                aria-label={`${t("explore.summarize")} ${book.title} — ${book.author}`}
-              >
-                <Sparkles className="w-4 h-4 mr-2" />
-                {t("explore.summarize")}
-              </Button>
-            </Card>
-          ))}
+                <Button
+                  onClick={() => handleSummarize(book, book.id!, "grid")}
+                  size="sm"
+                  className="w-full sm:w-auto shrink-0 focus-visible:ring-2 focus-visible:ring-[#5A54E6]"
+                  aria-label={`${t("explore.summarize")} ${book.title} — ${book.author}`}
+                >
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  {t("explore.summarize")}
+                </Button>
+              </Card>
+            );
+          })}
         </div>
       </main>
 
