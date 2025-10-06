@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
+import { toast } from "@/hooks/use-toast";
 import {
   Card,
   CardContent,
@@ -19,7 +20,9 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Users, FileText, TrendingUp, Crown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Users, FileText, TrendingUp, Crown, Download, BookOpen } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
 interface AdminStats {
@@ -47,6 +50,9 @@ const Admin = () => {
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [users, setUsers] = useState<UserData[]>([]);
   const [userGrowth, setUserGrowth] = useState<{ date: string; users: number }[]>([]);
+  const [catalogStats, setCatalogStats] = useState({ total: 0, pt: 0, en: 0, es: 0 });
+  const [importing, setImporting] = useState(false);
+  const [importProgress, setImportProgress] = useState<string[]>([]);
 
   useEffect(() => {
     checkAdminAccess();
@@ -166,8 +172,68 @@ const Admin = () => {
       }));
 
       setUserGrowth(growthArray);
+
+      // Load catalog stats
+      const { data: booksData } = await supabase
+        .from("books")
+        .select("lang");
+
+      if (booksData) {
+        const langCounts = booksData.reduce((acc: any, book) => {
+          acc[book.lang] = (acc[book.lang] || 0) + 1;
+          return acc;
+        }, {});
+
+        setCatalogStats({
+          total: booksData.length,
+          pt: langCounts.pt || 0,
+          en: langCounts.en || 0,
+          es: langCounts.es || 0,
+        });
+      }
     } catch (error) {
       console.error("Error loading admin data:", error);
+    }
+  };
+
+  const handleImportGoogleBooks = async () => {
+    setImporting(true);
+    setImportProgress(["Iniciando importação do Google Books..."]);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("import-google-books", {
+        body: { lang: "all", target: 100 }
+      });
+
+      if (error) {
+        toast({
+          title: "Erro na importação",
+          description: error.message,
+          variant: "destructive"
+        });
+        return;
+      }
+
+      if (data?.log) {
+        setImportProgress(data.log);
+      }
+
+      toast({
+        title: "Importação concluída!",
+        description: `${data.stats.inserted} livros importados, ${data.stats.skipped} pulados`
+      });
+
+      // Reload data
+      await loadAdminData();
+    } catch (error) {
+      console.error("Import error:", error);
+      toast({
+        title: "Erro",
+        description: "Falha ao importar livros",
+        variant: "destructive"
+      });
+    } finally {
+      setImporting(false);
     }
   };
 
@@ -251,6 +317,74 @@ const Admin = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Catalog Management */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <BookOpen className="h-5 w-5" />
+              Gerenciamento de Catálogo
+            </CardTitle>
+            <CardDescription>
+              Expanda o catálogo com livros do Google Books API
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Catalog Stats */}
+            <div className="grid grid-cols-4 gap-4">
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">Total</p>
+                <p className="text-2xl font-bold">{catalogStats.total}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">PT</p>
+                <p className="text-2xl font-bold">{catalogStats.pt}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">EN</p>
+                <p className="text-2xl font-bold">{catalogStats.en}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">ES</p>
+                <p className="text-2xl font-bold">{catalogStats.es}</p>
+              </div>
+            </div>
+
+            {/* Import Button */}
+            <div className="space-y-4">
+              <Button 
+                onClick={handleImportGoogleBooks}
+                disabled={importing}
+                className="w-full"
+                size="lg"
+              >
+                <Download className="mr-2 h-4 w-4" />
+                {importing ? "Importando..." : "Importar 300 Livros do Google Books"}
+              </Button>
+
+              {/* Import Progress */}
+              {importing && (
+                <div className="space-y-2">
+                  <Progress value={33} className="w-full" />
+                  <div className="text-sm text-muted-foreground space-y-1 max-h-32 overflow-y-auto">
+                    {importProgress.map((log, i) => (
+                      <p key={i}>{log}</p>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Import Log */}
+              {!importing && importProgress.length > 0 && (
+                <div className="rounded-lg border bg-muted p-4 space-y-1 max-h-48 overflow-y-auto">
+                  {importProgress.map((log, i) => (
+                    <p key={i} className="text-sm">{log}</p>
+                  ))}
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Charts */}
         <div className="grid gap-4 md:grid-cols-2">

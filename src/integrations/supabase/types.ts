@@ -147,36 +147,54 @@ export type Database = {
       books: {
         Row: {
           author: string
+          category: string | null
           cover_url: string | null
           created_at: string
+          description: string | null
+          google_books_id: string | null
           id: string
           is_active: boolean | null
+          isbn: string | null
           lang: string
+          page_count: number | null
           popularity: number | null
+          published_year: number | null
           tags: string[] | null
           title: string
           updated_at: string
         }
         Insert: {
           author: string
+          category?: string | null
           cover_url?: string | null
           created_at?: string
+          description?: string | null
+          google_books_id?: string | null
           id?: string
           is_active?: boolean | null
+          isbn?: string | null
           lang: string
+          page_count?: number | null
           popularity?: number | null
+          published_year?: number | null
           tags?: string[] | null
           title: string
           updated_at?: string
         }
         Update: {
           author?: string
+          category?: string | null
           cover_url?: string | null
           created_at?: string
+          description?: string | null
+          google_books_id?: string | null
           id?: string
           is_active?: boolean | null
+          isbn?: string | null
           lang?: string
+          page_count?: number | null
           popularity?: number | null
+          published_year?: number | null
           tags?: string[] | null
           title?: string
           updated_at?: string
