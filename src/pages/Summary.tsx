@@ -143,16 +143,6 @@ const Summary = () => {
     const maxWidth = pageWidth - (margin * 2);
     let yPosition = 20;
 
-    // Add "OnePageBook" text at the top center in gray
-    doc.setFontSize(12);
-    doc.setFont(undefined, "normal");
-    doc.setTextColor(128, 128, 128); // Gray color
-    const brandText = "OnePageBook";
-    const textWidth = doc.getTextWidth(brandText);
-    doc.text(brandText, (pageWidth - textWidth) / 2, yPosition);
-    yPosition += 12;
-    doc.setTextColor(0, 0, 0); // Reset to black for rest of content
-
     // Helper to add text with page break
     const addText = (text: string, fontSize: number = 11, fontStyle: string = "normal") => {
       doc.setFontSize(fontSize);
