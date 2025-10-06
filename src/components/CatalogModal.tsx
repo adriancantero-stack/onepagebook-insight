@@ -214,7 +214,6 @@ export const CatalogModal = ({ open, onClose, onSelect, lang }: CatalogModalProp
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
               {[...Array(6)].map((_, i) => (
                 <div key={i} className="border rounded-lg p-4 space-y-3 animate-pulse">
-                  <div className="aspect-[2/3] bg-muted rounded" />
                   <div className="h-4 bg-muted rounded w-3/4" />
                   <div className="h-3 bg-muted rounded w-1/2" />
                 </div>
@@ -232,13 +231,6 @@ export const CatalogModal = ({ open, onClose, onSelect, lang }: CatalogModalProp
                     key={book.id}
                     className="border rounded-lg p-4 space-y-3 hover:shadow-md transition-shadow"
                   >
-                    {book.cover_url && (
-                      <img 
-                        src={book.cover_url}
-                        alt={book.title}
-                        className="aspect-[2/3] w-full object-cover rounded"
-                      />
-                    )}
                     <div>
                       <h3 className="font-bold line-clamp-2">{book.title}</h3>
                       <p className="text-sm text-muted-foreground line-clamp-1">{book.author}</p>
