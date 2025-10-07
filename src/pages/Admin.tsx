@@ -297,49 +297,61 @@ const Admin = () => {
     setCatalogImportProgress({ current: 0, total: totalBooks });
     toast.info(`Iniciando importação de ${totalBooks} livros...`);
 
-    // Simulate progress (estimate)
-    const estimatedTimePerBook = 100; // ms
-    const totalEstimatedTime = totalBooks * estimatedTimePerBook;
-    const progressInterval = setInterval(() => {
-      setCatalogImportProgress(prev => {
-        if (prev.current >= totalBooks) {
-          clearInterval(progressInterval);
-          return prev;
-        }
-        return { ...prev, current: Math.min(prev.current + 1, totalBooks) };
-      });
-    }, totalEstimatedTime / totalBooks);
-
     try {
-      const { data, error } = await supabase.functions.invoke("import-hardcoded-catalog", {
-        body: { books: flatBooks }
-      });
+      let inserted = 0;
+      let skipped = 0;
+      const batchSize = 50;
+      
+      // Process in batches directly from client
+      for (let i = 0; i < flatBooks.length; i += batchSize) {
+        const batch = flatBooks.slice(i, i + batchSize);
+        
+        for (const book of batch) {
+          // Check if book already exists
+          const { data: existing } = await supabase
+            .from('books')
+            .select('id')
+            .eq('title', book.title)
+            .eq('author', book.author)
+            .eq('lang', book.lang)
+            .maybeSingle();
 
-      clearInterval(progressInterval);
+          if (existing) {
+            skipped++;
+          } else {
+            // Insert new book
+            const { error: insertError } = await supabase
+              .from('books')
+              .insert({
+                title: book.title,
+                author: book.author,
+                lang: book.lang,
+                category: book.categoryId,
+                is_active: true,
+                popularity: 0,
+              });
 
-      if (error) {
-        toast.error("Erro na importação do catálogo", {
-          description: error.message
-        });
-        setCatalogImportProgress({ current: 0, total: 0 });
-        return;
+            if (!insertError) {
+              inserted++;
+            }
+          }
+          
+          // Update progress after each book
+          setCatalogImportProgress({ current: i + batch.indexOf(book) + 1, total: totalBooks });
+        }
       }
 
-      setCatalogImportProgress({ current: totalBooks, total: totalBooks });
-
       toast.success("Importação do catálogo concluída!", {
-        description: `${data.stats.inserted} importados, ${data.stats.skipped} já existiam`
+        description: `${inserted} importados, ${skipped} já existiam`
       });
 
       // Reload data
       await loadAdminData();
     } catch (error) {
-      clearInterval(progressInterval);
       console.error("Catalog import error:", error);
       toast.error("Erro", {
         description: "Falha ao importar catálogo hardcoded"
       });
-      setCatalogImportProgress({ current: 0, total: 0 });
     } finally {
       setImportingCatalog(false);
       setTimeout(() => setCatalogImportProgress({ current: 0, total: 0 }), 2000);
