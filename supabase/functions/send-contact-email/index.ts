@@ -47,7 +47,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send email
     await client.send({
-      from: `OnePageBook <${Deno.env.get("ZOHO_USER")}>`,
+      from: "OnePageBook <contato@onepagebook.ai>",
       to: "contact@onepagebook.ai",
       replyTo: email,
       subject: "Nova mensagem de contato – OnePageBook.ai",
