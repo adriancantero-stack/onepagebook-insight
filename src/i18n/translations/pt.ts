@@ -298,6 +298,27 @@ export const pt = {
     "faq.q10": "Como falar com o suporte?",
     "faq.a10": "Envie um e-mail para contact@onepagebook.ai. Respondemos o quanto antes.",
     
+    // Contact page
+    "contact.title": "Entre em Contato",
+    "contact.subtitle": "Envie uma mensagem e retornaremos em breve.",
+    "contact.formTitle": "Formulário de Contato",
+    "contact.formDescription": "Preencha os campos abaixo para entrar em contato conosco.",
+    "contact.nameLabel": "Nome completo",
+    "contact.namePlaceholder": "Seu nome completo",
+    "contact.emailLabel": "E-mail",
+    "contact.emailPlaceholder": "seu@email.com",
+    "contact.messageLabel": "Mensagem",
+    "contact.messagePlaceholder": "Digite sua mensagem aqui...",
+    "contact.sendButton": "Enviar mensagem",
+    "contact.sending": "Enviando...",
+    "contact.cancel": "Cancelar",
+    "contact.success": "Mensagem enviada!",
+    "contact.successMessage": "Sua mensagem foi enviada com sucesso. Retornaremos em breve.",
+    "contact.error": "Erro",
+    "contact.errorMessage": "Erro ao enviar mensagem. Tente novamente.",
+    "contact.fillAllFields": "Por favor, preencha todos os campos.",
+    "contact.alternativeContact": "Ou envie um e-mail diretamente para:",
+    
     // Generation overlay
     "gen.loading": "Gerando resumo…",
     "gen.step.resolve": "Checando título e autor",

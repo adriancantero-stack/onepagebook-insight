@@ -21,6 +21,7 @@ const Welcome = lazy(() => import("./pages/Welcome"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Faq = lazy(() => import("./pages/Faq"));
+const Contact = lazy(() => import("./pages/Contact"));
 const Admin = lazy(() => import("./pages/Admin"));
 const GenerateCovers = lazy(() => import("./pages/GenerateCovers"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -64,6 +65,10 @@ const App = () => (
             <Route path="/en/terms" element={<Terms />} />
             <Route path="/en/privacy" element={<Privacy />} />
             <Route path="/en/faq" element={<Faq />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/pt/contact" element={<Contact />} />
+            <Route path="/es/contact" element={<Contact />} />
+            <Route path="/en/contact" element={<Contact />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/generate-covers" element={<GenerateCovers />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

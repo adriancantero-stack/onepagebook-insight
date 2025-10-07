@@ -300,6 +300,27 @@ export const en = {
     "faq.q10": "How do I contact support?",
     "faq.a10": "Email us at contact@onepagebook.ai. We'll get back to you ASAP.",
     
+    // Contact page
+    "contact.title": "Get in Touch",
+    "contact.subtitle": "Send us a message and we'll get back to you soon.",
+    "contact.formTitle": "Contact Form",
+    "contact.formDescription": "Fill out the fields below to get in touch with us.",
+    "contact.nameLabel": "Full name",
+    "contact.namePlaceholder": "Your full name",
+    "contact.emailLabel": "Email",
+    "contact.emailPlaceholder": "your@email.com",
+    "contact.messageLabel": "Message",
+    "contact.messagePlaceholder": "Type your message here...",
+    "contact.sendButton": "Send message",
+    "contact.sending": "Sending...",
+    "contact.cancel": "Cancel",
+    "contact.success": "Message sent!",
+    "contact.successMessage": "Your message was sent successfully. We'll get back to you soon.",
+    "contact.error": "Error",
+    "contact.errorMessage": "Error sending message. Please try again.",
+    "contact.fillAllFields": "Please fill in all fields.",
+    "contact.alternativeContact": "Or send an email directly to:",
+    
     // Generation overlay
     "gen.loading": "Generating summary…",
     "gen.step.resolve": "Resolving title and author",
