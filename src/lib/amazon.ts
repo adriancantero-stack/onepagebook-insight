@@ -41,8 +41,11 @@ export function buildAmazonUrl(asin: string, locale: Locale): string {
 
 /**
  * Build Amazon search URL for fallback when ASIN is not available
+ * Uses linkId to maintain affiliate tracking through the search journey
  */
 export function buildAmazonSearchUrl(query: string, locale: Locale): string {
   const { host, tag } = getMarketplace(locale);
-  return `https://${host}/s?k=${encodeURIComponent(query)}&tag=${encodeURIComponent(tag)}&linkCode=ll1`;
+  // Using linkId helps maintain tracking even after clicking search results
+  const linkId = Math.random().toString(36).substring(7);
+  return `https://${host}/s?k=${encodeURIComponent(query)}&tag=${encodeURIComponent(tag)}&linkCode=ll2&linkId=${linkId}`;
 }
