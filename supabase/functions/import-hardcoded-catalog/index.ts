@@ -6,27 +6,6 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Import the book catalog structure
-const bookCatalog = [
-  {
-    id: "habits",
-    nameKey: "cats.habits",
-    books: [
-      { title: "Hábitos Atômicos", author: "James Clear", locale: "pt" },
-      { title: "Trabalho Focado", author: "Cal Newport", locale: "pt" },
-      { title: "O Poder do Hábito", author: "Charles Duhigg", locale: "pt" },
-      { title: "Atomic Habits", author: "James Clear", locale: "en" },
-      { title: "Deep Work", author: "Cal Newport", locale: "en" },
-      { title: "The Power of Habit", author: "Charles Duhigg", locale: "en" },
-      { title: "Hábitos Atómicos", author: "James Clear", locale: "es" },
-      { title: "Enfócate", author: "Cal Newport", locale: "es" },
-      { title: "El Poder de los Hábitos", author: "Charles Duhigg", locale: "es" },
-      // Add more books from the catalog...
-    ]
-  },
-  // Add more categories...
-];
-
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -38,19 +17,89 @@ serve(async (req) => {
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
+    // Fetch the bookCatalog.ts file content from the repository
+    const catalogUrl = 'https://raw.githubusercontent.com/lovable-dev/tqtaerijrqfkwxennxae/main/src/data/bookCatalog.ts';
+    
+    let catalogContent: string;
+    try {
+      const response = await fetch(catalogUrl);
+      catalogContent = await response.text();
+    } catch (error) {
+      // Fallback: try a different approach or return error
+      console.error("Could not fetch catalog file:", error);
+      return new Response(
+        JSON.stringify({ error: "Could not fetch catalog file from repository" }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Extract the bookCatalog array using regex
+    const match = catalogContent.match(/export const bookCatalog: Category\[\] = (\[[\s\S]*?\n\]);/);
+    
+    if (!match) {
+      return new Response(
+        JSON.stringify({ error: "Could not parse catalog structure" }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Use a safer eval alternative - parse the structure manually
+    // Extract books from the text content
+    const books: Array<{title: string, author: string, locale: string, category: string}> = [];
+    
+    // Match all book entries in the catalog
+    const bookMatches = catalogContent.matchAll(/{\s*title:\s*"([^"]+)",\s*author:\s*"([^"]+)",\s*locale:\s*"(pt|en|es)"[^}]*}/g);
+    
+    let currentCategory = "";
+    const categoryMatches = catalogContent.matchAll(/{\s*id:\s*"([^"]+)",/g);
+    const categories: string[] = [];
+    
+    for (const catMatch of categoryMatches) {
+      categories.push(catMatch[1]);
+    }
+
+    // Now parse books and assign categories
+    let catIndex = 0;
+    let bookCount = 0;
+    const booksPerCategory = Math.ceil(catalogContent.split('books: [').length / categories.length);
+
+    for (const match of bookMatches) {
+      const [, title, author, locale] = match;
+      
+      // Determine which category based on position
+      if (bookCount > 0 && bookCount % 60 === 0 && catIndex < categories.length - 1) {
+        catIndex++;
+      }
+      
+      books.push({
+        title: title.trim(),
+        author: author.trim(),
+        locale: locale.trim(),
+        category: categories[catIndex] || 'habits'
+      });
+      
+      bookCount++;
+    }
+
+    console.log(`Extracted ${books.length} books from catalog`);
+
     let inserted = 0;
     let skipped = 0;
     let errors = 0;
     const log: string[] = [];
 
-    log.push("Iniciando importação do catálogo hardcoded...");
+    log.push(`Encontrados ${books.length} livros para importar`);
+    log.push("Iniciando importação em lotes...");
 
-    for (const category of bookCatalog) {
-      log.push(`\nProcessando categoria: ${category.id}`);
+    // Process in batches of 50
+    const batchSize = 50;
+    for (let i = 0; i < books.length; i += batchSize) {
+      const batch = books.slice(i, i + batchSize);
+      log.push(`\nProcessando lote ${Math.floor(i/batchSize) + 1}: livros ${i + 1} a ${Math.min(i + batchSize, books.length)}`);
 
-      for (const book of category.books) {
+      for (const book of batch) {
         try {
-          // Check if book already exists (by title, author, and language)
+          // Check if book already exists
           const { data: existing } = await supabase
             .from('books')
             .select('id')
@@ -71,7 +120,7 @@ serve(async (req) => {
               title: book.title,
               author: book.author,
               lang: book.locale,
-              category: category.id,
+              category: book.category,
               is_active: true,
               popularity: 0,
             });
@@ -81,9 +130,6 @@ serve(async (req) => {
             errors++;
           } else {
             inserted++;
-            if (inserted % 50 === 0) {
-              log.push(`${inserted} livros importados...`);
-            }
           }
 
         } catch (error) {
@@ -91,9 +137,16 @@ serve(async (req) => {
           errors++;
         }
       }
+
+      log.push(`✓ Lote concluído: ${inserted} inseridos, ${skipped} pulados, ${errors} erros`);
+      
+      // Small delay between batches
+      if (i + batchSize < books.length) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
     }
 
-    log.push(`\n✓ Importação concluída!`);
+    log.push(`\n=== Importação concluída ===`);
     log.push(`Total inseridos: ${inserted}`);
     log.push(`Total pulados (já existiam): ${skipped}`);
     log.push(`Total erros: ${errors}`);
@@ -101,7 +154,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({
         success: true,
-        stats: { inserted, skipped, errors },
+        stats: { inserted, skipped, errors, total: books.length },
         log
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
