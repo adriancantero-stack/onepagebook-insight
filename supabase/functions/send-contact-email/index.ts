@@ -36,8 +36,8 @@ const handler = async (req: Request): Promise<Response> => {
     const client = new SMTPClient({
       connection: {
         hostname: "smtppro.zoho.com",
-        port: 587,
-        tls: false, // Use STARTTLS instead of direct TLS
+        port: 465,
+        tls: true, // Direct TLS per Zoho docs for domain-based accounts
         auth: {
           username: Deno.env.get("ZOHO_USER") as string,
           password: Deno.env.get("ZOHO_PASS") as string,

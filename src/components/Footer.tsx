@@ -33,12 +33,12 @@ const Footer = () => {
               {t("nav.faq_short")}
             </Link>
             <span className="text-muted-foreground">•</span>
-            <Link 
-              to="/contact"
+            <a 
+              href={`mailto:${contactEmail}`}
               className="hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
             >
               {t("footer.contact")}
-            </Link>
+            </a>
           </div>
           <p className="text-center">
             {t("footer.copyright", { year: currentYear })}
