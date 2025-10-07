@@ -214,11 +214,22 @@ serve(async (req) => {
 
     log.push("Iniciando importação do catálogo hardcoded...");
 
-    // Process all categories
-    for (const [categoryId, books] of Object.entries(BOOK_DATA)) {
-      log.push(`\nProcessando categoria: ${categoryId} (${books.length} livros)`);
+    // Flatten all categories into a single list
+    const allBooks = Object.entries(BOOK_DATA).flatMap(([categoryId, books]) =>
+      books.map(b => ({ ...b, categoryId }))
+    );
 
-      for (const book of books) {
+    const total = allBooks.length;
+    const batchSize = 100;
+    let index = 0;
+    let batchNo = 0;
+
+    while (index < total) {
+      batchNo++;
+      const batch = allBooks.slice(index, index + batchSize);
+      log.push(`\nLote ${batchNo}: processando livros ${index + 1} a ${Math.min(index + batchSize, total)} de ${total}`);
+
+      for (const book of batch) {
         try {
           // Check if book already exists
           const { data: existing } = await supabase
@@ -234,14 +245,13 @@ serve(async (req) => {
             continue;
           }
 
-          // Insert new book
           const { error: insertError } = await supabase
             .from('books')
             .insert({
               title: book.title,
               author: book.author,
               lang: book.locale,
-              category: categoryId,
+              category: book.categoryId,
               is_active: true,
               popularity: 0,
             });
@@ -252,14 +262,20 @@ serve(async (req) => {
           } else {
             inserted++;
           }
-
-        } catch (error) {
-          console.error(`Error processing book:`, error);
+        } catch (e) {
+          console.error('Error processing book:', e);
           errors++;
         }
       }
 
-      log.push(`✓ Categoria ${categoryId} concluída`);
+      log.push(`✓ Lote ${batchNo} concluído (inseridos: ${inserted}, pulados: ${skipped}, erros: ${errors})`);
+
+      index += batchSize;
+
+      if (index < total) {
+        // Pequeno delay entre lotes para não sobrecarregar
+        await new Promise(r => setTimeout(r, 1000));
+      }
     }
 
     log.push(`\n=== Importação concluída ===`);
@@ -268,11 +284,7 @@ serve(async (req) => {
     log.push(`Total erros: ${errors}`);
 
     return new Response(
-      JSON.stringify({
-        success: true,
-        stats: { inserted, skipped, errors },
-        log
-      }),
+      JSON.stringify({ success: true, stats: { inserted, skipped, errors, total }, log }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
@@ -281,10 +293,7 @@ serve(async (req) => {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return new Response(
       JSON.stringify({ error: errorMessage }),
-      { 
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      }
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 });
