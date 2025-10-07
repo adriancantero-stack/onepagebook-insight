@@ -15,96 +15,69 @@ export default function GenerateCovers() {
   const handleGenerateCovers = async () => {
     setIsGenerating(true);
     setResults(null);
-    setProgress(null);
 
     try {
-      console.log('[GenerateCovers] Starting cover update process...');
-      
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        console.error('[GenerateCovers] No session found');
-        throw new Error('Not authenticated');
+      // Get total count first
+      const { data: books, error: booksError } = await supabase
+        .from('books')
+        .select('id, title, author, cover_url')
+        .eq('is_active', true)
+        .order('created_at', { ascending: true });
+
+      if (booksError) throw booksError;
+      if (!books || books.length === 0) {
+        toast({
+          title: "Nenhum livro encontrado",
+          description: "Não há livros ativos para atualizar",
+        });
+        return;
       }
 
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const url = `${supabaseUrl}/functions/v1/update-book-covers`;
-      
-      console.log('[GenerateCovers] Calling edge function:', url);
+      const totalBooks = books.length;
+      setProgress({ current: 0, total: totalBooks });
 
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${session.access_token}`,
-          'Content-Type': 'application/json',
-        },
+      const results = {
+        success: 0,
+        failed: 0,
+        skipped: 0,
+        errors: [] as string[]
+      };
+
+      // Process books in batches
+      const batchSize = 10;
+      for (let i = 0; i < books.length; i += batchSize) {
+        const batch = books.slice(i, i + batchSize);
+        
+        // Process batch via edge function
+        const { data, error } = await supabase.functions.invoke('generate-book-covers', {
+          body: { books: batch }
+        });
+
+        if (error) {
+          console.error('Batch error:', error);
+          results.failed += batch.length;
+        } else if (data) {
+          results.success += data.success || 0;
+          results.skipped += data.skipped || 0;
+          results.failed += data.failed || 0;
+          if (data.errors) results.errors.push(...data.errors);
+        }
+
+        // Update progress
+        setProgress({ 
+          current: Math.min(i + batchSize, totalBooks), 
+          total: totalBooks 
+        });
+      }
+
+      setResults({ results, total: totalBooks, processed: totalBooks });
+      toast({
+        title: "Capas atualizadas com sucesso!",
+        description: `${results.success} capas atualizadas, ${results.skipped} sem alteração, ${results.failed} falhas`,
       });
 
-      console.log('[GenerateCovers] Response status:', response.status);
-      console.log('[GenerateCovers] Response headers:', Object.fromEntries(response.headers.entries()));
-
-      if (!response.ok) {
-        console.error('[GenerateCovers] Response not OK');
-        throw new Error('Failed to start cover update');
-      }
-
-      const reader = response.body?.getReader();
-      if (!reader) {
-        console.error('[GenerateCovers] No reader available');
-        throw new Error('No response stream');
-      }
-
-      const decoder = new TextDecoder();
-      let buffer = '';
-
-      console.log('[GenerateCovers] Starting to read stream...');
-
-      while (true) {
-        const { done, value } = await reader.read();
-        
-        if (done) {
-          console.log('[GenerateCovers] Stream complete');
-          break;
-        }
-
-        buffer += decoder.decode(value, { stream: true });
-        console.log('[GenerateCovers] Buffer:', buffer);
-
-        const lines = buffer.split('\n');
-        buffer = lines.pop() || ''; // Keep incomplete line in buffer
-
-        for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            try {
-              const jsonStr = line.slice(6).trim();
-              if (!jsonStr) continue;
-              
-              console.log('[GenerateCovers] Parsing JSON:', jsonStr);
-              const data = JSON.parse(jsonStr);
-              console.log('[GenerateCovers] Parsed data:', data);
-              
-              if (data.type === 'progress') {
-                console.log('[GenerateCovers] Progress update:', data.processed, '/', data.total);
-                setProgress({ 
-                  current: data.processed, 
-                  total: data.total 
-                });
-              } else if (data.type === 'complete') {
-                console.log('[GenerateCovers] Process complete:', data);
-                setResults(data);
-                toast({
-                  title: "Capas atualizadas com sucesso!",
-                  description: `${data.results.success} capas atualizadas, ${data.results.skipped} sem alteração, ${data.results.failed} falhas`,
-                });
-              }
-            } catch (e) {
-              console.error('[GenerateCovers] Error parsing SSE:', e, 'Line:', line);
-            }
-          }
-        }
-      }
-
     } catch (error) {
-      console.error('[GenerateCovers] Error:', error);
+      console.error('Error updating covers:', error);
       toast({
         title: "Erro ao atualizar capas",
         description: error.message,
@@ -112,7 +85,6 @@ export default function GenerateCovers() {
       });
     } finally {
       setIsGenerating(false);
-      console.log('[GenerateCovers] Process finished');
     }
   };
 
