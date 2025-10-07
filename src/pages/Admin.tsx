@@ -183,21 +183,46 @@ const Admin = () => {
       setUserGrowth(growthArray);
 
       // Load catalog stats with summary and cover info
-      const { data: booksData } = await supabase
-        .from("books")
-        .select("lang, summary, cover_url");
+      // Fetch ALL books without pagination limits
+      let allBooks: any[] = [];
+      let from = 0;
+      const pageSize = 1000;
+      
+      while (true) {
+        const { data: booksData, error: booksError } = await supabase
+          .from("books")
+          .select("lang, summary, cover_url")
+          .range(from, from + pageSize - 1);
 
-      if (booksData) {
-        const langCounts = booksData.reduce((acc: any, book) => {
+        if (booksError) {
+          console.error("Error fetching books:", booksError);
+          break;
+        }
+
+        if (!booksData || booksData.length === 0) break;
+        
+        allBooks = [...allBooks, ...booksData];
+        
+        if (booksData.length < pageSize) break;
+        from += pageSize;
+      }
+
+      console.log(`Total de livros carregados: ${allBooks.length}`);
+
+      if (allBooks.length > 0) {
+        const langCounts = allBooks.reduce((acc: any, book) => {
           acc[book.lang] = (acc[book.lang] || 0) + 1;
           return acc;
         }, {});
 
-        const booksWithSummary = booksData.filter(b => b.summary !== null).length;
-        const booksWithCover = booksData.filter(b => b.cover_url !== null).length;
+        const booksWithSummary = allBooks.filter(b => b.summary !== null && b.summary !== '').length;
+        const booksWithCover = allBooks.filter(b => b.cover_url !== null && b.cover_url !== '').length;
+
+        console.log(`Livros com resumo: ${booksWithSummary}, sem resumo: ${allBooks.length - booksWithSummary}`);
+        console.log(`Livros com capa: ${booksWithCover}, sem capa: ${allBooks.length - booksWithCover}`);
 
         setCatalogStats({
-          total: booksData.length,
+          total: allBooks.length,
           pt: langCounts.pt || 0,
           en: langCounts.en || 0,
           es: langCounts.es || 0,
@@ -206,9 +231,9 @@ const Admin = () => {
         setStats(prev => prev ? {
           ...prev,
           booksWithSummary,
-          booksWithoutSummary: booksData.length - booksWithSummary,
+          booksWithoutSummary: allBooks.length - booksWithSummary,
           booksWithCover,
-          booksWithoutCover: booksData.length - booksWithCover,
+          booksWithoutCover: allBooks.length - booksWithCover,
         } : null);
       }
     } catch (error) {
