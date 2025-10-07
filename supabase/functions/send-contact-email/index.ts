@@ -36,8 +36,8 @@ const handler = async (req: Request): Promise<Response> => {
     const client = new SMTPClient({
       connection: {
         hostname: "smtp.zoho.com",
-        port: 465,
-        tls: true,
+        port: 587,
+        tls: false, // Use STARTTLS instead of direct TLS
         auth: {
           username: Deno.env.get("ZOHO_USER") as string,
           password: Deno.env.get("ZOHO_PASS") as string,
@@ -47,7 +47,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send email
     await client.send({
-      from: Deno.env.get("ZOHO_USER") as string,
+      from: `OnePageBook <${Deno.env.get("ZOHO_USER")}>`,
       to: "contact@onepagebook.ai",
       replyTo: email,
       subject: "Nova mensagem de contato – OnePageBook.ai",
