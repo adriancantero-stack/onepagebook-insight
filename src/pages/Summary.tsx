@@ -670,7 +670,7 @@ const Summary = () => {
             </div>
           )}
 
-          <div className="flex flex-wrap items-center justify-start gap-2 sm:gap-3 mt-6 sm:mt-8 pt-6 border-t border-border w-full">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-6 sm:mt-8 pt-6 border-t border-border w-full">
             <Button 
               onClick={handleListenSummary} 
               disabled={isGeneratingAudio}
@@ -705,7 +705,7 @@ const Summary = () => {
               title={summary.canonical_title || summary.book_title}
               author={summary.canonical_author || summary.book_author}
               locale={(i18n.language || "pt").split("-")[0] as 'pt' | 'en' | 'es'}
-              className="flex-1 min-w-[140px] sm:min-w-[160px]"
+              className="flex-1 min-w-[140px] sm:min-w-[160px] text-xs sm:text-sm"
             />
           </div>
 
