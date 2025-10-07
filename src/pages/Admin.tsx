@@ -21,7 +21,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Users, FileText, TrendingUp, Crown, Download, BookOpen } from "lucide-react";
+import { Users, FileText, TrendingUp, Crown, Download, BookOpen, ImagePlus } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
@@ -347,15 +347,27 @@ const Admin = () => {
 
             {/* Import Button */}
             <div className="space-y-4">
-              <Button 
-                onClick={handleImportGoogleBooks}
-                disabled={importing}
-                className="w-full"
-                size="lg"
-              >
-                <Download className="mr-2 h-4 w-4" />
-                {importing ? "Importando..." : "Importar 300 Livros do Google Books"}
-              </Button>
+              <div className="grid grid-cols-2 gap-4">
+                <Button 
+                  onClick={handleImportGoogleBooks}
+                  disabled={importing}
+                  className="w-full"
+                  size="lg"
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  {importing ? "Importando..." : "Importar 300 Livros"}
+                </Button>
+                
+                <Button 
+                  onClick={() => navigate("/generate-covers")}
+                  variant="secondary"
+                  className="w-full"
+                  size="lg"
+                >
+                  <ImagePlus className="mr-2 h-4 w-4" />
+                  Gerar Capas dos Livros
+                </Button>
+              </div>
 
               {/* Import Progress */}
               {importing && (
