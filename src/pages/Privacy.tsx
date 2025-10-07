@@ -45,7 +45,7 @@ const Privacy = () => {
         },
         {
           title: "8. Contato",
-          content: "Se você tiver dúvidas sobre esta Política de Privacidade, entre em contato conosco em sac@onepagebook.ai"
+          content: "Se você tiver dúvidas sobre esta Política de Privacidade, entre em contato conosco em contact@onepagebook.ai"
         }
       ]
     },
@@ -83,7 +83,7 @@ const Privacy = () => {
         },
         {
           title: "8. Contact",
-          content: "If you have questions about this Privacy Policy, contact us at sac@onepagebook.ai"
+          content: "If you have questions about this Privacy Policy, contact us at contact@onepagebook.ai"
         }
       ]
     },
@@ -121,7 +121,7 @@ const Privacy = () => {
         },
         {
           title: "8. Contacto",
-          content: "Si tiene preguntas sobre esta Política de Privacidad, contáctenos en sac@onepagebook.ai"
+          content: "Si tiene preguntas sobre esta Política de Privacidad, contáctenos en contact@onepagebook.ai"
         }
       ]
     }

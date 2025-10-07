@@ -133,7 +133,7 @@ const Faq = () => {
           <Card className="mt-12 p-6 text-center bg-muted/50">
             <p className="text-lg mb-4">{t("faq.cta.contact")}</p>
             <Button asChild>
-              <a href="mailto:sac@onepagebook.ai">{t("faq.contact")}</a>
+              <a href="mailto:contact@onepagebook.ai">{t("faq.contact")}</a>
             </Button>
           </Card>
         </main>

@@ -45,7 +45,7 @@ const Terms = () => {
         },
         {
           title: "8. Contato",
-          content: "Para dúvidas sobre estes Termos, entre em contato conosco em sac@onepagebook.ai"
+          content: "Para dúvidas sobre estes Termos, entre em contato conosco em contact@onepagebook.ai"
         }
       ]
     },
@@ -83,7 +83,7 @@ const Terms = () => {
         },
         {
           title: "8. Contact",
-          content: "For questions about these Terms, contact us at sac@onepagebook.ai"
+          content: "For questions about these Terms, contact us at contact@onepagebook.ai"
         }
       ]
     },
@@ -121,7 +121,7 @@ const Terms = () => {
         },
         {
           title: "8. Contacto",
-          content: "Para preguntas sobre estos Términos, contáctenos en sac@onepagebook.ai"
+          content: "Para preguntas sobre estos Términos, contáctenos en contact@onepagebook.ai"
         }
       ]
     }

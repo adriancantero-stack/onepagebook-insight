@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 const Footer = () => {
   const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
-  const contactEmail = "sac@onepagebook.ai";
+  const contactEmail = "contact@onepagebook.ai";
 
   return (
     <footer className="border-t border-border mt-auto">

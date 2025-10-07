@@ -298,7 +298,7 @@ export const en = {
     "faq.q9": "Is my data safe?",
     "faq.a9": "We use SSL, usage guardrails, and privacy best practices. See our Privacy Policy.",
     "faq.q10": "How do I contact support?",
-    "faq.a10": "Email us at sac@onepagebook.ai. We'll get back to you ASAP.",
+    "faq.a10": "Email us at contact@onepagebook.ai. We'll get back to you ASAP.",
     
     // Generation overlay
     "gen.loading": "Generating summary…",

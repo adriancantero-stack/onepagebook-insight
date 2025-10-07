@@ -4,7 +4,7 @@
 
 **OnePageBook** - The official domain for this project is: **onepagebook.ai**
 
-Contact email: sac@onepagebook.ai
+Contact email: contact@onepagebook.ai
 
 ## Project info
 
