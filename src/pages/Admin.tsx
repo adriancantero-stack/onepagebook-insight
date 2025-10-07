@@ -58,6 +58,7 @@ const Admin = () => {
   const [catalogStats, setCatalogStats] = useState({ total: 0, pt: 0, en: 0, es: 0 });
   const [importing, setImporting] = useState(false);
   const [importingCatalog, setImportingCatalog] = useState(false);
+  const [catalogImportProgress, setCatalogImportProgress] = useState({ current: 0, total: 0 });
   const [batchGenerating, setBatchGenerating] = useState(false);
   const [importProgress, setImportProgress] = useState<string[]>([]);
 
@@ -281,43 +282,67 @@ const Admin = () => {
 
   const handleImportHardcodedCatalog = async () => {
     setImportingCatalog(true);
-    toast.info("Importando catálogo hardcoded para o banco de dados...");
+    
+    // Flatten full catalog from code
+    const flatBooks = bookCatalog.flatMap(cat =>
+      cat.books.map(b => ({
+        title: b.title,
+        author: b.author,
+        lang: b.locale,
+        categoryId: cat.id,
+      }))
+    );
+
+    const totalBooks = flatBooks.length;
+    setCatalogImportProgress({ current: 0, total: totalBooks });
+    toast.info(`Iniciando importação de ${totalBooks} livros...`);
+
+    // Simulate progress (estimate)
+    const estimatedTimePerBook = 100; // ms
+    const totalEstimatedTime = totalBooks * estimatedTimePerBook;
+    const progressInterval = setInterval(() => {
+      setCatalogImportProgress(prev => {
+        if (prev.current >= totalBooks) {
+          clearInterval(progressInterval);
+          return prev;
+        }
+        return { ...prev, current: Math.min(prev.current + 1, totalBooks) };
+      });
+    }, totalEstimatedTime / totalBooks);
 
     try {
-      // Flatten full catalog from code
-      const flatBooks = bookCatalog.flatMap(cat =>
-        cat.books.map(b => ({
-          title: b.title,
-          author: b.author,
-          lang: b.locale,
-          categoryId: cat.id,
-        }))
-      );
-
       const { data, error } = await supabase.functions.invoke("import-hardcoded-catalog", {
         body: { books: flatBooks }
       });
+
+      clearInterval(progressInterval);
 
       if (error) {
         toast.error("Erro na importação do catálogo", {
           description: error.message
         });
+        setCatalogImportProgress({ current: 0, total: 0 });
         return;
       }
 
+      setCatalogImportProgress({ current: totalBooks, total: totalBooks });
+
       toast.success("Importação do catálogo concluída!", {
-        description: `${data.stats.inserted} importados, ${data.stats.skipped} já existiam (Total: ${data.stats.total})`
+        description: `${data.stats.inserted} importados, ${data.stats.skipped} já existiam`
       });
 
       // Reload data
       await loadAdminData();
     } catch (error) {
+      clearInterval(progressInterval);
       console.error("Catalog import error:", error);
       toast.error("Erro", {
         description: "Falha ao importar catálogo hardcoded"
       });
+      setCatalogImportProgress({ current: 0, total: 0 });
     } finally {
       setImportingCatalog(false);
+      setTimeout(() => setCatalogImportProgress({ current: 0, total: 0 }), 2000);
     }
   };
 
@@ -545,6 +570,25 @@ const Admin = () => {
                   {batchGenerating ? "Gerando..." : "Gerar Resumos"}
                 </Button>
               </div>
+
+              {/* Catalog Import Progress */}
+              {importingCatalog && catalogImportProgress.total > 0 && (
+                <div className="space-y-2 p-4 rounded-lg border bg-muted/50">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="font-medium">Importando livros do catálogo...</span>
+                    <span className="text-muted-foreground">
+                      {catalogImportProgress.current} / {catalogImportProgress.total}
+                    </span>
+                  </div>
+                  <Progress 
+                    value={(catalogImportProgress.current / catalogImportProgress.total) * 100} 
+                    className="h-2"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {Math.round((catalogImportProgress.current / catalogImportProgress.total) * 100)}% concluído
+                  </p>
+                </div>
+              )}
 
               {/* Import Progress */}
               {importing && (
