@@ -22,87 +22,119 @@ serve(async (req) => {
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-    // Buscar livros sem resumo (limite de 10 por execução para evitar timeout)
-    const { data: books, error: fetchError } = await supabase
-      .from('books')
-      .select('id, title, author, lang')
-      .is('summary', null)
-      .eq('is_active', true)
-      .limit(10);
+    let totalProcessed = 0;
+    let totalErrors = 0;
+    let batchNumber = 0;
+    let hasMoreBooks = true;
 
-    if (fetchError) {
-      console.error("Error fetching books:", fetchError);
-      throw fetchError;
-    }
+    console.log("Iniciando geração de resumos em lotes...");
 
-    if (!books || books.length === 0) {
-      console.log("No books pending summary generation");
-      return new Response(
-        JSON.stringify({ message: 'Nenhum livro pendente para gerar resumo', processed: 0 }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+    // Loop para processar todos os livros de 10 em 10
+    while (hasMoreBooks) {
+      batchNumber++;
+      console.log(`\n=== Processando lote ${batchNumber} ===`);
 
-    console.log(`Found ${books.length} books without summaries`);
+      // Buscar próximo lote de livros sem resumo
+      const { data: books, error: fetchError } = await supabase
+        .from('books')
+        .select('id, title, author, lang')
+        .is('summary', null)
+        .eq('is_active', true)
+        .limit(10);
 
-    let processed = 0;
-    let errors = 0;
+      if (fetchError) {
+        console.error("Error fetching books:", fetchError);
+        throw fetchError;
+      }
 
-    for (const book of books) {
-      try {
-        console.log(`Generating summary for: ${book.title} by ${book.author}`);
+      if (!books || books.length === 0) {
+        console.log("Não há mais livros sem resumo para processar.");
+        hasMoreBooks = false;
+        break;
+      }
 
-        const prompt = generatePrompt(book);
-        
-        let summary;
+      console.log(`Encontrados ${books.length} livros neste lote`);
+
+      let batchProcessed = 0;
+      let batchErrors = 0;
+
+      for (const book of books) {
         try {
-          summary = await generateSummaryWithAI(prompt, LOVABLE_API_KEY);
-        } catch (aiError) {
-          console.error(`AI error for book ${book.id}:`, aiError);
-          errors++;
-          continue;
+          console.log(`Generating summary for: ${book.title} by ${book.author}`);
+
+          const prompt = generatePrompt(book);
+          
+          let summary;
+          try {
+            summary = await generateSummaryWithAI(prompt, LOVABLE_API_KEY);
+          } catch (aiError) {
+            console.error(`AI error for book ${book.id}:`, aiError);
+            batchErrors++;
+            continue;
+          }
+
+          if (!summary || summary.trim().length === 0) {
+            console.error(`Empty summary generated for book ${book.id}`);
+            batchErrors++;
+            continue;
+          }
+
+          // Atualizar livro com resumo gerado
+          const { error: updateError } = await supabase
+            .from('books')
+            .update({
+              summary: summary,
+              summary_generated_at: new Date().toISOString()
+            })
+            .eq('id', book.id);
+
+          if (updateError) {
+            console.error(`Error updating book ${book.id}:`, updateError);
+            batchErrors++;
+          } else {
+            batchProcessed++;
+            console.log(`✓ Summary saved for: ${book.title}`);
+          }
+
+          // Delay entre requisições para evitar rate limiting
+          await new Promise(resolve => setTimeout(resolve, 500));
+
+        } catch (error) {
+          console.error(`Error processing book ${book.id}:`, error);
+          batchErrors++;
         }
+      }
 
-        if (!summary || summary.trim().length === 0) {
-          console.error(`Empty summary generated for book ${book.id}`);
-          errors++;
-          continue;
-        }
+      totalProcessed += batchProcessed;
+      totalErrors += batchErrors;
 
-        // Salvar resumo no banco
-        const { error: updateError } = await supabase
-          .from('books')
-          .update({
-            summary: summary,
-            summary_generated_at: new Date().toISOString(),
-          })
-          .eq('id', book.id);
+      console.log(`Lote ${batchNumber} concluído: ${batchProcessed} sucessos, ${batchErrors} erros`);
+      console.log(`Total acumulado: ${totalProcessed} resumos gerados`);
 
-        if (updateError) {
-          console.error(`Error updating book ${book.id}:`, updateError);
-          errors++;
-        } else {
-          processed++;
-          console.log(`✓ Summary saved for: ${book.title}`);
-        }
+      // Se processou menos de 10 livros, significa que não há mais livros
+      if (books.length < 10) {
+        hasMoreBooks = false;
+      }
 
-        // Delay entre requisições para evitar rate limiting
-        await new Promise(resolve => setTimeout(resolve, 500));
-
-      } catch (error) {
-        console.error(`Error processing book ${book.id}:`, error);
-        errors++;
+      // Pequeno delay entre lotes
+      if (hasMoreBooks) {
+        console.log("Aguardando 2 segundos antes do próximo lote...");
+        await new Promise(resolve => setTimeout(resolve, 2000));
       }
     }
 
-    console.log(`Batch completed: ${processed} processed, ${errors} errors`);
+    console.log(`\n=== Geração de resumos concluída ===`);
+    console.log(`Total de lotes processados: ${batchNumber}`);
+    console.log(`Total de resumos gerados: ${totalProcessed}`);
+    console.log(`Total de erros: ${totalErrors}`);
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
-        processed, 
-        errors,
-        total: books.length 
+      JSON.stringify({
+        success: true,
+        batches: batchNumber,
+        processed: totalProcessed,
+        errors: totalErrors,
+        message: `Processados ${totalProcessed} resumos em ${batchNumber} lote(s)`
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
