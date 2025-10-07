@@ -24,6 +24,7 @@ import { getThemeCategoryId } from "@/config/themes";
 import { SummarySection } from "@/components/SummarySection";
 import type { BookSummary } from "@/types";
 import { getCachedAudio, saveAudioToCache } from "@/lib/cacheUtils";
+import { BuyOnAmazonButton } from "@/components/BuyOnAmazonButton";
 
 const Summary = () => {
   const { t, i18n } = useTranslation();
@@ -687,6 +688,13 @@ const Summary = () => {
                 </>
               )}
             </Button>
+            <BuyOnAmazonButton
+              asin={null}
+              title={summary.canonical_title || summary.book_title}
+              author={summary.canonical_author || summary.book_author}
+              locale={(i18n.language || "pt").split("-")[0] as 'pt' | 'en' | 'es'}
+              className="flex-1 min-w-[140px] sm:min-w-[160px] text-xs sm:text-sm px-3 sm:px-4"
+            />
             <Button onClick={handleCopy} variant="outline" className="flex-1 min-w-[140px] sm:min-w-[160px] text-xs sm:text-sm px-3 sm:px-4">
               <Copy className="w-4 h-4 mr-1 sm:mr-2 shrink-0" />
               <span className="truncate">{t("summary.copy")}</span>

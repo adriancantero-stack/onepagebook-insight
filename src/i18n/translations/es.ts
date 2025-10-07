@@ -272,6 +272,10 @@ export const es = {
     "footer.contact": "Contacto",
     "footer.faq": "FAQ",
     "footer.copyright": "© {{year}} onepagebook.ai",
+    "footer.affiliate": "Como Asociado de Amazon, gano con compras que califican.",
+    
+    // Amazon
+    "amazon.buyButton": "Comprar en Amazon",
     
     // FAQ
     "faq.title": "Preguntas Frecuentes",

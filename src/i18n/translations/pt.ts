@@ -215,6 +215,10 @@ export const pt = {
     "footer.faq": "FAQ",
     "footer.copyright": "© {{year}} onepagebook.ai",
     "footer.tagline": "Conhecimento na velocidade que você precisa.",
+    "footer.affiliate": "Como Associado da Amazon, eu ganho com compras qualificadas.",
+    
+    // Amazon
+    "amazon.buyButton": "Comprar na Amazon",
     
     // Landing Page
     "landing.hero.headline": "Leia 10 livros em 10 minutos.",
