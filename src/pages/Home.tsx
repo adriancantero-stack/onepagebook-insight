@@ -50,6 +50,7 @@ const Home = () => {
     done: "",
     error: ""
   });
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -92,19 +93,32 @@ const Home = () => {
   };
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) {
-        navigate("/auth");
-      } else {
+    // Listen first to avoid missing auth events after OAuth redirect
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
         setUser(session.user);
+        setIsCheckingAuth(false);
+      } else {
+        setUser(null);
       }
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) {
-        navigate("/auth");
-      } else {
+    // Then check existing session; if not found, wait briefly before redirecting
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
         setUser(session.user);
+        setIsCheckingAuth(false);
+      } else {
+        setTimeout(() => {
+          supabase.auth.getSession().then(({ data: { session: s2 } }) => {
+            if (s2?.user) {
+              setUser(s2.user);
+            } else {
+              navigate("/auth", { replace: true });
+            }
+            setIsCheckingAuth(false);
+          });
+        }, 400);
       }
     });
 
@@ -340,7 +354,16 @@ const Home = () => {
     navigate("/auth");
   };
 
-  if (!user) return null;
+  if (!user) {
+    if (isCheckingAuth) {
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
+      );
+    }
+    return null;
+  }
 
   const isStep = (step: GenStep) => genState.step === step;
 
