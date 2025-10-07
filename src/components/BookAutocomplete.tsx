@@ -34,11 +34,12 @@ export const BookAutocomplete = ({
   const [loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [bookSelected, setBookSelected] = useState(false);
   const debounceRef = useRef<number>();
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const fetchSuggestions = useCallback(async (query: string) => {
-    if (query.length < 2) {
+    if (query.length < 2 || bookSelected) {
       setSuggestions([]);
       setShowDropdown(false);
       return;
@@ -60,7 +61,7 @@ export const BookAutocomplete = ({
     } finally {
       setLoading(false);
     }
-  }, [lang]);
+  }, [lang, bookSelected]);
 
   useEffect(() => {
     if (debounceRef.current) {
@@ -99,6 +100,7 @@ export const BookAutocomplete = ({
     }
     setShowDropdown(false);
     setSelectedIndex(-1);
+    setBookSelected(true);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -175,7 +177,10 @@ export const BookAutocomplete = ({
         <Input
           placeholder={t("home.bookTitlePlaceholder")}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => {
+            onChange(e.target.value);
+            setBookSelected(false);
+          }}
           onKeyDown={handleKeyDown}
           disabled={disabled}
           autoComplete="off"
