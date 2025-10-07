@@ -8,28 +8,62 @@ import { Loader2, ImagePlus } from "lucide-react";
 
 export default function GenerateCovers() {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isChecking, setIsChecking] = useState(false);
+  const [booksWithoutCovers, setBooksWithoutCovers] = useState<number | null>(null);
   const [results, setResults] = useState<any>(null);
   const [progress, setProgress] = useState<{ current: number; total: number } | null>(null);
   const { toast } = useToast();
+
+  const checkBooksWithoutCovers = async () => {
+    setIsChecking(true);
+    try {
+      const { count, error } = await supabase
+        .from('books')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true)
+        .or('cover_url.is.null,cover_url.eq./logo-gray.png');
+
+      if (error) throw error;
+      setBooksWithoutCovers(count || 0);
+      
+      if (count === 0) {
+        toast({
+          title: "Nenhum livro sem capa",
+          description: "Todos os livros já possuem capas atualizadas!",
+        });
+      }
+    } catch (error) {
+      console.error('Error checking covers:', error);
+      toast({
+        title: "Erro ao verificar capas",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsChecking(false);
+    }
+  };
 
   const handleGenerateCovers = async () => {
     setIsGenerating(true);
     setResults(null);
 
     try {
-      // Get total count first
+      // Get books without covers
       const { data: books, error: booksError } = await supabase
         .from('books')
         .select('id, title, author, cover_url')
         .eq('is_active', true)
+        .or('cover_url.is.null,cover_url.eq./logo-gray.png')
         .order('created_at', { ascending: true });
 
       if (booksError) throw booksError;
       if (!books || books.length === 0) {
         toast({
-          title: "Nenhum livro encontrado",
-          description: "Não há livros ativos para atualizar",
+          title: "Nenhum livro sem capa",
+          description: "Todos os livros já possuem capas!",
         });
+        setIsGenerating(false);
         return;
       }
 
@@ -99,25 +133,57 @@ export default function GenerateCovers() {
         </div>
 
         <Card className="p-8 space-y-6">
-          <div className="flex justify-center">
+          <div className="flex flex-col items-center gap-4">
             <Button
-              onClick={handleGenerateCovers}
-              disabled={isGenerating}
+              onClick={checkBooksWithoutCovers}
+              disabled={isChecking || isGenerating}
               size="lg"
+              variant="outline"
               className="gap-2"
             >
-              {isGenerating ? (
+              {isChecking ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Atualizando capas...
+                  Verificando...
                 </>
               ) : (
                 <>
                   <ImagePlus className="w-5 h-5" />
-                  Atualizar Capas
+                  Verificar Livros Sem Capas
                 </>
               )}
             </Button>
+
+            {booksWithoutCovers !== null && (
+              <div className="text-center space-y-2">
+                <p className="text-lg font-semibold">
+                  {booksWithoutCovers === 0 
+                    ? "✅ Todos os livros têm capas!"
+                    : `📚 ${booksWithoutCovers} livros sem capas encontrados`}
+                </p>
+                
+                {booksWithoutCovers > 0 && (
+                  <Button
+                    onClick={handleGenerateCovers}
+                    disabled={isGenerating}
+                    size="lg"
+                    className="gap-2"
+                  >
+                    {isGenerating ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        Atualizando capas...
+                      </>
+                    ) : (
+                      <>
+                        <ImagePlus className="w-5 h-5" />
+                        Iniciar Atualização
+                      </>
+                    )}
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
 
           {progress && progress.total > 0 && (
