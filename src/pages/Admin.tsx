@@ -21,7 +21,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Users, FileText, TrendingUp, Crown, Download, BookOpen, ImagePlus } from "lucide-react";
+import { Users, FileText, TrendingUp, Crown, Download, BookOpen, ImagePlus, Sparkles } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
@@ -52,6 +52,7 @@ const Admin = () => {
   const [userGrowth, setUserGrowth] = useState<{ date: string; users: number }[]>([]);
   const [catalogStats, setCatalogStats] = useState({ total: 0, pt: 0, en: 0, es: 0 });
   const [importing, setImporting] = useState(false);
+  const [batchGenerating, setBatchGenerating] = useState(false);
   const [importProgress, setImportProgress] = useState<string[]>([]);
 
   useEffect(() => {
@@ -232,6 +233,40 @@ const Admin = () => {
     }
   };
 
+  const handleBatchGenerateSummaries = async () => {
+    setBatchGenerating(true);
+    toast.info("Iniciando geração automática de resumos...");
+
+    try {
+      const { data, error } = await supabase.functions.invoke("batch-generate-summaries");
+
+      if (error) {
+        toast.error("Erro na geração de resumos", {
+          description: error.message
+        });
+        return;
+      }
+
+      toast.success("Geração concluída!", {
+        description: `${data.processed} resumos gerados com sucesso`
+      });
+
+      if (data.errors > 0) {
+        toast.warning(`${data.errors} livros apresentaram erros na geração`);
+      }
+
+      // Reload data
+      await loadAdminData();
+    } catch (error) {
+      console.error("Batch generate error:", error);
+      toast.error("Erro", {
+        description: "Falha ao gerar resumos automaticamente"
+      });
+    } finally {
+      setBatchGenerating(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background p-8">
@@ -345,9 +380,9 @@ const Admin = () => {
               </div>
             </div>
 
-            {/* Import Button */}
+            {/* Import Buttons */}
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <Button 
                   onClick={handleImportGoogleBooks}
                   disabled={importing}
@@ -366,6 +401,17 @@ const Admin = () => {
                 >
                   <ImagePlus className="mr-2 h-4 w-4" />
                   Gerar Capas dos Livros
+                </Button>
+
+                <Button 
+                  onClick={handleBatchGenerateSummaries}
+                  disabled={batchGenerating}
+                  variant="outline"
+                  className="w-full"
+                  size="lg"
+                >
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  {batchGenerating ? "Gerando..." : "Gerar Resumos Auto"}
                 </Button>
               </div>
 
