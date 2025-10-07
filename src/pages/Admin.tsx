@@ -22,6 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Users, FileText, TrendingUp, Crown, Download, BookOpen, ImagePlus, Sparkles, Upload } from "lucide-react";
+import { bookCatalog } from "@/data/bookCatalog";
 import { Progress } from "@/components/ui/progress";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
@@ -283,7 +284,19 @@ const Admin = () => {
     toast.info("Importando catálogo hardcoded para o banco de dados...");
 
     try {
-      const { data, error } = await supabase.functions.invoke("import-hardcoded-catalog");
+      // Flatten full catalog from code
+      const flatBooks = bookCatalog.flatMap(cat =>
+        cat.books.map(b => ({
+          title: b.title,
+          author: b.author,
+          lang: b.locale,
+          categoryId: cat.id,
+        }))
+      );
+
+      const { data, error } = await supabase.functions.invoke("import-hardcoded-catalog", {
+        body: { books: flatBooks }
+      });
 
       if (error) {
         toast.error("Erro na importação do catálogo", {
@@ -293,7 +306,7 @@ const Admin = () => {
       }
 
       toast.success("Importação do catálogo concluída!", {
-        description: `${data.stats.inserted} livros importados, ${data.stats.skipped} já existiam`
+        description: `${data.stats.inserted} importados, ${data.stats.skipped} já existiam (Total: ${data.stats.total})`
       });
 
       // Reload data

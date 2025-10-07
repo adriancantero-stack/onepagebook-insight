@@ -214,10 +214,27 @@ serve(async (req) => {
 
     log.push("Iniciando importação do catálogo hardcoded...");
 
-    // Flatten all categories into a single list
-    const allBooks = Object.entries(BOOK_DATA).flatMap(([categoryId, books]) =>
-      books.map(b => ({ ...b, categoryId }))
-    );
+    // Build input list: prefer client-provided books, fallback to embedded data
+    let allBooks: Array<{ title: string; author: string; lang: string; categoryId: string }> = [];
+    try {
+      const body = await req.json();
+      if (Array.isArray(body?.books)) {
+        allBooks = body.books.map((b: any) => ({
+          title: String(b.title),
+          author: String(b.author),
+          lang: String(b.lang || b.locale || 'pt'),
+          categoryId: String(b.categoryId || b.category || 'misc')
+        }));
+      }
+    } catch (_) {
+      // no body provided
+    }
+
+    if (allBooks.length === 0) {
+      allBooks = Object.entries(BOOK_DATA).flatMap(([categoryId, books]) =>
+        books.map(b => ({ title: b.title, author: b.author, lang: b.locale, categoryId }))
+      );
+    }
 
     const total = allBooks.length;
     const batchSize = 100;
@@ -237,7 +254,7 @@ serve(async (req) => {
             .select('id')
             .eq('title', book.title)
             .eq('author', book.author)
-            .eq('lang', book.locale)
+            .eq('lang', book.lang)
             .maybeSingle();
 
           if (existing) {
@@ -250,7 +267,7 @@ serve(async (req) => {
             .insert({
               title: book.title,
               author: book.author,
-              lang: book.locale,
+              lang: book.lang,
               category: book.categoryId,
               is_active: true,
               popularity: 0,
