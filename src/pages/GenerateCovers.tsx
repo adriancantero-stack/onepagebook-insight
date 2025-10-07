@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2, ImagePlus } from "lucide-react";
@@ -8,16 +9,31 @@ import { Loader2, ImagePlus } from "lucide-react";
 export default function GenerateCovers() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [results, setResults] = useState<any>(null);
+  const [progress, setProgress] = useState<{ current: number; total: number } | null>(null);
   const { toast } = useToast();
 
   const handleGenerateCovers = async () => {
     setIsGenerating(true);
     setResults(null);
+    setProgress(null);
 
     try {
+      // First, get total count of active books
+      const { count } = await supabase
+        .from('books')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true);
+
+      const totalBooks = count || 0;
+      setProgress({ current: 0, total: totalBooks });
+
       const { data, error } = await supabase.functions.invoke('update-book-covers');
 
       if (error) throw error;
+
+      // Update progress to completion
+      const processed = (data.results.success || 0) + (data.results.skipped || 0) + (data.results.failed || 0);
+      setProgress({ current: processed, total: totalBooks });
 
       setResults(data);
       toast({
@@ -67,6 +83,16 @@ export default function GenerateCovers() {
               )}
             </Button>
           </div>
+
+          {progress && progress.total > 0 && (
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm text-muted-foreground">
+                <span>Progresso</span>
+                <span>{progress.current} / {progress.total} livros</span>
+              </div>
+              <Progress value={(progress.current / progress.total) * 100} />
+            </div>
+          )}
 
           {results && (
             <div className="space-y-4 mt-6">
