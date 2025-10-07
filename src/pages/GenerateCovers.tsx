@@ -18,11 +18,20 @@ export default function GenerateCovers() {
     setProgress(null);
 
     try {
+      console.log('[GenerateCovers] Starting cover update process...');
+      
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) throw new Error('Not authenticated');
+      if (!session) {
+        console.error('[GenerateCovers] No session found');
+        throw new Error('Not authenticated');
+      }
 
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const response = await fetch(`${supabaseUrl}/functions/v1/update-book-covers`, {
+      const url = `${supabaseUrl}/functions/v1/update-book-covers`;
+      
+      console.log('[GenerateCovers] Calling edge function:', url);
+
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${session.access_token}`,
@@ -30,31 +39,57 @@ export default function GenerateCovers() {
         },
       });
 
-      if (!response.ok) throw new Error('Failed to start cover update');
+      console.log('[GenerateCovers] Response status:', response.status);
+      console.log('[GenerateCovers] Response headers:', Object.fromEntries(response.headers.entries()));
+
+      if (!response.ok) {
+        console.error('[GenerateCovers] Response not OK');
+        throw new Error('Failed to start cover update');
+      }
 
       const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
+      if (!reader) {
+        console.error('[GenerateCovers] No reader available');
+        throw new Error('No response stream');
+      }
 
-      if (!reader) throw new Error('No response stream');
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      console.log('[GenerateCovers] Starting to read stream...');
 
       while (true) {
         const { done, value } = await reader.read();
-        if (done) break;
+        
+        if (done) {
+          console.log('[GenerateCovers] Stream complete');
+          break;
+        }
 
-        const chunk = decoder.decode(value);
-        const lines = chunk.split('\n');
+        buffer += decoder.decode(value, { stream: true });
+        console.log('[GenerateCovers] Buffer:', buffer);
+
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || ''; // Keep incomplete line in buffer
 
         for (const line of lines) {
           if (line.startsWith('data: ')) {
             try {
-              const data = JSON.parse(line.slice(6));
+              const jsonStr = line.slice(6).trim();
+              if (!jsonStr) continue;
+              
+              console.log('[GenerateCovers] Parsing JSON:', jsonStr);
+              const data = JSON.parse(jsonStr);
+              console.log('[GenerateCovers] Parsed data:', data);
               
               if (data.type === 'progress') {
+                console.log('[GenerateCovers] Progress update:', data.processed, '/', data.total);
                 setProgress({ 
                   current: data.processed, 
                   total: data.total 
                 });
               } else if (data.type === 'complete') {
+                console.log('[GenerateCovers] Process complete:', data);
                 setResults(data);
                 toast({
                   title: "Capas atualizadas com sucesso!",
@@ -62,14 +97,14 @@ export default function GenerateCovers() {
                 });
               }
             } catch (e) {
-              console.error('Error parsing SSE:', e);
+              console.error('[GenerateCovers] Error parsing SSE:', e, 'Line:', line);
             }
           }
         }
       }
 
     } catch (error) {
-      console.error('Error updating covers:', error);
+      console.error('[GenerateCovers] Error:', error);
       toast({
         title: "Erro ao atualizar capas",
         description: error.message,
@@ -77,6 +112,7 @@ export default function GenerateCovers() {
       });
     } finally {
       setIsGenerating(false);
+      console.log('[GenerateCovers] Process finished');
     }
   };
 
