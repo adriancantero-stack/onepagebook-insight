@@ -31,6 +31,10 @@ interface AdminStats {
   totalSummaries: number;
   freeUsers: number;
   premiumUsers: number;
+  booksWithSummary: number;
+  booksWithoutSummary: number;
+  booksWithCover: number;
+  booksWithoutCover: number;
 }
 
 interface UserData {
@@ -135,6 +139,10 @@ const Admin = () => {
         totalSummaries,
         freeUsers: planCounts.free || 0,
         premiumUsers: planCounts.premium || 0,
+        booksWithSummary: 0,
+        booksWithoutSummary: 0,
+        booksWithCover: 0,
+        booksWithoutCover: 0,
       });
 
       // Prepare users table data
@@ -174,10 +182,10 @@ const Admin = () => {
 
       setUserGrowth(growthArray);
 
-      // Load catalog stats
+      // Load catalog stats with summary and cover info
       const { data: booksData } = await supabase
         .from("books")
-        .select("lang");
+        .select("lang, summary, cover_url");
 
       if (booksData) {
         const langCounts = booksData.reduce((acc: any, book) => {
@@ -185,12 +193,23 @@ const Admin = () => {
           return acc;
         }, {});
 
+        const booksWithSummary = booksData.filter(b => b.summary !== null).length;
+        const booksWithCover = booksData.filter(b => b.cover_url !== null).length;
+
         setCatalogStats({
           total: booksData.length,
           pt: langCounts.pt || 0,
           en: langCounts.en || 0,
           es: langCounts.es || 0,
         });
+
+        setStats(prev => prev ? {
+          ...prev,
+          booksWithSummary,
+          booksWithoutSummary: booksData.length - booksWithSummary,
+          booksWithCover,
+          booksWithoutCover: booksData.length - booksWithCover,
+        } : null);
       }
     } catch (error) {
       console.error("Error loading admin data:", error);
@@ -377,6 +396,38 @@ const Admin = () => {
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">ES</p>
                 <p className="text-2xl font-bold">{catalogStats.es}</p>
+              </div>
+            </div>
+
+            {/* Summary and Cover Stats */}
+            <div className="grid grid-cols-2 gap-4 pt-4 border-t">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium">Livros com Resumo</p>
+                  <Badge variant="secondary">{stats?.booksWithSummary || 0}</Badge>
+                </div>
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-muted-foreground">Livros sem Resumo</p>
+                  <Badge variant="outline">{stats?.booksWithoutSummary || 0}</Badge>
+                </div>
+                <Progress 
+                  value={catalogStats.total > 0 ? ((stats?.booksWithSummary || 0) / catalogStats.total) * 100 : 0} 
+                  className="h-2"
+                />
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium">Livros com Capa</p>
+                  <Badge variant="secondary">{stats?.booksWithCover || 0}</Badge>
+                </div>
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-muted-foreground">Livros sem Capa</p>
+                  <Badge variant="outline">{stats?.booksWithoutCover || 0}</Badge>
+                </div>
+                <Progress 
+                  value={catalogStats.total > 0 ? ((stats?.booksWithCover || 0) / catalogStats.total) * 100 : 0} 
+                  className="h-2"
+                />
               </div>
             </div>
 
