@@ -570,11 +570,11 @@ const Admin = () => {
                   <Button 
                     onClick={handleImportGoogleBooks}
                     disabled={importing}
-                    className="w-full text-xs h-auto py-3"
+                    className="w-full h-auto py-3 whitespace-normal"
                     size="lg"
                   >
                     <Download className="mr-2 h-4 w-4 shrink-0" />
-                    <span className="line-clamp-2 text-center">
+                    <span className="text-sm leading-tight">
                       {importing ? "Importando..." : "Importar Google Books"}
                     </span>
                   </Button>
