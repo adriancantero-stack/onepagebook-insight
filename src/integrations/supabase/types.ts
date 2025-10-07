@@ -193,6 +193,8 @@ export type Database = {
           page_count: number | null
           popularity: number | null
           published_year: number | null
+          summary: string | null
+          summary_generated_at: string | null
           tags: string[] | null
           title: string
           updated_at: string
@@ -212,6 +214,8 @@ export type Database = {
           page_count?: number | null
           popularity?: number | null
           published_year?: number | null
+          summary?: string | null
+          summary_generated_at?: string | null
           tags?: string[] | null
           title: string
           updated_at?: string
@@ -231,6 +235,8 @@ export type Database = {
           page_count?: number | null
           popularity?: number | null
           published_year?: number | null
+          summary?: string | null
+          summary_generated_at?: string | null
           tags?: string[] | null
           title?: string
           updated_at?: string
