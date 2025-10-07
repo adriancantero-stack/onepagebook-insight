@@ -22,13 +22,13 @@ serve(async (req) => {
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-    // Buscar livros sem resumo (limite de 50 por execução)
+    // Buscar livros sem resumo (limite de 10 por execução para evitar timeout)
     const { data: books, error: fetchError } = await supabase
       .from('books')
       .select('id, title, author, lang')
       .is('summary', null)
       .eq('is_active', true)
-      .limit(50);
+      .limit(10);
 
     if (fetchError) {
       console.error("Error fetching books:", fetchError);
@@ -53,7 +53,15 @@ serve(async (req) => {
         console.log(`Generating summary for: ${book.title} by ${book.author}`);
 
         const prompt = generatePrompt(book);
-        const summary = await generateSummaryWithAI(prompt, LOVABLE_API_KEY);
+        
+        let summary;
+        try {
+          summary = await generateSummaryWithAI(prompt, LOVABLE_API_KEY);
+        } catch (aiError) {
+          console.error(`AI error for book ${book.id}:`, aiError);
+          errors++;
+          continue;
+        }
 
         if (!summary || summary.trim().length === 0) {
           console.error(`Empty summary generated for book ${book.id}`);
@@ -78,8 +86,8 @@ serve(async (req) => {
           console.log(`✓ Summary saved for: ${book.title}`);
         }
 
-        // Pequeno delay para não sobrecarregar a API
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // Delay entre requisições para evitar rate limiting
+        await new Promise(resolve => setTimeout(resolve, 500));
 
       } catch (error) {
         console.error(`Error processing book ${book.id}:`, error);
@@ -169,7 +177,15 @@ async function generateSummaryWithAI(prompt: string, apiKey: string): Promise<st
   if (!response.ok) {
     const errorText = await response.text();
     console.error('AI API Error:', response.status, errorText);
-    throw new Error(`AI generation failed: ${response.status}`);
+    
+    if (response.status === 429) {
+      throw new Error('Rate limit exceeded - too many requests');
+    }
+    if (response.status === 402) {
+      throw new Error('Payment required - AI credits exhausted');
+    }
+    
+    throw new Error(`AI generation failed: ${response.status} - ${errorText}`);
   }
 
   const data = await response.json();
