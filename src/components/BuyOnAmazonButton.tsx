@@ -38,22 +38,16 @@ export function BuyOnAmazonButton({
   };
 
   return (
-    <Button
-      asChild
-      variant="default"
-      size="lg"
-      className={`gap-2 ${className}`}
+    <a
+      href={href}
+      target="_blank"
+      rel="nofollow sponsored"
+      aria-label={t('amazon.buyButton')}
+      onClick={handleClick}
+      className={`inline-flex items-center justify-center rounded-xl h-11 px-4 text-sm font-semibold bg-[#FF9900] text-black hover:bg-[#E68A00] active:bg-[#CC7A00] focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 transition-colors gap-2 ${className}`}
     >
-      <a
-        href={href}
-        target="_blank"
-        rel="nofollow sponsored"
-        aria-label={t('amazon.buyButton')}
-        onClick={handleClick}
-      >
-        <ShoppingCart className="w-4 h-4" aria-hidden="true" />
-        {t('amazon.buyButton')}
-      </a>
-    </Button>
+      <ShoppingCart className="w-4 h-4" aria-hidden="true" focusable="false" />
+      {t('amazon.buyButton')}
+    </a>
   );
 }

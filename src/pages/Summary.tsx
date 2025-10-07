@@ -670,7 +670,14 @@ const Summary = () => {
             </div>
           )}
 
-          <div className="flex flex-wrap gap-2 sm:gap-3 mt-6 sm:mt-8 pt-6 border-t border-border">
+          <div className="flex flex-wrap items-center justify-start gap-2 sm:gap-3 mt-6 sm:mt-8 pt-6 border-t border-border w-full">
+            <BuyOnAmazonButton
+              asin={null}
+              title={summary.canonical_title || summary.book_title}
+              author={summary.canonical_author || summary.book_author}
+              locale={(i18n.language || "pt").split("-")[0] as 'pt' | 'en' | 'es'}
+              className="flex-1 min-w-[140px] sm:min-w-[160px]"
+            />
             <Button 
               onClick={handleListenSummary} 
               disabled={isGeneratingAudio}
@@ -688,13 +695,6 @@ const Summary = () => {
                 </>
               )}
             </Button>
-            <BuyOnAmazonButton
-              asin={null}
-              title={summary.canonical_title || summary.book_title}
-              author={summary.canonical_author || summary.book_author}
-              locale={(i18n.language || "pt").split("-")[0] as 'pt' | 'en' | 'es'}
-              className="flex-1 min-w-[140px] sm:min-w-[160px] text-xs sm:text-sm px-3 sm:px-4"
-            />
             <Button onClick={handleCopy} variant="outline" className="flex-1 min-w-[140px] sm:min-w-[160px] text-xs sm:text-sm px-3 sm:px-4">
               <Copy className="w-4 h-4 mr-1 sm:mr-2 shrink-0" />
               <span className="truncate">{t("summary.copy")}</span>
