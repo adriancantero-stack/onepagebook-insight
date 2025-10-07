@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
+import { CronTimer } from "@/components/CronTimer";
 import {
   Card,
   CardContent,
@@ -61,9 +62,19 @@ const Admin = () => {
   const [catalogImportProgress, setCatalogImportProgress] = useState({ current: 0, total: 0 });
   const [batchGenerating, setBatchGenerating] = useState(false);
   const [importProgress, setImportProgress] = useState<string[]>([]);
+  const [cronSchedules, setCronSchedules] = useState<Array<{
+    job_name: string;
+    description: string;
+    next_run_at: string;
+  }>>([]);
 
   useEffect(() => {
     checkAdminAccess();
+    loadCronSchedules();
+    
+    // Update cron schedules every minute
+    const interval = setInterval(loadCronSchedules, 60000);
+    return () => clearInterval(interval);
   }, []);
 
   const checkAdminAccess = async () => {
@@ -94,6 +105,21 @@ const Admin = () => {
       navigate("/");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadCronSchedules = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('cron_schedules')
+        .select('job_name, description, next_run_at')
+        .order('job_name');
+      
+      if (!error && data) {
+        setCronSchedules(data);
+      }
+    } catch (error) {
+      console.error('Error loading cron schedules:', error);
     }
   };
 
@@ -540,47 +566,67 @@ const Admin = () => {
             {/* Import Buttons */}
             <div className="space-y-4">
               <div className="grid grid-cols-4 gap-4">
-                <Button 
-                  onClick={handleImportGoogleBooks}
-                  disabled={importing}
-                  className="w-full"
-                  size="lg"
-                >
-                  <Download className="mr-2 h-4 w-4" />
-                  {importing ? "Importando..." : "Importar Google Books"}
-                </Button>
+                <div className="space-y-2">
+                  <Button 
+                    onClick={handleImportGoogleBooks}
+                    disabled={importing}
+                    className="w-full"
+                    size="lg"
+                  >
+                    <Download className="mr-2 h-4 w-4" />
+                    {importing ? "Importando..." : "Importar Google Books"}
+                  </Button>
+                  {cronSchedules.find(s => s.job_name === 'weekly-google-books-import') && (
+                    <CronTimer 
+                      nextRunAt={cronSchedules.find(s => s.job_name === 'weekly-google-books-import')!.next_run_at}
+                      jobName="weekly-google-books-import"
+                    />
+                  )}
+                </div>
 
-                <Button 
-                  onClick={handleImportHardcodedCatalog}
-                  disabled={importingCatalog}
-                  variant="secondary"
-                  className="w-full"
-                  size="lg"
-                >
-                  <Upload className="mr-2 h-4 w-4" />
-                  {importingCatalog ? "Importando..." : "Importar Catálogo"}
-                </Button>
+                <div className="space-y-2">
+                  <Button 
+                    onClick={handleImportHardcodedCatalog}
+                    disabled={importingCatalog}
+                    variant="secondary"
+                    className="w-full"
+                    size="lg"
+                  >
+                    <Upload className="mr-2 h-4 w-4" />
+                    {importingCatalog ? "Importando..." : "Importar Catálogo"}
+                  </Button>
+                </div>
                 
-                <Button 
-                  onClick={() => navigate("/generate-covers")}
-                  variant="secondary"
-                  className="w-full"
-                  size="lg"
-                >
-                  <ImagePlus className="mr-2 h-4 w-4" />
-                  Gerar Capas
-                </Button>
+                <div className="space-y-2">
+                  <Button 
+                    onClick={() => navigate("/generate-covers")}
+                    variant="secondary"
+                    className="w-full"
+                    size="lg"
+                  >
+                    <ImagePlus className="mr-2 h-4 w-4" />
+                    Gerar Capas
+                  </Button>
+                </div>
 
-                <Button 
-                  onClick={handleBatchGenerateSummaries}
-                  disabled={batchGenerating}
-                  variant="outline"
-                  className="w-full"
-                  size="lg"
-                >
-                  <Sparkles className="mr-2 h-4 w-4" />
-                  {batchGenerating ? "Gerando..." : "Gerar Resumos"}
-                </Button>
+                <div className="space-y-2">
+                  <Button 
+                    onClick={handleBatchGenerateSummaries}
+                    disabled={batchGenerating}
+                    variant="outline"
+                    className="w-full"
+                    size="lg"
+                  >
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    {batchGenerating ? "Gerando..." : "Gerar Resumos"}
+                  </Button>
+                  {cronSchedules.find(s => s.job_name === 'daily-summary-generation') && (
+                    <CronTimer 
+                      nextRunAt={cronSchedules.find(s => s.job_name === 'daily-summary-generation')!.next_run_at}
+                      jobName="daily-summary-generation"
+                    />
+                  )}
+                </div>
               </div>
 
               {/* Catalog Import Progress */}

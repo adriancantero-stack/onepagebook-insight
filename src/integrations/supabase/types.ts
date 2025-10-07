@@ -243,6 +243,36 @@ export type Database = {
         }
         Relationships: []
       }
+      cron_schedules: {
+        Row: {
+          created_at: string | null
+          cron_expression: string
+          description: string | null
+          id: string
+          job_name: string
+          last_run_at: string | null
+          next_run_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          cron_expression: string
+          description?: string | null
+          id?: string
+          job_name: string
+          last_run_at?: string | null
+          next_run_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          cron_expression?: string
+          description?: string | null
+          id?: string
+          job_name?: string
+          last_run_at?: string | null
+          next_run_at?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -368,6 +398,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_next_cron_run: {
+        Args: { cron_expr: string; from_time?: string }
+        Returns: string
+      }
       gtrgm_compress: {
         Args: { "": unknown }
         Returns: unknown
