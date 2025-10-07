@@ -1,7 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { Resend } from "https://esm.sh/resend@2.0.0";
-
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -34,12 +32,26 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    // Send email to contact@onepagebook.ai
-    const emailResponse = await resend.emails.send({
-      from: "OnePageBook Contact <onboarding@resend.dev>",
-      to: ["contact@onepagebook.ai"],
-      reply_to: email,
+    // Configure SMTP client for Zoho
+    const client = new SMTPClient({
+      connection: {
+        hostname: "smtp.zoho.com",
+        port: 465,
+        tls: true,
+        auth: {
+          username: Deno.env.get("ZOHO_USER") as string,
+          password: Deno.env.get("ZOHO_PASS") as string,
+        },
+      },
+    });
+
+    // Send email
+    await client.send({
+      from: Deno.env.get("ZOHO_USER") as string,
+      to: "contact@onepagebook.ai",
+      replyTo: email,
       subject: "Nova mensagem de contato – OnePageBook.ai",
+      content: "auto",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #333; border-bottom: 2px solid #0066cc; padding-bottom: 10px;">
@@ -71,7 +83,9 @@ const handler = async (req: Request): Promise<Response> => {
       `,
     });
 
-    console.log("Contact email sent successfully:", emailResponse);
+    await client.close();
+
+    console.log("Contact email sent successfully via Zoho SMTP");
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
