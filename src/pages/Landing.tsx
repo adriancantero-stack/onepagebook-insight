@@ -41,20 +41,20 @@ export default function Landing({ lang }: LandingProps) {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b border-border/40 sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        <nav className="container mx-auto px-4 py-4 flex justify-between items-center" role="navigation" aria-label="Main navigation">
           <div className="flex items-center gap-2">
-            <BookOpen className="h-6 w-6 text-primary" />
+            <BookOpen className="h-6 w-6 text-primary" aria-hidden="true" />
             <span className="font-bold text-xl">OnePageBook</span>
           </div>
           <LanguageSelector />
-        </div>
+        </nav>
       </header>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-8 md:py-12 lg:py-20">
+      <section className="container mx-auto px-4 py-8 md:py-12 lg:py-20" aria-labelledby="hero-title">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <div className="space-y-4 md:space-y-6 text-center lg:text-left">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+            <h1 id="hero-title" className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
               {t("landing.hero.headline")}
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground">
@@ -79,8 +79,11 @@ export default function Landing({ lang }: LandingProps) {
             <div className="rounded-lg overflow-hidden shadow-2xl">
               <img 
                 src={heroMockup} 
-                alt="OnePageBook Summary Example"
+                alt="Exemplo de resumo de livro gerado pela OnePageBook mostrando insights práticos"
                 className="w-full h-auto"
+                loading="eager"
+                width="600"
+                height="800"
               />
             </div>
           </div>
@@ -88,32 +91,33 @@ export default function Landing({ lang }: LandingProps) {
       </section>
 
       {/* Benefits Section */}
-      <section className="bg-muted/30 py-12 md:py-16">
+      <section className="bg-muted/30 py-12 md:py-16" aria-labelledby="benefits-title">
+        <h2 id="benefits-title" className="sr-only">Benefícios do OnePageBook</h2>
         <div className="container mx-auto px-4">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            <Card className="p-6 text-center hover:shadow-lg transition-all hover:scale-105">
+            <article className="p-6 text-center hover:shadow-lg transition-all hover:scale-105 bg-card rounded-lg border border-border">
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 mb-4">
-                <Clock className="h-6 w-6 text-primary" />
+                <Clock className="h-6 w-6 text-primary" aria-hidden="true" />
               </div>
               <h3 className="text-xl font-bold mb-2">{t("landing.benefits.time.title")}</h3>
               <p className="text-muted-foreground">{t("landing.benefits.time.desc")}</p>
-            </Card>
+            </article>
 
-            <Card className="p-6 text-center hover:shadow-lg transition-all hover:scale-105">
+            <article className="p-6 text-center hover:shadow-lg transition-all hover:scale-105 bg-card rounded-lg border border-border">
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 mb-4">
-                <BookOpen className="h-6 w-6 text-primary" />
+                <BookOpen className="h-6 w-6 text-primary" aria-hidden="true" />
               </div>
               <h3 className="text-xl font-bold mb-2">{t("landing.benefits.learn.title")}</h3>
               <p className="text-muted-foreground">{t("landing.benefits.learn.desc")}</p>
-            </Card>
+            </article>
 
-            <Card className="p-6 text-center hover:shadow-lg transition-all hover:scale-105 sm:col-span-2 lg:col-span-1">
+            <article className="p-6 text-center hover:shadow-lg transition-all hover:scale-105 sm:col-span-2 lg:col-span-1 bg-card rounded-lg border border-border">
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 mb-4">
-                <Zap className="h-6 w-6 text-primary" />
+                <Zap className="h-6 w-6 text-primary" aria-hidden="true" />
               </div>
               <h3 className="text-xl font-bold mb-2">{t("landing.benefits.apply.title")}</h3>
               <p className="text-muted-foreground">{t("landing.benefits.apply.desc")}</p>
-            </Card>
+            </article>
           </div>
         </div>
       </section>
@@ -163,17 +167,20 @@ export default function Landing({ lang }: LandingProps) {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 max-w-3xl mx-auto">
             {books.map((book, idx) => (
-              <Card key={idx} className="p-4 md:p-6 text-center hover:shadow-lg transition-shadow">
+              <article key={idx} className="p-4 md:p-6 text-center hover:shadow-lg transition-shadow bg-card rounded-lg border border-border">
                 <div className="aspect-[2/3] rounded mb-3 md:mb-4 overflow-hidden bg-muted">
                   <img 
                     src={book.image} 
-                    alt={book.title}
+                    alt={`Capa do livro ${book.title} por ${book.author}`}
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    width="200"
+                    height="300"
                   />
                 </div>
                 <h4 className="font-bold text-xs sm:text-sm mb-1">{book.title}</h4>
                 <p className="text-xs text-muted-foreground">{book.author}</p>
-              </Card>
+              </article>
             ))}
           </div>
         </div>
