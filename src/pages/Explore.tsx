@@ -63,18 +63,23 @@ const Explore = () => {
   // Create flat index filtered by current locale
   const flatIndex = useMemo(() => createFlatIndex(i18n.language), [i18n.language]);
 
-  // Fetch total books count (catalog + database books) and covers
+  // Fetch total books count and covers from database only
   useEffect(() => {
     const fetchDataFromDB = async () => {
-      const catalogCount = flatIndex.length;
-      
-      const { data: dbBooks, count: dbBooksCount } = await supabase
+      const { count: dbBooksCount } = await supabase
         .from('books')
-        .select('title, author, cover_url', { count: 'exact' })
+        .select('*', { count: 'exact', head: true })
         .eq('lang', i18n.language)
         .eq('is_active', true);
       
-      setTotalBooksCount(catalogCount + (dbBooksCount || 0));
+      setTotalBooksCount(dbBooksCount || 0);
+      
+      // Fetch covers
+      const { data: dbBooks } = await supabase
+        .from('books')
+        .select('title, author, cover_url')
+        .eq('lang', i18n.language)
+        .eq('is_active', true);
       
       // Create a map of book covers by title-author key
       if (dbBooks) {
@@ -90,7 +95,7 @@ const Explore = () => {
     };
 
     fetchDataFromDB();
-  }, [flatIndex.length, i18n.language]);
+  }, [i18n.language]);
 
   // Sort categories alphabetically by translated name
   const sortedCategories = useMemo(() => {
