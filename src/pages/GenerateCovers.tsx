@@ -18,28 +18,56 @@ export default function GenerateCovers() {
     setProgress(null);
 
     try {
-      // First, get total count of active books
-      const { count } = await supabase
-        .from('books')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_active', true);
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error('Not authenticated');
 
-      const totalBooks = count || 0;
-      setProgress({ current: 0, total: totalBooks });
-
-      const { data, error } = await supabase.functions.invoke('update-book-covers');
-
-      if (error) throw error;
-
-      // Update progress to completion
-      const processed = (data.results.success || 0) + (data.results.skipped || 0) + (data.results.failed || 0);
-      setProgress({ current: processed, total: totalBooks });
-
-      setResults(data);
-      toast({
-        title: "Capas atualizadas com sucesso!",
-        description: `${data.results.success} capas atualizadas, ${data.results.skipped} sem alteração, ${data.results.failed} falhas`,
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const response = await fetch(`${supabaseUrl}/functions/v1/update-book-covers`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+        },
       });
+
+      if (!response.ok) throw new Error('Failed to start cover update');
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (!reader) throw new Error('No response stream');
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value);
+        const lines = chunk.split('\n');
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            try {
+              const data = JSON.parse(line.slice(6));
+              
+              if (data.type === 'progress') {
+                setProgress({ 
+                  current: data.processed, 
+                  total: data.total 
+                });
+              } else if (data.type === 'complete') {
+                setResults(data);
+                toast({
+                  title: "Capas atualizadas com sucesso!",
+                  description: `${data.results.success} capas atualizadas, ${data.results.skipped} sem alteração, ${data.results.failed} falhas`,
+                });
+              }
+            } catch (e) {
+              console.error('Error parsing SSE:', e);
+            }
+          }
+        }
+      }
+
     } catch (error) {
       console.error('Error updating covers:', error);
       toast({

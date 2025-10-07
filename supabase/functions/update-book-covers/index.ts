@@ -80,8 +80,9 @@ serve(async (req) => {
         JSON.stringify({
           success: true,
           message: 'No books found to update',
-          results: { success: 0, failed: 0, skipped: 0 },
-          total: 0
+          results: { success: 0, failed: 0, skipped: 0, errors: [] },
+          total: 0,
+          processed: 0
         }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
@@ -89,76 +90,124 @@ serve(async (req) => {
 
     console.log(`Found ${books.length} books to process`);
 
-    const results = {
-      success: 0,
-      failed: 0,
-      skipped: 0,
-      errors: [] as string[]
-    };
-
-    for (const book of books) {
-      try {
-        console.log(`\nProcessing: ${book.title} by ${book.author}`);
+    // Create a ReadableStream to send progress updates
+    const stream = new ReadableStream({
+      async start(controller) {
+        const encoder = new TextEncoder();
         
-        // Tentar buscar capa real do Google Books
-        const googleCover = await fetchGoogleBookCover(book.title, book.author);
-        
-        let newCoverUrl: string;
-        
-        if (googleCover) {
-          // Encontrou capa real no Google Books
-          newCoverUrl = googleCover;
-          console.log(`✓ Found Google Books cover for "${book.title}"`);
-        } else {
-          // Não encontrou, usar logo do site
-          newCoverUrl = PLACEHOLDER_LOGO;
-          console.log(`○ No cover found for "${book.title}", using site logo`);
-        }
+        const results = {
+          success: 0,
+          failed: 0,
+          skipped: 0,
+          errors: [] as string[]
+        };
 
-        // Atualizar o livro apenas se a capa for diferente
-        if (book.cover_url !== newCoverUrl) {
-          const { error: updateError } = await supabase
-            .from('books')
-            .update({ cover_url: newCoverUrl })
-            .eq('id', book.id);
+        // Send initial progress
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify({
+          type: 'progress',
+          total: books.length,
+          processed: 0,
+          results
+        })}\n\n`));
 
-          if (updateError) {
-            console.error(`Error updating "${book.title}":`, updateError.message);
+        let processed = 0;
+
+        for (const book of books) {
+          try {
+            console.log(`\nProcessing: ${book.title} by ${book.author}`);
+            
+            // Tentar buscar capa real do Google Books
+            const googleCover = await fetchGoogleBookCover(book.title, book.author);
+            
+            let newCoverUrl: string;
+            
+            if (googleCover) {
+              // Encontrou capa real no Google Books
+              newCoverUrl = googleCover;
+              console.log(`✓ Found Google Books cover for "${book.title}"`);
+            } else {
+              // Não encontrou, usar logo do site
+              newCoverUrl = PLACEHOLDER_LOGO;
+              console.log(`○ No cover found for "${book.title}", using site logo`);
+            }
+
+            // Atualizar o livro apenas se a capa for diferente
+            if (book.cover_url !== newCoverUrl) {
+              const { error: updateError } = await supabase
+                .from('books')
+                .update({ cover_url: newCoverUrl })
+                .eq('id', book.id);
+
+              if (updateError) {
+                console.error(`Error updating "${book.title}":`, updateError.message);
+                results.failed++;
+                results.errors.push(`${book.title}: ${updateError.message}`);
+              } else {
+                results.success++;
+                console.log(`✓ Updated cover for "${book.title}"`);
+              }
+            } else {
+              results.skipped++;
+              console.log(`- Skipped "${book.title}" (cover unchanged)`);
+            }
+
+            processed++;
+
+            // Send progress update
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify({
+              type: 'progress',
+              total: books.length,
+              processed,
+              results,
+              current_book: book.title
+            })}\n\n`));
+
+            // Delay para respeitar rate limits do Google Books API
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+          } catch (error) {
+            console.error(`Error processing "${book.title}":`, error);
             results.failed++;
-            results.errors.push(`${book.title}: ${updateError.message}`);
-          } else {
-            results.success++;
-            console.log(`✓ Updated cover for "${book.title}"`);
+            const errorMsg = error instanceof Error ? error.message : String(error);
+            results.errors.push(`${book.title}: ${errorMsg}`);
+            processed++;
+
+            // Send progress update even on error
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify({
+              type: 'progress',
+              total: books.length,
+              processed,
+              results
+            })}\n\n`));
           }
-        } else {
-          results.skipped++;
-          console.log(`- Skipped "${book.title}" (cover unchanged)`);
         }
 
-        // Delay para respeitar rate limits do Google Books API
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        console.log('\n=== Update Complete ===');
+        console.log(`Success: ${results.success}`);
+        console.log(`Failed: ${results.failed}`);
+        console.log(`Skipped: ${results.skipped}`);
 
-      } catch (error) {
-        console.error(`Error processing "${book.title}":`, error);
-        results.failed++;
-        const errorMsg = error instanceof Error ? error.message : String(error);
-        results.errors.push(`${book.title}: ${errorMsg}`);
+        // Send final result
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify({
+          type: 'complete',
+          success: true,
+          results,
+          total: books.length,
+          processed
+        })}\n\n`));
+
+        controller.close();
       }
-    }
+    });
 
-    console.log('\n=== Update Complete ===');
-    console.log(`Success: ${results.success}`);
-    console.log(`Failed: ${results.failed}`);
-    console.log(`Skipped: ${results.skipped}`);
-
-    return new Response(
-      JSON.stringify({
-        success: true,
-        results,
-        total: books.length
-      }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    return new Response(stream, {
+      headers: {
+        ...corsHeaders,
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+      },
+    });
 
   } catch (error) {
     console.error('Error in update-book-covers function:', error);
@@ -168,7 +217,8 @@ serve(async (req) => {
         success: false, 
         error: errorMsg,
         results: { success: 0, failed: 0, skipped: 0, errors: [errorMsg] },
-        total: 0
+        total: 0,
+        processed: 0
       }),
       { 
         status: 500,
