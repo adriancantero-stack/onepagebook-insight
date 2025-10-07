@@ -21,7 +21,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Users, FileText, TrendingUp, Crown, Download, BookOpen, ImagePlus, Sparkles } from "lucide-react";
+import { Users, FileText, TrendingUp, Crown, Download, BookOpen, ImagePlus, Sparkles, Upload } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
@@ -56,6 +56,7 @@ const Admin = () => {
   const [userGrowth, setUserGrowth] = useState<{ date: string; users: number }[]>([]);
   const [catalogStats, setCatalogStats] = useState({ total: 0, pt: 0, en: 0, es: 0 });
   const [importing, setImporting] = useState(false);
+  const [importingCatalog, setImportingCatalog] = useState(false);
   const [batchGenerating, setBatchGenerating] = useState(false);
   const [importProgress, setImportProgress] = useState<string[]>([]);
 
@@ -277,6 +278,36 @@ const Admin = () => {
     }
   };
 
+  const handleImportHardcodedCatalog = async () => {
+    setImportingCatalog(true);
+    toast.info("Importando catálogo hardcoded para o banco de dados...");
+
+    try {
+      const { data, error } = await supabase.functions.invoke("import-hardcoded-catalog");
+
+      if (error) {
+        toast.error("Erro na importação do catálogo", {
+          description: error.message
+        });
+        return;
+      }
+
+      toast.success("Importação do catálogo concluída!", {
+        description: `${data.stats.inserted} livros importados, ${data.stats.skipped} já existiam`
+      });
+
+      // Reload data
+      await loadAdminData();
+    } catch (error) {
+      console.error("Catalog import error:", error);
+      toast.error("Erro", {
+        description: "Falha ao importar catálogo hardcoded"
+      });
+    } finally {
+      setImportingCatalog(false);
+    }
+  };
+
   const handleBatchGenerateSummaries = async () => {
     setBatchGenerating(true);
     toast.info("Iniciando geração automática de resumos...");
@@ -458,7 +489,7 @@ const Admin = () => {
 
             {/* Import Buttons */}
             <div className="space-y-4">
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-4 gap-4">
                 <Button 
                   onClick={handleImportGoogleBooks}
                   disabled={importing}
@@ -466,7 +497,18 @@ const Admin = () => {
                   size="lg"
                 >
                   <Download className="mr-2 h-4 w-4" />
-                  {importing ? "Importando..." : "Importar 300 Livros"}
+                  {importing ? "Importando..." : "Importar Google Books"}
+                </Button>
+
+                <Button 
+                  onClick={handleImportHardcodedCatalog}
+                  disabled={importingCatalog}
+                  variant="secondary"
+                  className="w-full"
+                  size="lg"
+                >
+                  <Upload className="mr-2 h-4 w-4" />
+                  {importingCatalog ? "Importando..." : "Importar Catálogo"}
                 </Button>
                 
                 <Button 
@@ -476,7 +518,7 @@ const Admin = () => {
                   size="lg"
                 >
                   <ImagePlus className="mr-2 h-4 w-4" />
-                  Gerar Capas dos Livros
+                  Gerar Capas
                 </Button>
 
                 <Button 
@@ -487,7 +529,7 @@ const Admin = () => {
                   size="lg"
                 >
                   <Sparkles className="mr-2 h-4 w-4" />
-                  {batchGenerating ? "Gerando..." : "Gerar Resumos Auto"}
+                  {batchGenerating ? "Gerando..." : "Gerar Resumos"}
                 </Button>
               </div>
 
