@@ -40,9 +40,14 @@ const Footer = () => {
               {t("footer.contact")}
             </a>
           </div>
-          <p className="text-center">
-            {t("footer.copyright", { year: currentYear })}
-          </p>
+          <div className="flex flex-col items-center gap-1">
+            <p className="text-center">
+              {t("footer.copyright", { year: currentYear })}
+            </p>
+            <p className="text-center text-xs md:hidden">
+              Versão 1.0
+            </p>
+          </div>
         </div>
       </div>
     </footer>
