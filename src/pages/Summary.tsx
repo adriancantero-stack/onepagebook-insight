@@ -75,13 +75,30 @@ const Summary = () => {
         .single();
 
       if (error) throw error;
-      setSummary(data);
+
+      let enriched = data as any;
+
+      // Try to enrich with ASIN from public books catalog when missing
+      if (!enriched?.asin) {
+        const title = enriched.canonical_title || enriched.book_title;
+        const author = enriched.canonical_author || enriched.book_author;
+        const lang = enriched.language;
+        const { data: book, error: bookErr } = await supabase
+          .from("books")
+          .select("asin")
+          .eq("title", title)
+          .eq("author", author)
+          .eq("lang", lang)
+          .eq("is_active", true)
+          .maybeSingle();
+        if (!bookErr && book?.asin) {
+          enriched = { ...enriched, asin: book.asin };
+        }
+      }
+
+      setSummary(enriched);
     } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: t("toast.error"),
-        description: error.message,
-      });
+      toast({ variant: "destructive", title: t("toast.error"), description: error.message });
       navigate("/");
     } finally {
       setLoading(false);
@@ -701,7 +718,7 @@ const Summary = () => {
               <span className="truncate">{t("summary.share")}</span>
             </Button>
             <BuyOnAmazonButton
-              asin={null}
+              asin={summary?.asin ?? null}
               title={summary.canonical_title || summary.book_title}
               author={summary.canonical_author || summary.book_author}
               locale={(i18n.language || "pt").split("-")[0] as 'pt' | 'en' | 'es'}

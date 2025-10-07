@@ -85,6 +85,7 @@ export type Database = {
       book_summaries: {
         Row: {
           actions: string[] | null
+          asin: string | null
           book_author: string | null
           book_title: string
           canonical_author: string | null
@@ -112,6 +113,7 @@ export type Database = {
         }
         Insert: {
           actions?: string[] | null
+          asin?: string | null
           book_author?: string | null
           book_title: string
           canonical_author?: string | null
@@ -139,6 +141,7 @@ export type Database = {
         }
         Update: {
           actions?: string[] | null
+          asin?: string | null
           book_author?: string | null
           book_title?: string
           canonical_author?: string | null
