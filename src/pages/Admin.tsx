@@ -61,6 +61,7 @@ const Admin = () => {
   const [importingCatalog, setImportingCatalog] = useState(false);
   const [catalogImportProgress, setCatalogImportProgress] = useState({ current: 0, total: 0 });
   const [batchGenerating, setBatchGenerating] = useState(false);
+  const [batchGenerateProgress, setBatchGenerateProgress] = useState({ current: 0, total: 0 });
   const [importProgress, setImportProgress] = useState<string[]>([]);
   const [cronSchedules, setCronSchedules] = useState<Array<{
     job_name: string;
@@ -386,9 +387,20 @@ const Admin = () => {
 
   const handleBatchGenerateSummaries = async () => {
     setBatchGenerating(true);
-    toast.info("Iniciando geração automática de resumos...");
+    setBatchGenerateProgress({ current: 0, total: 0 });
 
     try {
+      // First, get total count of books without summaries
+      const { count } = await supabase
+        .from('books')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true)
+        .is('summary', null);
+
+      const totalBooks = count || 0;
+      setBatchGenerateProgress({ current: 0, total: totalBooks });
+      toast.info(`Iniciando geração de ${totalBooks} resumos...`);
+
       const { data, error } = await supabase.functions.invoke("batch-generate-summaries");
 
       if (error) {
@@ -397,6 +409,9 @@ const Admin = () => {
         });
         return;
       }
+
+      // Update progress to completion
+      setBatchGenerateProgress({ current: data.processed || 0, total: totalBooks });
 
       toast.success("Geração concluída!", {
         description: `${data.processed} resumos gerados com sucesso`
@@ -415,6 +430,7 @@ const Admin = () => {
       });
     } finally {
       setBatchGenerating(false);
+      setTimeout(() => setBatchGenerateProgress({ current: 0, total: 0 }), 2000);
     }
   };
 
@@ -646,6 +662,25 @@ const Admin = () => {
                   />
                   <p className="text-xs text-muted-foreground">
                     {Math.round((catalogImportProgress.current / catalogImportProgress.total) * 100)}% concluído
+                  </p>
+                </div>
+              )}
+
+              {/* Batch Generate Progress */}
+              {batchGenerating && batchGenerateProgress.total > 0 && (
+                <div className="space-y-2 p-4 rounded-lg border bg-muted/50">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="font-medium">Gerando resumos automaticamente...</span>
+                    <span className="text-muted-foreground">
+                      {batchGenerateProgress.current} / {batchGenerateProgress.total}
+                    </span>
+                  </div>
+                  <Progress 
+                    value={(batchGenerateProgress.current / batchGenerateProgress.total) * 100} 
+                    className="h-2"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {Math.round((batchGenerateProgress.current / batchGenerateProgress.total) * 100)}% concluído
                   </p>
                 </div>
               )}
