@@ -570,11 +570,13 @@ const Admin = () => {
                   <Button 
                     onClick={handleImportGoogleBooks}
                     disabled={importing}
-                    className="w-full"
+                    className="w-full text-xs h-auto py-3"
                     size="lg"
                   >
-                    <Download className="mr-2 h-4 w-4" />
-                    {importing ? "Importando..." : "Importar Google Books"}
+                    <Download className="mr-2 h-4 w-4 shrink-0" />
+                    <span className="line-clamp-2 text-center">
+                      {importing ? "Importando..." : "Importar Google Books"}
+                    </span>
                   </Button>
                   {cronSchedules.find(s => s.job_name === 'weekly-google-books-import') && (
                     <CronTimer 
