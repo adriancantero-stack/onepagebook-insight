@@ -369,7 +369,7 @@ const Home = () => {
   const isStep = (step: GenStep) => genState.step === step;
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-white flex flex-col">
       {/* Generation Progress Overlay */}
       <div 
         id="gen-overlay" 
@@ -379,7 +379,7 @@ const Home = () => {
         hidden={!genState.open}
       >
         <div className="gen-box">
-          <div className="gen-title">{t("gen.loading")}</div>
+          <div className="gen-title text-[#1D1D1F]">{t("gen.loading")}</div>
           <div className="gen-progress-container">
             <div className="gen-progress-track">
               <div 
@@ -388,7 +388,7 @@ const Home = () => {
                 aria-hidden="true"
               ></div>
             </div>
-            <div className="gen-progress-percentage">{getProgressPercentage()}%</div>
+            <div className="gen-progress-percentage text-[#7B61FF]">{getProgressPercentage()}%</div>
           </div>
           <ol className="gen-steps" role="list">
             <li className={isStep("resolve") ? "active" : ""}>
@@ -415,20 +415,20 @@ const Home = () => {
       </div>
       <FloatingHeader onLogout={handleLogout} showNavigation={false} />
 
-      <main className="mx-auto max-w-4xl px-4 sm:px-6">
-        <header className="w-full text-center pt-8 pb-4">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight animate-fade-in">
+      <main className="mx-auto max-w-4xl px-6 sm:px-12 lg:px-24 xl:px-32">
+        <header className="w-full text-center pt-12 pb-6">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight animate-fade-in text-[#1D1D1F]">
             OnePageBook
           </h1>
-          <p className="mt-3 text-base md:text-lg text-muted-foreground">
+          <p className="mt-4 text-lg sm:text-xl text-[#86868B] leading-relaxed">
             {i18n.language === 'pt' ? 'Seu livro em uma página.' : 
              i18n.language === 'es' ? 'Tu libro en una página.' : 
              'Your book on one page.'}
           </p>
         </header>
 
-        <div className="mx-auto mt-6 max-w-2xl w-full">
-          <Card className="p-4 sm:p-8 border-0 shadow-none">
+        <div className="mx-auto mt-8 max-w-2xl w-full">
+          <Card className="p-8 sm:p-10 border-[#E5E5EA] rounded-2xl shadow-sm">
             <div className="space-y-6">
             <div>
               <BookAutocomplete
@@ -447,10 +447,10 @@ const Home = () => {
 
             {bookAuthor && (
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-sm font-medium mb-2 text-[#1D1D1F]">
                   {t("home.bookAuthor")}
                 </label>
-                <div className="text-sm text-muted-foreground p-3 bg-muted rounded-md">
+                <div className="text-sm text-[#86868B] p-4 bg-[#F5F5F7] rounded-xl border border-[#E5E5EA]">
                   {bookAuthor}
                 </div>
               </div>
@@ -458,7 +458,7 @@ const Home = () => {
 
             <Button
               onClick={handleGenerateSummary}
-              className="w-full h-12 text-lg"
+              className="w-full h-14 text-base font-medium bg-[#7B61FF] hover:bg-[#6951E6] rounded-xl transition-all duration-200"
               disabled={loading}
             >
               {loading ? (
@@ -471,8 +471,8 @@ const Home = () => {
               )}
             </Button>
 
-            <p className="text-sm text-center text-muted-foreground mt-4">
-              {t("home.freeInfo")} · <span className="text-primary font-medium">{t("home.premiumInfo")}</span>
+            <p className="text-sm text-center text-[#86868B] mt-4">
+              {t("home.freeInfo")} · <span className="text-[#7B61FF] font-medium">{t("home.premiumInfo")}</span>
             </p>
           </div>
         </Card>

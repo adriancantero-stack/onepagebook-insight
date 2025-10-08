@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { BookOpen, ArrowLeft, Volume2 } from "lucide-react";
-import { LanguageSelector } from "@/components/LanguageSelector";
+import { BookOpen, Volume2 } from "lucide-react";
 import AudioPlayer from "@/components/AudioPlayer";
 import Footer from "@/components/Footer";
+import { FloatingHeader } from "@/components/FloatingHeader";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
@@ -104,35 +104,18 @@ const Demo = () => {
     : [];
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* Header */}
-      <header className="border-b bg-card/50 backdrop-blur supports-[backdrop-filter]:bg-card/50 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate("/")}
-            className="gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Home
-          </Button>
-          
-          <div className="flex items-center gap-2">
-            <LanguageSelector />
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-white flex flex-col">
+      <FloatingHeader />
 
       {/* Main Content */}
-      <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
-        <Card className="p-6 md:p-8 space-y-8">
+      <main className="flex-1 container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-16 max-w-4xl">
+        <Card className="p-8 md:p-12 space-y-10 border-[#E5E5EA] rounded-2xl shadow-sm">
           {/* Title */}
           <div className="space-y-4">
-            <div className="flex items-start gap-3">
-              <BookOpen className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
+            <div className="flex items-start gap-4">
+              <BookOpen className="h-7 w-7 text-[#7B61FF] mt-1 flex-shrink-0" />
               <div className="flex-1">
-                <h1 className="text-3xl font-bold mb-2">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-[#1D1D1F] mb-2">
                   {t('demo.title')}
                 </h1>
               </div>
@@ -140,80 +123,81 @@ const Demo = () => {
           </div>
 
           {/* Audio Section */}
-          <div className="space-y-4">
+          <div className="space-y-6">
             <Button
               onClick={handleGenerateAudio}
               disabled={isGeneratingAudio}
-              className="w-full sm:w-auto gap-2"
-              variant="default"
+              className="w-full sm:w-auto gap-2 bg-[#7B61FF] hover:bg-[#6951E6] rounded-xl py-6 px-8 text-base font-medium transition-all duration-200"
             >
-              <Volume2 className="h-4 w-4" />
+              <Volume2 className="h-5 w-5" />
               {isGeneratingAudio ? t("summary.generating") : t("demo.audio.generate")}
             </Button>
 
             {showAudioPlayer && audioUrl && (
-              <AudioPlayer audioUrl={audioUrl} />
+              <div className="p-6 bg-[#F5F5F7] rounded-2xl border border-[#E5E5EA]">
+                <AudioPlayer audioUrl={audioUrl} />
+              </div>
             )}
           </div>
 
           {/* One-liner Section */}
-          <div className="space-y-3">
-            <h2 className="text-xl font-semibold text-foreground">
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold text-[#1D1D1F]">
               {t("sections.oneLiner")}
             </h2>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-[#86868B] text-lg leading-relaxed">
               {t('demo.one')}
             </p>
           </div>
 
           {/* Key Ideas Section */}
-          <div className="space-y-3">
-            <h2 className="text-xl font-semibold text-foreground">
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold text-[#1D1D1F]">
               {t("sections.keyIdeas")}
             </h2>
-            <ul className="space-y-2">
+            <ul className="space-y-3">
               {keys.map((idea, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <span className="text-primary font-bold mt-1 flex-shrink-0">•</span>
-                  <span className="text-muted-foreground leading-relaxed flex-1">{idea}</span>
+                  <span className="text-[#7B61FF] font-bold text-lg mt-1 flex-shrink-0">•</span>
+                  <span className="text-[#86868B] text-lg leading-relaxed flex-1">{idea}</span>
                 </li>
               ))}
             </ul>
           </div>
 
           {/* Practical Applications Section */}
-          <div className="space-y-3">
-            <h2 className="text-xl font-semibold text-foreground">
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold text-[#1D1D1F]">
               {t("sections.actions")}
             </h2>
-            <ul className="space-y-2">
+            <ul className="space-y-3">
               {apply.map((step, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <span className="text-primary font-bold mt-1 flex-shrink-0">
+                  <span className="text-[#7B61FF] font-semibold text-lg mt-1 flex-shrink-0">
                     {index + 1}.
                   </span>
-                  <span className="text-muted-foreground leading-relaxed flex-1">{step}</span>
+                  <span className="text-[#86868B] text-lg leading-relaxed flex-1">{step}</span>
                 </li>
               ))}
             </ul>
           </div>
 
           {/* Closing Section */}
-          <div className="space-y-3">
-            <h2 className="text-xl font-semibold text-foreground">
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold text-[#1D1D1F]">
               {t("sections.closing")}
             </h2>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-[#86868B] text-lg leading-relaxed">
               {t('demo.close')}
             </p>
           </div>
 
           {/* CTA */}
-          <div className="pt-4 border-t">
+          <div className="pt-6 border-t border-[#E5E5EA]">
             <Button
               onClick={() => navigate("/")}
               size="lg"
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto bg-[#7B61FF] hover:bg-[#6951E6] rounded-xl px-8 py-6 text-base font-medium transition-all duration-200"
             >
               {t('demo.cta')}
             </Button>
