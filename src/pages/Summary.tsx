@@ -698,23 +698,16 @@ const Summary = () => {
       <main className="container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-12 sm:py-16 max-w-5xl flex-1">
         <Card className="p-8 sm:p-12 border-[#E5E5EA] rounded-2xl shadow-sm">
           <div className="flex items-start gap-4 sm:gap-5 mb-6 sm:mb-8 pb-8 border-b border-[#E5E5EA]">
-            {bookCover ? (
-              <div className="w-16 h-24 sm:w-20 sm:h-28 rounded-xl overflow-hidden shadow-md flex-shrink-0">
-                <img 
-                  src={bookCover} 
-                  alt={summary.canonical_title || summary.book_title}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.parentElement!.innerHTML = '<div class="p-3 sm:p-4 bg-[#7B61FF]/10 rounded-2xl w-full h-full flex items-center justify-center"><svg class="w-6 h-6 sm:w-7 sm:h-7 text-[#7B61FF]" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>';
-                  }}
-                />
-              </div>
-            ) : (
-              <div className="p-3 sm:p-4 bg-[#7B61FF]/10 rounded-2xl">
-                <BookOpen className="w-6 h-6 sm:w-7 sm:h-7 text-[#7B61FF]" />
-              </div>
-            )}
+            <div className="w-16 h-24 sm:w-20 sm:h-28 rounded-xl overflow-hidden shadow-md flex-shrink-0">
+              <img 
+                src={bookCover || '/book-placeholder.png'} 
+                alt={summary.canonical_title || summary.book_title}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.src = '/book-placeholder.png';
+                }}
+              />
+            </div>
             <div className="flex-1 min-w-0">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold mb-3 break-words tracking-tight text-[#1D1D1F]">
                 {summary.canonical_title || summary.book_title}
@@ -725,6 +718,7 @@ const Summary = () => {
               </p>
             </div>
           </div>
+
 
           <div className="space-y-8">
             <SummarySection title={t("sections.oneLiner")} content={summary.one_liner} />
