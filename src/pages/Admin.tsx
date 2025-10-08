@@ -472,7 +472,7 @@ const Admin = () => {
           if (error) {
             console.error(`Error generating summary for ${book.title}:`, error);
             errorCount++;
-          } else if (data?.summary) {
+          } else if (data?.summaryId) {
             successCount++;
           } else {
             errorCount++;
