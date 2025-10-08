@@ -807,7 +807,7 @@ const Admin = () => {
     try {
       const { data: books, error } = await supabase
         .from('books')
-        .select('id, title, author, lang')
+        .select('id, title, author, lang, isbn, google_books_id, asin')
         .is('isbn', null)
         .is('google_books_id', null)
         .is('asin', null)
@@ -818,6 +818,7 @@ const Admin = () => {
 
       setInvalidBooks(books || []);
       setShowInvalidBooksModal(true);
+      toast.success(`${books?.length || 0} livros inválidos encontrados para revisão`);
     } catch (error) {
       console.error('Error loading invalid books:', error);
       toast.error("Erro ao carregar livros inválidos");
@@ -830,13 +831,13 @@ const Admin = () => {
     try {
       const { error } = await supabase
         .from('books')
-        .update({ is_active: false })
+        .delete()
         .eq('id', bookId);
 
       if (error) throw error;
 
       setInvalidBooks(prev => prev.filter(b => b.id !== bookId));
-      toast.success("Livro removido do catálogo");
+      toast.success("Livro removido definitivamente da base de dados");
       
       await loadAdminData();
     } catch (error) {
@@ -847,7 +848,7 @@ const Admin = () => {
 
   const handleKeepInvalidBook = (bookId: string) => {
     setInvalidBooks(prev => prev.filter(b => b.id !== bookId));
-    toast.info("Livro mantido no catálogo");
+    toast.success("Livro mantido no catálogo");
   };
 
   if (loading) {
