@@ -528,8 +528,8 @@ const Explore = () => {
                   </div>
                 </div>
 
-                {/* Badges */}
-                <div className="flex items-center gap-2 mb-4">
+                {/* Badges - Fixed height for alignment */}
+                <div className="flex items-center gap-2 min-h-[28px] mb-4">
                   {book.badge && (
                     <Badge 
                       variant="secondary" 
