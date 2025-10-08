@@ -88,7 +88,7 @@ export const pt = {
     "summary.summarize": "Resumir este livro",
     
     // Sections
-    "sections.oneLiner": "O essencial em uma frase",
+    "sections.oneLiner": "O essencial do livro",
     "sections.keyIdeas": "Sacadas que importam",
     "sections.actions": "Plano de ação",
     "sections.routine": "Exemplo de rotina",

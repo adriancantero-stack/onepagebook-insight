@@ -146,7 +146,7 @@ export const en = {
     "summary.summarize": "Summarize this book",
     
     // Sections
-    "sections.oneLiner": "The essential in one sentence",
+    "sections.oneLiner": "The book essentials",
     "sections.keyIdeas": "Insights that matter",
     "sections.actions": "Action plan",
     "sections.routine": "Sample routine",
