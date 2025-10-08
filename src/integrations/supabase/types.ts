@@ -52,6 +52,48 @@ export type Database = {
           },
         ]
       }
+      book_categories: {
+        Row: {
+          created_at: string | null
+          description_en: string | null
+          description_es: string | null
+          description_pt: string | null
+          display_order: number | null
+          id: string
+          is_active: boolean | null
+          key: string
+          name_en: string
+          name_es: string
+          name_pt: string
+        }
+        Insert: {
+          created_at?: string | null
+          description_en?: string | null
+          description_es?: string | null
+          description_pt?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          key: string
+          name_en: string
+          name_es: string
+          name_pt: string
+        }
+        Update: {
+          created_at?: string | null
+          description_en?: string | null
+          description_es?: string | null
+          description_pt?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          key?: string
+          name_en?: string
+          name_es?: string
+          name_pt?: string
+        }
+        Relationships: []
+      }
       book_import_history: {
         Row: {
           books_imported: number | null

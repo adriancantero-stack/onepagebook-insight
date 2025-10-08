@@ -1,4 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.58.0';
+import { mapGoogleCategory } from '../_shared/categoryMapper.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -167,6 +168,10 @@ Deno.serve(async (req) => {
               || item.volumeInfo.imageLinks?.smallThumbnail?.replace('http:', 'https:')
               || null;
 
+            // Map Google Books category to OnePageBook predefined category
+            const googleCategory = item.volumeInfo.categories?.[0] || category;
+            const mappedCategory = mapGoogleCategory(googleCategory, 'business');
+
             booksToImport.push({
               title,
               author,
@@ -174,7 +179,7 @@ Deno.serve(async (req) => {
               google_books_id: item.id,
               isbn: extractISBN(item.volumeInfo.industryIdentifiers),
               description: item.volumeInfo.description?.substring(0, 1000) || null,
-              category: item.volumeInfo.categories?.[0] || category,
+              category: mappedCategory,
               published_year: extractYear(item.volumeInfo.publishedDate),
               page_count: item.volumeInfo.pageCount || null,
               cover_url: coverUrl,

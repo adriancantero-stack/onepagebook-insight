@@ -81,6 +81,14 @@ const Admin = () => {
     invalid: number;
     uncertain: number;
   } | null>(null);
+  const [isMigratingCategories, setIsMigratingCategories] = useState(false);
+  const [categoryMigrationResults, setCategoryMigrationResults] = useState<{
+    totalBooks: number;
+    migrated: number;
+    skipped: number;
+    errors: number;
+    categoryBreakdown: Record<string, number>;
+  } | null>(null);
 
   useEffect(() => {
     checkAdminAccess();
@@ -746,6 +754,46 @@ const Admin = () => {
     }
   };
 
+  const handleMigrateCategories = async (dryRun = false) => {
+    setIsMigratingCategories(true);
+    setCategoryMigrationResults(null);
+
+    try {
+      console.log(`Starting category migration (dryRun: ${dryRun})...`);
+      
+      const { data, error } = await supabase.functions.invoke('migrate-book-categories', {
+        body: { dryRun }
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      console.log('Migration results:', data);
+
+      if (data?.stats) {
+        setCategoryMigrationResults(data.stats);
+        
+        const message = dryRun
+          ? `Preview: ${data.stats.migrated} livros seriam migrados`
+          : `Migração concluída: ${data.stats.migrated} livros atualizados`;
+        
+        toast.success(message, {
+          description: `${data.stats.skipped} já estavam corretos, ${data.stats.errors} erros`
+        });
+      }
+
+      if (!dryRun) {
+        await loadAdminData();
+      }
+    } catch (error) {
+      console.error('Error migrating categories:', error);
+      toast.error("Erro ao migrar categorias");
+    } finally {
+      setIsMigratingCategories(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background p-8">
@@ -949,6 +997,33 @@ const Admin = () => {
                       <div className="flex justify-between">
                         <span className="text-red-600">Inválidos:</span>
                         <span className="font-medium">{validationResults.invalid}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Button 
+                    onClick={() => handleMigrateCategories(false)}
+                    disabled={isMigratingCategories}
+                    variant="outline"
+                    className="w-full h-auto py-3 whitespace-normal"
+                    size="lg"
+                  >
+                    <BookOpen className="mr-2 h-4 w-4 shrink-0" />
+                    <span className="text-sm leading-tight">
+                      {isMigratingCategories ? "Migrando..." : "Migrar Categorias"}
+                    </span>
+                  </Button>
+                  {categoryMigrationResults && (
+                    <div className="text-xs space-y-1">
+                      <div className="flex justify-between">
+                        <span className="text-green-600">Migrados:</span>
+                        <span className="font-medium">{categoryMigrationResults.migrated}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Já corretos:</span>
+                        <span className="font-medium">{categoryMigrationResults.skipped}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-yellow-600">Incertos:</span>
