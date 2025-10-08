@@ -64,6 +64,10 @@ const Admin = () => {
   const [isCheckingSummaries, setIsCheckingSummaries] = useState(false);
   const [booksWithoutSummaries, setBooksWithoutSummaries] = useState<number | null>(null);
   const [batchGenerateProgress, setBatchGenerateProgress] = useState({ current: 0, total: 0 });
+  const [isGeneratingCovers, setIsGeneratingCovers] = useState(false);
+  const [isCheckingCovers, setIsCheckingCovers] = useState(false);
+  const [booksWithoutCovers, setBooksWithoutCovers] = useState<number | null>(null);
+  const [coverGenerateProgress, setCoverGenerateProgress] = useState({ current: 0, total: 0 });
   const [importProgress, setImportProgress] = useState<string[]>([]);
   const [cronSchedules, setCronSchedules] = useState<Array<{
     job_name: string;
@@ -462,6 +466,113 @@ const Admin = () => {
     }
   };
 
+  const checkBooksWithoutCovers = async () => {
+    setIsCheckingCovers(true);
+    try {
+      const { count, error } = await supabase
+        .from('books')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true)
+        .or('cover_url.is.null,cover_url.eq./logo-gray.png');
+
+      if (error) throw error;
+      setBooksWithoutCovers(count || 0);
+      
+      if (count === 0) {
+        toast.success("Todos os livros já têm capas!", {
+          description: "Não há livros pendentes para gerar capas.",
+        });
+      }
+    } catch (error) {
+      console.error('Error checking covers:', error);
+      toast.error("Erro ao verificar capas", {
+        description: error.message,
+      });
+    } finally {
+      setIsCheckingCovers(false);
+    }
+  };
+
+  const handleGenerateCovers = async () => {
+    if (!booksWithoutCovers || booksWithoutCovers === 0) {
+      toast.error("Nenhum livro sem capa", {
+        description: "Por favor, verifique os livros sem capa primeiro.",
+      });
+      return;
+    }
+
+    setIsGeneratingCovers(true);
+    setCoverGenerateProgress({ current: 0, total: booksWithoutCovers });
+
+    try {
+      // Get books without covers
+      const { data: books, error: booksError } = await supabase
+        .from('books')
+        .select('id, title, author, cover_url')
+        .eq('is_active', true)
+        .or('cover_url.is.null,cover_url.eq./logo-gray.png')
+        .order('created_at', { ascending: true });
+
+      if (booksError) throw booksError;
+      if (!books || books.length === 0) {
+        toast.error("Nenhum livro sem capa", {
+          description: "Todos os livros já possuem capas!",
+        });
+        setIsGeneratingCovers(false);
+        return;
+      }
+
+      const totalBooks = books.length;
+      const results = {
+        success: 0,
+        failed: 0,
+        skipped: 0,
+      };
+
+      // Process books in batches
+      const batchSize = 10;
+      for (let i = 0; i < books.length; i += batchSize) {
+        const batch = books.slice(i, i + batchSize);
+        
+        // Process batch via edge function
+        const { data, error } = await supabase.functions.invoke('generate-book-covers', {
+          body: { books: batch }
+        });
+
+        if (error) {
+          console.error('Batch error:', error);
+          results.failed += batch.length;
+        } else if (data) {
+          results.success += data.success || 0;
+          results.skipped += data.skipped || 0;
+          results.failed += data.failed || 0;
+        }
+
+        // Update progress
+        setCoverGenerateProgress({ 
+          current: Math.min(i + batchSize, totalBooks), 
+          total: totalBooks 
+        });
+      }
+
+      toast.success("Capas atualizadas!", {
+        description: `${results.success} capas atualizadas, ${results.skipped} sem alteração, ${results.failed} falhas`,
+      });
+
+      // Reset and reload data
+      setBooksWithoutCovers(null);
+      await loadAdminData();
+    } catch (error) {
+      console.error('Error updating covers:', error);
+      toast.error("Erro", {
+        description: "Falha ao atualizar capas",
+      });
+    } finally {
+      setIsGeneratingCovers(false);
+      setTimeout(() => setCoverGenerateProgress({ current: 0, total: 0 }), 2000);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background p-8">
@@ -645,13 +756,14 @@ const Admin = () => {
                 
                 <div className="space-y-2">
                   <Button 
-                    onClick={() => navigate("/generate-covers")}
+                    onClick={checkBooksWithoutCovers}
+                    disabled={isCheckingCovers || isGeneratingCovers}
                     variant="secondary"
                     className="w-full"
                     size="lg"
                   >
                     <ImagePlus className="mr-2 h-4 w-4" />
-                    Gerar Capas
+                    {isCheckingCovers ? "Verificando..." : "Verificar Capas"}
                   </Button>
                 </div>
 
@@ -690,6 +802,48 @@ const Admin = () => {
                   />
                   <p className="text-xs text-muted-foreground">
                     {Math.round((catalogImportProgress.current / catalogImportProgress.total) * 100)}% concluído
+                  </p>
+                </div>
+              )}
+
+              {/* Cover Check Result */}
+              {booksWithoutCovers !== null && !isGeneratingCovers && (
+                <div className="space-y-3 p-4 rounded-lg border bg-muted/50">
+                  <p className="text-lg font-semibold text-center">
+                    {booksWithoutCovers === 0 
+                      ? "✅ Todos os livros têm capas!"
+                      : `📚 ${booksWithoutCovers} livros sem capas encontrados`}
+                  </p>
+                  
+                  {booksWithoutCovers > 0 && (
+                    <Button
+                      onClick={handleGenerateCovers}
+                      disabled={isGeneratingCovers}
+                      className="w-full gap-2"
+                      size="lg"
+                    >
+                      <ImagePlus className="w-5 h-5" />
+                      Iniciar Geração de Capas
+                    </Button>
+                  )}
+                </div>
+              )}
+
+              {/* Cover Generate Progress */}
+              {isGeneratingCovers && coverGenerateProgress.total > 0 && (
+                <div className="space-y-2 p-4 rounded-lg border bg-muted/50">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="font-medium">Gerando capas...</span>
+                    <span className="text-muted-foreground">
+                      {coverGenerateProgress.current} / {coverGenerateProgress.total}
+                    </span>
+                  </div>
+                  <Progress 
+                    value={coverGenerateProgress.total > 0 ? (coverGenerateProgress.current / coverGenerateProgress.total) * 100 : 0} 
+                    className="h-2"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {coverGenerateProgress.total > 0 ? Math.round((coverGenerateProgress.current / coverGenerateProgress.total) * 100) : 0}% concluído
                   </p>
                 </div>
               )}
