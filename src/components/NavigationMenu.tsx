@@ -90,9 +90,9 @@ export const NavigationMenu = ({ onLogout }: NavigationMenuProps) => {
           <DropdownMenuItem
             key={index}
             onClick={item.onClick}
-            className="gap-3 cursor-pointer py-3 group"
+            className="gap-3 cursor-pointer py-3 group hover:text-white"
           >
-            <item.icon className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+            <item.icon className="h-4 w-4 text-muted-foreground group-hover:text-white" />
             <span>{item.label}</span>
           </DropdownMenuItem>
         ))}
@@ -103,9 +103,9 @@ export const NavigationMenu = ({ onLogout }: NavigationMenuProps) => {
           <DropdownMenuItem
             key={index}
             onClick={item.onClick}
-            className="gap-3 cursor-pointer py-3 group"
+            className="gap-3 cursor-pointer py-3 group hover:text-white"
           >
-            <item.icon className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+            <item.icon className="h-4 w-4 text-muted-foreground group-hover:text-white" />
             <span>{item.label}</span>
           </DropdownMenuItem>
         ))}
