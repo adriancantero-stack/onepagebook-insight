@@ -476,7 +476,7 @@ const Home = () => {
           </p>
         </div>
 
-        <Card className="max-w-2xl mx-auto p-4 sm:p-8">
+        <Card className="max-w-2xl mx-auto p-4 sm:p-8 border-0 shadow-none">
           <div className="space-y-6">
             <div>
               <BookAutocomplete
