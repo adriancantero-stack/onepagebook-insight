@@ -364,18 +364,24 @@ const Explore = () => {
               value={query}
               onChange={setQuery}
               onBookSelect={(bookId, title, author) => {
-                if (bookId) {
-                  const book = flatIndex.find(b => b.id === bookId);
-                  if (book) {
-                    handleSummarize(
-                      { title: book.title, author: book.author, locale: book.locale },
-                      bookId,
-                      "search"
-                    );
-                  }
-                } else {
-                  setQuery(title);
+                // Track analytics
+                if (typeof window !== "undefined" && (window as any).gtag) {
+                  (window as any).gtag("event", "catalog_select", {
+                    categoryId: selectedCategory,
+                    title: title,
+                    author: author,
+                    locale: i18n.language,
+                    source: "autocomplete",
+                  });
                 }
+
+                // Navigate to home with book data
+                navigate("/home", {
+                  state: {
+                    bookTitle: title,
+                    bookAuthor: author,
+                  }
+                });
               }}
               disabled={false}
               lang={i18n.language}
