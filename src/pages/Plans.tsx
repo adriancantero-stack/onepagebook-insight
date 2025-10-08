@@ -74,31 +74,32 @@ const Plans = () => {
   const isPremium = currentPlan?.subscription_plans?.type === "premium";
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-white flex flex-col">
       <FloatingHeader />
 
-      <main className="container mx-auto px-4 py-8 sm:py-16 max-w-4xl flex-1">
-        <div className="text-center mb-8 sm:mb-12">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-4">{t("plans.title")}</h1>
+      <main className="container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-12 sm:py-20 flex-1">
+        <div className="text-center mb-10 sm:mb-14">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold mb-4 text-[#1D1D1F] tracking-tight">{t("plans.title")}</h1>
+          <p className="text-lg text-[#86868B]">Escolha o plano ideal para você</p>
           
           {/* Billing Toggle */}
-          <div className="inline-flex items-center gap-2 bg-muted p-1 rounded-lg mt-4">
+          <div className="inline-flex items-center gap-2 bg-[#F5F5F7] p-1 rounded-xl mt-6">
             <button
               onClick={() => setBillingCycle("monthly")}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#5A54E6] focus:ring-offset-2 ${
+              className={`px-5 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
                 billingCycle === "monthly"
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "bg-white text-[#1D1D1F] shadow-sm"
+                  : "text-[#86868B] hover:text-[#1D1D1F]"
               }`}
             >
               {t("plans.toggle.monthly")}
             </button>
             <button
               onClick={() => setBillingCycle("yearly")}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#5A54E6] focus:ring-offset-2 ${
+              className={`px-5 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
                 billingCycle === "yearly"
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "bg-white text-[#1D1D1F] shadow-sm"
+                  : "text-[#86868B] hover:text-[#1D1D1F]"
               }`}
             >
               {t("plans.toggle.yearly")}
@@ -106,37 +107,39 @@ const Plans = () => {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {/* Free Plan */}
           <Card 
-            className={`p-8 ${currentPlan?.subscription_plans?.type === "free" ? "border-primary" : ""}`}
+            className={`p-10 border-[#E5E5EA] rounded-2xl transition-all duration-200 hover:shadow-lg ${
+              currentPlan?.subscription_plans?.type === "free" ? "border-[#7B61FF] shadow-md" : ""
+            }`}
             role="region"
             aria-label={t("plans.free.name")}
           >
-            <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold mb-2">{t("plans.free.name")}</h3>
-              <div className="text-4xl font-bold mb-4">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-semibold mb-3 text-[#1D1D1F]">{t("plans.free.name")}</h3>
+              <div className="text-5xl font-semibold mb-2 text-[#1D1D1F]">
                 {t("plans.free.price.monthly")}
               </div>
+              <p className="text-[#86868B]">Para começar</p>
             </div>
 
-            <ul className="space-y-3 mb-8">
+            <ul className="space-y-4 mb-8">
               {(t("plans.free.bullets", { returnObjects: true }) as string[]).map((bullet: string, index: number) => (
                 <li key={index} className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                  <span>{bullet}</span>
+                  <Check className="w-5 h-5 text-[#7B61FF] shrink-0 mt-0.5" />
+                  <span className="text-[#1D1D1F]">{bullet}</span>
                 </li>
               ))}
             </ul>
 
             {currentPlan?.subscription_plans?.type === "free" ? (
-              <Button className="w-full" disabled>
+              <Button className="w-full py-6 bg-[#F5F5F7] text-[#86868B] hover:bg-[#F5F5F7] cursor-default" disabled>
                 {t("plans.currentPlan")}
               </Button>
             ) : (
               <Button 
-                className="w-full" 
-                variant="outline"
+                className="w-full py-6 bg-white text-[#7B61FF] border-2 border-[#7B61FF] hover:bg-[#7B61FF] hover:text-white transition-all rounded-xl" 
                 onClick={() => handlePlanSelect("free", "monthly")}
               >
                 {t("plans.free.cta")}
@@ -146,44 +149,47 @@ const Plans = () => {
 
           {/* Premium Plan */}
           <Card 
-            className={`p-8 relative ${isPremium ? "border-primary" : "border-primary/50"}`}
+            className={`p-10 relative border-[#7B61FF] rounded-2xl transition-all duration-200 hover:shadow-xl ${
+              isPremium ? "shadow-lg" : "shadow-md"
+            }`}
             role="region"
             aria-label={t("plans.premium.name")}
           >
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#7B61FF] text-white px-6 py-2 rounded-full text-sm font-semibold flex items-center gap-2 shadow-sm">
               <Crown className="w-4 h-4" />
               {t("plans.badge")}
             </div>
 
-            <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold mb-2">{t("plans.premium.name")}</h3>
-              <div className="text-4xl font-bold mb-2">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-semibold mb-3 text-[#1D1D1F]">{t("plans.premium.name")}</h3>
+              <div className="text-5xl font-semibold mb-2 text-[#1D1D1F]">
                 {billingCycle === "monthly" 
                   ? t("plans.premium.price.monthly")
                   : t("plans.premium.price.yearly")
                 }
               </div>
               {billingCycle === "yearly" && (
-                <p className="text-sm text-primary font-medium">{t("plans.premium.hint")}</p>
+                <p className="text-sm text-[#7B61FF] font-medium">{t("plans.premium.hint")}</p>
               )}
+              <p className="text-[#86868B] mt-2">Ilimitado</p>
             </div>
 
-            <ul className="space-y-3 mb-8">
+            <ul className="space-y-4 mb-8">
               {(t("plans.premium.bullets", { returnObjects: true }) as string[]).map((bullet: string, index: number) => (
                 <li key={index} className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                  <span className={index < 2 ? "font-semibold" : ""}>{bullet}</span>
+                  <Check className="w-5 h-5 text-[#7B61FF] shrink-0 mt-0.5" />
+                  <span className={`text-[#1D1D1F] ${index < 2 ? "font-semibold" : ""}`}>{bullet}</span>
                 </li>
               ))}
             </ul>
 
             {isPremium ? (
-              <Button className="w-full" disabled>
+              <Button className="w-full py-6 bg-[#F5F5F7] text-[#86868B] hover:bg-[#F5F5F7] cursor-default" disabled>
                 {t("plans.currentPlan")}
               </Button>
             ) : (
               <Button 
-                className="w-full bg-[#5A54E6] hover:bg-[#4a44d6] focus:outline-none focus:ring-2 focus:ring-[#5A54E6] focus:ring-offset-2" 
+                className="w-full py-6 bg-[#7B61FF] hover:bg-[#6951E6] text-white border-none shadow-sm transition-all rounded-xl" 
                 asChild
               >
                 <a 
@@ -206,8 +212,8 @@ const Plans = () => {
         </div>
 
         {/* Trust Line */}
-        <div className="text-center mt-12">
-          <p className="text-sm text-muted-foreground">
+        <div className="text-center mt-16">
+          <p className="text-sm text-[#86868B]">
             Cancele quando quiser · Garantia de 7 dias · Acesso imediato
           </p>
         </div>

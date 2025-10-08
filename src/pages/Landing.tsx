@@ -38,37 +38,37 @@ export default function Landing({ lang }: LandingProps) {
   const heroMockup = lang === "pt" ? heroMockupPt : lang === "es" ? heroMockupEs : heroMockupEn;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="border-b border-border/40 sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
-        <nav className="container mx-auto px-4 py-4 flex justify-between items-center" role="navigation" aria-label="Main navigation">
+      <header className="border-b border-[#E5E5EA] sticky top-0 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 z-50">
+        <nav className="container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-4 flex justify-between items-center" role="navigation" aria-label="Main navigation">
           <div className="flex items-center gap-2">
-            <BookOpen className="h-6 w-6 text-primary" aria-hidden="true" />
-            <span className="font-bold text-xl">OnePageBook</span>
+            <BookOpen className="h-6 w-6 text-[#7B61FF]" aria-hidden="true" />
+            <span className="font-semibold text-xl text-[#1D1D1F]">OnePageBook</span>
           </div>
           <LanguageSelector />
         </nav>
       </header>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-8 md:py-12 lg:py-20" aria-labelledby="hero-title">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          <div className="space-y-4 md:space-y-6 text-center lg:text-left">
-            <h1 id="hero-title" className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+      <section className="container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-12 md:py-16 lg:py-24" aria-labelledby="hero-title">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="space-y-6 md:space-y-8 text-center lg:text-left">
+            <h1 id="hero-title" className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold leading-tight text-[#1D1D1F] tracking-tight">
               {t("landing.hero.headline")}
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-muted-foreground">
+            <p className="text-lg sm:text-xl md:text-2xl text-[#86868B] font-normal">
               {t("landing.hero.subtitle")}
             </p>
-            <div className="flex flex-col items-center lg:items-start gap-2">
+            <div className="flex flex-col items-center lg:items-start gap-3">
               <Button
                 size="lg"
                 onClick={handleCTA}
-                className="w-full sm:w-auto text-sm sm:text-base md:text-lg px-6 sm:px-8 md:px-12 py-4 sm:py-5 md:py-6 bg-primary hover:bg-primary/90 transition-all hover:scale-105"
+                className="w-full sm:w-auto text-base sm:text-lg px-8 sm:px-10 md:px-14 py-5 sm:py-6 md:py-7 bg-[#7B61FF] hover:bg-[#6951E6] text-white border-none shadow-sm transition-all duration-200 hover:scale-105 rounded-xl"
               >
                 {t("landing.hero.cta")}
               </Button>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-[#86868B]">
                 {t("landing.hero.noCreditCard")}
               </p>
             </div>
@@ -76,7 +76,7 @@ export default function Landing({ lang }: LandingProps) {
           
           {/* Hero Mockup */}
           <div className="hidden lg:block">
-            <div className="rounded-lg overflow-hidden shadow-2xl">
+            <div className="rounded-2xl overflow-hidden shadow-2xl">
               <img 
                 src={heroMockup} 
                 alt="Exemplo de resumo de livro gerado pela OnePageBook mostrando insights práticos"
@@ -123,37 +123,41 @@ export default function Landing({ lang }: LandingProps) {
       </section>
 
       {/* How It Works Section */}
-      <section className="container mx-auto px-4 py-12 md:py-16">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12">
+      <section className="container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-16 md:py-20">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-center mb-12 md:mb-16 text-[#1D1D1F] tracking-tight">
           {t("landing.howItWorks.title")}
         </h2>
-        <div className="grid md:grid-cols-3 gap-6 md:gap-8 mb-6 md:mb-8">
-          <div className="text-center space-y-4">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-foreground text-2xl font-bold mb-4">
+        <div className="grid md:grid-cols-3 gap-8 md:gap-12 mb-8 md:mb-12">
+          <div className="text-center space-y-5">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#7B61FF] text-white text-2xl font-semibold mb-5">
               1
             </div>
-            <h3 className="text-xl font-bold">{t("landing.howItWorks.step1.title")}</h3>
-            <p className="text-muted-foreground">{t("landing.howItWorks.step1.desc")}</p>
+            <h3 className="text-xl font-semibold text-[#1D1D1F]">{t("landing.howItWorks.step1.title")}</h3>
+            <p className="text-[#86868B]">{t("landing.howItWorks.step1.desc")}</p>
           </div>
 
-          <div className="text-center space-y-4">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-foreground text-2xl font-bold mb-4">
+          <div className="text-center space-y-5">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#7B61FF] text-white text-2xl font-semibold mb-5">
               2
             </div>
-            <h3 className="text-xl font-bold">{t("landing.howItWorks.step2.title")}</h3>
-            <p className="text-muted-foreground">{t("landing.howItWorks.step2.desc")}</p>
+            <h3 className="text-xl font-semibold text-[#1D1D1F]">{t("landing.howItWorks.step2.title")}</h3>
+            <p className="text-[#86868B]">{t("landing.howItWorks.step2.desc")}</p>
           </div>
 
-          <div className="text-center space-y-4">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-foreground text-2xl font-bold mb-4">
+          <div className="text-center space-y-5">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#7B61FF] text-white text-2xl font-semibold mb-5">
               3
             </div>
-            <h3 className="text-xl font-bold">{t("landing.howItWorks.step3.title")}</h3>
-            <p className="text-muted-foreground">{t("landing.howItWorks.step3.desc")}</p>
+            <h3 className="text-xl font-semibold text-[#1D1D1F]">{t("landing.howItWorks.step3.title")}</h3>
+            <p className="text-[#86868B]">{t("landing.howItWorks.step3.desc")}</p>
           </div>
         </div>
         <div className="text-center">
-          <Button size="lg" onClick={handleCTA} variant="outline" className="px-8">
+          <Button 
+            size="lg" 
+            onClick={handleCTA} 
+            className="px-10 py-6 text-base bg-white text-[#7B61FF] border-2 border-[#7B61FF] hover:bg-[#7B61FF] hover:text-white transition-all duration-200 rounded-xl"
+          >
             {t("landing.howItWorks.cta")}
           </Button>
         </div>
