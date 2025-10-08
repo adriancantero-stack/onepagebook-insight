@@ -37,6 +37,7 @@ interface AdminStats {
   booksWithoutSummary: number;
   booksWithCover: number;
   booksWithoutCover: number;
+  totalAudios: number;
 }
 
 interface UserData {
@@ -194,6 +195,11 @@ const Admin = () => {
         return acc;
       }, {}) || {};
 
+      // Get total audios count
+      const { count: audiosCount } = await supabase
+        .from("book_audio")
+        .select("*", { count: 'exact', head: true });
+
       setStats({
         totalUsers,
         activeUsers,
@@ -204,6 +210,7 @@ const Admin = () => {
         booksWithoutSummary: 0,
         booksWithCover: 0,
         booksWithoutCover: 0,
+        totalAudios: audiosCount || 0,
       });
 
       // Prepare users table data
@@ -1009,8 +1016,8 @@ const Admin = () => {
               </div>
             </div>
 
-            {/* Summary and Cover Stats */}
-            <div className="grid grid-cols-2 gap-4 pt-4 border-t">
+            {/* Summary, Cover, and Audio Stats */}
+            <div className="grid grid-cols-3 gap-4 pt-4 border-t">
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-medium">Livros com Resumo</p>
@@ -1036,6 +1043,22 @@ const Admin = () => {
                 </div>
                 <Progress 
                   value={catalogStats.total > 0 ? ((stats?.booksWithCover || 0) / catalogStats.total) * 100 : 0} 
+                  className="h-2"
+                />
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium">Áudios Gerados</p>
+                  <Badge variant="secondary">{stats?.totalAudios || 0}</Badge>
+                </div>
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-muted-foreground">Total</p>
+                  <span className="text-xs text-muted-foreground">
+                    {stats?.totalAudios || 0} arquivos
+                  </span>
+                </div>
+                <Progress 
+                  value={100} 
                   className="h-2"
                 />
               </div>
