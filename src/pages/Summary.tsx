@@ -776,7 +776,7 @@ const Summary = () => {
                       <div className="flex-1 min-w-0">
                         <h4 className="font-semibold text-base mb-2 line-clamp-2 text-[#1D1D1F]">{book.title}</h4>
                         <p className="text-sm text-[#86868B] mb-3 line-clamp-1">{book.author}</p>
-                        <Button size="sm" variant="ghost" className="h-8 text-sm px-3 hover:bg-[#F5F5F7] rounded-lg transition-all duration-200">
+                        <Button size="sm" variant="ghost" className="h-8 text-sm px-3 hover:bg-[#7B61FF] hover:text-white rounded-lg transition-all duration-200">
                           {t("summary.summarize")}
                         </Button>
                       </div>
