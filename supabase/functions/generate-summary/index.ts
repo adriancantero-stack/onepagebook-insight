@@ -878,14 +878,20 @@ Responde SOLO con el JSON, sin texto adicional.`
 
     console.log("Summary saved:", summary.id);
 
-    // Add book to catalog if it doesn't exist
+    // Try to find and attach cover_url from books catalog
+    let coverUrl: string | null = null;
     const { data: existingBook } = await supabase
       .from("books")
-      .select("id")
+      .select("id, cover_url")
       .eq("title", finalCanonicalTitle)
       .eq("author", finalCanonicalAuthor)
       .eq("lang", language)
       .maybeSingle();
+    
+    if (existingBook?.cover_url) {
+      coverUrl = existingBook.cover_url;
+      console.log("📷 Found cover in catalog:", coverUrl);
+    }
 
     if (!existingBook) {
       console.log("📚 Adding new book to catalog:", finalCanonicalTitle, "by", finalCanonicalAuthor);
