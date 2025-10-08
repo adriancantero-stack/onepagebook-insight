@@ -77,7 +77,7 @@ const Plans = () => {
     <div className="min-h-screen bg-background flex flex-col">
       <FloatingHeader />
 
-      <main className="container mx-auto px-4 py-8 sm:py-16 max-w-4xl flex-1 pt-24">
+      <main className="container mx-auto px-4 py-8 sm:py-16 max-w-4xl flex-1 pt-32">
         <div className="text-center mb-8 sm:mb-12">
           <h1 className="text-3xl sm:text-4xl font-bold mb-4">{t("plans.title")}</h1>
           

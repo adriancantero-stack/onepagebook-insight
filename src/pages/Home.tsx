@@ -415,7 +415,7 @@ const Home = () => {
       </div>
       <FloatingHeader onLogout={handleLogout} />
 
-      <main className="mx-auto max-w-4xl px-4 sm:px-6 pt-24">
+      <main className="mx-auto max-w-4xl px-4 sm:px-6 pt-32">
         <header className="w-full text-center pt-8 pb-4">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
             OnePageBook
