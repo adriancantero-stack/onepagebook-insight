@@ -225,6 +225,8 @@ export const en = {
     
     // Explore
     "explore.title": "Explore by category",
+    "explore.header.title": "Explore Books",
+    "explore.header.subtitle": "Discover transformative insights in a single page",
     "explore.books": "Books",
     "explore.search.placeholder": "Search by title or author…",
     "explore.search.hint": "Press Enter to summarize what you typed",

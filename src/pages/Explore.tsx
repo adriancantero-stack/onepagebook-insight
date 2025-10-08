@@ -349,10 +349,10 @@ const Explore = () => {
         {/* Apple-style Header */}
         <div className="mb-10 sm:mb-16 text-center max-w-3xl mx-auto">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-[#1D1D1F] mb-4 tracking-tight">
-            Explorar Livros
+            {t("explore.header.title")}
           </h1>
           <p className="text-lg sm:text-xl text-[#86868B] font-normal">
-            Descubra insights transformadores em uma única página
+            {t("explore.header.subtitle")}
           </p>
         </div>
 
@@ -555,7 +555,7 @@ const Explore = () => {
                   aria-label={`${t("explore.summarize")} ${book.title} — ${book.author}`}
                 >
                   <Sparkles className="w-4 h-4 mr-2" />
-                  Gerar resumo
+                  {t("explore.summarize")}
                 </Button>
               </Card>
             );

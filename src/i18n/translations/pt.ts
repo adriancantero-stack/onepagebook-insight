@@ -167,6 +167,8 @@ export const pt = {
     
     // Explore
     "explore.title": "Explorar por categoria",
+    "explore.header.title": "Explorar Livros",
+    "explore.header.subtitle": "Descubra insights transformadores em uma única página",
     "explore.books": "Livros",
     "explore.search.placeholder": "Buscar por título ou autor…",
     "explore.search.hint": "Pressione Enter para resumir o que digitou",
