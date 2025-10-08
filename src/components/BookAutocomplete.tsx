@@ -190,12 +190,13 @@ export const BookAutocomplete = ({
           autoComplete="off"
         />
         <div 
-          className="text-xs text-center transition-all duration-700 ease-in-out px-1"
+          className="text-xs text-center px-1"
           style={{
             opacity: value.length > 0 ? 1 : 0,
             transform: value.length > 0 ? 'translateY(0)' : 'translateY(-12px)',
             maxHeight: value.length > 0 ? '40px' : '0px',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            transition: 'all 1000ms cubic-bezier(0.4, 0, 0.2, 1)'
           }}
         >
           <span className="text-muted-foreground/60">
