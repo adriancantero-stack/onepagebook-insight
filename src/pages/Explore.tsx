@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, ArrowLeft, Sparkles, Shuffle, Filter } from "lucide-react";
-import { LanguageSelector } from "@/components/LanguageSelector";
+import { Sparkles, Shuffle, Filter, BookOpen } from "lucide-react";
+import { FloatingHeader } from "@/components/FloatingHeader";
 import Footer from "@/components/Footer";
 import { 
   Select,
@@ -370,26 +370,9 @@ const Explore = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="border-b border-border">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between relative">
-          <Button 
-            variant="ghost" 
-            onClick={() => navigate("/")} 
-            size="sm"
-            className="gap-0 sm:gap-2 flex-col sm:flex-row px-2 sm:px-4 h-auto sm:h-9 py-1 sm:py-2"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-[10px] sm:text-sm">Home</span>
-          </Button>
-          <div className="flex items-center gap-2 absolute left-1/2 transform -translate-x-1/2">
-            <BookOpen className="w-6 h-6 text-primary" />
-            <h1 className="text-lg sm:text-xl font-bold text-foreground">OnePageBook</h1>
-          </div>
-          <LanguageSelector />
-        </div>
-      </header>
+      <FloatingHeader />
 
-      <main className="container mx-auto px-4 py-6 sm:py-8 max-w-6xl flex-1">
+      <main className="container mx-auto px-4 py-6 sm:py-8 max-w-6xl flex-1 pt-24">
         <div className="mb-6 sm:mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold mb-4">
             {t("explore.title")} <span className="text-xl sm:text-2xl text-muted-foreground">({totalBooksCount} {t("explore.books")})</span>

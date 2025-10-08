@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Check, Crown, ArrowLeft, BookOpen } from "lucide-react";
+import { Check, Crown } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-import { LanguageSelector } from "@/components/LanguageSelector";
+import { FloatingHeader } from "@/components/FloatingHeader";
 import Footer from "@/components/Footer";
 import type { UserSubscription } from "@/types";
 
@@ -75,21 +75,9 @@ const Plans = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="border-b border-border">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between relative">
-          <Button variant="ghost" onClick={() => navigate("/")} size="sm">
-            <ArrowLeft className="w-4 h-4 mr-1 sm:mr-2" />
-            <span className="hidden sm:inline">Home</span>
-          </Button>
-          <div className="flex items-center gap-2 absolute left-1/2 transform -translate-x-1/2">
-            <BookOpen className="w-6 h-6 text-primary" />
-            <h1 className="text-lg sm:text-xl font-bold text-foreground">OnePageBook</h1>
-          </div>
-          <LanguageSelector />
-        </div>
-      </header>
+      <FloatingHeader />
 
-      <main className="container mx-auto px-4 py-8 sm:py-16 max-w-4xl flex-1">
+      <main className="container mx-auto px-4 py-8 sm:py-16 max-w-4xl flex-1 pt-24">
         <div className="text-center mb-8 sm:mb-12">
           <h1 className="text-3xl sm:text-4xl font-bold mb-4">{t("plans.title")}</h1>
           

@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { Search, ArrowLeft, BookOpen } from "lucide-react";
+import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Accordion,
@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { LanguageSelector } from "@/components/LanguageSelector";
+import { FloatingHeader } from "@/components/FloatingHeader";
 
 const Faq = () => {
   const { t } = useTranslation();
@@ -77,23 +77,9 @@ const Faq = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-        <header className="border-b border-border">
-          <div className="container mx-auto px-4 py-4 flex items-center justify-between relative">
-            <Link to="/">
-              <Button variant="ghost" size="sm" className="gap-2">
-                <ArrowLeft className="h-4 w-4" />
-                Home
-              </Button>
-            </Link>
-            <div className="flex items-center gap-2 absolute left-1/2 transform -translate-x-1/2">
-              <BookOpen className="w-8 h-8 text-primary" />
-              <h1 className="text-xl font-bold text-foreground">OnePageBook</h1>
-            </div>
-            <LanguageSelector />
-          </div>
-        </header>
+      <FloatingHeader />
 
-        <main className="flex-1 container mx-auto px-4 py-12 max-w-3xl">
+      <main className="flex-1 container mx-auto px-4 py-12 max-w-3xl pt-24">
           <h1 className="text-4xl font-bold mb-2 text-center">{t("faq.title_long")}</h1>
           
           <div className="relative mb-8 mt-8">
