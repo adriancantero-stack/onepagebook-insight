@@ -360,6 +360,7 @@ const Explore = () => {
         <div className="mb-10 sm:mb-14 max-w-3xl mx-auto">
           <div className="relative">
             <BookAutocomplete
+              hideExploreLink={true}
               value={query}
               onChange={setQuery}
               onBookSelect={(bookId, title, author) => {

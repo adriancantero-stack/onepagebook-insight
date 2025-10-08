@@ -20,6 +20,7 @@ interface BookAutocompleteProps {
   onBookSelect: (bookId: string | null, title: string, author: string, source?: 'catalog' | 'history') => void;
   disabled?: boolean;
   lang: string;
+  hideExploreLink?: boolean;
 }
 
 export const BookAutocomplete = ({ 
@@ -27,7 +28,8 @@ export const BookAutocomplete = ({
   onChange, 
   onBookSelect, 
   disabled,
-  lang 
+  lang,
+  hideExploreLink = false
 }: BookAutocompleteProps) => {
   const { t } = useTranslation();
   const [suggestions, setSuggestions] = useState<Book[]>([]);
@@ -190,28 +192,30 @@ export const BookAutocomplete = ({
           autoComplete="off"
           className="h-12 text-base"
         />
-        <div 
-          className="text-xs text-center px-1"
-          style={{
-            opacity: value.length > 0 ? 1 : 0,
-            transform: value.length > 0 ? 'translateY(0)' : 'translateY(-12px)',
-            maxHeight: value.length > 0 ? '40px' : '0px',
-            overflow: 'hidden',
-            transition: 'all 1000ms cubic-bezier(0.4, 0, 0.2, 1)'
-          }}
-        >
-          <span className="text-muted-foreground/60">
-            {lang === "en" ? "Don't know the title? " : lang === "es" ? "¿No sabes el título? " : "Não sabe o título? "}
-          </span>
-          <button
-            onClick={() => {
-              window.location.href = '/explore';
+        {!hideExploreLink && (
+          <div 
+            className="text-xs text-center px-1"
+            style={{
+              opacity: value.length > 0 ? 1 : 0,
+              transform: value.length > 0 ? 'translateY(0)' : 'translateY(-12px)',
+              maxHeight: value.length > 0 ? '40px' : '0px',
+              overflow: 'hidden',
+              transition: 'all 1000ms cubic-bezier(0.4, 0, 0.2, 1)'
             }}
-            className="text-primary hover:underline font-medium transition-colors"
           >
-            {lang === "en" ? "Browse catalog" : lang === "es" ? "Explorar catálogo" : "Explorar catálogo"}
-          </button>
-        </div>
+            <span className="text-muted-foreground/60">
+              {lang === "en" ? "Don't know the title? " : lang === "es" ? "¿No sabes el título? " : "Não sabe o título? "}
+            </span>
+            <button
+              onClick={() => {
+                window.location.href = '/explore';
+              }}
+              className="text-primary hover:underline font-medium transition-colors"
+            >
+              {lang === "en" ? "Browse catalog" : lang === "es" ? "Explorar catálogo" : "Explorar catálogo"}
+            </button>
+          </div>
+        )}
       </div>
 
       {showDropdown && (
