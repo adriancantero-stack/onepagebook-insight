@@ -212,7 +212,6 @@ export default function Landing({ lang }: LandingProps) {
         </h2>
         <div className="grid md:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
           <Card className="p-6 md:p-8 relative">
-            <Quote className="h-8 w-8 text-primary/20 absolute top-4 right-4" />
             <p className="text-sm md:text-base text-muted-foreground mb-4 italic">
               "{t("landing.testimonials.testimonial1.quote")}"
             </p>
@@ -230,7 +229,6 @@ export default function Landing({ lang }: LandingProps) {
           </Card>
 
           <Card className="p-6 md:p-8 relative">
-            <Quote className="h-8 w-8 text-primary/20 absolute top-4 right-4" />
             <p className="text-sm md:text-base text-muted-foreground mb-4 italic">
               "{t("landing.testimonials.testimonial2.quote")}"
             </p>
@@ -248,7 +246,6 @@ export default function Landing({ lang }: LandingProps) {
           </Card>
 
           <Card className="p-6 md:p-8 relative">
-            <Quote className="h-8 w-8 text-primary/20 absolute top-4 right-4" />
             <p className="text-sm md:text-base text-muted-foreground mb-4 italic">
               "{t("landing.testimonials.testimonial3.quote")}"
             </p>
