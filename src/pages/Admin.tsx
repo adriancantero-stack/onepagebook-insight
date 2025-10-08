@@ -967,12 +967,22 @@ const Admin = () => {
                     onClick={handleImportHardcodedCatalog}
                     disabled={importingCatalog}
                     variant="secondary"
-                    className="w-full"
+                    className="w-full h-auto py-3 whitespace-normal"
                     size="lg"
                   >
-                    <Upload className="mr-2 h-4 w-4" />
-                    {importingCatalog ? "Importando..." : "Importar Catálogo"}
+                    <Upload className="mr-2 h-4 w-4 shrink-0" />
+                    <span className="text-sm leading-tight">
+                      {importingCatalog ? "Importando..." : "Importar Catálogo"}
+                    </span>
                   </Button>
+                  {importingCatalog && catalogImportProgress.total > 0 && (
+                    <div className="space-y-1">
+                      <Progress value={(catalogImportProgress.current / catalogImportProgress.total) * 100} className="h-2" />
+                      <p className="text-xs text-muted-foreground">
+                        {catalogImportProgress.current}/{catalogImportProgress.total}
+                      </p>
+                    </div>
+                  )}
                 </div>
                 
                 <div className="space-y-2">
@@ -1000,6 +1010,12 @@ const Admin = () => {
                       </div>
                     </div>
                   )}
+                  {isValidatingBooks && validationResults && (
+                    <Progress 
+                      value={(validationResults.total / (validationResults.total || 1)) * 100} 
+                      className="h-2" 
+                    />
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -1018,49 +1034,63 @@ const Admin = () => {
                   {categoryMigrationResults && (
                     <div className="text-xs space-y-1">
                       <div className="flex justify-between">
-                        <span className="text-green-600">Migrados:</span>
+                        <span>Migrados:</span>
                         <span className="font-medium">{categoryMigrationResults.migrated}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Já corretos:</span>
-                        <span className="font-medium">{categoryMigrationResults.skipped}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-yellow-600">Incertos:</span>
-                        <span className="font-medium">{validationResults.uncertain}</span>
+                        <span>Erros:</span>
+                        <span className="font-medium text-red-600">{categoryMigrationResults.errors}</span>
                       </div>
                     </div>
                   )}
+                  {isMigratingCategories && categoryMigrationResults && (
+                    <Progress 
+                      value={((categoryMigrationResults.migrated + categoryMigrationResults.skipped) / categoryMigrationResults.totalBooks) * 100} 
+                      className="h-2" 
+                    />
+                  )}
                 </div>
                 
+              </div>
+
+              {/* Check and Generate Buttons */}
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t">
                 <div className="space-y-2">
                   <Button 
                     onClick={checkBooksWithoutCovers}
-                    disabled={isCheckingCovers || isGeneratingCovers}
-                    variant="secondary"
-                    className="w-full"
-                    size="lg"
+                    disabled={isCheckingCovers}
+                    variant="outline"
+                    className="w-full h-auto py-3 whitespace-normal"
                   >
-                    <ImagePlus className="mr-2 h-4 w-4" />
-                    {isCheckingCovers ? "Verificando..." : "Verificar Capas"}
+                    <ImagePlus className="mr-2 h-4 w-4 shrink-0" />
+                    <span className="text-sm leading-tight">
+                      {isCheckingCovers ? "Verificando..." : "Verificar Capas"}
+                    </span>
                   </Button>
+                  {cronSchedules.find(s => s.job_name === 'nightly-cover-check') && (
+                    <CronTimer 
+                      nextRunAt={cronSchedules.find(s => s.job_name === 'nightly-cover-check')!.next_run_at}
+                      jobName="nightly-cover-check"
+                    />
+                  )}
                 </div>
 
                 <div className="space-y-2">
                   <Button 
                     onClick={checkBooksWithoutSummaries}
-                    disabled={isCheckingSummaries || batchGenerating}
+                    disabled={isCheckingSummaries}
                     variant="outline"
-                    className="w-full"
-                    size="lg"
+                    className="w-full h-auto py-3 whitespace-normal"
                   >
-                    <Sparkles className="mr-2 h-4 w-4" />
-                    {isCheckingSummaries ? "Verificando..." : "Verificar Resumos"}
+                    <Sparkles className="mr-2 h-4 w-4 shrink-0" />
+                    <span className="text-sm leading-tight">
+                      {isCheckingSummaries ? "Verificando..." : "Verificar Resumos"}
+                    </span>
                   </Button>
-                  {cronSchedules.find(s => s.job_name === 'daily-summary-generation') && (
+                  {cronSchedules.find(s => s.job_name === 'nightly-summary-check') && (
                     <CronTimer 
-                      nextRunAt={cronSchedules.find(s => s.job_name === 'daily-summary-generation')!.next_run_at}
-                      jobName="daily-summary-generation"
+                      nextRunAt={cronSchedules.find(s => s.job_name === 'nightly-summary-check')!.next_run_at}
+                      jobName="nightly-summary-check"
                     />
                   )}
                 </div>
@@ -1166,6 +1196,39 @@ const Admin = () => {
                   <p className="text-xs text-muted-foreground">
                     {batchGenerateProgress.total > 0 ? Math.round((batchGenerateProgress.current / batchGenerateProgress.total) * 100) : 0}% concluído
                   </p>
+                </div>
+              )}
+
+              {/* Invalid Books Section */}
+              {validationResults && validationResults.invalid > 0 && (
+                <div className="p-4 rounded-lg border border-red-200 bg-red-50 dark:bg-red-950/20 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-red-600 font-semibold text-lg">⚠️ {validationResults.invalid} livros inválidos detectados</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Estes livros não foram encontrados no Google Books e podem ter informações incorretas. 
+                    Você pode revisá-los manualmente ou removê-los do catálogo.
+                  </p>
+                  <div className="flex gap-2 mt-3">
+                    <Button 
+                      variant="outline"
+                      size="sm"
+                      onClick={() => toast.info("Funcionalidade de revisão em desenvolvimento")}
+                    >
+                      Revisar Manualmente
+                    </Button>
+                    <Button 
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => {
+                        if (confirm(`Tem certeza que deseja remover ${validationResults.invalid} livros inválidos?`)) {
+                          toast.info("Funcionalidade de remoção em desenvolvimento");
+                        }
+                      }}
+                    >
+                      Remover Inválidos
+                    </Button>
+                  </div>
                 </div>
               )}
 
