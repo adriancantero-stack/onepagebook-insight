@@ -449,17 +449,11 @@ const Explore = () => {
               >
                 {/* Book Cover */}
                 <div className="flex items-center gap-4 mb-4">
-                  {coverUrl ? (
-                    <img 
-                      src={coverUrl} 
-                      alt={`${book.title} cover`}
-                      className="w-16 h-24 object-cover rounded-md shadow-sm"
-                    />
-                  ) : (
-                    <div className="w-16 h-24 bg-[#F5F5F7] rounded-md flex items-center justify-center">
-                      <BookOpen className="w-6 h-6 text-[#86868B]" />
-                    </div>
-                  )}
+                  <img 
+                    src={coverUrl || '/book-placeholder.png'} 
+                    alt={`${book.title} cover`}
+                    className="w-16 h-24 object-cover rounded-md shadow-sm"
+                  />
 
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-base text-[#1D1D1F] line-clamp-2 mb-1 leading-snug">
