@@ -4,13 +4,13 @@ import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { BookOpen, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import Footer from "@/components/Footer";
 import { UpgradeModal } from "@/components/UpgradeModal";
 import { BookAutocomplete } from "@/components/BookAutocomplete";
-import { NavigationMenu } from "@/components/NavigationMenu";
+import { FloatingHeader } from "@/components/FloatingHeader";
 import { BookDetailsModal } from "@/components/BookDetailsModal";
 
 import { 
@@ -413,20 +413,9 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <header className="border-b border-border/50 backdrop-blur-xl bg-background/50 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <BookOpen className="w-6 h-6 text-primary" />
-            <h1 className="text-xl font-bold text-foreground">OnePageBook</h1>
-          </div>
-          <div className="flex items-center gap-2">
-            <LanguageSelector />
-            <NavigationMenu onLogout={handleLogout} />
-          </div>
-        </div>
-      </header>
+      <FloatingHeader onLogout={handleLogout} />
 
-      <main className="mx-auto max-w-4xl px-4 sm:px-6">
+      <main className="mx-auto max-w-4xl px-4 sm:px-6 pt-24">
         <header className="w-full text-center pt-8 pb-4">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
             OnePageBook
