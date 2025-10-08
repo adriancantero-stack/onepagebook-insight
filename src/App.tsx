@@ -23,7 +23,6 @@ const Privacy = lazy(() => import("./pages/Privacy"));
 const Faq = lazy(() => import("./pages/Faq"));
 
 const Admin = lazy(() => import("./pages/Admin"));
-const GenerateCovers = lazy(() => import("./pages/GenerateCovers"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -66,7 +65,6 @@ const App = () => (
             <Route path="/en/privacy" element={<Privacy />} />
             <Route path="/en/faq" element={<Faq />} />
             <Route path="/admin" element={<Admin />} />
-            <Route path="/generate-covers" element={<GenerateCovers />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
