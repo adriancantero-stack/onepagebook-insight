@@ -352,9 +352,20 @@ const Summary = () => {
     if (summary.year) shareText += ` (${summary.year})`;
     shareText += '\n\n';
     
+    // Only include the one-liner (essential summary)
     if (summary.one_liner) {
       shareText += `${summary.one_liner}\n\n`;
     }
+    
+    // Add promotional message with site link
+    const promoMessages = {
+      pt: '📖 Leia o resumo completo em onepagebook.ai',
+      en: '📖 Read the full summary at onepagebook.ai',
+      es: '📖 Lee el resumen completo en onepagebook.ai'
+    };
+    
+    const currentLang = (i18n.language || 'pt').split('-')[0] as 'pt' | 'en' | 'es';
+    shareText += `\n${promoMessages[currentLang] || promoMessages.pt}`;
     
     if (navigator.share) {
       try {
