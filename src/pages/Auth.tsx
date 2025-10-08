@@ -108,7 +108,7 @@ const Auth = () => {
   };
 
   return <div className="min-h-screen flex flex-col bg-white">
-      <div className="flex-1 flex items-center justify-center px-6 sm:px-12 py-16">
+      <div className="flex-1 flex items-center justify-center px-6 sm:px-12 py-8 sm:py-12">
         <div className="absolute top-4 right-4">
           <LanguageSelector />
         </div>
