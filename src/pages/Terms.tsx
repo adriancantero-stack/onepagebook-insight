@@ -139,8 +139,8 @@ const Terms = () => {
             Home
           </Button>
           <div className="flex items-center gap-2 absolute left-1/2 transform -translate-x-1/2">
-            <BookOpen className="w-8 h-8 text-primary" />
-            <h1 className="text-xl font-bold text-foreground">OnePageBook</h1>
+            <BookOpen className="w-5 h-5 text-primary" />
+            <span className="font-semibold text-sm">OnePageBook</span>
           </div>
           <LanguageSelector />
         </div>
