@@ -267,8 +267,8 @@ export const es = {
     "header.explore": "Explorar",
     
     // Footer
-    "footer.terms": "Términos de Servicio",
-    "footer.privacy": "Política de Privacidad",
+    "footer.terms": "Términos",
+    "footer.privacy": "Privacidad",
     "footer.contact": "Contacto",
     "footer.faq": "FAQ",
     "footer.copyright": "© {{year}} onepagebook.ai",

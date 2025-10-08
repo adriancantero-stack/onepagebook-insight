@@ -209,8 +209,8 @@ export const pt = {
     "header.explore": "Explorar",
     
     // Footer
-    "footer.terms": "Termos de Serviço",
-    "footer.privacy": "Política de Privacidade",
+    "footer.terms": "Termos",
+    "footer.privacy": "Privacidade",
     "footer.contact": "Contato",
     "footer.faq": "FAQ",
     "footer.copyright": "© {{year}} onepagebook.ai",
