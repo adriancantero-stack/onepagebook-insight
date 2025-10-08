@@ -478,7 +478,7 @@ const Home = () => {
 
         <div className="mx-auto mt-6 max-w-2xl w-full">
           <Card className="p-4 sm:p-8 border-0 shadow-none">
-          <div className="space-y-6">
+            <div className="space-y-6">
             <div>
               <BookAutocomplete
                 value={bookTitle}
