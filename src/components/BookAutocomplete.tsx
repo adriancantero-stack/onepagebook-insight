@@ -188,6 +188,7 @@ export const BookAutocomplete = ({
           onKeyDown={handleKeyDown}
           disabled={disabled}
           autoComplete="off"
+          className="h-12 text-base"
         />
         <div 
           className="text-xs text-center px-1"
