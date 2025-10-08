@@ -196,6 +196,27 @@ const BOOK_DATA: Record<string, Array<{title: string, author: string, locale: st
   ],
 };
 
+async function searchGoogleBooks(title: string, author: string, lang: string): Promise<any> {
+  const query = `${title} ${author}`.trim();
+  const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&langRestrict=${lang}&maxResults=3`;
+  
+  const response = await fetch(url);
+  if (!response.ok) return null;
+  
+  const data = await response.json();
+  return data.items?.[0] || null;
+}
+
+async function searchOpenLibrary(title: string, author: string): Promise<any> {
+  const url = `https://openlibrary.org/search.json?title=${encodeURIComponent(title)}&author=${encodeURIComponent(author)}&limit=3`;
+  
+  const response = await fetch(url);
+  if (!response.ok) return null;
+  
+  const data = await response.json();
+  return data.docs?.[0] || null;
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -210,6 +231,7 @@ serve(async (req) => {
     let inserted = 0;
     let skipped = 0;
     let errors = 0;
+    let enriched = 0;
     const log: string[] = [];
 
     log.push("Iniciando importação do catálogo hardcoded...");
@@ -262,16 +284,57 @@ serve(async (req) => {
             continue;
           }
 
+          // Try to enrich with metadata from Google Books or Open Library
+          let bookData: any = {
+            title: book.title,
+            author: book.author,
+            lang: book.lang,
+            category: book.categoryId,
+            is_active: true,
+            popularity: 0,
+          };
+
+          try {
+            // Try Google Books first
+            await new Promise(resolve => setTimeout(resolve, 200)); // Rate limit
+            const googleResult = await searchGoogleBooks(book.title, book.author, book.lang);
+            
+            if (googleResult?.volumeInfo) {
+              const volumeInfo = googleResult.volumeInfo;
+              bookData.google_books_id = googleResult.id;
+              bookData.isbn = volumeInfo.industryIdentifiers?.find((id: any) => 
+                id.type === 'ISBN_13' || id.type === 'ISBN_10'
+              )?.identifier;
+              bookData.description = volumeInfo.description?.substring(0, 1000);
+              bookData.published_year = volumeInfo.publishedDate ? parseInt(volumeInfo.publishedDate.substring(0, 4)) : null;
+              bookData.page_count = volumeInfo.pageCount;
+              bookData.cover_url = volumeInfo.imageLinks?.thumbnail?.replace('http:', 'https:') 
+                || volumeInfo.imageLinks?.smallThumbnail?.replace('http:', 'https:');
+              bookData.tags = volumeInfo.categories || [book.categoryId];
+              enriched++;
+              console.log(`✓ Enriched from Google Books: ${book.title}`);
+            } else {
+              // Try Open Library as fallback
+              const openLibResult = await searchOpenLibrary(book.title, book.author);
+              
+              if (openLibResult) {
+                bookData.isbn = openLibResult.isbn?.[0];
+                bookData.description = openLibResult.first_sentence?.join(' ').substring(0, 1000);
+                bookData.published_year = openLibResult.first_publish_year;
+                bookData.page_count = openLibResult.number_of_pages_median;
+                bookData.cover_url = openLibResult.cover_i ? `https://covers.openlibrary.org/b/id/${openLibResult.cover_i}-L.jpg` : null;
+                bookData.tags = [book.categoryId];
+                enriched++;
+                console.log(`✓ Enriched from Open Library: ${book.title}`);
+              }
+            }
+          } catch (enrichError) {
+            console.log(`Could not enrich ${book.title}, inserting basic data`);
+          }
+
           const { error: insertError } = await supabase
             .from('books')
-            .insert({
-              title: book.title,
-              author: book.author,
-              lang: book.lang,
-              category: book.categoryId,
-              is_active: true,
-              popularity: 0,
-            });
+            .insert(bookData);
 
           if (insertError) {
             console.error(`Error inserting ${book.title}:`, insertError);
@@ -285,7 +348,7 @@ serve(async (req) => {
         }
       }
 
-      log.push(`✓ Lote ${batchNo} concluído (inseridos: ${inserted}, pulados: ${skipped}, erros: ${errors})`);
+      log.push(`✓ Lote ${batchNo} concluído (inseridos: ${inserted}, enriquecidos: ${enriched}, pulados: ${skipped}, erros: ${errors})`);
 
       index += batchSize;
 
@@ -297,11 +360,12 @@ serve(async (req) => {
 
     log.push(`\n=== Importação concluída ===`);
     log.push(`Total inseridos: ${inserted}`);
+    log.push(`Total enriquecidos com metadados: ${enriched}`);
     log.push(`Total pulados (já existiam): ${skipped}`);
     log.push(`Total erros: ${errors}`);
 
     return new Response(
-      JSON.stringify({ success: true, stats: { inserted, skipped, errors, total }, log }),
+      JSON.stringify({ success: true, stats: { inserted, skipped, errors, enriched, total }, log }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 

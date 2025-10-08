@@ -75,6 +75,20 @@ async function fetchGoogleBooks(query: string, lang: string, maxResults: number 
   return data.items || [];
 }
 
+async function fetchOpenLibrary(query: string, maxResults: number = 20): Promise<any[]> {
+  const url = `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=${maxResults}`;
+  
+  console.log(`Fetching from Open Library: ${url}`);
+  
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Open Library API error: ${response.statusText}`);
+  }
+  
+  const data = await response.json();
+  return data.docs || [];
+}
+
 function normalizeText(text: string): string {
   return text
     .toLowerCase()
@@ -132,6 +146,7 @@ Deno.serve(async (req) => {
         console.log(`Fetching category: ${category}`);
         
         try {
+          // Try Google Books first
           const items = await fetchGoogleBooks(category, currentLang, 20);
           
           for (const item of items) {
@@ -190,6 +205,59 @@ Deno.serve(async (req) => {
 
             if (booksToImport.length >= target) {
               break;
+            }
+          }
+
+          // If we didn't get enough books from Google Books, try Open Library
+          if (booksToImport.length < target) {
+            console.log(`Complementing with Open Library for category: ${category}`);
+            try {
+              const openLibDocs = await fetchOpenLibrary(category, 10);
+              
+              for (const doc of openLibDocs) {
+                if (!doc.title || !doc.author_name?.[0]) continue;
+                
+                const title = doc.title;
+                const author = doc.author_name[0];
+                const normalizedKey = `${normalizeText(title)}_${normalizeText(author)}_${currentLang}`;
+                
+                if (seenKeys.has(normalizedKey)) continue;
+                
+                // Check if already exists in database
+                const { data: existing } = await supabase
+                  .from('books')
+                  .select('id')
+                  .eq('lang', currentLang)
+                  .ilike('title', title)
+                  .ilike('author', author)
+                  .maybeSingle();
+
+                if (existing) {
+                  totalSkipped++;
+                  continue;
+                }
+                
+                seenKeys.add(normalizedKey);
+                
+                booksToImport.push({
+                  title,
+                  author,
+                  lang: currentLang,
+                  isbn: doc.isbn?.[0] || null,
+                  description: doc.first_sentence?.join(' ').substring(0, 1000) || null,
+                  category: mapGoogleCategory(category, 'business'),
+                  published_year: doc.first_publish_year || null,
+                  page_count: doc.number_of_pages_median || null,
+                  cover_url: doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg` : null,
+                  is_active: true,
+                  popularity: 0,
+                  tags: [category]
+                });
+                
+                if (booksToImport.length >= target) break;
+              }
+            } catch (olError) {
+              console.error(`Error fetching Open Library for ${category}:`, olError);
             }
           }
 
