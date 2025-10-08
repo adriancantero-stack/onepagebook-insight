@@ -103,7 +103,7 @@ export default {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 1s ease-out",
-        "shine": "shine 3s ease-in-out infinite",
+        "shine": "shine 2.5s ease-in-out 1",
       },
     },
   },
