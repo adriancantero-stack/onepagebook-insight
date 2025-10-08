@@ -578,11 +578,23 @@ const Admin = () => {
   const checkBooksWithoutCovers = async () => {
     setIsCheckingCovers(true);
     try {
+      // First, update books without covers to use the site icon as placeholder
+      const { error: updateError } = await supabase
+        .from('books')
+        .update({ cover_url: '/logo-gray.png' })
+        .eq('is_active', true)
+        .is('cover_url', null);
+
+      if (updateError) {
+        console.error('Error setting placeholder covers:', updateError);
+      }
+
+      // Then count books that still need proper covers
       const { count, error } = await supabase
         .from('books')
         .select('*', { count: 'exact', head: true })
         .eq('is_active', true)
-        .or('cover_url.is.null,cover_url.eq./logo-gray.png');
+        .eq('cover_url', '/logo-gray.png');
 
       if (error) throw error;
       setBooksWithoutCovers(count || 0);
@@ -590,6 +602,10 @@ const Admin = () => {
       if (count === 0) {
         toast.success("Todos os livros já têm capas!", {
           description: "Não há livros pendentes para gerar capas.",
+        });
+      } else {
+        toast.info(`${count} livros usando ícone do site como placeholder`, {
+          description: "Ícone do site definido até encontrar as capas corretas.",
         });
       }
     } catch (error) {
