@@ -417,8 +417,7 @@ const Home = () => {
 
       <main className="mx-auto max-w-4xl px-4 sm:px-6">
         <header className="w-full text-center pt-8 pb-4">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight animate-fade-in relative">
-            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/30 to-transparent bg-[length:200%_100%] animate-shine pointer-events-none"></span>
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight animate-fade-in bg-gradient-to-r from-foreground via-foreground to-foreground bg-[length:200%_auto] bg-clip-text animate-shine" style={{ WebkitTextFillColor: 'transparent', backgroundImage: 'linear-gradient(90deg, currentColor 0%, currentColor 40%, hsl(var(--primary)) 50%, currentColor 60%, currentColor 100%)', color: 'hsl(var(--foreground))' }}>
             OnePageBook
           </h1>
           <p className="mt-3 text-base md:text-lg text-muted-foreground">
