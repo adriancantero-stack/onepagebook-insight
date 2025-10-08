@@ -74,6 +74,13 @@ const Admin = () => {
     description: string;
     next_run_at: string;
   }>>([]);
+  const [isValidatingBooks, setIsValidatingBooks] = useState(false);
+  const [validationResults, setValidationResults] = useState<{
+    total: number;
+    valid: number;
+    invalid: number;
+    uncertain: number;
+  } | null>(null);
 
   useEffect(() => {
     checkAdminAccess();
@@ -659,6 +666,86 @@ const Admin = () => {
     }
   };
 
+  const handleValidateBooks = async () => {
+    setIsValidatingBooks(true);
+    setValidationResults(null);
+    
+    try {
+      toast.info("Iniciando validação de livros...", {
+        description: "Isso pode levar alguns minutos"
+      });
+
+      // Get count of books without identifiers
+      const { count } = await supabase
+        .from('books')
+        .select('*', { count: 'exact', head: true })
+        .is('isbn', null)
+        .is('google_books_id', null)
+        .is('asin', null)
+        .eq('is_active', true);
+
+      const totalToValidate = count || 0;
+      
+      if (totalToValidate === 0) {
+        toast.success("Todos os livros já possuem identificadores!");
+        return;
+      }
+
+      const batchSize = 50;
+      let offset = 0;
+      let allResults = {
+        total: 0,
+        valid: 0,
+        invalid: 0,
+        uncertain: 0
+      };
+
+      // Process in batches
+      while (offset < totalToValidate) {
+        const { data, error } = await supabase.functions.invoke("validate-books", {
+          body: { 
+            limit: batchSize,
+            offset: offset
+          }
+        });
+
+        if (error) {
+          console.error('Validation error:', error);
+          throw error;
+        }
+
+        if (data?.summary) {
+          allResults.total += data.summary.total;
+          allResults.valid += data.summary.valid;
+          allResults.invalid += data.summary.invalid;
+          allResults.uncertain += data.summary.uncertain;
+          
+          setValidationResults({ ...allResults });
+          
+          toast.info(`Progresso: ${offset + data.summary.total}/${totalToValidate}`, {
+            description: `${allResults.valid} válidos, ${allResults.invalid} inválidos`
+          });
+        }
+
+        offset += batchSize;
+        
+        // Small delay between batches
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      }
+
+      toast.success("Validação concluída!", {
+        description: `${allResults.valid} livros válidos, ${allResults.invalid} inválidos, ${allResults.uncertain} incertos`
+      });
+
+      await loadAdminData();
+    } catch (error) {
+      console.error('Error validating books:', error);
+      toast.error("Erro ao validar livros");
+    } finally {
+      setIsValidatingBooks(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background p-8">
@@ -838,6 +925,37 @@ const Admin = () => {
                     <Upload className="mr-2 h-4 w-4" />
                     {importingCatalog ? "Importando..." : "Importar Catálogo"}
                   </Button>
+                </div>
+                
+                <div className="space-y-2">
+                  <Button 
+                    onClick={handleValidateBooks}
+                    disabled={isValidatingBooks}
+                    variant="outline"
+                    className="w-full h-auto py-3 whitespace-normal"
+                    size="lg"
+                  >
+                    <Sparkles className="mr-2 h-4 w-4 shrink-0" />
+                    <span className="text-sm leading-tight">
+                      {isValidatingBooks ? "Validando..." : "Validar Livros"}
+                    </span>
+                  </Button>
+                  {validationResults && (
+                    <div className="text-xs space-y-1">
+                      <div className="flex justify-between">
+                        <span className="text-green-600">Válidos:</span>
+                        <span className="font-medium">{validationResults.valid}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-red-600">Inválidos:</span>
+                        <span className="font-medium">{validationResults.invalid}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-yellow-600">Incertos:</span>
+                        <span className="font-medium">{validationResults.uncertain}</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 
                 <div className="space-y-2">
