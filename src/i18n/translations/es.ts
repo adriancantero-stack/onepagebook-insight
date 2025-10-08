@@ -122,7 +122,7 @@ export const es = {
     "summary.back": "Volver",
     "summary.by": "por",
     "summary.copy": "Copiar",
-    "summary.download": "Descargar",
+    "summary.download": "Descargar PDF",
     "summary.share": "Compartir",
     "summary.listen": "Escuchar Resumen",
     "summary.generating": "Generando audio...",

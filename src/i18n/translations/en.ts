@@ -122,7 +122,7 @@ export const en = {
     "summary.back": "Back",
     "summary.by": "by",
     "summary.copy": "Copy",
-    "summary.download": "Download",
+    "summary.download": "Download PDF",
     "summary.share": "Share",
     "summary.listen": "Listen to Summary",
     "summary.generating": "Generating audio...",

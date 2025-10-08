@@ -64,7 +64,7 @@ export const pt = {
     "summary.back": "Voltar",
     "summary.by": "por",
     "summary.copy": "Copiar",
-    "summary.download": "Baixar",
+    "summary.download": "Baixar PDF",
     "summary.share": "Compartilhar",
     "summary.listen": "Escutar Resumo",
     "summary.generating": "Gerando áudio...",
