@@ -342,16 +342,23 @@ const Explore = () => {
   }, [filterLevel, filterLang, sortBy]);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-white flex flex-col">
       <FloatingHeader />
 
-      <main className="container mx-auto px-4 py-6 sm:py-8 max-w-6xl flex-1">
-        <div className="mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-4">
-            {t("explore.title")} <span className="text-xl sm:text-2xl text-muted-foreground">({totalBooksCount} {t("explore.books")})</span>
+      <main className="container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-8 sm:py-12 flex-1">
+        {/* Apple-style Header */}
+        <div className="mb-10 sm:mb-16 text-center max-w-3xl mx-auto">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-[#1D1D1F] mb-4 tracking-tight">
+            Explorar Livros
           </h1>
-          
-          <div className="max-w-xl">
+          <p className="text-lg sm:text-xl text-[#86868B] font-normal">
+            Descubra insights transformadores em uma única página
+          </p>
+        </div>
+
+        {/* Centered Search Bar */}
+        <div className="mb-10 sm:mb-14 max-w-3xl mx-auto">
+          <div className="relative">
             <BookAutocomplete
               value={query}
               onChange={setQuery}
@@ -375,64 +382,68 @@ const Explore = () => {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2 mb-6 sm:mb-8">
-          {sortedCategories.map(category => (
-            <Button
-              key={category.id}
-              variant={selectedCategory === category.id ? "default" : "outline"}
-              size="sm"
-              onClick={() => {
-                setSelectedCategory(category.id);
-                setQuery("");
-                setIsOpen(false);
-              }}
-              className="rounded-md"
-            >
-              {t(category.nameKey)}
-            </Button>
-          ))}
+        {/* Minimalist Category Chips */}
+        <div className="mb-10 sm:mb-12 flex items-center gap-4 overflow-x-auto scrollbar-hide pb-2">
+          <div className="flex gap-2 flex-nowrap">
+            {sortedCategories.map(category => (
+              <button
+                key={category.id}
+                onClick={() => {
+                  setSelectedCategory(category.id);
+                  setQuery("");
+                  setIsOpen(false);
+                }}
+                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 ${
+                  selectedCategory === category.id
+                    ? 'bg-[#1D1D1F] text-white'
+                    : 'bg-[#F5F5F7] text-[#1D1D1F] hover:bg-[#1D1D1F] hover:text-white'
+                }`}
+              >
+                {t(category.nameKey)}
+              </button>
+            ))}
+          </div>
+
+          {/* Surprise Me Icon */}
+          <button
+            onClick={handleRandomBook}
+            disabled={allBooks.length === 0}
+            className="ml-auto p-2 rounded-full bg-[#F5F5F7] hover:bg-[#1D1D1F] hover:text-white transition-all duration-200 shrink-0 disabled:opacity-50"
+            title={t("explore.random")}
+          >
+            <Shuffle className="w-5 h-5" />
+          </button>
         </div>
 
-        {/* Filters and Sort */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <div className="flex items-center gap-2 flex-wrap">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              <Filter className="w-4 h-4 mr-2" />
-              {t("filters.title")}
-            </Button>
+        {/* Filters and Sort - Condensed */}
+        <div className="flex items-center gap-3 mb-8">
+          <Select value={sortBy} onValueChange={(v: any) => setSortBy(v)}>
+            <SelectTrigger className="w-[200px] border-[#E5E5EA] bg-white hover:border-[#1D1D1F] transition-colors">
+              <SelectValue placeholder={t("sort.label")} />
+            </SelectTrigger>
+            <SelectContent className="bg-white border-[#E5E5EA]">
+              <SelectItem value="recommended">{t("sort.recommended")}</SelectItem>
+              <SelectItem value="trending">{t("sort.trending")}</SelectItem>
+              <SelectItem value="alpha">{t("sort.alpha")}</SelectItem>
+            </SelectContent>
+          </Select>
 
-            <Select value={sortBy} onValueChange={(v: any) => setSortBy(v)}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder={t("sort.label")} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="recommended">{t("sort.recommended")}</SelectItem>
-                <SelectItem value="trending">{t("sort.trending")}</SelectItem>
-                <SelectItem value="alpha">{t("sort.alpha")}</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRandomBook}
-              disabled={allBooks.length === 0}
-            >
-              <Shuffle className="w-4 h-4 mr-2" />
-              {t("explore.random")}
-            </Button>
-          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowFilters(!showFilters)}
+            className="border-[#E5E5EA] hover:border-[#1D1D1F] transition-colors"
+          >
+            <Filter className="w-4 h-4 mr-2" />
+            {t("filters.title")}
+          </Button>
         </div>
 
         {showFilters && (
-          <Card className="p-4 mb-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Card className="p-6 mb-8 border-[#E5E5EA] shadow-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
-                <h3 className="font-semibold mb-2">{t("filters.level")}</h3>
+                <h3 className="font-semibold text-[#1D1D1F] mb-3">{t("filters.level")}</h3>
                 <div className="space-y-2">
                   {["basic", "intermediate"].map(level => (
                     <div key={level} className="flex items-center space-x-2">
@@ -447,7 +458,7 @@ const Explore = () => {
                           }
                         }}
                       />
-                      <Label htmlFor={`level-${level}`}>
+                      <Label htmlFor={`level-${level}`} className="text-[#1D1D1F]">
                         {t(`filters.level.${level}`)}
                       </Label>
                     </div>
@@ -456,7 +467,7 @@ const Explore = () => {
               </div>
 
               <div>
-                <h3 className="font-semibold mb-2">{t("filters.lang")}</h3>
+                <h3 className="font-semibold text-[#1D1D1F] mb-3">{t("filters.lang")}</h3>
                 <div className="space-y-2">
                   {["pt", "en", "es"].map(lang => (
                     <div key={lang} className="flex items-center space-x-2">
@@ -471,7 +482,7 @@ const Explore = () => {
                           }
                         }}
                       />
-                      <Label htmlFor={`lang-${lang}`}>
+                      <Label htmlFor={`lang-${lang}`} className="text-[#1D1D1F]">
                         {t(`filters.lang.${lang}`)}
                       </Label>
                     </div>
@@ -482,7 +493,8 @@ const Explore = () => {
           </Card>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {/* Apple-style Book Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {allBooks.map((book, index) => {
             const coverKey = `${book.title.toLowerCase()}-${book.author.toLowerCase()}`;
             const coverUrl = bookCovers[coverKey];
@@ -490,49 +502,60 @@ const Explore = () => {
             return (
               <Card 
                 key={`${book.title}-${index}`}
-                className="p-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 hover:border-primary transition-colors"
+                className="p-5 flex flex-col gap-4 border-[#E5E5EA] hover:shadow-lg hover:scale-[1.02] transition-all duration-200 ease-in-out bg-white group"
               >
-                <div className="flex items-start gap-3 flex-1 min-w-0 w-full sm:w-auto">
+                {/* Book Cover */}
+                <div className="flex items-center gap-4">
                   {coverUrl ? (
                     <img 
                       src={coverUrl} 
                       alt={`${book.title} cover`}
-                      className="w-12 h-16 object-cover rounded shrink-0"
+                      className="w-16 h-24 object-cover rounded-md shadow-sm"
                     />
                   ) : (
-                    <div className="p-2 bg-primary/10 rounded-lg shrink-0">
-                      <BookOpen className="w-5 h-5 text-primary" />
+                    <div className="w-16 h-24 bg-[#F5F5F7] rounded-md flex items-center justify-center">
+                      <BookOpen className="w-6 h-6 text-[#86868B]" />
                     </div>
                   )}
+
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-start gap-2 mb-1">
-                      <h3 className="font-bold text-base line-clamp-2 flex-1">
-                        {book.title}
-                      </h3>
-                      {book.badge && (
-                        <Badge variant="secondary" className="shrink-0 text-xs">
-                          {t(`badges.${book.badge}`)}
-                        </Badge>
-                      )}
-                    </div>
-                    <p className="text-sm text-muted-foreground line-clamp-1">
+                    <h3 className="font-semibold text-base text-[#1D1D1F] line-clamp-2 mb-1 leading-snug">
+                      {book.title}
+                    </h3>
+                    <p className="text-sm text-[#86868B] line-clamp-1">
                       {book.author}
                     </p>
-                    {book.level && (
-                      <Badge variant="outline" className="mt-1 text-xs">
-                        {t(`filters.level.${book.level}`)}
-                      </Badge>
-                    )}
                   </div>
                 </div>
+
+                {/* Badges */}
+                <div className="flex items-center gap-2">
+                  {book.badge && (
+                    <Badge 
+                      variant="secondary" 
+                      className="text-xs bg-[#E5E5EA] text-[#1D1D1F] border-none"
+                    >
+                      {t(`badges.${book.badge}`)}
+                    </Badge>
+                  )}
+                  {book.level && (
+                    <Badge 
+                      variant="outline" 
+                      className="text-xs border-[#E5E5EA] text-[#86868B]"
+                    >
+                      {t(`filters.level.${book.level}`)}
+                    </Badge>
+                  )}
+                </div>
+
+                {/* Generate Summary Button */}
                 <Button
                   onClick={() => handleSummarize(book, book.id!, "grid")}
-                  size="sm"
-                  className="w-full sm:w-auto shrink-0 focus-visible:ring-2 focus-visible:ring-[#5A54E6]"
+                  className="w-full bg-[#7B61FF] hover:bg-[#6951E6] text-white border-none shadow-sm transition-all duration-200"
                   aria-label={`${t("explore.summarize")} ${book.title} — ${book.author}`}
                 >
                   <Sparkles className="w-4 h-4 mr-2" />
-                  {t("explore.summarize")}
+                  Gerar resumo
                 </Button>
               </Card>
             );
