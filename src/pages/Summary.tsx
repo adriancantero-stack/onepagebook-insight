@@ -737,16 +737,16 @@ const Summary = () => {
                 </>
               )}
             </Button>
-            <Button onClick={handleCopy} variant="outline" className="flex-1 min-w-[140px] sm:min-w-[160px] border-[#E5E5EA] rounded-xl hover:bg-[#F5F5F7] transition-all duration-200 text-sm sm:text-base px-4 sm:px-5 py-6">
-              <Copy className="w-4 h-4 mr-1 sm:mr-2 shrink-0" />
+            <Button onClick={handleCopy} variant="outline" className="flex-1 min-w-[140px] sm:min-w-[160px] border-[#E5E5EA] rounded-xl hover:bg-[#F5F5F7] hover:text-[#1D1D1F] transition-all duration-200 text-sm sm:text-base px-4 sm:px-5 py-6 group">
+              <Copy className="w-4 h-4 mr-1 sm:mr-2 shrink-0 group-hover:text-[#1D1D1F]" />
               <span className="truncate">{t("summary.copy")}</span>
             </Button>
-            <Button onClick={handleDownload} variant="outline" className="flex-1 min-w-[140px] sm:min-w-[160px] border-[#E5E5EA] rounded-xl hover:bg-[#F5F5F7] transition-all duration-200 text-sm sm:text-base px-4 sm:px-5 py-6">
-              <Download className="w-4 h-4 mr-1 sm:mr-2 shrink-0" />
+            <Button onClick={handleDownload} variant="outline" className="flex-1 min-w-[140px] sm:min-w-[160px] border-[#E5E5EA] rounded-xl hover:bg-[#F5F5F7] hover:text-[#1D1D1F] transition-all duration-200 text-sm sm:text-base px-4 sm:px-5 py-6 group">
+              <Download className="w-4 h-4 mr-1 sm:mr-2 shrink-0 group-hover:text-[#1D1D1F]" />
               <span className="truncate">{t("summary.download")}</span>
             </Button>
-            <Button onClick={handleShare} variant="outline" className="flex-1 min-w-[140px] sm:min-w-[160px] border-[#E5E5EA] rounded-xl hover:bg-[#F5F5F7] transition-all duration-200 text-sm sm:text-base px-4 sm:px-5 py-6">
-              <Share2 className="w-4 h-4 mr-1 sm:mr-2 shrink-0" />
+            <Button onClick={handleShare} variant="outline" className="flex-1 min-w-[140px] sm:min-w-[160px] border-[#E5E5EA] rounded-xl hover:bg-[#F5F5F7] hover:text-[#1D1D1F] transition-all duration-200 text-sm sm:text-base px-4 sm:px-5 py-6 group">
+              <Share2 className="w-4 h-4 mr-1 sm:mr-2 shrink-0 group-hover:text-[#1D1D1F]" />
               <span className="truncate">{t("summary.share")}</span>
             </Button>
             <BuyOnAmazonButton
