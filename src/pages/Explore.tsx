@@ -415,7 +415,7 @@ const Explore = () => {
           </button>
         </div>
 
-        {/* Filters and Sort - Condensed */}
+        {/* Sort - Condensed */}
         <div className="flex items-center gap-3 mb-8">
           <Select value={sortBy} onValueChange={(v: any) => setSortBy(v)}>
             <SelectTrigger className="w-[200px] border-[#E5E5EA] bg-white hover:border-[#1D1D1F] transition-colors">
@@ -427,71 +427,7 @@ const Explore = () => {
               <SelectItem value="alpha">{t("sort.alpha")}</SelectItem>
             </SelectContent>
           </Select>
-
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowFilters(!showFilters)}
-            className="border-[#E5E5EA] hover:border-[#1D1D1F] transition-colors"
-          >
-            <Filter className="w-4 h-4 mr-2" />
-            {t("filters.title")}
-          </Button>
         </div>
-
-        {showFilters && (
-          <Card className="p-6 mb-8 border-[#E5E5EA] shadow-sm">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div>
-                <h3 className="font-semibold text-[#1D1D1F] mb-3">{t("filters.level")}</h3>
-                <div className="space-y-2">
-                  {["basic", "intermediate"].map(level => (
-                    <div key={level} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`level-${level}`}
-                        checked={filterLevel.includes(level)}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            setFilterLevel([...filterLevel, level]);
-                          } else {
-                            setFilterLevel(filterLevel.filter(l => l !== level));
-                          }
-                        }}
-                      />
-                      <Label htmlFor={`level-${level}`} className="text-[#1D1D1F]">
-                        {t(`filters.level.${level}`)}
-                      </Label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h3 className="font-semibold text-[#1D1D1F] mb-3">{t("filters.lang")}</h3>
-                <div className="space-y-2">
-                  {["pt", "en", "es"].map(lang => (
-                    <div key={lang} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`lang-${lang}`}
-                        checked={filterLang.includes(lang)}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            setFilterLang([...filterLang, lang]);
-                          } else {
-                            setFilterLang(filterLang.filter(l => l !== lang));
-                          }
-                        }}
-                      />
-                      <Label htmlFor={`lang-${lang}`} className="text-[#1D1D1F]">
-                        {t(`filters.lang.${lang}`)}
-                      </Label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </Card>
-        )}
 
         {/* Apple-style Book Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
