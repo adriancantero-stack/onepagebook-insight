@@ -479,46 +479,6 @@ const Home = () => {
         <Card className="max-w-2xl mx-auto p-4 sm:p-8">
           <div className="space-y-6">
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-medium">
-                  {t("home.bookTitle")} *
-                </label>
-                <div className="hidden sm:block text-xs text-muted-foreground">
-                  {i18n.language === 'pt' && (
-                    <>
-                      Não sabe o título?{" "}
-                      <button
-                        onClick={() => navigate("/explore")}
-                        className="text-primary hover:underline font-medium"
-                      >
-                        Explorar catálogo
-                      </button>
-                    </>
-                  )}
-                  {i18n.language === 'en' && (
-                    <>
-                      Don't know the title?{" "}
-                      <button
-                        onClick={() => navigate("/explore")}
-                        className="text-primary hover:underline font-medium"
-                      >
-                        Browse catalog
-                      </button>
-                    </>
-                  )}
-                  {i18n.language === 'es' && (
-                    <>
-                      ¿No sabes el título?{" "}
-                      <button
-                        onClick={() => navigate("/explore")}
-                        className="text-primary hover:underline font-medium"
-                      >
-                        Explorar catálogo
-                      </button>
-                    </>
-                  )}
-                </div>
-              </div>
               <BookAutocomplete
                 value={bookTitle}
                 onChange={setBookTitle}
@@ -526,41 +486,6 @@ const Home = () => {
                 disabled={loading}
                 lang={i18n.language}
               />
-              <div className="sm:hidden mt-2 text-xs text-muted-foreground text-center">
-                {i18n.language === 'pt' && (
-                  <>
-                    Não sabe o título?{" "}
-                    <button
-                      onClick={() => navigate("/explore")}
-                      className="text-primary hover:underline font-medium"
-                    >
-                      Explorar catálogo
-                    </button>
-                  </>
-                )}
-                {i18n.language === 'en' && (
-                  <>
-                    Don't know the title?{" "}
-                    <button
-                      onClick={() => navigate("/explore")}
-                      className="text-primary hover:underline font-medium"
-                    >
-                      Browse catalog
-                    </button>
-                  </>
-                )}
-                {i18n.language === 'es' && (
-                  <>
-                    ¿No sabes el título?{" "}
-                    <button
-                      onClick={() => navigate("/explore")}
-                      className="text-primary hover:underline font-medium"
-                    >
-                      Explorar catálogo
-                    </button>
-                  </>
-                )}
-              </div>
               {selectedBookFeedback && (
                 <div className="mt-2 text-xs text-primary font-medium">
                   {selectedBookFeedback}

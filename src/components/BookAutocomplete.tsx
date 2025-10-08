@@ -173,9 +173,13 @@ export const BookAutocomplete = ({
 
   return (
     <div ref={wrapperRef} className="relative">
-      <div className="space-y-1">
+      <div className="space-y-2">
         <Input
-          placeholder={t("home.bookTitlePlaceholder")}
+          placeholder={
+            lang === "en" ? "Search by title, author or theme..." :
+            lang === "es" ? "Busca por título, autor o tema..." :
+            "Busque por título, autor ou tema..."
+          }
           value={value}
           onChange={(e) => {
             onChange(e.target.value);
@@ -185,11 +189,18 @@ export const BookAutocomplete = ({
           disabled={disabled}
           autoComplete="off"
         />
-        <p className="text-xs text-muted-foreground px-1">
-          {lang === "en" && "Search by book title or author"}
-          {lang === "es" && "Busca por título o autor"}
-          {lang === "pt" && "Busque por título ou autor"}
-        </p>
+        {value.length > 0 && (
+          <div className="flex items-center justify-end gap-2 text-xs text-muted-foreground animate-fade-in px-1">
+            <button
+              onClick={() => {
+                window.location.href = '/explore';
+              }}
+              className="text-primary hover:underline font-medium"
+            >
+              {lang === "en" ? "Browse catalog" : lang === "es" ? "Explorar catálogo" : "Explorar catálogo"}
+            </button>
+          </div>
+        )}
       </div>
 
       {showDropdown && (
