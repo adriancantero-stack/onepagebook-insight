@@ -61,6 +61,8 @@ const Admin = () => {
   const [importingCatalog, setImportingCatalog] = useState(false);
   const [catalogImportProgress, setCatalogImportProgress] = useState({ current: 0, total: 0 });
   const [batchGenerating, setBatchGenerating] = useState(false);
+  const [isCheckingSummaries, setIsCheckingSummaries] = useState(false);
+  const [booksWithoutSummaries, setBooksWithoutSummaries] = useState<number | null>(null);
   const [batchGenerateProgress, setBatchGenerateProgress] = useState({ current: 0, total: 0 });
   const [importProgress, setImportProgress] = useState<string[]>([]);
   const [cronSchedules, setCronSchedules] = useState<Array<{
@@ -385,21 +387,46 @@ const Admin = () => {
     }
   };
 
-  const handleBatchGenerateSummaries = async () => {
-    setBatchGenerating(true);
-    setBatchGenerateProgress({ current: 0, total: 0 });
-
+  const checkBooksWithoutSummaries = async () => {
+    setIsCheckingSummaries(true);
     try {
-      // First, get total count of books without summaries
-      const { count } = await supabase
+      const { count, error } = await supabase
         .from('books')
         .select('*', { count: 'exact', head: true })
         .eq('is_active', true)
         .is('summary', null);
 
-      const totalBooks = count || 0;
-      setBatchGenerateProgress({ current: 0, total: totalBooks });
-      toast.info(`Iniciando geração de ${totalBooks} resumos...`);
+      if (error) throw error;
+      setBooksWithoutSummaries(count || 0);
+      
+      if (count === 0) {
+        toast.success("Todos os livros já têm resumos!", {
+          description: "Não há livros pendentes para gerar resumos.",
+        });
+      }
+    } catch (error) {
+      console.error('Error checking summaries:', error);
+      toast.error("Erro ao verificar resumos", {
+        description: error.message,
+      });
+    } finally {
+      setIsCheckingSummaries(false);
+    }
+  };
+
+  const handleBatchGenerateSummaries = async () => {
+    if (!booksWithoutSummaries || booksWithoutSummaries === 0) {
+      toast.error("Nenhum livro sem resumo", {
+        description: "Por favor, verifique os livros sem resumo primeiro.",
+      });
+      return;
+    }
+
+    setBatchGenerating(true);
+    setBatchGenerateProgress({ current: 0, total: booksWithoutSummaries });
+
+    try {
+      toast.info(`Iniciando geração de ${booksWithoutSummaries} resumos...`);
 
       const { data, error } = await supabase.functions.invoke("batch-generate-summaries");
 
@@ -411,7 +438,7 @@ const Admin = () => {
       }
 
       // Update progress to completion
-      setBatchGenerateProgress({ current: data.processed || 0, total: totalBooks });
+      setBatchGenerateProgress({ current: data.processed || 0, total: booksWithoutSummaries });
 
       toast.success("Geração concluída!", {
         description: `${data.processed} resumos gerados com sucesso`
@@ -421,7 +448,8 @@ const Admin = () => {
         toast.warning(`${data.errors} livros apresentaram erros na geração`);
       }
 
-      // Reload data
+      // Reset and reload data
+      setBooksWithoutSummaries(null);
       await loadAdminData();
     } catch (error) {
       console.error("Batch generate error:", error);
@@ -629,14 +657,14 @@ const Admin = () => {
 
                 <div className="space-y-2">
                   <Button 
-                    onClick={handleBatchGenerateSummaries}
-                    disabled={batchGenerating}
+                    onClick={checkBooksWithoutSummaries}
+                    disabled={isCheckingSummaries || batchGenerating}
                     variant="outline"
                     className="w-full"
                     size="lg"
                   >
                     <Sparkles className="mr-2 h-4 w-4" />
-                    {batchGenerating ? "Gerando..." : "Gerar Resumos"}
+                    {isCheckingSummaries ? "Verificando..." : "Verificar Resumos"}
                   </Button>
                   {cronSchedules.find(s => s.job_name === 'daily-summary-generation') && (
                     <CronTimer 
@@ -666,6 +694,29 @@ const Admin = () => {
                 </div>
               )}
 
+              {/* Summary Check Result */}
+              {booksWithoutSummaries !== null && !batchGenerating && (
+                <div className="space-y-3 p-4 rounded-lg border bg-muted/50">
+                  <p className="text-lg font-semibold text-center">
+                    {booksWithoutSummaries === 0 
+                      ? "✅ Todos os livros têm resumos!"
+                      : `📚 ${booksWithoutSummaries} livros sem resumos encontrados`}
+                  </p>
+                  
+                  {booksWithoutSummaries > 0 && (
+                    <Button
+                      onClick={handleBatchGenerateSummaries}
+                      disabled={batchGenerating}
+                      className="w-full gap-2"
+                      size="lg"
+                    >
+                      <Sparkles className="w-5 h-5" />
+                      Iniciar Geração de Resumos
+                    </Button>
+                  )}
+                </div>
+              )}
+
               {/* Batch Generate Progress */}
               {batchGenerating && batchGenerateProgress.total > 0 && (
                 <div className="space-y-2 p-4 rounded-lg border bg-muted/50">
@@ -676,11 +727,11 @@ const Admin = () => {
                     </span>
                   </div>
                   <Progress 
-                    value={(batchGenerateProgress.current / batchGenerateProgress.total) * 100} 
+                    value={batchGenerateProgress.total > 0 ? (batchGenerateProgress.current / batchGenerateProgress.total) * 100 : 0} 
                     className="h-2"
                   />
                   <p className="text-xs text-muted-foreground">
-                    {Math.round((batchGenerateProgress.current / batchGenerateProgress.total) * 100)}% concluído
+                    {batchGenerateProgress.total > 0 ? Math.round((batchGenerateProgress.current / batchGenerateProgress.total) * 100) : 0}% concluído
                   </p>
                 </div>
               )}
