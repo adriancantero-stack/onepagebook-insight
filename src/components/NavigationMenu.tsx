@@ -73,12 +73,12 @@ export const NavigationMenu = ({ onLogout }: NavigationMenuProps) => {
         <Button 
           variant="ghost" 
           size="icon"
-          className="hover:text-primary"
+          className="hover:bg-transparent group"
         >
           {/* Mobile: 3 dots */}
-          <MoreVertical className="h-5 w-5 md:hidden" />
+          <MoreVertical className="h-5 w-5 md:hidden group-hover:text-primary" />
           {/* Desktop: 3 lines */}
-          <Menu className="h-5 w-5 hidden md:block" />
+          <Menu className="h-5 w-5 hidden md:block group-hover:text-primary" />
         </Button>
       </DropdownMenuTrigger>
       
@@ -90,9 +90,9 @@ export const NavigationMenu = ({ onLogout }: NavigationMenuProps) => {
           <DropdownMenuItem
             key={index}
             onClick={item.onClick}
-            className="gap-3 cursor-pointer py-3 hover:text-primary hover:bg-primary/10"
+            className="gap-3 cursor-pointer py-3 group"
           >
-            <item.icon className="h-4 w-4 text-muted-foreground" />
+            <item.icon className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
             <span>{item.label}</span>
           </DropdownMenuItem>
         ))}
@@ -103,9 +103,9 @@ export const NavigationMenu = ({ onLogout }: NavigationMenuProps) => {
           <DropdownMenuItem
             key={index}
             onClick={item.onClick}
-            className="gap-3 cursor-pointer py-3 hover:text-primary hover:bg-primary/10"
+            className="gap-3 cursor-pointer py-3 group"
           >
-            <item.icon className="h-4 w-4 text-muted-foreground" />
+            <item.icon className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
             <span>{item.label}</span>
           </DropdownMenuItem>
         ))}
@@ -114,9 +114,9 @@ export const NavigationMenu = ({ onLogout }: NavigationMenuProps) => {
         
         <DropdownMenuItem
           onClick={handleLogout}
-          className="gap-3 cursor-pointer py-3 text-destructive hover:bg-destructive/10"
+          className="gap-3 cursor-pointer py-3 text-destructive group"
         >
-          <LogOut className="h-4 w-4" />
+          <LogOut className="h-4 w-4 group-hover:text-destructive" />
           <span>Sair</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
