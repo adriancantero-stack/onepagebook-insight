@@ -19,7 +19,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { 
   bookCatalog, 
-  starterPacks,
   createFlatIndex, 
   suggestBooks, 
   getBooksByLocale,
@@ -282,32 +281,6 @@ const Explore = () => {
     handleSummarize(randomBook, randomBook.id || `${selectedCategory}-random`, "random");
   };
 
-  const handlePackOpen = (packId: string) => {
-    // Track analytics event
-    if (typeof window !== "undefined" && (window as any).gtag) {
-      (window as any).gtag("event", "pack_open", {
-        packId,
-        locale: i18n.language,
-      });
-    }
-
-    const pack = starterPacks.find(p => p.id === packId);
-    if (!pack || pack.books.length === 0) return;
-
-    // Find first book in the pack
-    const firstBookId = pack.books[0];
-    const allBooksFlat = flatIndex;
-    const firstBook = allBooksFlat.find(b => b.id === firstBookId);
-
-    if (firstBook) {
-      handleSummarize(
-        { title: firstBook.title, author: firstBook.author, locale: firstBook.locale },
-        firstBook.id,
-        "pack"
-      );
-    }
-  };
-
   // Get current category books filtered by locale
   const currentCategory = bookCatalog.find(cat => cat.id === selectedCategory);
   const categoryBooks = currentCategory ? getBooksByLocale(currentCategory, i18n.language) : [];
@@ -452,32 +425,6 @@ const Explore = () => {
           <p className="text-sm text-muted-foreground mt-2">
             {t("explore.search.hint")}
           </p>
-        </div>
-
-        {/* Starter Packs Carousel */}
-        <div className="mb-6 sm:mb-8">
-          <h2 className="text-xl font-bold mb-4">Starter Packs</h2>
-          <div className="flex gap-4 overflow-x-auto pb-4">
-            {starterPacks.map(pack => (
-              <Card 
-                key={pack.id}
-                className="p-4 min-w-[280px] cursor-pointer hover:border-primary transition-colors"
-                onClick={() => handlePackOpen(pack.id)}
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="p-2 bg-primary/10 rounded-lg shrink-0">
-                    <Sparkles className="w-5 h-5 text-primary" />
-                  </div>
-                  <h3 className="font-bold text-base">
-                    {pack.name[i18n.language as keyof typeof pack.name] || pack.name.en}
-                  </h3>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  {pack.books.length} {t("explore.summarize").toLowerCase()}s
-                </p>
-              </Card>
-            ))}
-          </div>
         </div>
 
         <div className="flex flex-wrap gap-2 mb-6 sm:mb-8">
