@@ -44,7 +44,7 @@ const Contact = () => {
           <p className="text-lg text-muted-foreground">{content.message}</p>
         </div>
 
-        <Card className="p-8">
+        <Card className="p-8 border-0 shadow-none">
           <div className="text-center space-y-6">
             <a 
               href={`mailto:${contactEmail}`}
