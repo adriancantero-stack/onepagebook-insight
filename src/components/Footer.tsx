@@ -42,7 +42,7 @@ const Footer = () => {
           </div>
           <div className="flex flex-col items-center gap-1">
             <p className="text-center text-xs">
-              {t("footer.affiliate")}
+              Associado da Amazon
             </p>
             <p className="text-center">
               {t("footer.copyright", { year: currentYear })}
