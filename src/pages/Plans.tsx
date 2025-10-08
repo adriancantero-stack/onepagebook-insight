@@ -208,7 +208,7 @@ const Plans = () => {
         {/* Trust Line */}
         <div className="text-center mt-12">
           <p className="text-sm text-muted-foreground">
-            {t("plans.trust")}
+            Cancele quando quiser · Garantia de 7 dias · Acesso imediato
           </p>
         </div>
       </main>
