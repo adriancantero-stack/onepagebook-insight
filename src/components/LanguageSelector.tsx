@@ -27,7 +27,7 @@ export const LanguageSelector = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
+        <Button variant="ghost" size="sm" className="gap-2 border-0 hover:bg-transparent">
           <Globe className="h-4 w-4" />
           <span className="hidden sm:inline">{currentLanguage?.flag}</span>
         </Button>
