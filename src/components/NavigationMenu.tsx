@@ -73,7 +73,7 @@ export const NavigationMenu = ({ onLogout }: NavigationMenuProps) => {
         <Button 
           variant="ghost" 
           size="icon"
-          className="relative overflow-hidden backdrop-blur-xl bg-background/30 border border-white/10 hover:bg-background/40 hover:border-white/20 transition-all duration-300"
+          className="hover:text-primary"
         >
           {/* Mobile: 3 dots */}
           <MoreVertical className="h-5 w-5 md:hidden" />
@@ -84,37 +84,37 @@ export const NavigationMenu = ({ onLogout }: NavigationMenuProps) => {
       
       <DropdownMenuContent 
         align="end" 
-        className="w-56 backdrop-blur-2xl bg-background/80 border border-white/10 shadow-2xl shadow-primary/5"
+        className="w-56"
       >
         {menuItems.map((item, index) => (
           <DropdownMenuItem
             key={index}
             onClick={item.onClick}
-            className="gap-3 cursor-pointer py-3 transition-all duration-200 hover:bg-primary/10 hover:translate-x-1"
+            className="gap-3 cursor-pointer py-3 hover:text-primary hover:bg-primary/10"
           >
             <item.icon className="h-4 w-4 text-muted-foreground" />
             <span>{item.label}</span>
           </DropdownMenuItem>
         ))}
         
-        <DropdownMenuSeparator className="bg-border/50" />
+        <DropdownMenuSeparator />
         
         {secondaryItems.map((item, index) => (
           <DropdownMenuItem
             key={index}
             onClick={item.onClick}
-            className="gap-3 cursor-pointer py-3 transition-all duration-200 hover:bg-primary/10 hover:translate-x-1"
+            className="gap-3 cursor-pointer py-3 hover:text-primary hover:bg-primary/10"
           >
             <item.icon className="h-4 w-4 text-muted-foreground" />
             <span>{item.label}</span>
           </DropdownMenuItem>
         ))}
         
-        <DropdownMenuSeparator className="bg-border/50" />
+        <DropdownMenuSeparator />
         
         <DropdownMenuItem
           onClick={handleLogout}
-          className="gap-3 cursor-pointer py-3 text-destructive hover:bg-destructive/10 hover:translate-x-1 transition-all duration-200"
+          className="gap-3 cursor-pointer py-3 text-destructive hover:bg-destructive/10"
         >
           <LogOut className="h-4 w-4" />
           <span>Sair</span>
