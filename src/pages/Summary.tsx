@@ -766,7 +766,7 @@ const Summary = () => {
                   <Card 
                     key={index}
                     className="p-6 border-[#E5E5EA] rounded-2xl hover:shadow-lg hover:scale-[1.02] transition-all duration-200 cursor-pointer"
-                    onClick={() => navigate("/", { state: { bookTitle: book.title, bookAuthor: book.author } })}
+                    onClick={() => navigate("/home", { state: { bookTitle: book.title, bookAuthor: book.author } })}
                   >
                     <div className="flex items-start gap-4">
                       <div className="p-3 bg-[#7B61FF]/10 rounded-xl shrink-0">
