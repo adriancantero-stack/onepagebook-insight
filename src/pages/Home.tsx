@@ -464,19 +464,20 @@ const Home = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 sm:py-16">
-        <div className="max-w-2xl mx-auto text-center mb-8 sm:mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            {t("home.title")}
-            <br />
-            {t("home.titleLine2")}
-          </h2>
-          <p className="text-muted-foreground text-base sm:text-lg">
-            {t("home.subtitle")}
+      <main className="mx-auto max-w-4xl px-4 sm:px-6">
+        <header className="w-full text-center pt-8 pb-4">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+            OnePageBook
+          </h1>
+          <p className="mt-3 text-base md:text-lg text-muted-foreground">
+            {i18n.language === 'pt' ? 'Seu livro em uma página.' : 
+             i18n.language === 'es' ? 'Tu libro en una página.' : 
+             'Your book on one page.'}
           </p>
-        </div>
+        </header>
 
-        <Card className="max-w-2xl mx-auto p-4 sm:p-8 border-0 shadow-none">
+        <div className="mx-auto mt-6 max-w-2xl w-full">
+          <Card className="p-4 sm:p-8 border-0 shadow-none">
           <div className="space-y-6">
             <div>
               <BookAutocomplete
@@ -524,6 +525,7 @@ const Home = () => {
             </p>
           </div>
         </Card>
+        </div>
       </main>
 
       <Footer />
