@@ -587,7 +587,7 @@ const Explore = () => {
           </Card>
         )}
 
-        <div className="flex flex-col gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {allBooks.map((book, index) => {
             const coverKey = `${book.title.toLowerCase()}-${book.author.toLowerCase()}`;
             const coverUrl = bookCovers[coverKey];
