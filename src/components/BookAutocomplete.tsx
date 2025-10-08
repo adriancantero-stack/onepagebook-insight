@@ -189,18 +189,27 @@ export const BookAutocomplete = ({
           disabled={disabled}
           autoComplete="off"
         />
-        {value.length > 0 && (
-          <div className="flex items-center justify-end gap-2 text-xs text-muted-foreground animate-fade-in px-1">
-            <button
-              onClick={() => {
-                window.location.href = '/explore';
-              }}
-              className="text-primary hover:underline font-medium"
-            >
-              {lang === "en" ? "Browse catalog" : lang === "es" ? "Explorar catálogo" : "Explorar catálogo"}
-            </button>
-          </div>
-        )}
+        <div 
+          className="text-xs text-center transition-all duration-500 ease-out px-1"
+          style={{
+            opacity: value.length > 0 ? 1 : 0,
+            transform: value.length > 0 ? 'translateY(0)' : 'translateY(-8px)',
+            maxHeight: value.length > 0 ? '40px' : '0px',
+            overflow: 'hidden'
+          }}
+        >
+          <span className="text-muted-foreground/60">
+            {lang === "en" ? "Don't know the book title? " : lang === "es" ? "¿No sabes el título del libro? " : "Não sabe o título do livro? "}
+          </span>
+          <button
+            onClick={() => {
+              window.location.href = '/explore';
+            }}
+            className="text-primary hover:underline font-medium transition-colors"
+          >
+            {lang === "en" ? "Browse catalog" : lang === "es" ? "Explorar catálogo" : "Explorar catálogo"}
+          </button>
+        </div>
       </div>
 
       {showDropdown && (
