@@ -190,16 +190,16 @@ export const BookAutocomplete = ({
           autoComplete="off"
         />
         <div 
-          className="text-xs text-center transition-all duration-500 ease-out px-1"
+          className="text-xs text-center transition-all duration-700 ease-in-out px-1"
           style={{
             opacity: value.length > 0 ? 1 : 0,
-            transform: value.length > 0 ? 'translateY(0)' : 'translateY(-8px)',
+            transform: value.length > 0 ? 'translateY(0)' : 'translateY(-12px)',
             maxHeight: value.length > 0 ? '40px' : '0px',
             overflow: 'hidden'
           }}
         >
           <span className="text-muted-foreground/60">
-            {lang === "en" ? "Don't know the book title? " : lang === "es" ? "¿No sabes el título del libro? " : "Não sabe o título do livro? "}
+            {lang === "en" ? "Don't know the title? " : lang === "es" ? "¿No sabes el título? " : "Não sabe o título? "}
           </span>
           <button
             onClick={() => {
