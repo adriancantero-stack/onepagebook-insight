@@ -22,7 +22,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Users, FileText, TrendingUp, Crown, Download, BookOpen, ImagePlus, Sparkles, Upload } from "lucide-react";
+import { Users, FileText, TrendingUp, Crown, Download, BookOpen, ImagePlus, Sparkles, Upload, Trash2 } from "lucide-react";
 import { bookCatalog } from "@/data/bookCatalog";
 import { Progress } from "@/components/ui/progress";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
@@ -97,6 +97,8 @@ const Admin = () => {
   }>>([]);
   const [showInvalidBooksModal, setShowInvalidBooksModal] = useState(false);
   const [isLoadingInvalidBooks, setIsLoadingInvalidBooks] = useState(false);
+  const [isClearingAudioCache, setIsClearingAudioCache] = useState(false);
+
 
   useEffect(() => {
     checkAdminAccess();
@@ -698,6 +700,33 @@ const Admin = () => {
     }
   };
 
+  const handleClearAudioCache = async () => {
+    setIsClearingAudioCache(true);
+    
+    try {
+      toast.info("Limpando cache de áudios...", {
+        description: "Todos os áudios serão regenerados na próxima reprodução"
+      });
+
+      const { data, error } = await supabase.functions.invoke("clear-audio-cache");
+
+      if (error) throw error;
+
+      toast.success("Cache limpo com sucesso!", {
+        description: `${data.totalDeleted} arquivos de áudio removidos`,
+      });
+
+    } catch (error) {
+      console.error('Error clearing audio cache:', error);
+      toast.error("Erro ao limpar cache", {
+        description: error instanceof Error ? error.message : "Erro desconhecido",
+      });
+    } finally {
+      setIsClearingAudioCache(false);
+    }
+  };
+
+
   const handleValidateBooks = async () => {
     setIsValidatingBooks(true);
     setValidationResults(null);
@@ -1167,6 +1196,24 @@ const Admin = () => {
                     />
                   )}
                 </div>
+              </div>
+
+              {/* Clear Audio Cache Button */}
+              <div className="pt-4 border-t">
+                <Button 
+                  onClick={handleClearAudioCache}
+                  disabled={isClearingAudioCache}
+                  variant="destructive"
+                  className="w-full h-auto py-3 whitespace-normal"
+                >
+                  <Trash2 className="mr-2 h-4 w-4 shrink-0" />
+                  <span className="text-sm leading-tight">
+                    {isClearingAudioCache ? "Limpando cache..." : "Limpar Cache de Áudios"}
+                  </span>
+                </Button>
+                <p className="text-xs text-muted-foreground mt-2 text-center">
+                  Remove todos os áudios em cache. Eles serão regenerados com o texto atualizado.
+                </p>
               </div>
 
               {/* Catalog Import Progress */}
