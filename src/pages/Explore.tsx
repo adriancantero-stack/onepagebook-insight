@@ -453,6 +453,9 @@ const Explore = () => {
                     src={coverUrl || '/book-placeholder.png'} 
                     alt={`${book.title} cover`}
                     className="w-16 h-24 object-cover rounded-md shadow-sm"
+                    onError={(e) => {
+                      e.currentTarget.src = '/book-placeholder.png';
+                    }}
                   />
 
                   <div className="flex-1 min-w-0">
