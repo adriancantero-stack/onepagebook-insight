@@ -213,6 +213,8 @@ export const pt = {
     "footer.privacy": "Privacidade",
     "footer.contact": "Contato",
     "footer.faq": "FAQ",
+    "footer.amazon_associate": "Associado da Amazon",
+    "footer.version": "Versão 1.0",
     "footer.copyright": "© {{year}} onepagebook.ai",
     "footer.tagline": "Conhecimento na velocidade que você precisa.",
     "footer.affiliate": "Como Associado da Amazon, eu ganho com compras qualificadas.",

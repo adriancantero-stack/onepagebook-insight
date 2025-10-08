@@ -43,13 +43,13 @@ const Footer = () => {
           
           <div className="flex flex-col items-center gap-1">
             <p className="text-center text-xs">
-              Associado da Amazon
+              {t("footer.amazon_associate")}
             </p>
             <p className="text-center">
               {t("footer.copyright", { year: currentYear })}
             </p>
             <p className="text-center text-xs md:hidden">
-              Versão 1.0
+              {t("footer.version")}
             </p>
           </div>
         </div>

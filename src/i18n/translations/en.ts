@@ -271,6 +271,8 @@ export const en = {
     "footer.privacy": "Privacy",
     "footer.contact": "Contact",
     "footer.faq": "FAQ",
+    "footer.amazon_associate": "Amazon Associate",
+    "footer.version": "Version 1.0",
     "footer.copyright": "© {{year}} onepagebook.ai",
     "footer.affiliate": "As an Amazon Associate I earn from qualifying purchases.",
     
