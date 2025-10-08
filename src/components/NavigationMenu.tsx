@@ -52,11 +52,6 @@ export const NavigationMenu = ({ onLogout }: NavigationMenuProps) => {
       label: t("header.history"),
       onClick: () => navigate("/history"),
     },
-    {
-      icon: BookOpen,
-      label: "Categorias",
-      onClick: () => toast({ title: "Em breve" }),
-    },
   ];
 
   const secondaryItems = [
