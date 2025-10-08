@@ -147,7 +147,7 @@ const Terms = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8 max-w-4xl flex-1">
-        <Card className="p-8">
+        <Card className="p-8 border-0">
           <h1 className="text-3xl font-bold mb-4">{pageContent.title}</h1>
           <p className="text-sm text-muted-foreground mb-8">{pageContent.lastUpdated}</p>
           
