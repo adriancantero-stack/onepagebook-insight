@@ -17,6 +17,13 @@ const Footer = () => {
             >
               {t("footer.terms")}
             </Link>
+            <span className="text-muted-foreground">•</span>
+            <Link 
+              to="/privacy" 
+              className="hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+            >
+              {t("footer.privacy")}
+            </Link>
           </div>
           
           <div className="flex flex-col items-center gap-1">
