@@ -9,7 +9,7 @@ const Footer = () => {
   return (
     <footer className="border-t border-border mt-auto">
       <div className="container mx-auto px-4 py-6">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+        <div className="flex flex-col items-center justify-center gap-4 text-sm text-muted-foreground">
           <div className="flex flex-wrap items-center justify-center gap-2">
             <Link 
               to="/terms" 
@@ -40,6 +40,7 @@ const Footer = () => {
               {t("footer.contact")}
             </a>
           </div>
+          
           <div className="flex flex-col items-center gap-1">
             <p className="text-center text-xs">
               Associado da Amazon
