@@ -30,7 +30,6 @@ export const GOOGLE_TO_ONEPAGE_MAP: Record<string, string> = {
   'saúde': 'sleep',
   'Medical': 'sleep',
   'Health Fitness': 'sleep',
-  'Wellness': 'sleep',
   
   // Productivity & Habits
   'habits': 'habits',
@@ -78,7 +77,6 @@ export const GOOGLE_TO_ONEPAGE_MAP: Record<string, string> = {
   'creative': 'creativity',
   'creativity': 'creativity',
   'criatividade': 'creativity',
-  'Innovation': 'creativity',
   'Design': 'creativity',
   
   // Biography
@@ -125,6 +123,74 @@ export const GOOGLE_TO_ONEPAGE_MAP: Record<string, string> = {
   'Personal Development': 'personal-dev',
   'Motivational': 'personal-dev',
   'Success': 'personal-dev',
+  
+  // Fiction
+  'fiction': 'fiction',
+  'ficção': 'fiction',
+  'ficción': 'fiction',
+  'Fiction': 'fiction',
+  'General Fiction': 'fiction',
+  'Literary Fiction': 'fiction',
+  
+  // Romance
+  'romance': 'romance',
+  'Romance': 'romance',
+  'amor': 'romance',
+  'Love Stories': 'romance',
+  'Romantic Fiction': 'romance',
+  
+  // Thriller & Mystery
+  'thriller': 'thriller',
+  'suspense': 'thriller',
+  'suspenso': 'thriller',
+  'mystery': 'thriller',
+  'mistério': 'thriller',
+  'misterio': 'thriller',
+  'Thriller': 'thriller',
+  'Mystery': 'thriller',
+  'Crime': 'thriller',
+  'Detective': 'thriller',
+  
+  // Fantasy & Sci-Fi
+  'fantasy': 'fantasy',
+  'fantasia': 'fantasy',
+  'fantasía': 'fantasy',
+  'Fantasy': 'fantasy',
+  'Science Fiction': 'fantasy',
+  'Sci-Fi': 'fantasy',
+  'Ficção Científica': 'fantasy',
+  'Ciencia Ficción': 'fantasy',
+  'Magical Realism': 'fantasy',
+  'Realismo Mágico': 'fantasy',
+  
+  // Wellness & Fitness
+  'wellness': 'wellness',
+  'bem-estar': 'wellness',
+  'bienestar': 'wellness',
+  'Wellness': 'wellness',
+  'Fitness': 'wellness',
+  'Diet': 'wellness',
+  'Nutrition': 'wellness',
+  'Exercise': 'wellness',
+  
+  // History & Culture
+  'history': 'history',
+  'história': 'history',
+  'historia': 'history',
+  'History': 'history',
+  'Historical': 'history',
+  'Culture': 'history',
+  'Cultural Studies': 'history',
+  'Ensaio': 'history',
+  
+  // Science & Innovation
+  'science': 'science',
+  'ciência': 'science',
+  'ciencia': 'science',
+  'Science': 'science',
+  'Innovation': 'science',
+  'Research': 'science',
+  'Scientific': 'science',
 };
 
 /**

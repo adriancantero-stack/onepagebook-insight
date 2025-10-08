@@ -387,6 +387,35 @@ const Admin = () => {
     }
   };
 
+  const handlePopulateNewCategories = async () => {
+    setImporting(true);
+    toast.info("Populando novas categorias...");
+
+    try {
+      const { data, error } = await supabase.functions.invoke('populate-new-categories');
+
+      if (error) throw error;
+
+      if (data?.stats) {
+        const stats = data.stats;
+        toast.success("Novas categorias populadas!", {
+          description: `Inseridos: ${stats.inserted}, Pulados: ${stats.skipped}, Erros: ${stats.errors}`
+        });
+      } else {
+        toast.success("Novas categorias populadas com sucesso!");
+      }
+      
+      await loadAdminData();
+    } catch (error) {
+      console.error("Error populating new categories:", error);
+      toast.error("Erro", {
+        description: "Falha ao popular novas categorias"
+      });
+    } finally {
+      setImporting(false);
+    }
+  };
+
   const handleImportHardcodedCatalog = async () => {
     setImportingCatalog(true);
     
@@ -1108,6 +1137,24 @@ const Admin = () => {
                       </p>
                     </div>
                   )}
+                </div>
+
+                <div className="space-y-2">
+                  <Button 
+                    onClick={handlePopulateNewCategories}
+                    disabled={importing}
+                    variant="outline"
+                    className="w-full h-auto py-3 whitespace-normal"
+                    size="lg"
+                  >
+                    <Sparkles className="mr-2 h-4 w-4 shrink-0" />
+                    <span className="text-sm leading-tight">
+                      {importing ? "Populando..." : "Popular Novas Categorias"}
+                    </span>
+                  </Button>
+                  <p className="text-xs text-muted-foreground">
+                    Adiciona ~20 livros para cada nova categoria (Ficção, Romance, Suspense, etc.)
+                  </p>
                 </div>
                 
                 <div className="space-y-2">
