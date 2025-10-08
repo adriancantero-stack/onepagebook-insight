@@ -247,13 +247,14 @@ export const BookAutocomplete = ({
                   }`}
                   onClick={() => handleSelectBook(book)}
                 >
-                  {book.cover_url && (
-                    <img
-                      src={book.cover_url}
-                      alt={book.title}
-                      className="w-10 h-14 object-cover rounded"
-                    />
-                  )}
+                  <img
+                    src={book.cover_url || '/book-placeholder.png'}
+                    alt={book.title}
+                    className="w-10 h-14 object-cover rounded"
+                    onError={(e) => {
+                      e.currentTarget.src = '/book-placeholder.png';
+                    }}
+                  />
                   <div className="flex-1 min-w-0">
                     <div className="font-medium truncate">
                       {highlightMatch(book.title, value)}
