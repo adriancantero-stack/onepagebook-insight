@@ -386,7 +386,7 @@ const Explore = () => {
                 setQuery("");
                 setIsOpen(false);
               }}
-              className="rounded-full"
+              className="rounded-md"
             >
               {t(category.nameKey)}
             </Button>
