@@ -413,7 +413,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <FloatingHeader onLogout={handleLogout} />
+      <FloatingHeader onLogout={handleLogout} showNavigation={false} />
 
       <main className="mx-auto max-w-4xl px-4 sm:px-6">
         <header className="w-full text-center pt-8 pb-4">
