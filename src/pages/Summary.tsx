@@ -325,8 +325,7 @@ const Summary = () => {
       addText(summary.closing);
     }
 
-    // Add new page with footer
-    doc.addPage();
+    // Add footer to current page (no new page)
     const pageHeight = doc.internal.pageSize.getHeight();
     doc.setFontSize(10);
     doc.setFont(undefined, "normal");
