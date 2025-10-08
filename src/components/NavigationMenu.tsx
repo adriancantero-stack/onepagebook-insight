@@ -16,6 +16,7 @@ import {
   Compass,
   Crown,
   HelpCircle,
+  Mail,
   LogOut
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -64,6 +65,11 @@ export const NavigationMenu = ({ onLogout }: NavigationMenuProps) => {
       icon: HelpCircle,
       label: t("nav.faq_short"),
       onClick: () => navigate("/faq"),
+    },
+    {
+      icon: Mail,
+      label: t("footer.contact"),
+      onClick: () => navigate("/contact"),
     },
   ];
 
