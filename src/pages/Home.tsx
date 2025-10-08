@@ -165,10 +165,21 @@ const Home = () => {
   // Load book data from Explore page navigation
   useEffect(() => {
     if (location.state?.bookTitle) {
-      setBookTitle(location.state.bookTitle);
-      setBookAuthor(location.state.bookAuthor || "");
+      const title = location.state.bookTitle;
+      const author = location.state.bookAuthor || "";
+      
+      setBookTitle(title);
+      setBookAuthor(author);
+      
       // Clear the state after loading
       window.history.replaceState({}, document.title);
+      
+      // If we have both title and author, trigger generation automatically
+      if (author && title) {
+        setTimeout(() => {
+          handleGenerateSummary();
+        }, 500);
+      }
     }
   }, [location]);
 
