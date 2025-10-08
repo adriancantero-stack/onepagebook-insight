@@ -107,33 +107,33 @@ const Auth = () => {
     }
   };
 
-  return <div className="min-h-screen flex flex-col">
-      <div className="flex-1 flex items-center justify-center bg-background p-4">
+  return <div className="min-h-screen flex flex-col bg-white">
+      <div className="flex-1 flex items-center justify-center px-6 sm:px-12 py-16">
         <div className="absolute top-4 right-4">
           <LanguageSelector />
         </div>
         
-        <Card className="w-full max-w-md border-transparent">
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
+        <Card className="w-full max-w-lg border-transparent rounded-2xl shadow-sm p-10">
+        <CardHeader className="text-center space-y-4">
+          <div className="flex justify-center">
             <div className="flex items-center gap-2">
-              <BookOpen className="w-8 h-8 text-primary" />
-              <h1 className="text-2xl font-bold text-foreground">OnePageBook</h1>
+              <BookOpen className="w-10 h-10 text-[#7B61FF]" />
+              <h1 className="text-3xl font-semibold text-[#1D1D1F] tracking-tight">OnePageBook</h1>
             </div>
           </div>
-          <p className="text-sm text-primary font-medium mb-3">{t("auth.tagline")}</p>
-          <p className="text-base sm:text-lg text-foreground/80 mb-6 max-w-[60ch] mx-auto leading-relaxed py-0 my-[5px]">
+          <p className="text-base font-medium text-[#7B61FF]">{t("auth.tagline")}</p>
+          <p className="text-lg text-[#86868B] leading-relaxed max-w-md mx-auto">
             {t("hero.sub")}
           </p>
-          <CardDescription className="mt-1 mb-3 py-[4px]">
+          <CardDescription className="text-base text-[#86868B]">
             {t("auth.subtitle")}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-6">
           <Button 
             type="button"
             variant="outline" 
-            className="w-full h-12 mb-4"
+            className="w-full h-12 rounded-xl border-[#E5E5EA] hover:bg-[#F5F5F7] transition-all duration-200"
             onClick={handleGoogleSignIn}
             disabled={googleLoading}
           >
@@ -146,42 +146,44 @@ const Auth = () => {
             {googleLoading ? t("auth.signingIn") : t("auth.continueWithGoogle")}
           </Button>
           
-          <p className="text-xs text-muted-foreground text-center mb-4">
+          <p className="text-xs text-[#86868B] text-center">
             {t("auth.googlePrivacy")}
           </p>
           
-          <div className="relative mb-4">
-            <Separator />
-            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-2 text-xs text-muted-foreground">
+          <div className="relative">
+            <Separator className="bg-[#E5E5EA]" />
+            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-sm text-[#86868B]">
               {t("auth.orDivider")}
             </span>
           </div>
 
-          <form onSubmit={handleAuth} className="space-y-2">
+          <form onSubmit={handleAuth} className="space-y-4">
             {isSignUp && (
               <div className="space-y-2">
-                <Label htmlFor="fullName">{t("auth.fullName")}</Label>
+                <Label htmlFor="fullName" className="text-sm font-medium text-[#1D1D1F]">{t("auth.fullName")}</Label>
                 <Input 
                   id="fullName" 
                   type="text" 
                   value={fullName} 
                   onChange={e => setFullName(e.target.value)} 
                   required 
+                  className="h-12 rounded-xl border-[#E5E5EA] focus:border-[#7B61FF] transition-all"
                 />
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="email">{t("auth.email")}</Label>
+              <Label htmlFor="email" className="text-sm font-medium text-[#1D1D1F]">{t("auth.email")}</Label>
               <Input 
                 id="email" 
                 type="email" 
                 value={email} 
                 onChange={e => setEmail(e.target.value)} 
                 required 
+                className="h-12 rounded-xl border-[#E5E5EA] focus:border-[#7B61FF] transition-all"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">{t("auth.password")}</Label>
+              <Label htmlFor="password" className="text-sm font-medium text-[#1D1D1F]">{t("auth.password")}</Label>
               <Input 
                 id="password" 
                 type="password" 
@@ -189,11 +191,12 @@ const Auth = () => {
                 onChange={e => setPassword(e.target.value)} 
                 required 
                 minLength={6} 
+                className="h-12 rounded-xl border-[#E5E5EA] focus:border-[#7B61FF] transition-all"
               />
             </div>
             <Button 
               type="submit" 
-              className="w-full" 
+              className="w-full h-12 bg-[#7B61FF] hover:bg-[#6951E6] rounded-xl text-white font-medium transition-all duration-200" 
               disabled={loading || !email || !password || (isSignUp && !fullName)}
             >
               {loading 
@@ -204,7 +207,7 @@ const Auth = () => {
               }
             </Button>
             {error && (
-              <p className="text-sm text-destructive text-center mt-2">{error}</p>
+              <p className="text-sm text-red-500 text-center">{error}</p>
             )}
             <div className="text-center">
               <Button
@@ -214,7 +217,7 @@ const Auth = () => {
                   setIsSignUp(!isSignUp);
                   setError("");
                 }}
-                className="text-sm"
+                className="text-sm text-[#7B61FF] hover:text-[#6951E6]"
               >
                 {isSignUp 
                   ? t("auth.haveAccount") 
