@@ -490,7 +490,7 @@ const Summary = () => {
       }> = {
         pt: {
           by: 'por',
-          summary: 'O essencial em 1 frase',
+          summary: 'O essencial do livro',
           keyIdeas: 'Sacadas que importam',
           practicalApplications: 'Plano de ação',
           routine: 'Exemplo de rotina',
@@ -502,7 +502,7 @@ const Summary = () => {
         },
         en: {
           by: 'by',
-          summary: 'The essential in 1 sentence',
+          summary: 'The book essentials',
           keyIdeas: 'Insights that matter',
           practicalApplications: 'Action plan',
           routine: 'Sample routine',
@@ -514,7 +514,7 @@ const Summary = () => {
         },
         es: {
           by: 'por',
-          summary: 'Lo esencial en 1 frase',
+          summary: 'Lo esencial del libro',
           keyIdeas: 'Ideas que importan',
           practicalApplications: 'Plan de acción',
           routine: 'Rutina de ejemplo',
