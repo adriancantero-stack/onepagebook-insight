@@ -259,7 +259,7 @@ const Admin = () => {
         }, {});
 
         const booksWithSummary = allBooks.filter(b => b.summary !== null && b.summary !== '').length;
-        const booksWithCover = allBooks.filter(b => b.cover_url !== null && b.cover_url !== '').length;
+        const booksWithCover = allBooks.filter(b => b.cover_url !== null && b.cover_url !== '' && b.cover_url !== '/logo-gray.png').length;
 
         console.log(`Livros com resumo: ${booksWithSummary}, sem resumo: ${allBooks.length - booksWithSummary}`);
         console.log(`Livros com capa: ${booksWithCover}, sem capa: ${allBooks.length - booksWithCover}`);
