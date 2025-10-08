@@ -171,15 +171,8 @@ const Home = () => {
       setBookTitle(title);
       setBookAuthor(author);
       
-      // Clear the state after loading
+      // Clear the state after loading to prevent re-triggering
       window.history.replaceState({}, document.title);
-      
-      // If we have both title and author, trigger generation automatically
-      if (author && title) {
-        setTimeout(() => {
-          handleGenerateSummary();
-        }, 500);
-      }
     }
   }, [location]);
 
