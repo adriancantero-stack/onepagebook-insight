@@ -4,12 +4,13 @@ import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { BookOpen, History, Crown, LogOut, Loader2, Compass, HelpCircle } from "lucide-react";
+import { BookOpen, Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import Footer from "@/components/Footer";
 import { UpgradeModal } from "@/components/UpgradeModal";
 import { BookAutocomplete } from "@/components/BookAutocomplete";
+import { NavigationMenu } from "@/components/NavigationMenu";
 import { BookDetailsModal } from "@/components/BookDetailsModal";
 
 import { 
@@ -412,54 +413,15 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <header className="border-b border-border">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between relative">
+      <header className="border-b border-border/50 backdrop-blur-xl bg-background/50 sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <BookOpen className="w-6 h-6 text-primary" />
-            <h1 className="text-xl font-bold text-foreground hidden sm:block">OnePageBook</h1>
+            <h1 className="text-xl font-bold text-foreground">OnePageBook</h1>
           </div>
-          <div className="flex items-center gap-1 sm:gap-2">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => navigate("/explore")} 
-              className="gap-0 sm:gap-2 flex-col sm:flex-row px-2 sm:px-4 h-auto sm:h-9 py-1 sm:py-2"
-            >
-              <Compass className="w-4 h-4" />
-              <span className="text-[10px] sm:text-sm">{t("header.explore")}</span>
-            </Button>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => navigate("/history")} 
-              className="gap-0 sm:gap-2 flex-col sm:flex-row px-2 sm:px-4 h-auto sm:h-9 py-1 sm:py-2"
-            >
-              <History className="w-4 h-4" />
-              <span className="text-[10px] sm:text-sm">{t("header.history")}</span>
-            </Button>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => navigate("/plans")} 
-              className="gap-0 sm:gap-2 flex-col sm:flex-row px-2 sm:px-4 h-auto sm:h-9 py-1 sm:py-2"
-            >
-              <Crown className="w-4 h-4" />
-              <span className="text-[10px] sm:text-sm">{t("header.premium")}</span>
-            </Button>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => navigate("/faq")} 
-              className="gap-0 sm:gap-2 flex-col sm:flex-row px-2 sm:px-4 h-auto sm:h-9 py-1 sm:py-2"
-              aria-label={t("faq.title_long")}
-            >
-              <HelpCircle className="w-4 h-4" />
-              <span className="text-[10px] sm:text-sm">{t("nav.faq_short")}</span>
-            </Button>
+          <div className="flex items-center gap-2">
             <LanguageSelector />
-            <Button variant="ghost" size="sm" onClick={handleLogout}>
-              <LogOut className="w-4 h-4" />
-            </Button>
+            <NavigationMenu onLogout={handleLogout} />
           </div>
         </div>
       </header>
