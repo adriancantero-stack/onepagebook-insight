@@ -581,7 +581,7 @@ const Admin = () => {
       // First, update books without covers to use the site icon as placeholder
       const { error: updateError } = await supabase
         .from('books')
-        .update({ cover_url: '/logo-gray.png' })
+        .update({ cover_url: '/book-placeholder.png' })
         .eq('is_active', true)
         .is('cover_url', null);
 
@@ -594,7 +594,7 @@ const Admin = () => {
         .from('books')
         .select('*', { count: 'exact', head: true })
         .eq('is_active', true)
-        .eq('cover_url', '/logo-gray.png');
+        .eq('cover_url', '/book-placeholder.png');
 
       if (error) throw error;
       setBooksWithoutCovers(count || 0);
