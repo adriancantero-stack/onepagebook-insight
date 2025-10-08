@@ -325,6 +325,18 @@ const Summary = () => {
       addText(summary.closing);
     }
 
+    // Add new page with footer
+    doc.addPage();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    doc.setFontSize(10);
+    doc.setFont(undefined, "normal");
+    doc.setTextColor(150, 150, 150); // Gray color
+    const footerText = "OnePageBook.ai";
+    const footerWidth = doc.getTextWidth(footerText);
+    const footerX = (pageWidth - footerWidth) / 2; // Center horizontally
+    const footerY = pageHeight - 20; // 20 units from bottom
+    doc.text(footerText, footerX, footerY);
+
     // Save the PDF
     doc.save(`${summary.canonical_title || summary.book_title}.pdf`);
     
