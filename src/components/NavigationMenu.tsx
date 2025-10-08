@@ -13,12 +13,7 @@ import {
   MoreVertical, 
   BookOpen, 
   History, 
-  Bookmark, 
   Compass,
-  Settings,
-  Moon,
-  Sun,
-  MessageCircle,
   Crown,
   HelpCircle,
   LogOut
@@ -58,11 +53,6 @@ export const NavigationMenu = ({ onLogout }: NavigationMenuProps) => {
       onClick: () => navigate("/history"),
     },
     {
-      icon: Bookmark,
-      label: "Favoritos",
-      onClick: () => toast({ title: "Em breve" }),
-    },
-    {
       icon: BookOpen,
       label: "Categorias",
       onClick: () => toast({ title: "Em breve" }),
@@ -79,16 +69,6 @@ export const NavigationMenu = ({ onLogout }: NavigationMenuProps) => {
       icon: HelpCircle,
       label: t("nav.faq_short"),
       onClick: () => navigate("/faq"),
-    },
-    {
-      icon: Settings,
-      label: "Configurações",
-      onClick: () => toast({ title: "Em breve" }),
-    },
-    {
-      icon: MessageCircle,
-      label: "Fale com a IA",
-      onClick: () => toast({ title: "Em breve" }),
     },
   ];
 
