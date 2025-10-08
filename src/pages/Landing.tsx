@@ -11,6 +11,15 @@ import powerOfHabit from "@/assets/books/power-of-habit.jpg";
 import heroMockupPt from "@/assets/hero-mockup-pt.jpg";
 import heroMockupEn from "@/assets/hero-mockup-en.jpg";
 import heroMockupEs from "@/assets/hero-mockup-es.jpg";
+import ptPerson1 from "@/assets/testimonials/pt-person1.jpg";
+import ptPerson2 from "@/assets/testimonials/pt-person2.jpg";
+import ptPerson3 from "@/assets/testimonials/pt-person3.jpg";
+import enPerson1 from "@/assets/testimonials/en-person1.jpg";
+import enPerson2 from "@/assets/testimonials/en-person2.jpg";
+import enPerson3 from "@/assets/testimonials/en-person3.jpg";
+import esPerson1 from "@/assets/testimonials/es-person1.jpg";
+import esPerson2 from "@/assets/testimonials/es-person2.jpg";
+import esPerson3 from "@/assets/testimonials/es-person3.jpg";
 
 interface LandingProps {
   lang: "pt" | "es" | "en";
@@ -36,6 +45,12 @@ export default function Landing({ lang }: LandingProps) {
   ];
 
   const heroMockup = lang === "pt" ? heroMockupPt : lang === "es" ? heroMockupEs : heroMockupEn;
+  
+  const testimonialImages = lang === "pt" 
+    ? [ptPerson1, ptPerson2, ptPerson3]
+    : lang === "es" 
+    ? [esPerson1, esPerson2, esPerson3]
+    : [enPerson1, enPerson2, enPerson3];
 
   return (
     <div className="min-h-screen bg-white">
@@ -201,9 +216,16 @@ export default function Landing({ lang }: LandingProps) {
             <p className="text-sm md:text-base text-muted-foreground mb-4 italic">
               "{t("landing.testimonials.testimonial1.quote")}"
             </p>
-            <div>
-              <p className="font-bold text-sm md:text-base">{t("landing.testimonials.testimonial1.author")}</p>
-              <p className="text-xs md:text-sm text-muted-foreground">{t("landing.testimonials.testimonial1.role")}</p>
+            <div className="flex items-center gap-3">
+              <img 
+                src={testimonialImages[0]} 
+                alt={t("landing.testimonials.testimonial1.author")}
+                className="w-12 h-12 rounded-full object-cover"
+              />
+              <div>
+                <p className="font-bold text-sm md:text-base">{t("landing.testimonials.testimonial1.author")}</p>
+                <p className="text-xs md:text-sm text-muted-foreground">{t("landing.testimonials.testimonial1.role")}</p>
+              </div>
             </div>
           </Card>
 
@@ -212,9 +234,16 @@ export default function Landing({ lang }: LandingProps) {
             <p className="text-sm md:text-base text-muted-foreground mb-4 italic">
               "{t("landing.testimonials.testimonial2.quote")}"
             </p>
-            <div>
-              <p className="font-bold text-sm md:text-base">{t("landing.testimonials.testimonial2.author")}</p>
-              <p className="text-xs md:text-sm text-muted-foreground">{t("landing.testimonials.testimonial2.role")}</p>
+            <div className="flex items-center gap-3">
+              <img 
+                src={testimonialImages[1]} 
+                alt={t("landing.testimonials.testimonial2.author")}
+                className="w-12 h-12 rounded-full object-cover"
+              />
+              <div>
+                <p className="font-bold text-sm md:text-base">{t("landing.testimonials.testimonial2.author")}</p>
+                <p className="text-xs md:text-sm text-muted-foreground">{t("landing.testimonials.testimonial2.role")}</p>
+              </div>
             </div>
           </Card>
 
@@ -223,9 +252,16 @@ export default function Landing({ lang }: LandingProps) {
             <p className="text-sm md:text-base text-muted-foreground mb-4 italic">
               "{t("landing.testimonials.testimonial3.quote")}"
             </p>
-            <div>
-              <p className="font-bold text-sm md:text-base">{t("landing.testimonials.testimonial3.author")}</p>
-              <p className="text-xs md:text-sm text-muted-foreground">{t("landing.testimonials.testimonial3.role")}</p>
+            <div className="flex items-center gap-3">
+              <img 
+                src={testimonialImages[2]} 
+                alt={t("landing.testimonials.testimonial3.author")}
+                className="w-12 h-12 rounded-full object-cover"
+              />
+              <div>
+                <p className="font-bold text-sm md:text-base">{t("landing.testimonials.testimonial3.author")}</p>
+                <p className="text-xs md:text-sm text-muted-foreground">{t("landing.testimonials.testimonial3.role")}</p>
+              </div>
             </div>
           </Card>
         </div>
