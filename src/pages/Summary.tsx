@@ -723,16 +723,16 @@ const Summary = () => {
             <Button 
               onClick={handleListenSummary} 
               disabled={isGeneratingAudio}
-              className="flex-1 min-w-[140px] sm:min-w-[160px] bg-[#7B61FF] hover:bg-[#6951E6] rounded-xl transition-all duration-200 text-sm sm:text-base px-4 sm:px-5 py-6"
+              className="flex-1 min-w-[140px] sm:min-w-[160px] bg-white text-[#1D1D1F] border border-[#E5E5EA] hover:bg-[#7B61FF] hover:text-white hover:border-[#7B61FF] rounded-xl transition-all duration-200 text-sm sm:text-base px-4 sm:px-5 py-6 group"
             >
               {isGeneratingAudio ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-1 sm:mr-2 shrink-0 animate-spin" />
+                  <Loader2 className="w-4 h-4 mr-1 sm:mr-2 shrink-0 animate-spin group-hover:text-white" />
                   <span className="truncate">{t("summary.generating")}</span>
                 </>
               ) : (
                 <>
-                  <Volume2 className="w-4 h-4 mr-1 sm:mr-2 shrink-0" />
+                  <Volume2 className="w-4 h-4 mr-1 sm:mr-2 shrink-0 group-hover:text-white" />
                   <span className="truncate">{t("summary.listen")}</span>
                 </>
               )}
