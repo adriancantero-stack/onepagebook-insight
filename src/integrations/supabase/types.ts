@@ -133,6 +133,7 @@ export type Database = {
           canonical_author: string | null
           canonical_title: string | null
           closing: string | null
+          cover_url: string | null
           created_at: string
           id: string
           key_ideas: string[] | null
@@ -161,6 +162,7 @@ export type Database = {
           canonical_author?: string | null
           canonical_title?: string | null
           closing?: string | null
+          cover_url?: string | null
           created_at?: string
           id?: string
           key_ideas?: string[] | null
@@ -189,6 +191,7 @@ export type Database = {
           canonical_author?: string | null
           canonical_title?: string | null
           closing?: string | null
+          cover_url?: string | null
           created_at?: string
           id?: string
           key_ideas?: string[] | null

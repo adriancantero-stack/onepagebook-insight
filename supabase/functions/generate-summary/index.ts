@@ -863,6 +863,7 @@ Responde SOLO con el JSON, sin texto adicional.`
         theme: summaryData.theme || theme,
         language: language,
         norm_key: cacheKey,  // Add cache key
+        cover_url: null,  // Will be updated after checking books catalog
         // Legacy fields for backwards compatibility
         summary_text: summaryData.oneLiner || "",
         main_ideas: summaryData.keyIdeas || [],
@@ -891,6 +892,12 @@ Responde SOLO con el JSON, sin texto adicional.`
     if (existingBook?.cover_url) {
       coverUrl = existingBook.cover_url;
       console.log("📷 Found cover in catalog:", coverUrl);
+      
+      // Update the summary with the cover_url
+      await supabase
+        .from("book_summaries")
+        .update({ cover_url: coverUrl })
+        .eq("id", summary.id);
     }
 
     if (!existingBook) {
