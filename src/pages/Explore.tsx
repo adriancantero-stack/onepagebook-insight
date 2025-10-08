@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Shuffle, Filter, BookOpen } from "lucide-react";
 import { FloatingHeader } from "@/components/FloatingHeader";
+import { BookAutocomplete } from "@/components/BookAutocomplete";
 import Footer from "@/components/Footer";
 import { 
   Select,
@@ -351,80 +351,28 @@ const Explore = () => {
             {t("explore.title")} <span className="text-xl sm:text-2xl text-muted-foreground">({totalBooksCount} {t("explore.books")})</span>
           </h1>
           
-          <div className="relative max-w-xl">
-            <Input
-              ref={inputRef}
-              role="combobox"
-              aria-autocomplete="list"
-              aria-expanded={isOpen}
-              aria-controls="ac-list"
-              aria-activedescendant={
-                activeIndex >= 0 && suggestions[activeIndex]
-                  ? `opt-${suggestions[activeIndex].id}`
-                  : ""
-              }
-              type="text"
-              placeholder={t("explore.search.placeholder")}
+          <div className="max-w-xl">
+            <BookAutocomplete
               value={query}
-              onChange={(e) => handleInputChange(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="w-full focus-visible:ring-2 focus-visible:ring-[#5A54E6]"
+              onChange={setQuery}
+              onBookSelect={(bookId, title, author) => {
+                if (bookId) {
+                  const book = flatIndex.find(b => b.id === bookId);
+                  if (book) {
+                    handleSummarize(
+                      { title: book.title, author: book.author, locale: book.locale },
+                      bookId,
+                      "search"
+                    );
+                  }
+                } else {
+                  setQuery(title);
+                }
+              }}
+              disabled={false}
+              lang={i18n.language}
             />
-            
-            {isOpen && (
-              <div
-                ref={dropdownRef}
-                id="ac-list"
-                role="listbox"
-                className="absolute z-50 w-full mt-2 bg-background border border-border rounded-lg shadow-lg max-h-96 overflow-y-auto"
-              >
-                {suggestions.length > 0 ? (
-                  <ul className="py-2">
-                    {suggestions.map((item, idx) => (
-                      <li
-                        key={item.id}
-                        id={`opt-${item.id}`}
-                        role="option"
-                        aria-selected={idx === activeIndex}
-                        onMouseEnter={() => setActiveIndex(idx)}
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          selectSuggestion(item);
-                        }}
-                        className={`px-4 py-3 cursor-pointer transition-colors ${
-                          idx === activeIndex
-                            ? "bg-primary/10"
-                            : "hover:bg-muted"
-                        }`}
-                      >
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="flex-1 min-w-0">
-                            <div className="font-semibold text-sm truncate">
-                              {item.title}
-                            </div>
-                            <div className="text-xs text-muted-foreground truncate">
-                              {item.author}
-                            </div>
-                          </div>
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary shrink-0">
-                            {t(item.catNameKey)}
-                          </span>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <div className="px-4 py-3 text-sm text-muted-foreground">
-                    {t("explore.search.noResults")}
-                  </div>
-                )}
-              </div>
-            )}
           </div>
-          
-          <p className="text-sm text-muted-foreground mt-2">
-            {t("explore.search.hint")}
-          </p>
         </div>
 
         <div className="flex flex-wrap gap-2 mb-6 sm:mb-8">
