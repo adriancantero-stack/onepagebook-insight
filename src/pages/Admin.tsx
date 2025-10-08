@@ -89,6 +89,14 @@ const Admin = () => {
     errors: number;
     categoryBreakdown: Record<string, number>;
   } | null>(null);
+  const [invalidBooks, setInvalidBooks] = useState<Array<{
+    id: string;
+    title: string;
+    author: string;
+    lang: string;
+  }>>([]);
+  const [showInvalidBooksModal, setShowInvalidBooksModal] = useState(false);
+  const [isLoadingInvalidBooks, setIsLoadingInvalidBooks] = useState(false);
 
   useEffect(() => {
     checkAdminAccess();
@@ -794,6 +802,54 @@ const Admin = () => {
     }
   };
 
+  const handleLoadInvalidBooks = async () => {
+    setIsLoadingInvalidBooks(true);
+    try {
+      const { data: books, error } = await supabase
+        .from('books')
+        .select('id, title, author, lang')
+        .is('isbn', null)
+        .is('google_books_id', null)
+        .is('asin', null)
+        .eq('is_active', true)
+        .order('title');
+
+      if (error) throw error;
+
+      setInvalidBooks(books || []);
+      setShowInvalidBooksModal(true);
+    } catch (error) {
+      console.error('Error loading invalid books:', error);
+      toast.error("Erro ao carregar livros inválidos");
+    } finally {
+      setIsLoadingInvalidBooks(false);
+    }
+  };
+
+  const handleRemoveInvalidBook = async (bookId: string) => {
+    try {
+      const { error } = await supabase
+        .from('books')
+        .update({ is_active: false })
+        .eq('id', bookId);
+
+      if (error) throw error;
+
+      setInvalidBooks(prev => prev.filter(b => b.id !== bookId));
+      toast.success("Livro removido do catálogo");
+      
+      await loadAdminData();
+    } catch (error) {
+      console.error('Error removing book:', error);
+      toast.error("Erro ao remover livro");
+    }
+  };
+
+  const handleKeepInvalidBook = (bookId: string) => {
+    setInvalidBooks(prev => prev.filter(b => b.id !== bookId));
+    toast.info("Livro mantido no catálogo");
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background p-8">
@@ -1213,20 +1269,38 @@ const Admin = () => {
                     <Button 
                       variant="outline"
                       size="sm"
-                      onClick={() => toast.info("Funcionalidade de revisão em desenvolvimento")}
+                      onClick={handleLoadInvalidBooks}
+                      disabled={isLoadingInvalidBooks}
                     >
-                      Revisar Manualmente
+                      {isLoadingInvalidBooks ? "Carregando..." : "Revisar Manualmente"}
                     </Button>
                     <Button 
                       variant="destructive"
                       size="sm"
-                      onClick={() => {
+                      onClick={async () => {
                         if (confirm(`Tem certeza que deseja remover ${validationResults.invalid} livros inválidos?`)) {
-                          toast.info("Funcionalidade de remoção em desenvolvimento");
+                          try {
+                            const { error } = await supabase
+                              .from('books')
+                              .update({ is_active: false })
+                              .is('isbn', null)
+                              .is('google_books_id', null)
+                              .is('asin', null)
+                              .eq('is_active', true);
+
+                            if (error) throw error;
+
+                            toast.success("Livros inválidos removidos com sucesso");
+                            setValidationResults(null);
+                            await loadAdminData();
+                          } catch (error) {
+                            console.error('Error removing invalid books:', error);
+                            toast.error("Erro ao remover livros inválidos");
+                          }
                         }
                       }}
                     >
-                      Remover Inválidos
+                      Remover Todos Inválidos
                     </Button>
                   </div>
                 </div>
@@ -1340,6 +1414,68 @@ const Admin = () => {
             </Table>
           </CardContent>
         </Card>
+
+        {/* Invalid Books Review Modal */}
+        {showInvalidBooksModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <Card className="w-full max-w-4xl max-h-[80vh] overflow-hidden flex flex-col">
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <span>Revisar Livros Inválidos ({invalidBooks.length})</span>
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => setShowInvalidBooksModal(false)}
+                  >
+                    ✕
+                  </Button>
+                </CardTitle>
+                <CardDescription>
+                  Revise cada livro e decida se deseja mantê-lo ou removê-lo do catálogo
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="overflow-y-auto flex-1">
+                {invalidBooks.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    ✅ Todos os livros foram revisados!
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {invalidBooks.map((book) => (
+                      <div 
+                        key={book.id}
+                        className="p-4 border rounded-lg bg-muted/50 flex items-center justify-between gap-4"
+                      >
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-lg">{book.title}</h3>
+                          <p className="text-sm text-muted-foreground">
+                            Autor: {book.author} | Idioma: {book.lang.toUpperCase()}
+                          </p>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleKeepInvalidBook(book.id)}
+                          >
+                            Manter
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => handleRemoveInvalidBook(book.id)}
+                          >
+                            Remover
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   );
