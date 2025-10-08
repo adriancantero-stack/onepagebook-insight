@@ -417,7 +417,7 @@ const Home = () => {
 
       <main className="mx-auto max-w-4xl px-4 sm:px-6">
         <header className="w-full text-center pt-8 pb-4">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight animate-fade-in">
             OnePageBook
           </h1>
           <p className="mt-3 text-base md:text-lg text-muted-foreground">
