@@ -79,7 +79,7 @@ const Faq = () => {
     <div className="min-h-screen bg-background flex flex-col">
       <FloatingHeader />
 
-      <main className="flex-1 container mx-auto px-4 py-12 max-w-3xl pt-32">
+      <main className="flex-1 container mx-auto px-4 py-12 max-w-3xl">
           <h1 className="text-4xl font-bold mb-2 text-center">{t("faq.title_long")}</h1>
           
           <div className="relative mb-8 mt-8">

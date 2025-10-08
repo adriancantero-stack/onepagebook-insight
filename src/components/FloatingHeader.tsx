@@ -8,7 +8,7 @@ interface FloatingHeaderProps {
 
 export const FloatingHeader = ({ onLogout }: FloatingHeaderProps) => {
   return (
-    <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-4xl">
+    <header className="w-full max-w-4xl mx-auto pt-4 px-4">
       <div className="px-6 py-3 flex items-center justify-between">
         <div className="flex-1"></div>
         <div className="flex items-center gap-2 justify-center">

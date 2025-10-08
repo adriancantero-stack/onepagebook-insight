@@ -372,7 +372,7 @@ const Explore = () => {
     <div className="min-h-screen bg-background flex flex-col">
       <FloatingHeader />
 
-      <main className="container mx-auto px-4 py-6 sm:py-8 max-w-6xl flex-1 pt-40">
+      <main className="container mx-auto px-4 py-6 sm:py-8 max-w-6xl flex-1">
         <div className="mb-6 sm:mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold mb-4">
             {t("explore.title")} <span className="text-xl sm:text-2xl text-muted-foreground">({totalBooksCount} {t("explore.books")})</span>
