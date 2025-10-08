@@ -58,6 +58,7 @@ const Admin = () => {
   const [userGrowth, setUserGrowth] = useState<{ date: string; users: number }[]>([]);
   const [catalogStats, setCatalogStats] = useState({ total: 0, pt: 0, en: 0, es: 0 });
   const [importing, setImporting] = useState(false);
+  const [importProgress, setImportProgress] = useState<{ current: number; total: number; lang: string } | null>(null);
   const [importingCatalog, setImportingCatalog] = useState(false);
   const [catalogImportProgress, setCatalogImportProgress] = useState({ current: 0, total: 0 });
   const [batchGenerating, setBatchGenerating] = useState(false);
@@ -68,7 +69,6 @@ const Admin = () => {
   const [isCheckingCovers, setIsCheckingCovers] = useState(false);
   const [booksWithoutCovers, setBooksWithoutCovers] = useState<number | null>(null);
   const [coverGenerateProgress, setCoverGenerateProgress] = useState({ current: 0, total: 0 });
-  const [importProgress, setImportProgress] = useState<string[]>([]);
   const [cronSchedules, setCronSchedules] = useState<Array<{
     job_name: string;
     description: string;
@@ -279,29 +279,70 @@ const Admin = () => {
 
   const handleImportGoogleBooks = async () => {
     setImporting(true);
-    setImportProgress(["Iniciando importação do Google Books..."]);
+    setImportProgress(null);
 
     try {
-      const { data, error } = await supabase.functions.invoke("import-google-books", {
-        body: { lang: "all", target: 100 }
-      });
+      const languages = ['pt', 'en', 'es'];
+      const targetPerLang = 100;
+      let totalImported = 0;
+      let totalSkipped = 0;
 
-      if (error) {
-        toast.error("Erro na importação", {
-          description: error.message
-        });
-        return;
-      }
+      for (const lang of languages) {
+        setImportProgress({ current: 0, total: targetPerLang, lang });
+        
+        let imported = 0;
+        let attempts = 0;
+        const maxAttempts = 200; // Try up to 200 books to get 100 unique ones
+        
+        const categories = lang === 'pt' 
+          ? ['negócios', 'autoajuda', 'psicologia', 'saúde', 'desenvolvimento pessoal']
+          : lang === 'es'
+          ? ['negocios', 'autoayuda', 'psicología', 'salud', 'desarrollo personal']
+          : ['business', 'self-help', 'psychology', 'health', 'personal development'];
 
-      if (data?.log) {
-        setImportProgress(data.log);
+        while (imported < targetPerLang && attempts < maxAttempts) {
+          const category = categories[attempts % categories.length];
+          
+          try {
+            // Fetch small batch from Google Books
+            const { data, error } = await supabase.functions.invoke("import-google-books", {
+              body: { 
+                lang,
+                target: 20, // Small batches
+                categories: [category]
+              }
+            });
+
+            if (error) {
+              console.error(`Error importing ${lang}:`, error);
+              break;
+            }
+
+            if (data?.stats) {
+              imported += data.stats.inserted || 0;
+              totalSkipped += data.stats.skipped || 0;
+              setImportProgress({ current: imported, total: targetPerLang, lang });
+            }
+
+            attempts += 20;
+            
+            // Small delay between requests
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+          } catch (error) {
+            console.error(`Error in batch for ${lang}:`, error);
+            break;
+          }
+        }
+
+        totalImported += imported;
+        toast.success(`${lang.toUpperCase()}: ${imported} livros importados`);
       }
 
       toast.success("Importação concluída!", {
-        description: `${data.stats.inserted} livros importados, ${data.stats.skipped} pulados`
+        description: `${totalImported} livros importados, ${totalSkipped} já existiam`
       });
 
-      // Reload data
       await loadAdminData();
     } catch (error) {
       console.error("Import error:", error);
@@ -310,6 +351,7 @@ const Admin = () => {
       });
     } finally {
       setImporting(false);
+      setImportProgress(null);
     }
   };
 
@@ -934,24 +976,22 @@ const Admin = () => {
                 </div>
               )}
 
-              {/* Import Progress */}
-              {importing && (
-                <div className="space-y-2">
-                  <Progress value={33} className="w-full" />
-                  <div className="text-sm text-muted-foreground space-y-1 max-h-32 overflow-y-auto">
-                    {importProgress.map((log, i) => (
-                      <p key={i}>{log}</p>
-                    ))}
+              {/* Google Books Import Progress */}
+              {importing && importProgress && (
+                <div className="space-y-2 p-4 rounded-lg border bg-muted/50">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="font-medium">Importando livros - {importProgress.lang.toUpperCase()}</span>
+                    <span className="text-muted-foreground">
+                      {importProgress.current} / {importProgress.total}
+                    </span>
                   </div>
-                </div>
-              )}
-
-              {/* Import Log */}
-              {!importing && importProgress.length > 0 && (
-                <div className="rounded-lg border bg-muted p-4 space-y-1 max-h-48 overflow-y-auto">
-                  {importProgress.map((log, i) => (
-                    <p key={i} className="text-sm">{log}</p>
-                  ))}
+                  <Progress 
+                    value={importProgress.total > 0 ? (importProgress.current / importProgress.total) * 100 : 0} 
+                    className="h-2"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {importProgress.total > 0 ? Math.round((importProgress.current / importProgress.total) * 100) : 0}% concluído
+                  </p>
                 </div>
               )}
             </div>
