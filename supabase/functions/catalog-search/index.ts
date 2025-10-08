@@ -44,11 +44,13 @@ serve(async (req) => {
 
     // Search in history (book_summaries table)
     // Using ilike for case-insensitive search (PostgreSQL handles accent-insensitive via unaccent in indexes)
+    // Escape special characters that could break the query (commas, parentheses, etc)
+    const escapedQuery = searchQuery.replace(/[,()]/g, '');
     const { data: historyBooks, error: historyError } = await supabase
       .from("book_summaries")
       .select("id, book_title, book_author, language")
       .eq("language", lang)
-      .or(`book_title.ilike.*${searchQuery}*,book_author.ilike.*${searchQuery}*`)
+      .or(`book_title.ilike.*${escapedQuery}*,book_author.ilike.*${escapedQuery}*`)
       .limit(limit);
 
     if (historyError) {
