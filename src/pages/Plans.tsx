@@ -162,7 +162,7 @@ const Plans = () => {
 
             <div className="text-center mb-8">
               <h3 className="text-2xl font-semibold mb-3 text-[#1D1D1F]">{t("plans.premium.name")}</h3>
-              <div className="text-5xl font-semibold mb-2 text-[#1D1D1F]">
+              <div className="text-6xl font-semibold mb-2 text-[#1D1D1F] whitespace-nowrap">
                 {billingCycle === "monthly" 
                   ? t("plans.premium.price.monthly")
                   : t("plans.premium.price.yearly")
