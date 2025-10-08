@@ -430,27 +430,71 @@ const Admin = () => {
     setBatchGenerateProgress({ current: 0, total: booksWithoutSummaries });
 
     try {
-      toast.info(`Iniciando geração de ${booksWithoutSummaries} resumos...`);
+      // Get books without summaries
+      const { data: books, error: booksError } = await supabase
+        .from('books')
+        .select('id, title, author, lang')
+        .eq('is_active', true)
+        .is('summary', null)
+        .order('created_at', { ascending: true })
+        .limit(booksWithoutSummaries);
 
-      const { data, error } = await supabase.functions.invoke("batch-generate-summaries");
-
-      if (error) {
-        toast.error("Erro na geração de resumos", {
-          description: error.message
+      if (booksError) throw booksError;
+      if (!books || books.length === 0) {
+        toast.error("Nenhum livro sem resumo", {
+          description: "Todos os livros já possuem resumos!",
         });
+        setBatchGenerating(false);
         return;
       }
 
-      // Update progress to completion
-      setBatchGenerateProgress({ current: data.processed || 0, total: booksWithoutSummaries });
+      toast.info(`Iniciando geração de ${books.length} resumos...`);
+
+      let successCount = 0;
+      let errorCount = 0;
+
+      // Process books one by one (AI generation is slow, so we process sequentially)
+      for (let i = 0; i < books.length; i++) {
+        const book = books[i];
+        
+        try {
+          console.log(`Generating summary ${i + 1}/${books.length}: ${book.title}`);
+          
+          // Call individual generate-summary function
+          const { data, error } = await supabase.functions.invoke('generate-summary', {
+            body: { 
+              userTitle: book.title,
+              userAuthor: book.author,
+              locale: book.lang
+            }
+          });
+
+          if (error) {
+            console.error(`Error generating summary for ${book.title}:`, error);
+            errorCount++;
+          } else if (data?.summary) {
+            successCount++;
+          } else {
+            errorCount++;
+          }
+
+          // Update progress after each book
+          setBatchGenerateProgress({ current: i + 1, total: books.length });
+
+          // Small delay to avoid overwhelming the API
+          if (i < books.length - 1) {
+            await new Promise(resolve => setTimeout(resolve, 500));
+          }
+
+        } catch (error) {
+          console.error(`Error processing ${book.title}:`, error);
+          errorCount++;
+        }
+      }
 
       toast.success("Geração concluída!", {
-        description: `${data.processed} resumos gerados com sucesso`
+        description: `${successCount} resumos gerados, ${errorCount} erros`
       });
-
-      if (data.errors > 0) {
-        toast.warning(`${data.errors} livros apresentaram erros na geração`);
-      }
 
       // Reset and reload data
       setBooksWithoutSummaries(null);
