@@ -502,10 +502,10 @@ const Explore = () => {
             return (
               <Card 
                 key={`${book.title}-${index}`}
-                className="p-5 flex flex-col gap-4 border-[#E5E5EA] hover:shadow-lg hover:scale-[1.02] transition-all duration-200 ease-in-out bg-white group"
+                className="p-5 flex flex-col h-full border-[#E5E5EA] hover:shadow-lg hover:scale-[1.02] transition-all duration-200 ease-in-out bg-white group"
               >
                 {/* Book Cover */}
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 mb-4">
                   {coverUrl ? (
                     <img 
                       src={coverUrl} 
@@ -529,7 +529,7 @@ const Explore = () => {
                 </div>
 
                 {/* Badges */}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 mb-4">
                   {book.badge && (
                     <Badge 
                       variant="secondary" 
@@ -548,10 +548,10 @@ const Explore = () => {
                   )}
                 </div>
 
-                {/* Generate Summary Button */}
+                {/* Generate Summary Button - Pushed to bottom */}
                 <Button
                   onClick={() => handleSummarize(book, book.id!, "grid")}
-                  className="w-full bg-[#7B61FF] hover:bg-[#6951E6] text-white border-none shadow-sm transition-all duration-200"
+                  className="w-full mt-auto bg-[#7B61FF] hover:bg-[#6951E6] text-white border-none shadow-sm transition-all duration-200"
                   aria-label={`${t("explore.summarize")} ${book.title} — ${book.author}`}
                 >
                   <Sparkles className="w-4 h-4 mr-2" />
