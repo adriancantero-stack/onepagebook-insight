@@ -69,7 +69,8 @@ function extractYear(dateString?: string): number | null {
   return yearMatch ? parseInt(yearMatch[0]) : null;
 }
 
-function normalizeText(text: string): string {
+function normalizeText(text: string | undefined): string {
+  if (!text) return '';
   return text
     .toLowerCase()
     .normalize('NFD')
