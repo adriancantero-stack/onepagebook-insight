@@ -33,6 +33,20 @@ async function searchGoogleBooks(title: string, author: string, lang: string): P
   return data.items || []
 }
 
+async function searchOpenLibrary(title: string, author: string): Promise<any> {
+  const url = `https://openlibrary.org/search.json?title=${encodeURIComponent(title)}&author=${encodeURIComponent(author)}&limit=5`
+  
+  console.log('Searching Open Library:', { title, author, url })
+  
+  const response = await fetch(url)
+  if (!response.ok) {
+    throw new Error(`Open Library API error: ${response.status}`)
+  }
+  
+  const data = await response.json()
+  return data.docs || []
+}
+
 function normalizeText(text: string): string {
   return text
     .toLowerCase()
@@ -57,7 +71,7 @@ function calculateSimilarity(str1: string, str2: string): number {
   return commonWords.length / Math.max(words1.length, words2.length)
 }
 
-function validateBook(bookTitle: string, bookAuthor: string, googleResults: any[]): BookValidationResult['status'] {
+function validateBookFromGoogleBooks(bookTitle: string, bookAuthor: string, googleResults: any[]): { status: BookValidationResult['status'], foundInfo?: any } {
   for (const item of googleResults) {
     const volumeInfo = item.volumeInfo
     const title = volumeInfo.title || ''
@@ -68,7 +82,7 @@ function validateBook(bookTitle: string, bookAuthor: string, googleResults: any[
       ? Math.max(...authors.map((a: string) => calculateSimilarity(bookAuthor, a)))
       : 0
     
-    console.log('Comparing:', { 
+    console.log('Comparing (Google Books):', { 
       bookTitle, 
       foundTitle: title, 
       titleSimilarity,
@@ -78,11 +92,55 @@ function validateBook(bookTitle: string, bookAuthor: string, googleResults: any[
     })
     
     if (titleSimilarity >= 0.7 && authorSimilarity >= 0.6) {
-      return 'valid'
+      return {
+        status: 'valid',
+        foundInfo: {
+          foundTitle: volumeInfo.title,
+          foundAuthor: volumeInfo.authors?.join(', '),
+          googleBooksId: item.id,
+          isbn: volumeInfo.industryIdentifiers?.find((id: any) => 
+            id.type === 'ISBN_13' || id.type === 'ISBN_10'
+          )?.identifier
+        }
+      }
     }
   }
   
-  return googleResults.length > 0 ? 'uncertain' : 'invalid'
+  return { status: googleResults.length > 0 ? 'uncertain' : 'invalid' }
+}
+
+function validateBookFromOpenLibrary(bookTitle: string, bookAuthor: string, openLibResults: any[]): { status: BookValidationResult['status'], foundInfo?: any } {
+  for (const doc of openLibResults) {
+    const title = doc.title || ''
+    const authors = doc.author_name || []
+    
+    const titleSimilarity = calculateSimilarity(bookTitle, title)
+    const authorSimilarity = authors.length > 0 
+      ? Math.max(...authors.map((a: string) => calculateSimilarity(bookAuthor, a)))
+      : 0
+    
+    console.log('Comparing (Open Library):', { 
+      bookTitle, 
+      foundTitle: title, 
+      titleSimilarity,
+      bookAuthor,
+      foundAuthors: authors,
+      authorSimilarity 
+    })
+    
+    if (titleSimilarity >= 0.7 && authorSimilarity >= 0.6) {
+      return {
+        status: 'valid',
+        foundInfo: {
+          foundTitle: doc.title,
+          foundAuthor: doc.author_name?.join(', '),
+          isbn: doc.isbn?.[0]
+        }
+      }
+    }
+  }
+  
+  return { status: openLibResults.length > 0 ? 'uncertain' : 'invalid' }
 }
 
 serve(async (req) => {
@@ -128,19 +186,21 @@ serve(async (req) => {
         // Add delay to respect rate limits
         await new Promise(resolve => setTimeout(resolve, 200))
         
+        // Try Google Books first
         const googleResults = await searchGoogleBooks(book.title, book.author, book.lang)
-        const status = validateBook(book.title, book.author, googleResults)
+        let validationResult = validateBookFromGoogleBooks(book.title, book.author, googleResults)
         
-        let foundInfo: any = {}
-        if (googleResults.length > 0) {
-          const bestMatch = googleResults[0].volumeInfo
-          foundInfo = {
-            foundTitle: bestMatch.title,
-            foundAuthor: bestMatch.authors?.join(', '),
-            googleBooksId: googleResults[0].id,
-            isbn: bestMatch.industryIdentifiers?.find((id: any) => 
-              id.type === 'ISBN_13' || id.type === 'ISBN_10'
-            )?.identifier
+        let source = 'Google Books'
+        
+        // If not found in Google Books, try Open Library
+        if (validationResult.status === 'invalid') {
+          console.log('Not found in Google Books, trying Open Library...')
+          const openLibResults = await searchOpenLibrary(book.title, book.author)
+          const openLibValidation = validateBookFromOpenLibrary(book.title, book.author, openLibResults)
+          
+          if (openLibValidation.status !== 'invalid') {
+            validationResult = openLibValidation
+            source = 'Open Library'
           }
         }
         
@@ -148,13 +208,13 @@ serve(async (req) => {
           id: book.id,
           title: book.title,
           author: book.author,
-          status,
-          ...foundInfo,
-          reason: status === 'invalid' 
-            ? 'Não encontrado no Google Books'
-            : status === 'uncertain'
-            ? 'Encontrado mas com diferenças significativas'
-            : 'Validado com sucesso'
+          status: validationResult.status,
+          ...validationResult.foundInfo,
+          reason: validationResult.status === 'invalid' 
+            ? 'Não encontrado no Google Books nem Open Library'
+            : validationResult.status === 'uncertain'
+            ? `Encontrado no ${source} mas com diferenças significativas`
+            : `Validado com sucesso via ${source}`
         })
         
         console.log('Validation result:', results[results.length - 1])
