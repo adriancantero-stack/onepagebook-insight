@@ -23,6 +23,20 @@ serve(async (req) => {
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
+    // Get admin user ID to use for system-generated summaries
+    const { data: adminUser, error: adminError } = await supabase
+      .from('user_roles')
+      .select('user_id')
+      .eq('role', 'admin')
+      .limit(1)
+      .single();
+
+    if (adminError || !adminUser) {
+      throw new Error("No admin user found. Please ensure at least one admin exists.");
+    }
+
+    const systemUserId = adminUser.user_id;
+
     let totalProcessed = 0;
     let totalErrors = 0;
     let batchNumber = 0;
@@ -99,10 +113,7 @@ serve(async (req) => {
             continue;
           }
 
-          // Criar um user_id fictício para resumos do sistema (usando o service role)
-          const systemUserId = '00000000-0000-0000-0000-000000000000';
-
-          // Inserir resumo na tabela book_summaries
+          // Inserir resumo na tabela book_summaries usando o admin user
           const { error: insertError } = await supabase
             .from('book_summaries')
             .insert({
