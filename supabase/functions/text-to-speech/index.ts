@@ -94,16 +94,16 @@ serve(async (req) => {
 
     console.log('Processing audio request for summary:', summaryId, 'language:', language)
 
-    // Check if audio already exists in cache
+    // Check if audio already exists in cache for this specific summary
     const { data: existingAudio, error: audioError } = await supabase
       .from('book_audio')
       .select('audio_url')
       .eq('book_summary_id', summaryId)
       .eq('language', language)
-      .single()
+      .maybeSingle()
 
     if (existingAudio && !audioError) {
-      console.log('Audio found in cache, returning URL')
+      console.log('✅ Audio found in user cache, returning URL')
       
       // Get signed URL for the audio file
       const { data: signedUrl } = await supabase.storage
@@ -120,6 +120,59 @@ serve(async (req) => {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           }
         )
+      }
+    }
+
+    // If not in user cache, check global cache
+    // First, get the canonical book info from the current summary
+    console.log('🔍 Checking global audio cache...')
+    const { data: currentSummary } = await supabase
+      .from('book_summaries')
+      .select('canonical_title, canonical_author')
+      .eq('id', summaryId)
+      .single()
+
+    if (currentSummary?.canonical_title) {
+      // Look for any other summary of the same book (same canonical title + author)
+      const { data: otherSummaries } = await supabase
+        .from('book_summaries')
+        .select('id')
+        .eq('canonical_title', currentSummary.canonical_title)
+        .eq('canonical_author', currentSummary.canonical_author)
+        .neq('id', summaryId)
+        .limit(1)
+
+      if (otherSummaries && otherSummaries.length > 0) {
+        // Check if any of these summaries have audio in the same language
+        const { data: globalAudio } = await supabase
+          .from('book_audio')
+          .select('audio_url, book_summary_id')
+          .eq('language', language)
+          .in('book_summary_id', otherSummaries.map(s => s.id))
+          .limit(1)
+          .maybeSingle()
+
+        if (globalAudio) {
+          console.log('✅ Audio found in global cache! Returning existing audio.')
+          
+          // Get signed URL for the existing audio file
+          const { data: signedUrl } = await supabase.storage
+            .from('book-audio')
+            .createSignedUrl(globalAudio.audio_url, 3600)
+          
+          if (signedUrl) {
+            return new Response(
+              JSON.stringify({ 
+                audioUrl: signedUrl.signedUrl,
+                cached: true,
+                globalCache: true
+              }),
+              {
+                headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+              }
+            )
+          }
+        }
       }
     }
 
