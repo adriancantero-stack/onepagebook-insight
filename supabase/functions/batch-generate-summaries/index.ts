@@ -1,3 +1,4 @@
+import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
@@ -34,11 +35,10 @@ serve(async (req) => {
       batchNumber++;
       console.log(`\n=== Processando lote ${batchNumber} ===`);
 
-      // Buscar próximo lote de livros sem resumo
+      // Buscar próximo lote de livros ativos
       const { data: books, error: fetchError } = await supabase
         .from('books')
         .select('id, title, author, lang')
-        .is('summary', null)
         .eq('is_active', true)
         .limit(10);
 
@@ -48,7 +48,7 @@ serve(async (req) => {
       }
 
       if (!books || books.length === 0) {
-        console.log("Não há mais livros sem resumo para processar.");
+        console.log("Não há mais livros para processar.");
         hasMoreBooks = false;
         break;
       }
@@ -60,36 +60,71 @@ serve(async (req) => {
 
       for (const book of books) {
         try {
-          console.log(`Generating summary for: ${book.title} by ${book.author}`);
+          // Verificar se já existe resumo para este livro em qualquer idioma
+          const { data: existingSummaries, error: checkError } = await supabase
+            .from('book_summaries')
+            .select('id, language')
+            .eq('canonical_title', book.title)
+            .eq('canonical_author', book.author);
+
+          if (checkError) {
+            console.error(`Error checking existing summaries for ${book.id}:`, checkError);
+            continue;
+          }
+
+          // Se já existe resumo para este idioma, pular
+          const hasLangSummary = existingSummaries?.some(s => s.language === book.lang);
+          if (hasLangSummary) {
+            console.log(`✓ Summary already exists for: ${book.title} (${book.lang})`);
+            batchProcessed++;
+            continue;
+          }
+
+          console.log(`Generating summary for: ${book.title} by ${book.author} (${book.lang})`);
 
           const prompt = generatePrompt(book);
           
-          let summary;
+          let summaryData;
           try {
-            summary = await generateSummaryWithAI(prompt, LOVABLE_API_KEY);
+            summaryData = await generateSummaryWithAI(prompt, LOVABLE_API_KEY, book.lang);
           } catch (aiError) {
             console.error(`AI error for book ${book.id}:`, aiError);
             batchErrors++;
             continue;
           }
 
-          if (!summary || summary.trim().length === 0) {
-            console.error(`Empty summary generated for book ${book.id}`);
+          if (!summaryData || !summaryData.oneLiner) {
+            console.error(`Invalid summary generated for book ${book.id}`);
             batchErrors++;
             continue;
           }
 
-          // Atualizar livro com resumo gerado
-          const { error: updateError } = await supabase
-            .from('books')
-            .update({
-              summary: summary,
-              summary_generated_at: new Date().toISOString()
-            })
-            .eq('id', book.id);
+          // Criar um user_id fictício para resumos do sistema (usando o service role)
+          const systemUserId = '00000000-0000-0000-0000-000000000000';
 
-          if (updateError) {
-            console.error(`Error updating book ${book.id}:`, updateError);
+          // Inserir resumo na tabela book_summaries
+          const { error: insertError } = await supabase
+            .from('book_summaries')
+            .insert({
+              user_id: systemUserId,
+              user_title: book.title,
+              user_author: book.author,
+              book_title: book.title,
+              book_author: book.author,
+              canonical_title: book.title,
+              canonical_author: book.author,
+              language: book.lang,
+              one_liner: summaryData.oneLiner,
+              key_ideas: summaryData.keyIdeas,
+              actions: summaryData.practicalSteps,
+              closing: summaryData.closing,
+              theme: summaryData.theme || 'default',
+              norm_key: `${book.title.toLowerCase()}|${book.author.toLowerCase()}|${book.lang}`,
+              source: 'catalog'
+            });
+
+          if (insertError) {
+            console.error(`Error inserting summary for ${book.id}:`, insertError);
             batchErrors++;
           } else {
             batchProcessed++;
@@ -97,7 +132,7 @@ serve(async (req) => {
           }
 
           // Delay entre requisições para evitar rate limiting
-          await new Promise(resolve => setTimeout(resolve, 500));
+          await new Promise(resolve => setTimeout(resolve, 1000));
 
         } catch (error) {
           console.error(`Error processing book ${book.id}:`, error);
@@ -151,41 +186,53 @@ serve(async (req) => {
 
 function generatePrompt(book: any): string {
   const prompts: Record<string, string> = {
-    pt: `Crie um resumo conciso e prático do livro "${book.title}" de ${book.author}. 
+    pt: `Você é um especialista em resumir livros de forma clara e acionável.
 
-O resumo deve ter entre 500-700 palavras e incluir:
-- Uma breve introdução sobre o livro e seu propósito
-- Os principais conceitos e ideias centrais
-- Lições e aprendizados chave
-- Aplicações práticas para o dia a dia
+Analise o livro "${book.title}" de ${book.author} e gere um resumo estruturado em JSON com os seguintes campos:
 
-Mantenha um tom inspirador e acessível. Foque no que o leitor pode aprender e aplicar.`,
+{
+  "oneLiner": "Uma frase de 2-3 linhas que captura a essência central do livro",
+  "keyIdeas": ["4-6 ideias principais do livro, cada uma em uma frase curta e clara"],
+  "practicalSteps": ["3-5 ações práticas que o leitor pode aplicar imediatamente"],
+  "closing": "Uma frase motivacional final que encoraja o leitor a agir",
+  "theme": "uma palavra: productivity, health, mindset, finance ou default"
+}
+
+Seja conciso, prático e inspirador. Foque no que o leitor pode aprender e aplicar.`,
     
-    en: `Create a concise and practical summary of the book "${book.title}" by ${book.author}.
+    en: `You are an expert at summarizing books clearly and actionably.
 
-The summary should be 500-700 words and include:
-- A brief introduction about the book and its purpose
-- Main concepts and central ideas
-- Key lessons and learnings
-- Practical applications for daily life
+Analyze the book "${book.title}" by ${book.author} and generate a structured JSON summary with these fields:
 
-Keep an inspiring and accessible tone. Focus on what readers can learn and apply.`,
+{
+  "oneLiner": "A 2-3 sentence phrase capturing the book's core essence",
+  "keyIdeas": ["4-6 main ideas from the book, each in a short, clear sentence"],
+  "practicalSteps": ["3-5 practical actions readers can apply immediately"],
+  "closing": "A final motivational sentence that encourages the reader to act",
+  "theme": "one word: productivity, health, mindset, finance or default"
+}
+
+Be concise, practical and inspiring. Focus on what readers can learn and apply.`,
     
-    es: `Crea un resumen conciso y práctico del libro "${book.title}" de ${book.author}.
+    es: `Eres un experto en resumir libros de forma clara y accionable.
 
-El resumen debe tener entre 500-700 palabras e incluir:
-- Una breve introducción sobre el libro y su propósito
-- Los principales conceptos e ideas centrales
-- Lecciones y aprendizajes clave
-- Aplicaciones prácticas para el día a día
+Analiza el libro "${book.title}" de ${book.author} y genera un resumen estructurado en JSON con estos campos:
 
-Mantén un tono inspirador y accesible. Enfócate en lo que el lector puede aprender y aplicar.`
+{
+  "oneLiner": "Una frase de 2-3 líneas que captura la esencia central del libro",
+  "keyIdeas": ["4-6 ideas principales del libro, cada una en una frase corta y clara"],
+  "practicalSteps": ["3-5 acciones prácticas que el lector puede aplicar inmediatamente"],
+  "closing": "Una frase motivacional final que anime al lector a actuar",
+  "theme": "una palabra: productivity, health, mindset, finance o default"
+}
+
+Sé conciso, práctico e inspirador. Enfócate en lo que el lector puede aprender y aplicar.`
   };
 
   return prompts[book.lang] || prompts['pt'];
 }
 
-async function generateSummaryWithAI(prompt: string, apiKey: string): Promise<string> {
+async function generateSummaryWithAI(prompt: string, apiKey: string, lang: string): Promise<any> {
   const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -197,12 +244,13 @@ async function generateSummaryWithAI(prompt: string, apiKey: string): Promise<st
       messages: [
         { 
           role: 'system', 
-          content: 'You are an expert book summarizer. Create clear, engaging, and actionable book summaries that help readers understand and apply key concepts.' 
+          content: 'You are an expert book summarizer. Always respond with valid JSON only, no additional text.' 
         },
         { role: 'user', content: prompt }
       ],
       temperature: 0.7,
-      max_tokens: 1500,
+      max_tokens: 2000,
+      response_format: { type: "json_object" }
     }),
   });
 
@@ -221,5 +269,12 @@ async function generateSummaryWithAI(prompt: string, apiKey: string): Promise<st
   }
 
   const data = await response.json();
-  return data.choices[0].message.content.trim();
+  const content = data.choices[0].message.content.trim();
+  
+  try {
+    return JSON.parse(content);
+  } catch (e) {
+    console.error('Failed to parse AI response as JSON:', content);
+    throw new Error('Invalid JSON response from AI');
+  }
 }

@@ -263,7 +263,7 @@ const Admin = () => {
       while (true) {
         const { data: booksData, error: booksError } = await supabase
           .from("books")
-          .select("lang, summary, cover_url")
+          .select("lang, cover_url")
           .range(from, from + pageSize - 1);
 
         if (booksError) {
@@ -287,7 +287,13 @@ const Admin = () => {
           return acc;
         }, {});
 
-        const booksWithSummary = allBooks.filter(b => b.summary !== null && b.summary !== '').length;
+        // Contar livros com resumo na tabela book_summaries
+        const { data: catalogSummaries } = await supabase
+          .from('book_summaries')
+          .select('canonical_title, canonical_author, language')
+          .eq('source', 'catalog');
+
+        const booksWithSummary = catalogSummaries?.length || 0;
         const booksWithCover = allBooks.filter(b => b.cover_url !== null && b.cover_url !== '' && b.cover_url !== '/logo-gray.png').length;
 
         console.log(`Livros com resumo: ${booksWithSummary}, sem resumo: ${allBooks.length - booksWithSummary}`);
@@ -501,18 +507,38 @@ const Admin = () => {
   const checkBooksWithoutSummaries = async () => {
     setIsCheckingSummaries(true);
     try {
-      const { count, error } = await supabase
+      // Contar livros ativos
+      const { count: totalBooks, error: countError } = await supabase
         .from('books')
         .select('*', { count: 'exact', head: true })
-        .eq('is_active', true)
-        .is('summary', null);
+        .eq('is_active', true);
 
-      if (error) throw error;
-      setBooksWithoutSummaries(count || 0);
+      if (countError) throw countError;
+
+      // Contar resumos únicos no catálogo
+      const { data: summaries, error: summariesError } = await supabase
+        .from('book_summaries')
+        .select('canonical_title, canonical_author, language')
+        .eq('source', 'catalog');
+
+      if (summariesError) throw summariesError;
+
+      // Criar set de livros com resumo (title|lang)
+      const booksWithSummary = new Set();
+      summaries?.forEach(s => {
+        booksWithSummary.add(`${s.canonical_title}|${s.language}`);
+      });
+
+      const withoutSummaries = (totalBooks || 0) - booksWithSummary.size;
+      setBooksWithoutSummaries(withoutSummaries);
       
-      if (count === 0) {
-        toast.success("Todos os livros já têm resumos!", {
-          description: "Não há livros pendentes para gerar resumos.",
+      if (withoutSummaries === 0) {
+        toast.success("Todos os livros têm resumos!", {
+          description: "Não há livros pendentes.",
+        });
+      } else {
+        toast.info(`${withoutSummaries} livros sem resumo`, {
+          description: "Clique em 'Gerar Resumos' para processar em lotes.",
         });
       }
     } catch (error) {
@@ -526,94 +552,35 @@ const Admin = () => {
   };
 
   const handleBatchGenerateSummaries = async () => {
-    if (!booksWithoutSummaries || booksWithoutSummaries === 0) {
-      toast.error("Nenhum livro sem resumo", {
-        description: "Por favor, verifique os livros sem resumo primeiro.",
-      });
-      return;
-    }
-
     setBatchGenerating(true);
-    setBatchGenerateProgress({ current: 0, total: booksWithoutSummaries });
 
     try {
-      // Get books without summaries
-      const { data: books, error: booksError } = await supabase
-        .from('books')
-        .select('id, title, author, lang')
-        .eq('is_active', true)
-        .is('summary', null)
-        .order('created_at', { ascending: true })
-        .limit(booksWithoutSummaries);
-
-      if (booksError) throw booksError;
-      if (!books || books.length === 0) {
-        toast.error("Nenhum livro sem resumo", {
-          description: "Todos os livros já possuem resumos!",
-        });
-        setBatchGenerating(false);
-        return;
-      }
-
-      toast.info(`Iniciando geração de ${books.length} resumos...`, {
-        description: "Isso pode levar vários minutos. O progresso será atualizado automaticamente."
+      toast.info("Iniciando geração de resumos em lotes...", {
+        description: "Isso pode levar alguns minutos. Processando 10 livros por vez."
       });
 
-      // Store initial count
-      const initialWithSummary = stats?.booksWithSummary || 0;
-
-      // Call batch-generate-summaries (it processes all books internally)
-      const generatePromise = supabase.functions.invoke('batch-generate-summaries', {
+      // Iniciar geração (função processa internamente)
+      const { data, error } = await supabase.functions.invoke('batch-generate-summaries', {
         body: {}
       });
-
-      // Poll for progress updates by rechecking summary count every 3 seconds
-      const pollInterval = setInterval(async () => {
-        const { count } = await supabase
-          .from('books')
-          .select('*', { count: 'exact', head: true })
-          .eq('is_active', true)
-          .not('summary', 'is', null);
-        
-        const currentProgress = (count || 0) - initialWithSummary;
-        setBatchGenerateProgress({ 
-          current: currentProgress, 
-          total: books.length 
-        });
-      }, 3000);
-
-      // Wait for batch generation to complete
-      const { data, error } = await generatePromise;
-      clearInterval(pollInterval);
 
       if (error) {
         throw error;
       }
 
-      // Final progress check
-      const { count: finalCount } = await supabase
-        .from('books')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_active', true)
-        .not('summary', 'is', null);
-      
-      const totalGenerated = (finalCount || 0) - initialWithSummary;
-
       toast.success("Geração concluída!", {
-        description: `${totalGenerated} resumos gerados com sucesso!`
+        description: `${data.processed} resumos gerados em ${data.batches} lote(s). ${data.errors} erros.`
       });
 
-      // Reset and reload data
-      setBooksWithoutSummaries(null);
+      // Recarregar dados
       await loadAdminData();
     } catch (error) {
       console.error("Batch generate error:", error);
-      toast.error("Erro", {
-        description: error.message || "Falha ao gerar resumos automaticamente"
+      toast.error("Erro na geração", {
+        description: error.message || "Falha ao gerar resumos"
       });
     } finally {
       setBatchGenerating(false);
-      setTimeout(() => setBatchGenerateProgress({ current: 0, total: 0 }), 2000);
     }
   };
 
