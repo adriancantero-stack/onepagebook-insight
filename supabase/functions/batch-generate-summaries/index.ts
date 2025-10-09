@@ -114,7 +114,10 @@ serve(async (req) => {
               canonical_title: book.title,
               canonical_author: book.author,
               language: book.lang,
+              summary_text: summaryData.oneLiner, // Campo obrigatório
               one_liner: summaryData.oneLiner,
+              main_ideas: summaryData.keyIdeas,
+              practical_applications: summaryData.practicalSteps?.join('\n') || '',
               key_ideas: summaryData.keyIdeas,
               actions: summaryData.practicalSteps,
               closing: summaryData.closing,
