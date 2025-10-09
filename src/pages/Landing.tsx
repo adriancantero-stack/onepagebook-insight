@@ -299,74 +299,74 @@ const Landing = ({ lang }: LandingProps) => {
       <section className="border-t border-border bg-muted/30 py-16 sm:py-24 lg:py-32">
         <div className="container mx-auto px-6 sm:px-12 lg:px-24">
           <h2 className="mb-16 text-center text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
-            {t("landing.pricing.title")}
+            {t("landing.plans.title")}
           </h2>
 
           <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-2">
             {/* Free Plan */}
             <Card className="relative p-8 transition-all hover:shadow-xl">
-              <h3 className="mb-4 text-2xl font-bold">{t("landing.pricing.free.title")}</h3>
+              <h3 className="mb-4 text-2xl font-bold">{t("landing.plans.free.title")}</h3>
               <div className="mb-6">
                 <span className="text-4xl font-bold">{pricing.free}</span>
-                <span className="text-muted-foreground">{t("landing.pricing.free.period")}</span>
+                <span className="text-muted-foreground">{t("landing.plans.free.period")}</span>
               </div>
               <ul className="mb-8 space-y-3">
                 <li className="flex items-start gap-2">
                   <Check className="h-5 w-5 shrink-0 text-primary" />
-                  <span>{t("landing.pricing.free.feature1")}</span>
+                  <span>{t("landing.plans.free.feature1")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="h-5 w-5 shrink-0 text-primary" />
-                  <span>{t("landing.pricing.free.feature2")}</span>
+                  <span>{t("landing.plans.free.feature2")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="h-5 w-5 shrink-0 text-primary" />
-                  <span>{t("landing.pricing.free.feature3")}</span>
+                  <span>{t("landing.plans.free.feature3")}</span>
                 </li>
               </ul>
               <Button onClick={handleCTA} variant="outline" className="w-full">
-                {t("landing.pricing.free.cta")}
+                {t("landing.plans.free.cta")}
               </Button>
             </Card>
 
             {/* Premium Plan */}
             <Card className="relative border-2 border-primary p-8 shadow-xl transition-all hover:shadow-2xl">
               <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary px-4 py-1 text-xs font-semibold">
-                {t("landing.pricing.premium.badge")}
+                {t("landing.plans.premium.badge")}
               </Badge>
 
-              <h3 className="mb-4 text-2xl font-bold">{t("landing.pricing.premium.title")}</h3>
+              <h3 className="mb-4 text-2xl font-bold">{t("landing.plans.premium.title")}</h3>
               <div className="mb-2">
                 <span className="text-4xl font-bold">{pricing.premium}</span>
-                <span className="text-muted-foreground">{t("landing.pricing.premium.period")}</span>
+                <span className="text-muted-foreground">{t("landing.plans.premium.period")}</span>
               </div>
               <p className="mb-6 text-sm text-muted-foreground">{t("landing.pricing.valueProposition")}</p>
 
               <ul className="mb-6 space-y-3">
                 <li className="flex items-start gap-2">
                   <Check className="h-5 w-5 shrink-0 text-primary" />
-                  <span>{t("landing.pricing.premium.feature1")}</span>
+                  <span>{t("landing.plans.premium.feature1")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="h-5 w-5 shrink-0 text-primary" />
-                  <span>{t("landing.pricing.premium.feature2")}</span>
+                  <span>{t("landing.plans.premium.feature2")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="h-5 w-5 shrink-0 text-primary" />
-                  <span>{t("landing.pricing.premium.feature3")}</span>
+                  <span>{t("landing.plans.premium.feature3")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="h-5 w-5 shrink-0 text-primary" />
-                  <span>{t("landing.pricing.premium.feature4")}</span>
+                  <span>{t("landing.plans.premium.feature4")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="h-5 w-5 shrink-0 text-primary" />
-                  <span>{t("landing.pricing.premium.feature5")}</span>
+                  <span>{t("landing.plans.premium.feature5")}</span>
                 </li>
               </ul>
 
               <Button onClick={handleCTA} className="mb-4 w-full shadow-lg transition-all hover:scale-105">
-                {t("landing.pricing.premium.cta")}
+                {t("landing.plans.premium.cta")}
               </Button>
 
               <p className="text-center text-xs text-muted-foreground">{t("landing.pricing.cancelAnytime")}</p>
