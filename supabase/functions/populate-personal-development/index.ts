@@ -132,7 +132,7 @@ Deno.serve(async (req) => {
             title,
             author,
             lang,
-            category: 'personal_development',
+            category: 'personal-dev',
             description: item.volumeInfo.description,
             published_year: extractYear(item.volumeInfo.publishedDate),
             page_count: item.volumeInfo.pageCount,

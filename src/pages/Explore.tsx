@@ -150,12 +150,16 @@ const Explore = () => {
   // Fetch books for selected category from database (for DB categories)
   useEffect(() => {
     const fetchBooks = async () => {
+      const categoriesFilter = selectedCategory === 'personal-dev'
+        ? ['personal-dev', 'personal_development']
+        : [selectedCategory];
+
       const { data } = await supabase
         .from('books')
         .select('id, title, author, lang, cover_url, popularity')
         .eq('is_active', true)
         .eq('lang', i18n.language)
-        .eq('category', selectedCategory)
+        .in('category', categoriesFilter)
         .order('popularity', { ascending: false });
       setDbBooks(data || []);
     };
