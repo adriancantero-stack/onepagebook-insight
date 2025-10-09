@@ -379,7 +379,8 @@ const Landing = ({ lang }: LandingProps) => {
       <footer className="border-t border-border bg-background py-12">
         <div className="container mx-auto px-6 text-center sm:px-12 lg:px-24">
           <div className="mb-6 flex items-center justify-center gap-2">
-            <img src={logoGray} alt="OnePageBook" className="h-8 opacity-60" loading="lazy" />
+            <BookOpen className="h-6 w-6 text-primary opacity-60" />
+            <span className="text-lg font-semibold tracking-tight opacity-60">OnePageBook</span>
           </div>
           <p className="mb-4 text-sm text-muted-foreground">{t("landing.footer.tagline")}</p>
           <Footer />
