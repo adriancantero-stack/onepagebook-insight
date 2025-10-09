@@ -13,7 +13,7 @@ const BASE_URL = "https://onepagebook.ai";
 const localeMap = {
   pt: "pt_BR",
   en: "en_US",
-  es: "es_ES",
+  es: "es_LA", // Latin America Spanish
 };
 
 /**
@@ -25,8 +25,8 @@ export const useSEO = ({ title, description, lang, path, imageUrl }: SEOConfig) 
     // Update document title
     document.title = title;
 
-    // Update HTML lang attribute
-    document.documentElement.lang = lang === "pt" ? "pt-BR" : lang === "es" ? "es-ES" : "en-US";
+    // Update HTML lang attribute (es for all Spanish-speaking countries)
+    document.documentElement.lang = lang === "pt" ? "pt-BR" : lang === "es" ? "es" : "en-US";
 
     // Update or create meta tags
     const updateMetaTag = (name: string, content: string, isProperty = false) => {
@@ -116,13 +116,13 @@ export const useSEO = ({ title, description, lang, path, imageUrl }: SEOConfig) 
         "price": "0",
         "priceCurrency": lang === "pt" ? "BRL" : "USD"
       },
-      "inLanguage": lang === "pt" ? "pt-BR" : lang === "es" ? "es-ES" : "en-US",
+      "inLanguage": lang === "pt" ? "pt-BR" : lang === "es" ? "es" : "en-US",
       "potentialAction": {
         "@type": "UseAction",
         "target": {
           "@type": "EntryPoint",
           "urlTemplate": `${BASE_URL}/${lang}`,
-          "inLanguage": lang === "pt" ? "pt-BR" : lang === "es" ? "es-ES" : "en-US"
+          "inLanguage": lang === "pt" ? "pt-BR" : lang === "es" ? "es" : "en-US"
         }
       }
     };
