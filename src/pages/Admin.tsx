@@ -555,6 +555,10 @@ const Admin = () => {
   const handleBatchGenerateSummaries = async () => {
     setBatchGenerating(true);
 
+    let lastProgressCount = 0;
+    let noProgressCount = 0;
+    const MAX_NO_PROGRESS = 6; // 6 checks sem progresso = 30 segundos
+
     // Inicia um monitor de progresso em loop (polling)
     const startProgressMonitor = async () => {
       const poll = async () => {
@@ -573,6 +577,33 @@ const Admin = () => {
 
           setBatchGenerateProgress({ current, total });
 
+          // Verifica se há progresso
+          if (current === lastProgressCount) {
+            noProgressCount++;
+            if (noProgressCount >= MAX_NO_PROGRESS) {
+              // Sem progresso por muito tempo
+              if (summaryProgressInterval.current) clearInterval(summaryProgressInterval.current);
+              setBatchGenerating(false);
+              
+              if (current >= total) {
+                toast.success("Geração concluída!", {
+                  description: `Todos os ${current} resumos foram gerados.`,
+                });
+              } else {
+                toast.warning("Geração pausada ou concluída", {
+                  description: `Gerados ${current} de ${total} resumos. Verifique os logs se precisar continuar.`,
+                });
+              }
+              await loadAdminData();
+              return;
+            }
+          } else {
+            // Houve progresso, resetar contador
+            noProgressCount = 0;
+            lastProgressCount = current;
+          }
+
+          // Verificar se completou
           if (current >= total) {
             if (summaryProgressInterval.current) clearInterval(summaryProgressInterval.current);
             setBatchGenerating(false);
@@ -583,6 +614,15 @@ const Admin = () => {
           }
         } catch (e) {
           console.error('Progress poll error:', e);
+          noProgressCount++;
+          
+          if (noProgressCount >= MAX_NO_PROGRESS) {
+            if (summaryProgressInterval.current) clearInterval(summaryProgressInterval.current);
+            setBatchGenerating(false);
+            toast.error("Erro ao monitorar progresso", {
+              description: "A geração pode ter falhado. Verifique a página de admin.",
+            });
+          }
         }
       };
 
