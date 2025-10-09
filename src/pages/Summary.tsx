@@ -37,6 +37,7 @@ const Summary = () => {
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [bookCover, setBookCover] = useState<string | null>(null);
+  const [relatedBooksWithCovers, setRelatedBooksWithCovers] = useState<any[]>([]);
 
   // Get related book recommendations based on theme - ALWAYS from same category and locale
   const relatedBooks = useMemo(() => {
@@ -62,6 +63,38 @@ const Summary = () => {
     const shuffled = [...booksInLocale].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, 2);
   }, [summary, i18n.language]);
+
+  // Fetch covers for related books from database
+  useEffect(() => {
+    const fetchCovers = async () => {
+      if (relatedBooks.length === 0) {
+        setRelatedBooksWithCovers([]);
+        return;
+      }
+
+      const booksWithCovers = await Promise.all(
+        relatedBooks.map(async (book: Book) => {
+          const { data } = await supabase
+            .from("books")
+            .select("cover_url")
+            .eq("title", book.title)
+            .eq("author", book.author)
+            .eq("lang", book.locale)
+            .eq("is_active", true)
+            .maybeSingle();
+
+          return {
+            ...book,
+            cover: data?.cover_url || "/book-placeholder.png"
+          };
+        })
+      );
+
+      setRelatedBooksWithCovers(booksWithCovers);
+    };
+
+    fetchCovers();
+  }, [relatedBooks]);
 
   useEffect(() => {
     loadSummary();
@@ -798,11 +831,11 @@ const Summary = () => {
           </div>
 
           {/* Related Books Section */}
-          {relatedBooks.length > 0 && (
+          {relatedBooksWithCovers.length > 0 && (
             <div className="mt-10 sm:mt-12 pt-10 border-t border-[#E5E5EA]">
               <h3 className="text-2xl sm:text-3xl font-semibold mb-6 text-[#1D1D1F] tracking-tight">{t("summary.relatedBooks")}</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
-                {relatedBooks.map((book: Book, index: number) => (
+                {relatedBooksWithCovers.map((book: Book, index: number) => (
                   <Card 
                     key={index}
                     className="p-6 border-[#E5E5EA] rounded-2xl hover:shadow-lg hover:scale-[1.02] transition-all duration-200 cursor-pointer"
