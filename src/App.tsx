@@ -24,6 +24,7 @@ const Faq = lazy(() => import("./pages/Faq"));
 const Contact = lazy(() => import("./pages/Contact"));
 
 const Admin = lazy(() => import("./pages/Admin"));
+const PopulateBooks = lazy(() => import("./pages/PopulateBooks"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -67,6 +68,7 @@ const App = () => (
             <Route path="/en/privacy" element={<Privacy />} />
             <Route path="/en/faq" element={<Faq />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/populate-books" element={<PopulateBooks />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
