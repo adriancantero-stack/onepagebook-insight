@@ -315,22 +315,28 @@ const Explore = () => {
   };
 
   // Get current category books filtered by locale
+  // Check if category exists in static catalog or only in DB
   const currentCategory = bookCatalog.find(cat => cat.id === selectedCategory);
+  
   const sourceBooks = currentCategory
     ? getBooksByLocale(currentCategory, i18n.language)
-    : dbBooks.map((b: any, index: number) => ({
-        title: b.title,
-        author: b.author,
-        locale: b.lang,
-        id: b.id || `${selectedCategory}-${i18n.language}-${index}`,
-        ...(b.badge ? { badge: b.badge } : {}),
-      }));
+    : dbBooks
+        .filter((b: any) => b.lang === i18n.language) // Extra safety filter
+        .map((b: any, index: number) => ({
+          title: b.title,
+          author: b.author,
+          locale: b.lang,
+          id: b.id || `${selectedCategory}-${i18n.language}-${index}`,
+          ...(b.badge ? { badge: b.badge } : {}),
+        }));
 
   const getFilteredAndSortedBooks = () => {
-    let filtered = sourceBooks.map((book, index) => {
-      const bookId = (book as any).id || `${selectedCategory}-${(book as any).locale}-${index}`;
-      return { ...book, id: bookId } as any;
-    });
+    let filtered = sourceBooks
+      .filter((book: any) => book.locale === i18n.language) // Filter by current language
+      .map((book, index) => {
+        const bookId = (book as any).id || `${selectedCategory}-${(book as any).locale}-${index}`;
+        return { ...book, id: bookId } as any;
+      });
 
     // Apply level filter
     if (filterLevel.length > 0) {
