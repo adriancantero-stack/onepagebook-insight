@@ -194,158 +194,7 @@ const Landing = ({ lang }: LandingProps) => {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="border-t border-border bg-muted/30 py-16 sm:py-20">
-        <div className="container mx-auto px-6 sm:px-12 lg:px-24">
-          <div className="mb-12 space-y-3 text-center">
-            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
-              {t("landing.testimonials.title")}
-            </h2>
-            <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-              {t("landing.testimonials.subtitle")}
-            </p>
-          </div>
-
-          <div className="grid gap-8 md:grid-cols-3">
-            {/* Testimonial 1 */}
-            <Card className="p-8 transition-all hover:shadow-lg">
-              <p className="mb-6 italic text-muted-foreground">
-                "{t("landing.testimonials.testimonial1.text")}"
-              </p>
-              <div className="flex items-center gap-3">
-                <img
-                  src={testimonialImages[lang][0]}
-                  alt={t("landing.testimonials.testimonial1.author")}
-                  className="h-12 w-12 rounded-full object-cover"
-                  loading="lazy"
-                />
-                <div>
-                  <p className="font-semibold">{t("landing.testimonials.testimonial1.author")}</p>
-                  <p className="text-sm text-muted-foreground">{t("landing.testimonials.testimonial1.role")}</p>
-                </div>
-              </div>
-            </Card>
-
-            {/* Testimonial 2 */}
-            <Card className="p-8 transition-all hover:shadow-lg">
-              <p className="mb-6 italic text-muted-foreground">
-                "{t("landing.testimonials.testimonial2.text")}"
-              </p>
-              <div className="flex items-center gap-3">
-                <img
-                  src={testimonialImages[lang][1]}
-                  alt={t("landing.testimonials.testimonial2.author")}
-                  className="h-12 w-12 rounded-full object-cover"
-                  loading="lazy"
-                />
-                <div>
-                  <p className="font-semibold">{t("landing.testimonials.testimonial2.author")}</p>
-                  <p className="text-sm text-muted-foreground">{t("landing.testimonials.testimonial2.role")}</p>
-                </div>
-              </div>
-            </Card>
-
-            {/* Testimonial 3 */}
-            <Card className="p-8 transition-all hover:shadow-lg">
-              <p className="mb-6 italic text-muted-foreground">
-                "{t("landing.testimonials.testimonial3.text")}"
-              </p>
-              <div className="flex items-center gap-3">
-                <img
-                  src={testimonialImages[lang][2]}
-                  alt={t("landing.testimonials.testimonial3.author")}
-                  className="h-12 w-12 rounded-full object-cover"
-                  loading="lazy"
-                />
-                <div>
-                  <p className="font-semibold">{t("landing.testimonials.testimonial3.author")}</p>
-                  <p className="text-sm text-muted-foreground">{t("landing.testimonials.testimonial3.role")}</p>
-                </div>
-              </div>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section className="container mx-auto px-6 py-16 sm:px-12 sm:py-24 lg:px-24">
-        <h2 className="mb-16 text-center text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
-          {t("landing.pricing.title")}
-        </h2>
-
-        <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-2">
-          {/* Free Plan */}
-          <Card className="relative p-8 transition-all hover:shadow-xl">
-            <h3 className="mb-4 text-2xl font-bold">{t("landing.pricing.free.title")}</h3>
-            <div className="mb-6">
-              <span className="text-4xl font-bold">{pricing.free}</span>
-              <span className="text-muted-foreground">{t("landing.pricing.free.period")}</span>
-            </div>
-            <ul className="mb-8 space-y-3">
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 shrink-0 text-primary" />
-                <span>{t("landing.pricing.free.feature1")}</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 shrink-0 text-primary" />
-                <span>{t("landing.pricing.free.feature2")}</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 shrink-0 text-primary" />
-                <span>{t("landing.pricing.free.feature3")}</span>
-              </li>
-            </ul>
-            <Button onClick={handleCTA} variant="outline" className="w-full">
-              {t("landing.pricing.free.cta")}
-            </Button>
-          </Card>
-
-          {/* Premium Plan */}
-          <Card className="relative border-2 border-primary p-8 shadow-xl transition-all hover:shadow-2xl">
-            <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary px-4 py-1 text-xs font-semibold">
-              {t("landing.pricing.premium.badge")}
-            </Badge>
-
-            <h3 className="mb-4 text-2xl font-bold">{t("landing.pricing.premium.title")}</h3>
-            <div className="mb-2">
-              <span className="text-4xl font-bold">{pricing.premium}</span>
-              <span className="text-muted-foreground">{t("landing.pricing.premium.period")}</span>
-            </div>
-            <p className="mb-6 text-sm text-muted-foreground">{t("landing.pricing.valueProposition")}</p>
-
-            <ul className="mb-6 space-y-3">
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 shrink-0 text-primary" />
-                <span>{t("landing.pricing.premium.feature1")}</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 shrink-0 text-primary" />
-                <span>{t("landing.pricing.premium.feature2")}</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 shrink-0 text-primary" />
-                <span>{t("landing.pricing.premium.feature3")}</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 shrink-0 text-primary" />
-                <span>{t("landing.pricing.premium.feature4")}</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 shrink-0 text-primary" />
-                <span>{t("landing.pricing.premium.feature5")}</span>
-              </li>
-            </ul>
-
-            <Button onClick={handleCTA} className="mb-4 w-full shadow-lg transition-all hover:scale-105">
-              {t("landing.pricing.premium.cta")}
-            </Button>
-
-            <p className="text-center text-xs text-muted-foreground">{t("landing.pricing.cancelAnytime")}</p>
-          </Card>
-        </div>
-      </section>
-
-      {/* Library Preview Section */}
+      {/* Library Preview Section - Moved after How It Works */}
       <section className="border-t border-border bg-muted/30 py-16 sm:py-20">
         <div className="container mx-auto px-6 sm:px-12 lg:px-24">
           <h2 className="mb-12 text-center text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
@@ -355,7 +204,7 @@ const Landing = ({ lang }: LandingProps) => {
           <div className="mx-auto grid max-w-4xl gap-8 sm:grid-cols-3">
             {featuredBooks.map((book, idx) => (
               <div key={idx} className="group space-y-4 text-center transition-all hover:scale-105">
-                <div className="relative overflow-hidden rounded-lg shadow-lg">
+                <div className="relative overflow-hidden rounded-xl shadow-lg">
                   <Badge className="absolute right-2 top-2 z-10 bg-primary/90 text-xs">
                     {t("landing.library.previewBadge")}
                   </Badge>
@@ -371,6 +220,157 @@ const Landing = ({ lang }: LandingProps) => {
                 </Button>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="container mx-auto px-6 py-16 sm:px-12 sm:py-24 lg:px-24">
+        <div className="mb-12 space-y-3 text-center">
+          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
+            {t("landing.testimonials.title")}
+          </h2>
+          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
+            {t("landing.testimonials.subtitle")}
+          </p>
+        </div>
+
+        <div className="grid gap-8 md:grid-cols-3">
+          {/* Testimonial 1 */}
+          <Card className="p-8 transition-all hover:shadow-lg">
+            <p className="mb-6 italic text-muted-foreground">
+              "{t("landing.testimonials.testimonial1.text")}"
+            </p>
+            <div className="flex items-center gap-3">
+              <img
+                src={testimonialImages[lang][0]}
+                alt={t("landing.testimonials.testimonial1.author")}
+                className="h-12 w-12 rounded-full object-cover"
+                loading="lazy"
+              />
+              <div>
+                <p className="font-semibold">{t("landing.testimonials.testimonial1.author")}</p>
+                <p className="text-sm text-muted-foreground">{t("landing.testimonials.testimonial1.role")}</p>
+              </div>
+            </div>
+          </Card>
+
+          {/* Testimonial 2 */}
+          <Card className="p-8 transition-all hover:shadow-lg">
+            <p className="mb-6 italic text-muted-foreground">
+              "{t("landing.testimonials.testimonial2.text")}"
+            </p>
+            <div className="flex items-center gap-3">
+              <img
+                src={testimonialImages[lang][1]}
+                alt={t("landing.testimonials.testimonial2.author")}
+                className="h-12 w-12 rounded-full object-cover"
+                loading="lazy"
+              />
+              <div>
+                <p className="font-semibold">{t("landing.testimonials.testimonial2.author")}</p>
+                <p className="text-sm text-muted-foreground">{t("landing.testimonials.testimonial2.role")}</p>
+              </div>
+            </div>
+          </Card>
+
+          {/* Testimonial 3 */}
+          <Card className="p-8 transition-all hover:shadow-lg">
+            <p className="mb-6 italic text-muted-foreground">
+              "{t("landing.testimonials.testimonial3.text")}"
+            </p>
+            <div className="flex items-center gap-3">
+              <img
+                src={testimonialImages[lang][2]}
+                alt={t("landing.testimonials.testimonial3.author")}
+                className="h-12 w-12 rounded-full object-cover"
+                loading="lazy"
+              />
+              <div>
+                <p className="font-semibold">{t("landing.testimonials.testimonial3.author")}</p>
+                <p className="text-sm text-muted-foreground">{t("landing.testimonials.testimonial3.role")}</p>
+              </div>
+            </div>
+          </Card>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="border-t border-border bg-muted/30 py-16 sm:py-24 lg:py-32">
+        <div className="container mx-auto px-6 sm:px-12 lg:px-24">
+          <h2 className="mb-16 text-center text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
+            {t("landing.pricing.title")}
+          </h2>
+
+          <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-2">
+            {/* Free Plan */}
+            <Card className="relative p-8 transition-all hover:shadow-xl">
+              <h3 className="mb-4 text-2xl font-bold">{t("landing.pricing.free.title")}</h3>
+              <div className="mb-6">
+                <span className="text-4xl font-bold">{pricing.free}</span>
+                <span className="text-muted-foreground">{t("landing.pricing.free.period")}</span>
+              </div>
+              <ul className="mb-8 space-y-3">
+                <li className="flex items-start gap-2">
+                  <Check className="h-5 w-5 shrink-0 text-primary" />
+                  <span>{t("landing.pricing.free.feature1")}</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="h-5 w-5 shrink-0 text-primary" />
+                  <span>{t("landing.pricing.free.feature2")}</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="h-5 w-5 shrink-0 text-primary" />
+                  <span>{t("landing.pricing.free.feature3")}</span>
+                </li>
+              </ul>
+              <Button onClick={handleCTA} variant="outline" className="w-full">
+                {t("landing.pricing.free.cta")}
+              </Button>
+            </Card>
+
+            {/* Premium Plan */}
+            <Card className="relative border-2 border-primary p-8 shadow-xl transition-all hover:shadow-2xl">
+              <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary px-4 py-1 text-xs font-semibold">
+                {t("landing.pricing.premium.badge")}
+              </Badge>
+
+              <h3 className="mb-4 text-2xl font-bold">{t("landing.pricing.premium.title")}</h3>
+              <div className="mb-2">
+                <span className="text-4xl font-bold">{pricing.premium}</span>
+                <span className="text-muted-foreground">{t("landing.pricing.premium.period")}</span>
+              </div>
+              <p className="mb-6 text-sm text-muted-foreground">{t("landing.pricing.valueProposition")}</p>
+
+              <ul className="mb-6 space-y-3">
+                <li className="flex items-start gap-2">
+                  <Check className="h-5 w-5 shrink-0 text-primary" />
+                  <span>{t("landing.pricing.premium.feature1")}</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="h-5 w-5 shrink-0 text-primary" />
+                  <span>{t("landing.pricing.premium.feature2")}</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="h-5 w-5 shrink-0 text-primary" />
+                  <span>{t("landing.pricing.premium.feature3")}</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="h-5 w-5 shrink-0 text-primary" />
+                  <span>{t("landing.pricing.premium.feature4")}</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="h-5 w-5 shrink-0 text-primary" />
+                  <span>{t("landing.pricing.premium.feature5")}</span>
+                </li>
+              </ul>
+
+              <Button onClick={handleCTA} className="mb-4 w-full shadow-lg transition-all hover:scale-105">
+                {t("landing.pricing.premium.cta")}
+              </Button>
+
+              <p className="text-center text-xs text-muted-foreground">{t("landing.pricing.cancelAnytime")}</p>
+            </Card>
           </div>
         </div>
       </section>
