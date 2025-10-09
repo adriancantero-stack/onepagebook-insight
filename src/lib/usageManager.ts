@@ -7,7 +7,7 @@ export interface UsageData {
 }
 
 const STORAGE_KEY = "ob_usage";
-const FREE_LIMIT = 5;
+const FREE_LIMIT = 10;
 
 // Get current month key in format "YYYY-MM"
 export const getMonthKey = (): string => {

@@ -33,8 +33,8 @@ export const es = {
     "landing.plans.free.title": "Gratuito",
     "landing.plans.free.price": "$0",
     "landing.plans.free.period": "/mes",
-    "landing.plans.free.feature1": "5 resúmenes gratis",
-    "landing.plans.free.feature2": "5 audios gratis",
+    "landing.plans.free.feature1": "10 resúmenes gratis",
+    "landing.plans.free.feature2": "10 audios gratis",
     "landing.plans.free.feature3": "Acceso a biblioteca básica",
     "landing.plans.free.cta": "Empezar gratis",
     
@@ -80,10 +80,10 @@ export const es = {
     "home.generateButton": "Generar Resumen",
     "home.button": "Generar Resumen",
     "home.generating": "Generando...",
-    "home.note": "Plan Gratis: 5 resúmenes/mes + 5 audios/mes",
-    "home.freeInfo": "Plan Gratis: 5 resúmenes/mes + 5 audios/mes",
+    "home.note": "Plan Gratis: 10 resúmenes/mes + 10 audios/mes",
+    "home.freeInfo": "Plan Gratis: 10 resúmenes/mes + 10 audios/mes",
     "home.premiumInfo": "Premium: resúmenes y audios ilimitados",
-    "home.freeLimit": "Plan Gratuito: 5 resúmenes por mes",
+    "home.freeLimit": "Plan Gratuito: 10 resúmenes por mes",
     "home.premiumUnlimited": "Premium: Resúmenes ilimitados",
     "hero.trust": "Gratis: 5 resúmenes + 5 audios/mes",
     
@@ -114,7 +114,7 @@ export const es = {
     "welcome.title": "¡Bienvenido a OnePageBook!",
     "welcome.description": "Tu cuenta ha sido creada con éxito. Ya puedes comenzar a generar resúmenes de libros.",
     "welcome.freeplan": "Plan Gratis Activado",
-    "welcome.limits": "5 resúmenes + 5 audios por mes",
+    "welcome.limits": "10 resúmenes + 10 audios por mes",
     "welcome.cta": "Comenzar a usar",
     "welcome.redirect": "Redirigiendo automáticamente en 5 segundos...",
     
@@ -214,10 +214,10 @@ export const es = {
     "toast.paymentComingSoon": "¡Integración de pago próximamente!",
     
     // Limits
-    "limit.toasts.summary.ok": "¡Resumen generado! Llevas {used}/5 este mes.",
-    "limit.toasts.summary.hard": "Alcanzaste el límite de 5 resúmenes/mes.",
-    "limit.toasts.audio.ok": "¡Audio generado! Llevas {used}/5 este mes.",
-    "limit.toasts.audio.hard": "Alcanzaste el límite de 5 audios/mes.",
+    "limit.toasts.summary.ok": "¡Resumen generado! Llevas {used}/10 este mes.",
+    "limit.toasts.summary.hard": "Alcanzaste el límite de 10 resúmenes/mes.",
+    "limit.toasts.audio.ok": "¡Audio generado! Llevas {used}/10 este mes.",
+    "limit.toasts.audio.hard": "Alcanzaste el límite de 10 audios/mes.",
     "limit.cta.upgrade": "Suscribirse a Premium",
     "limit.modal.title": "Llegaste al límite del plan Gratis",
     "limit.modal.body": "Premium te da resúmenes y audios ilimitados, exportación a PDF, historial y traducción instantánea.",
