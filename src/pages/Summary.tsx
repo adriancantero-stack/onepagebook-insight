@@ -729,8 +729,8 @@ const Summary = () => {
       </header>
 
       <main className="container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-12 sm:py-16 max-w-5xl flex-1">
-        <Card className="p-8 sm:p-12 border-[#E5E5EA] rounded-2xl shadow-sm">
-          <div className="flex items-start gap-4 sm:gap-5 mb-6 sm:mb-8 pb-8 border-b border-[#E5E5EA]">
+        <Card className="p-8 sm:p-12 border-border rounded-2xl shadow-sm">
+          <div className="flex items-start gap-4 sm:gap-5 mb-6 sm:mb-8 pb-8 border-b border-border">
             <div className="w-16 h-24 sm:w-20 sm:h-28 rounded-xl overflow-hidden shadow-md flex-shrink-0">
               <img 
                 src={bookCover || '/book-placeholder.png'} 
