@@ -163,7 +163,6 @@ const Admin = () => {
         .from("profiles")
         .select(`
           id,
-          email,
           full_name,
           created_at
         `);
@@ -213,15 +212,20 @@ const Admin = () => {
         totalAudios: audiosCount || 0,
       });
 
+      // Get auth users to access email addresses securely
+      const { data } = await supabase.auth.admin.listUsers();
+      const authUsers = data?.users || [];
+      
       // Prepare users table data
       const usersWithData = profilesData?.map(profile => {
         const subscription = subscriptionsData?.find(s => s.user_id === profile.id);
         const planType = subscription?.subscription_plans?.type || "free";
         const summariesCount = summariesByUser[profile.id] || 0;
+        const authUser = authUsers.find(u => u.id === profile.id);
 
         return {
           id: profile.id,
-          email: profile.email || "",
+          email: authUser?.email || "",
           full_name: profile.full_name || "N/A",
           created_at: profile.created_at,
           plan_type: planType,
