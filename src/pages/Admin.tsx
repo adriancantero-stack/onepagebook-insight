@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
@@ -75,6 +75,7 @@ const Admin = () => {
     description: string;
     next_run_at: string;
   }>>([]);
+  const summaryProgressInterval = useRef<number | null>(null);
   const [isValidatingBooks, setIsValidatingBooks] = useState(false);
   const [validationResults, setValidationResults] = useState<{
     total: number;
@@ -554,33 +555,82 @@ const Admin = () => {
   const handleBatchGenerateSummaries = async () => {
     setBatchGenerating(true);
 
+    // Inicializa barra de progresso com base no último check
+    const initialTotal = booksWithoutSummaries ?? 0;
+    if (initialTotal > 0) {
+      setBatchGenerateProgress({ current: 0, total: initialTotal });
+    }
+
+    // Inicia um monitor de progresso em loop (polling)
+    const startProgressMonitor = () => {
+      const poll = async () => {
+        try {
+          const { count: totalBooks } = await supabase
+            .from('books')
+            .select('*', { count: 'exact', head: true })
+            .eq('is_active', true);
+
+          const { data: summaries } = await supabase
+            .from('book_summaries')
+            .select('canonical_title, language')
+            .eq('source', 'catalog');
+
+          const setWith = new Set<string>();
+          summaries?.forEach((s: any) => setWith.add(`${s.canonical_title}|${s.language}`));
+
+          const remaining = (totalBooks || 0) - setWith.size;
+          const total = initialTotal || (totalBooks || 0);
+          const current = Math.max(0, total - remaining);
+
+          setBatchGenerateProgress({ current, total });
+
+          if (remaining <= 0) {
+            if (summaryProgressInterval.current) clearInterval(summaryProgressInterval.current);
+            setBatchGenerating(false);
+            toast.success("Geração concluída!", {
+              description: "Todos os resumos do catálogo foram gerados.",
+            });
+            await loadAdminData();
+          }
+        } catch (e) {
+          console.error('Progress poll error:', e);
+        }
+      };
+
+      // Executa imediatamente e depois a cada 5s
+      // @ts-ignore - window typings in SSR
+      summaryProgressInterval.current = window.setInterval(poll, 5000);
+      poll();
+    };
+
     try {
       toast.info("Iniciando geração de resumos em lotes...", {
-        description: "Isso pode levar alguns minutos. Processando 10 livros por vez."
+        description: "Isso roda no servidor e pode levar vários minutos.",
       });
 
-      // Iniciar geração (função processa internamente)
+      startProgressMonitor();
+
+      // Dispara a função (ela processa em lotes no servidor)
       const { data, error } = await supabase.functions.invoke('batch-generate-summaries', {
         body: {}
       });
 
-      if (error) {
-        throw error;
+      if (error) throw error;
+
+      // Se a função retornar antes do fim, mantemos o monitor rodando até zerar
+      if (data?.processed !== undefined) {
+        toast.success("Lote iniciado", {
+          description: `${data.processed} processados no retorno imediato. Continuando em background...`
+        });
       }
-
-      toast.success("Geração concluída!", {
-        description: `${data.processed} resumos gerados em ${data.batches} lote(s). ${data.errors} erros.`
-      });
-
-      // Recarregar dados
-      await loadAdminData();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Batch generate error:", error);
-      toast.error("Erro na geração", {
-        description: error.message || "Falha ao gerar resumos"
+      // Em funções longas o navegador pode acusar network error/timeout enquanto o servidor continua
+      toast.info("Geração rodando em background", {
+        description: "Vamos atualizar a barra de progresso automaticamente."
       });
     } finally {
-      setBatchGenerating(false);
+      // Não finalizamos aqui; o encerramento ocorre quando remaining chegar a 0
     }
   };
 

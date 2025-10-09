@@ -5,6 +5,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS'
 };
 
 serve(async (req) => {
@@ -49,12 +50,14 @@ serve(async (req) => {
       batchNumber++;
       console.log(`\n=== Processando lote ${batchNumber} ===`);
 
-      // Buscar próximo lote de livros ativos
+      // Buscar próximo lote de livros ativos com paginação por offset
+      const offset = (batchNumber - 1) * 10;
       const { data: books, error: fetchError } = await supabase
         .from('books')
         .select('id, title, author, lang')
         .eq('is_active', true)
-        .limit(10);
+        .order('created_at', { ascending: true })
+        .range(offset, offset + 9);
 
       if (fetchError) {
         console.error("Error fetching books:", fetchError);
@@ -160,8 +163,8 @@ serve(async (req) => {
       console.log(`Lote ${batchNumber} concluído: ${batchProcessed} sucessos, ${batchErrors} erros`);
       console.log(`Total acumulado: ${totalProcessed} resumos gerados`);
 
-      // Se processou menos de 10 livros, significa que não há mais livros
-      if (books.length < 10) {
+      // Se retornou menos de 10 livros, chegamos ao fim da paginação
+      if (!books || books.length < 10) {
         hasMoreBooks = false;
       }
 
