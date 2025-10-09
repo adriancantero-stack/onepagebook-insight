@@ -22,7 +22,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Users, FileText, TrendingUp, Crown, Download, BookOpen, ImagePlus, Sparkles, Upload, Trash2 } from "lucide-react";
+import { Users, FileText, TrendingUp, Crown, Download, BookOpen, ImagePlus, Sparkles, Upload, Trash2, RefreshCw } from "lucide-react";
 import { bookCatalog } from "@/data/bookCatalog";
 import { Progress } from "@/components/ui/progress";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
@@ -554,109 +554,27 @@ const Admin = () => {
 
   const handleBatchGenerateSummaries = async () => {
     setBatchGenerating(true);
-
-    let lastProgressCount = 0;
-    let noProgressCount = 0;
-    const MAX_NO_PROGRESS = 6; // 6 checks sem progresso = 30 segundos
-
-    // Inicia um monitor de progresso em loop (polling)
-    const startProgressMonitor = async () => {
-      const poll = async () => {
-        try {
-          const { count: totalBooks } = await supabase
-            .from('books')
-            .select('*', { count: 'exact', head: true })
-            .eq('is_active', true);
-
-          const { count: totalSummaries } = await supabase
-            .from('book_summaries')
-            .select('*', { count: 'exact', head: true });
-
-          const total = totalBooks || 0;
-          const current = totalSummaries || 0;
-
-          setBatchGenerateProgress({ current, total });
-
-          // Verifica se há progresso
-          if (current === lastProgressCount) {
-            noProgressCount++;
-            if (noProgressCount >= MAX_NO_PROGRESS) {
-              // Sem progresso por muito tempo
-              if (summaryProgressInterval.current) clearInterval(summaryProgressInterval.current);
-              setBatchGenerating(false);
-              
-              if (current >= total) {
-                toast.success("Geração concluída!", {
-                  description: `Todos os ${current} resumos foram gerados.`,
-                });
-              } else {
-                toast.warning("Geração pausada ou concluída", {
-                  description: `Gerados ${current} de ${total} resumos. Verifique os logs se precisar continuar.`,
-                });
-              }
-              await loadAdminData();
-              return;
-            }
-          } else {
-            // Houve progresso, resetar contador
-            noProgressCount = 0;
-            lastProgressCount = current;
-          }
-
-          // Verificar se completou
-          if (current >= total) {
-            if (summaryProgressInterval.current) clearInterval(summaryProgressInterval.current);
-            setBatchGenerating(false);
-            toast.success("Geração concluída!", {
-              description: `Todos os ${current} resumos foram gerados.`,
-            });
-            await loadAdminData();
-          }
-        } catch (e) {
-          console.error('Progress poll error:', e);
-          noProgressCount++;
-          
-          if (noProgressCount >= MAX_NO_PROGRESS) {
-            if (summaryProgressInterval.current) clearInterval(summaryProgressInterval.current);
-            setBatchGenerating(false);
-            toast.error("Erro ao monitorar progresso", {
-              description: "A geração pode ter falhado. Verifique a página de admin.",
-            });
-          }
-        }
-      };
-
-      // Executa imediatamente para mostrar progresso inicial
-      await poll();
-      
-      // Depois repete a cada 5s
-      // @ts-ignore - window typings in SSR
-      summaryProgressInterval.current = window.setInterval(poll, 5000);
-    };
+    
+    toast.info("🔄 Gerando resumos em segundo plano...", {
+      description: "Este processo pode levar vários minutos. Recarregue a página para ver o progresso.",
+    });
 
     try {
-      toast.info("Iniciando geração de resumos em lotes...", {
-        description: "Isso roda no servidor e pode levar vários minutos.",
+      const { data, error } = await supabase.functions.invoke('batch-generate-summaries', {
+        body: { booksWithoutSummaries }
       });
 
-      await startProgressMonitor();
+      if (error) throw error;
 
-      // Dispara a função (ela processa em lotes no servidor)
-      // Não esperamos a resposta pois pode dar timeout
-      supabase.functions.invoke('batch-generate-summaries', { body: {} })
-        .catch(error => {
-          console.error("Edge function error (esperado para operações longas):", error);
-        });
-
+      toast.success("Geração iniciada com sucesso!", {
+        description: "Os resumos estão sendo gerados no servidor. Isso pode levar vários minutos.",
+      });
     } catch (error: any) {
-      console.error("Batch generate error:", error);
-      toast.error("Erro ao iniciar geração", {
-        description: error.message
+      console.error('Error generating summaries:', error);
+      toast.error("Erro ao gerar resumos", {
+        description: error.message,
       });
       setBatchGenerating(false);
-      if (summaryProgressInterval.current) {
-        clearInterval(summaryProgressInterval.current);
-      }
     }
   };
 
@@ -1295,17 +1213,27 @@ const Admin = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Button 
-                    onClick={checkBooksWithoutSummaries}
-                    disabled={isCheckingSummaries}
-                    variant="outline"
-                    className="w-full h-auto py-3 whitespace-normal"
-                  >
-                    <Sparkles className="mr-2 h-4 w-4 shrink-0" />
-                    <span className="text-sm leading-tight">
-                      {isCheckingSummaries ? "Verificando..." : "Verificar Resumos"}
-                    </span>
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button 
+                      onClick={checkBooksWithoutSummaries}
+                      disabled={isCheckingSummaries}
+                      variant="outline"
+                      className="flex-1 h-auto py-3 whitespace-normal"
+                    >
+                      <Sparkles className="mr-2 h-4 w-4 shrink-0" />
+                      <span className="text-sm leading-tight">
+                        {isCheckingSummaries ? "Verificando..." : "Verificar Resumos"}
+                      </span>
+                    </Button>
+                    <Button 
+                      onClick={loadAdminData}
+                      variant="outline"
+                      className="h-auto py-3"
+                      title="Atualizar contagem de resumos"
+                    >
+                      <RefreshCw className="h-4 w-4" />
+                    </Button>
+                  </div>
                   {cronSchedules.find(s => s.job_name === 'nightly-summary-check') && (
                     <CronTimer 
                       nextRunAt={cronSchedules.find(s => s.job_name === 'nightly-summary-check')!.next_run_at}
@@ -1418,21 +1346,29 @@ const Admin = () => {
               )}
 
               {/* Batch Generate Progress */}
-              {batchGenerating && batchGenerateProgress.total > 0 && (
-                <div className="space-y-2 p-4 rounded-lg border bg-muted/50">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="font-medium">Gerando resumos automaticamente...</span>
-                    <span className="text-muted-foreground">
-                      {batchGenerateProgress.current} / {batchGenerateProgress.total}
-                    </span>
+              {batchGenerating && (
+                <div className="space-y-3 p-4 rounded-lg border bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800">
+                  <div className="flex items-center gap-3">
+                    <div className="animate-spin h-5 w-5 border-2 border-primary border-t-transparent rounded-full shrink-0" />
+                    <div className="flex-1">
+                      <p className="font-medium text-sm">🔄 Gerando resumos em segundo plano</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Este processo pode levar vários minutos. Os resumos estão sendo gerados no servidor.
+                        Recarregue a página ou clique no botão 🔄 para ver o progresso atualizado.
+                      </p>
+                    </div>
                   </div>
-                  <Progress 
-                    value={batchGenerateProgress.total > 0 ? (batchGenerateProgress.current / batchGenerateProgress.total) * 100 : 0} 
-                    className="h-2"
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    {batchGenerateProgress.total > 0 ? Math.round((batchGenerateProgress.current / batchGenerateProgress.total) * 100) : 0}% concluído
-                  </p>
+                  <Button
+                    onClick={() => {
+                      setBatchGenerating(false);
+                      toast.info("Indicador ocultado. A geração continua no servidor.");
+                    }}
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                  >
+                    Ocultar este aviso
+                  </Button>
                 </div>
               )}
 
