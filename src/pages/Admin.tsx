@@ -555,14 +555,8 @@ const Admin = () => {
   const handleBatchGenerateSummaries = async () => {
     setBatchGenerating(true);
 
-    // Inicializa barra de progresso com base no último check
-    const initialTotal = booksWithoutSummaries ?? 0;
-    if (initialTotal > 0) {
-      setBatchGenerateProgress({ current: 0, total: initialTotal });
-    }
-
     // Inicia um monitor de progresso em loop (polling)
-    const startProgressMonitor = () => {
+    const startProgressMonitor = async () => {
       const poll = async () => {
         try {
           const { count: totalBooks } = await supabase
@@ -570,25 +564,20 @@ const Admin = () => {
             .select('*', { count: 'exact', head: true })
             .eq('is_active', true);
 
-          const { data: summaries } = await supabase
+          const { count: totalSummaries } = await supabase
             .from('book_summaries')
-            .select('canonical_title, language')
-            .eq('source', 'catalog');
+            .select('*', { count: 'exact', head: true });
 
-          const setWith = new Set<string>();
-          summaries?.forEach((s: any) => setWith.add(`${s.canonical_title}|${s.language}`));
-
-          const remaining = (totalBooks || 0) - setWith.size;
-          const total = initialTotal || (totalBooks || 0);
-          const current = Math.max(0, total - remaining);
+          const total = totalBooks || 0;
+          const current = totalSummaries || 0;
 
           setBatchGenerateProgress({ current, total });
 
-          if (remaining <= 0) {
+          if (current >= total) {
             if (summaryProgressInterval.current) clearInterval(summaryProgressInterval.current);
             setBatchGenerating(false);
             toast.success("Geração concluída!", {
-              description: "Todos os resumos do catálogo foram gerados.",
+              description: `Todos os ${current} resumos foram gerados.`,
             });
             await loadAdminData();
           }
@@ -597,10 +586,12 @@ const Admin = () => {
         }
       };
 
-      // Executa imediatamente e depois a cada 5s
+      // Executa imediatamente para mostrar progresso inicial
+      await poll();
+      
+      // Depois repete a cada 5s
       // @ts-ignore - window typings in SSR
       summaryProgressInterval.current = window.setInterval(poll, 5000);
-      poll();
     };
 
     try {
@@ -608,29 +599,24 @@ const Admin = () => {
         description: "Isso roda no servidor e pode levar vários minutos.",
       });
 
-      startProgressMonitor();
+      await startProgressMonitor();
 
       // Dispara a função (ela processa em lotes no servidor)
-      const { data, error } = await supabase.functions.invoke('batch-generate-summaries', {
-        body: {}
-      });
-
-      if (error) throw error;
-
-      // Se a função retornar antes do fim, mantemos o monitor rodando até zerar
-      if (data?.processed !== undefined) {
-        toast.success("Lote iniciado", {
-          description: `${data.processed} processados no retorno imediato. Continuando em background...`
+      // Não esperamos a resposta pois pode dar timeout
+      supabase.functions.invoke('batch-generate-summaries', { body: {} })
+        .catch(error => {
+          console.error("Edge function error (esperado para operações longas):", error);
         });
-      }
+
     } catch (error: any) {
       console.error("Batch generate error:", error);
-      // Em funções longas o navegador pode acusar network error/timeout enquanto o servidor continua
-      toast.info("Geração rodando em background", {
-        description: "Vamos atualizar a barra de progresso automaticamente."
+      toast.error("Erro ao iniciar geração", {
+        description: error.message
       });
-    } finally {
-      // Não finalizamos aqui; o encerramento ocorre quando remaining chegar a 0
+      setBatchGenerating(false);
+      if (summaryProgressInterval.current) {
+        clearInterval(summaryProgressInterval.current);
+      }
     }
   };
 
