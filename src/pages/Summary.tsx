@@ -809,9 +809,14 @@ const Summary = () => {
                     onClick={() => navigate("/home", { state: { bookTitle: book.title, bookAuthor: book.author } })}
                   >
                     <div className="flex items-start gap-4">
-                      <div className="p-3 bg-[#7B61FF]/10 rounded-xl shrink-0">
-                        <BookOpen className="w-5 h-5 text-[#7B61FF]" />
-                      </div>
+                      <img
+                        src={(book as any).cover || "/book-placeholder.png"}
+                        alt={book.title}
+                        className="w-16 h-24 object-cover rounded-lg shrink-0"
+                        onError={(e) => {
+                          e.currentTarget.src = "/book-placeholder.png";
+                        }}
+                      />
                       <div className="flex-1 min-w-0">
                         <h4 className="font-semibold text-base mb-2 line-clamp-2 text-[#1D1D1F]">{book.title}</h4>
                         <p className="text-sm text-[#86868B] mb-3 line-clamp-1">{book.author}</p>
