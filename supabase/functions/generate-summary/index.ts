@@ -385,6 +385,15 @@ serve(async (req) => {
 
     const { bookTitle, bookAuthor, language = "pt" } = await req.json();
     
+    // Validate required fields
+    if (!bookTitle || typeof bookTitle !== 'string' || bookTitle.trim() === '') {
+      console.error("❌ Invalid bookTitle:", bookTitle);
+      return new Response(JSON.stringify({ error: "Título do livro é obrigatório" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    
     // Check cache FIRST - with fallback for empty author
     const cacheKey = createCacheKey(bookTitle, bookAuthor || "", language);
     console.log("🔍 [Cache] Checking cache with key:", cacheKey);

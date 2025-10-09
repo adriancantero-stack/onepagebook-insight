@@ -555,52 +555,52 @@ const Admin = () => {
         return;
       }
 
-      toast.info(`Iniciando geração de ${books.length} resumos...`);
+      toast.info(`Iniciando geração de ${books.length} resumos...`, {
+        description: "Isso pode levar vários minutos. O progresso será atualizado automaticamente."
+      });
 
-      let successCount = 0;
-      let errorCount = 0;
+      // Store initial count
+      const initialWithSummary = stats?.booksWithSummary || 0;
 
-      // Process books one by one (AI generation is slow, so we process sequentially)
-      for (let i = 0; i < books.length; i++) {
-        const book = books[i];
+      // Call batch-generate-summaries (it processes all books internally)
+      const generatePromise = supabase.functions.invoke('batch-generate-summaries', {
+        body: {}
+      });
+
+      // Poll for progress updates by rechecking summary count every 3 seconds
+      const pollInterval = setInterval(async () => {
+        const { count } = await supabase
+          .from('books')
+          .select('*', { count: 'exact', head: true })
+          .eq('is_active', true)
+          .not('summary', 'is', null);
         
-        try {
-          console.log(`Generating summary ${i + 1}/${books.length}: ${book.title}`);
-          
-          // Call individual generate-summary function
-          const { data, error } = await supabase.functions.invoke('generate-summary', {
-            body: { 
-              userTitle: book.title,
-              userAuthor: book.author,
-              locale: book.lang
-            }
-          });
+        const currentProgress = (count || 0) - initialWithSummary;
+        setBatchGenerateProgress({ 
+          current: currentProgress, 
+          total: books.length 
+        });
+      }, 3000);
 
-          if (error) {
-            console.error(`Error generating summary for ${book.title}:`, error);
-            errorCount++;
-          } else if (data?.summaryId) {
-            successCount++;
-          } else {
-            errorCount++;
-          }
+      // Wait for batch generation to complete
+      const { data, error } = await generatePromise;
+      clearInterval(pollInterval);
 
-          // Update progress after each book
-          setBatchGenerateProgress({ current: i + 1, total: books.length });
-
-          // Small delay to avoid overwhelming the API
-          if (i < books.length - 1) {
-            await new Promise(resolve => setTimeout(resolve, 500));
-          }
-
-        } catch (error) {
-          console.error(`Error processing ${book.title}:`, error);
-          errorCount++;
-        }
+      if (error) {
+        throw error;
       }
 
+      // Final progress check
+      const { count: finalCount } = await supabase
+        .from('books')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true)
+        .not('summary', 'is', null);
+      
+      const totalGenerated = (finalCount || 0) - initialWithSummary;
+
       toast.success("Geração concluída!", {
-        description: `${successCount} resumos gerados, ${errorCount} erros`
+        description: `${totalGenerated} resumos gerados com sucesso!`
       });
 
       // Reset and reload data
@@ -609,7 +609,7 @@ const Admin = () => {
     } catch (error) {
       console.error("Batch generate error:", error);
       toast.error("Erro", {
-        description: "Falha ao gerar resumos automaticamente"
+        description: error.message || "Falha ao gerar resumos automaticamente"
       });
     } finally {
       setBatchGenerating(false);
