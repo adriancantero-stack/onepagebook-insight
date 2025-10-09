@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { Clock, BookOpen, Zap, CheckCircle2, Quote } from "lucide-react";
+import { useSEO } from "@/hooks/useSEO";
 import atomicHabits from "@/assets/books/atomic-habits.jpg";
 import richDadPoorDad from "@/assets/books/rich-dad-poor-dad.jpg";
 import powerOfHabit from "@/assets/books/power-of-habit.jpg";
@@ -28,6 +29,36 @@ interface LandingProps {
 export default function Landing({ lang }: LandingProps) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+
+  // SEO Configuration by language
+  const seoConfig = {
+    pt: {
+      title: "OnePageBook — Resumos de Livros em 1 Página com IA",
+      description: "Transforme qualquer livro em insights práticos em minutos. Gere resumos inteligentes de livros em português com IA avançada.",
+      path: "/pt",
+    },
+    en: {
+      title: "OnePageBook — AI-Powered Book Summaries in One Page",
+      description: "Transform any book into actionable insights in minutes. Generate intelligent book summaries in English with advanced AI.",
+      path: "/en",
+    },
+    es: {
+      title: "OnePageBook — Resúmenes de Libros en 1 Página con IA",
+      description: "Transforma cualquier libro en conocimientos prácticos en minutos. Genera resúmenes inteligentes de libros en español con IA avanzada.",
+      path: "/es",
+    },
+  };
+
+  const currentSEO = seoConfig[lang];
+
+  // Apply SEO meta tags dynamically
+  useSEO({
+    title: currentSEO.title,
+    description: currentSEO.description,
+    lang,
+    path: currentSEO.path,
+    imageUrl: "https://lovable.dev/opengraph-image-p98pqg.png",
+  });
 
   useEffect(() => {
     i18n.changeLanguage(lang);
