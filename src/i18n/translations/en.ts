@@ -195,8 +195,8 @@ export const en = {
     "plans.free.name": "Free",
     "plans.free.price.monthly": "$0 / month",
     "plans.free.bullets": [
-      "5 summaries/month",
-      "5 full audios/month",
+      "10 summaries/month",
+      "10 full audios/month",
       "Basic support"
     ],
     "plans.free.cta": "Start free",

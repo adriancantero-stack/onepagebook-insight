@@ -27,7 +27,7 @@ export const pt = {
     "home.premiumInfo": "Premium: resumos e áudios ilimitados",
     "home.freeLimit": "Plano Gratuito: 10 resumos por mês",
     "home.premiumUnlimited": "Premium: Resumos ilimitados",
-    "hero.trust": "Grátis: 5 resumos + 5 áudios/mês",
+    "hero.trust": "Grátis: 10 resumos + 10 áudios/mês",
     
     // Auth
     "auth.title": "Bem-vindo",
@@ -113,8 +113,8 @@ export const pt = {
     "plans.free.name": "Gratuito",
     "plans.free.price.monthly": "R$ 0/mês",
     "plans.free.bullets": [
-      "5 resumos/mês",
-      "5 áudios completos/mês",
+      "10 resumos/mês",
+      "10 áudios completos/mês",
       "Suporte básico"
     ],
     "plans.free.cta": "Começar grátis",
