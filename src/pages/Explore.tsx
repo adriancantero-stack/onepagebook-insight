@@ -58,11 +58,11 @@ const Explore = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [totalBooksCount, setTotalBooksCount] = useState(0);
   const [bookCovers, setBookCovers] = useState<Record<string, string>>({});
+  const [dbCategories, setDbCategories] = useState<{ id: string; name: string }[]>([]);
+  const [dbBooks, setDbBooks] = useState<any[]>([]);
 
   // Create flat index filtered by current locale
   const flatIndex = useMemo(() => createFlatIndex(i18n.language), [i18n.language]);
-
-  // Fetch total books count and covers from database only
   useEffect(() => {
     const fetchDataFromDB = async () => {
       const { count: dbBooksCount } = await supabase
@@ -95,15 +95,33 @@ const Explore = () => {
 
     fetchDataFromDB();
   }, [i18n.language]);
+  // Fetch active categories from database
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const { data: cats } = await supabase
+        .from('book_categories')
+        .select('key, name_pt, name_en, name_es')
+        .eq('is_active', true)
+        .order('display_order', { ascending: true });
+
+      const mapped = (cats || []).map((c: any) => {
+        const name =
+          i18n.language === 'en' ? c.name_en :
+          i18n.language === 'es' ? c.name_es :
+          c.name_pt;
+        return { id: c.key, name };
+      });
+      setDbCategories(mapped);
+    };
+    fetchCategories();
+  }, [i18n.language]);
 
   // Sort categories alphabetically by translated name
   const sortedCategories = useMemo(() => {
-    return [...bookCatalog].sort((a, b) => {
-      const nameA = t(a.nameKey);
-      const nameB = t(b.nameKey);
-      return nameA.localeCompare(nameB, i18n.language);
+    return [...dbCategories].sort((a, b) => {
+      return a.name.localeCompare(b.name, i18n.language);
     });
-  }, [t, i18n.language]);
+  }, [dbCategories, i18n.language]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -128,6 +146,21 @@ const Explore = () => {
     setIsOpen(false);
     setSuggestions([]);
   }, [i18n.language]);
+
+  // Fetch books for selected category from database (for DB categories)
+  useEffect(() => {
+    const fetchBooks = async () => {
+      const { data } = await supabase
+        .from('books')
+        .select('id, title, author, lang, cover_url, popularity')
+        .eq('is_active', true)
+        .eq('lang', i18n.language)
+        .eq('category', selectedCategory)
+        .order('popularity', { ascending: false });
+      setDbBooks(data || []);
+    };
+    fetchBooks();
+  }, [selectedCategory, i18n.language]);
 
   const handleInputChange = (value: string) => {
     setQuery(value);
@@ -283,12 +316,20 @@ const Explore = () => {
 
   // Get current category books filtered by locale
   const currentCategory = bookCatalog.find(cat => cat.id === selectedCategory);
-  const categoryBooks = currentCategory ? getBooksByLocale(currentCategory, i18n.language) : [];
+  const sourceBooks = currentCategory
+    ? getBooksByLocale(currentCategory, i18n.language)
+    : dbBooks.map((b: any, index: number) => ({
+        title: b.title,
+        author: b.author,
+        locale: b.lang,
+        id: b.id || `${selectedCategory}-${i18n.language}-${index}`,
+        ...(b.badge ? { badge: b.badge } : {}),
+      }));
 
   const getFilteredAndSortedBooks = () => {
-    let filtered = categoryBooks.map((book, index) => {
-      const bookId = book.id || `${selectedCategory}-${book.locale}-${index}`;
-      return { ...book, id: bookId };
+    let filtered = sourceBooks.map((book, index) => {
+      const bookId = (book as any).id || `${selectedCategory}-${(book as any).locale}-${index}`;
+      return { ...book, id: bookId } as any;
     });
 
     // Apply level filter
@@ -406,7 +447,7 @@ const Explore = () => {
                     : 'bg-[#F5F5F7] text-[#1D1D1F] hover:bg-[#1D1D1F] hover:text-white'
                 }`}
               >
-                {t(category.nameKey)}
+                {category.name}
               </button>
             ))}
           </div>
@@ -440,7 +481,7 @@ const Explore = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {allBooks.map((book, index) => {
             const coverKey = `${book.title.toLowerCase()}-${book.author.toLowerCase()}`;
-            const coverUrl = bookCovers[coverKey];
+            const coverUrl = (book as any).cover_url || bookCovers[coverKey];
             
             return (
               <Card 
