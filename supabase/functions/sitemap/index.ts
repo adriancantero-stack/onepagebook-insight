@@ -82,12 +82,14 @@ Deno.serve(async (req) => {
     const baseUrl = 'https://onepagebook.ai';
     const today = formatDate(new Date());
 
-    // Static routes by language
+    // Landing pages with language versions (for hreflang)
+    const landingPages = [
+      { pt: '/pt', en: '/en', es: '/es', priority: '1.0', changefreq: 'weekly' },
+    ];
+
+    // Static routes by language (without hreflang)
     const staticRoutes = [
       { path: '/', priority: '1.0', changefreq: 'weekly' },
-      { path: '/pt', priority: '1.0', changefreq: 'weekly' },
-      { path: '/en', priority: '1.0', changefreq: 'weekly' },
-      { path: '/es', priority: '1.0', changefreq: 'weekly' },
       { path: '/pt/home', priority: '0.8', changefreq: 'weekly' },
       { path: '/en/home', priority: '0.8', changefreq: 'weekly' },
       { path: '/es/home', priority: '0.8', changefreq: 'weekly' },
@@ -106,7 +108,29 @@ Deno.serve(async (req) => {
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
     xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n';
 
-    // Add static routes
+    // Add landing pages with hreflang tags
+    for (const page of landingPages) {
+      const langs = ['pt', 'en', 'es'] as const;
+      
+      for (const lang of langs) {
+        xml += '  <url>\n';
+        xml += `    <loc>${baseUrl}${page[lang]}</loc>\n`;
+        xml += `    <lastmod>${today}</lastmod>\n`;
+        xml += `    <changefreq>${page.changefreq}</changefreq>\n`;
+        xml += `    <priority>${page.priority}</priority>\n`;
+        
+        // Add hreflang links for all language versions
+        for (const altLang of langs) {
+          xml += `    <xhtml:link rel="alternate" hreflang="${altLang}" href="${baseUrl}${page[altLang]}" />\n`;
+        }
+        // Add x-default pointing to Portuguese
+        xml += `    <xhtml:link rel="alternate" hreflang="x-default" href="${baseUrl}/pt" />\n`;
+        
+        xml += '  </url>\n';
+      }
+    }
+
+    // Add other static routes
     for (const route of staticRoutes) {
       xml += '  <url>\n';
       xml += `    <loc>${baseUrl}${route.path}</loc>\n`;

@@ -67,10 +67,18 @@ export const useSEO = ({ title, description, lang, path, imageUrl }: SEOConfig) 
     updateLinkTag("canonical", canonicalUrl);
 
     // Hreflang tags for multilingual SEO
-    updateLinkTag("alternate", `${BASE_URL}/pt`, "pt");
-    updateLinkTag("alternate", `${BASE_URL}/en`, "en");
-    updateLinkTag("alternate", `${BASE_URL}/es`, "es");
-    updateLinkTag("alternate", `${BASE_URL}/pt`, "x-default"); // Default to Portuguese
+    // For landing pages, add all language versions
+    const isLandingPage = path === '/pt' || path === '/en' || path === '/es' || path === '/';
+    
+    if (isLandingPage) {
+      updateLinkTag("alternate", `${BASE_URL}/pt`, "pt");
+      updateLinkTag("alternate", `${BASE_URL}/en`, "en");
+      updateLinkTag("alternate", `${BASE_URL}/es`, "es");
+      updateLinkTag("alternate", `${BASE_URL}/pt`, "x-default"); // Default to Portuguese
+    } else {
+      // For other pages, add hreflang for the current language
+      updateLinkTag("alternate", canonicalUrl, lang === "pt" ? "pt-BR" : lang === "es" ? "es" : "en-US");
+    }
 
     // Open Graph tags
     updateMetaTag("og:type", "website", true);
@@ -108,21 +116,28 @@ export const useSEO = ({ title, description, lang, path, imageUrl }: SEOConfig) 
       "@type": "WebApplication",
       "name": "OnePageBook",
       "description": description,
-      "url": canonicalUrl,
+      "url": `${BASE_URL}/${lang}`,
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web",
+      "inLanguage": [
+        lang === "pt" ? "pt-BR" : lang === "es" ? "es-ES" : "en-US"
+      ],
+      "availableLanguage": [
+        { "@type": "Language", "name": "Portuguese", "alternateName": "pt-BR" },
+        { "@type": "Language", "name": "English", "alternateName": "en-US" },
+        { "@type": "Language", "name": "Spanish", "alternateName": "es-ES" }
+      ],
       "offers": {
         "@type": "Offer",
         "price": "0",
-        "priceCurrency": lang === "pt" ? "BRL" : "USD"
+        "priceCurrency": lang === "pt" ? "BRL" : lang === "es" ? "EUR" : "USD"
       },
-      "inLanguage": lang === "pt" ? "pt-BR" : lang === "es" ? "es" : "en-US",
       "potentialAction": {
         "@type": "UseAction",
         "target": {
           "@type": "EntryPoint",
           "urlTemplate": `${BASE_URL}/${lang}`,
-          "inLanguage": lang === "pt" ? "pt-BR" : lang === "es" ? "es" : "en-US"
+          "inLanguage": lang === "pt" ? "pt-BR" : lang === "es" ? "es-ES" : "en-US"
         }
       }
     };
