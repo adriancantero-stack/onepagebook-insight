@@ -22,7 +22,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Users, FileText, TrendingUp, Crown, Download, BookOpen, ImagePlus, Sparkles, Upload, Trash2, RefreshCw } from "lucide-react";
+import { Users, FileText, TrendingUp, Crown, Download, BookOpen, ImagePlus, Sparkles, Upload, Trash2, RefreshCw, UserX } from "lucide-react";
 import { bookCatalog } from "@/data/bookCatalog";
 import { Progress } from "@/components/ui/progress";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
@@ -100,6 +100,8 @@ const Admin = () => {
   const [showInvalidBooksModal, setShowInvalidBooksModal] = useState(false);
   const [isLoadingInvalidBooks, setIsLoadingInvalidBooks] = useState(false);
   const [isClearingAudioCache, setIsClearingAudioCache] = useState(false);
+  const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
+  const [upgradingUserId, setUpgradingUserId] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -317,6 +319,69 @@ const Admin = () => {
       }
     } catch (error) {
       console.error("Error loading admin data:", error);
+    }
+  };
+
+  const handleDeleteUser = async (userId: string, userEmail: string) => {
+    if (!confirm(`Tem certeza que deseja deletar o usuário ${userEmail}? Esta ação não pode ser desfeita.`)) {
+      return;
+    }
+
+    setDeletingUserId(userId);
+    try {
+      const { error } = await supabase.auth.admin.deleteUser(userId);
+      
+      if (error) throw error;
+
+      toast.success("Usuário deletado com sucesso");
+      await loadAdminData();
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error("Erro ao deletar usuário");
+    } finally {
+      setDeletingUserId(null);
+    }
+  };
+
+  const handleUpgradeToPremium = async (userId: string, userEmail: string, currentPlan: string) => {
+    if (currentPlan === "premium") {
+      toast.info("Este usuário já possui plano Premium");
+      return;
+    }
+
+    if (!confirm(`Deseja liberar o plano Premium para ${userEmail}?`)) {
+      return;
+    }
+
+    setUpgradingUserId(userId);
+    try {
+      // Get premium plan ID
+      const { data: premiumPlan, error: planError } = await supabase
+        .from("subscription_plans")
+        .select("id")
+        .eq("type", "premium")
+        .single();
+
+      if (planError) throw planError;
+
+      // Update user subscription
+      const { error: updateError } = await supabase
+        .from("user_subscriptions")
+        .update({ 
+          plan_id: premiumPlan.id,
+          status: 'active'
+        })
+        .eq("user_id", userId);
+
+      if (updateError) throw updateError;
+
+      toast.success("Usuário atualizado para Premium!");
+      await loadAdminData();
+    } catch (error) {
+      console.error("Error upgrading user:", error);
+      toast.error("Erro ao liberar Premium");
+    } finally {
+      setUpgradingUserId(null);
     }
   };
 
@@ -1509,6 +1574,7 @@ const Admin = () => {
                   <TableHead>Data de Cadastro</TableHead>
                   <TableHead>Plano</TableHead>
                   <TableHead className="text-right">Resumos</TableHead>
+                  <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -1525,6 +1591,30 @@ const Admin = () => {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">{user.summaries_count}</TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleUpgradeToPremium(user.id, user.email, user.plan_type)}
+                          disabled={upgradingUserId === user.id || user.plan_type === "premium"}
+                          className="gap-1"
+                        >
+                          <Crown className="w-3 h-3" />
+                          {user.plan_type === "premium" ? "Premium" : "Liberar"}
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => handleDeleteUser(user.id, user.email)}
+                          disabled={deletingUserId === user.id}
+                          className="gap-1"
+                        >
+                          <UserX className="w-3 h-3" />
+                          Deletar
+                        </Button>
+                      </div>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
