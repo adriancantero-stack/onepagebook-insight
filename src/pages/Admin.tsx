@@ -215,16 +215,25 @@ const Admin = () => {
         totalAudios: audiosCount || 0,
       });
 
-      // Get auth users to access email addresses securely
-      const { data } = await supabase.auth.admin.listUsers();
-      const authUsers = data?.users || [];
+      // Get auth users via edge function (requires service role)
+      const { data: authUsersResponse, error: authError } = await supabase.functions.invoke(
+        'admin-user-operations',
+        { body: { operation: 'list_users' } }
+      );
+
+      if (authError) {
+        console.error('Error fetching auth users:', authError);
+        toast.error("Erro ao carregar emails dos usuários");
+      }
+
+      const authUsers = authUsersResponse?.users || [];
       
       // Prepare users table data
       const usersWithData = profilesData?.map(profile => {
         const subscription = subscriptionsData?.find(s => s.user_id === profile.id);
         const planType = subscription?.subscription_plans?.type || "free";
         const summariesCount = summariesByUser[profile.id] || 0;
-        const authUser = authUsers.find(u => u.id === profile.id);
+        const authUser = authUsers.find((u: any) => u.id === profile.id);
 
         return {
           id: profile.id,
@@ -329,9 +338,12 @@ const Admin = () => {
 
     setDeletingUserId(userId);
     try {
-      const { error } = await supabase.auth.admin.deleteUser(userId);
+      const { data, error } = await supabase.functions.invoke('admin-user-operations', {
+        body: { operation: 'delete_user', userId }
+      });
       
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
 
       toast.success("Usuário deletado com sucesso");
       await loadAdminData();
@@ -364,16 +376,13 @@ const Admin = () => {
 
       if (planError) throw planError;
 
-      // Update user subscription
-      const { error: updateError } = await supabase
-        .from("user_subscriptions")
-        .update({ 
-          plan_id: premiumPlan.id,
-          status: 'active'
-        })
-        .eq("user_id", userId);
+      // Update user subscription via edge function
+      const { data, error } = await supabase.functions.invoke('admin-user-operations', {
+        body: { operation: 'upgrade_to_premium', userId, planId: premiumPlan.id }
+      });
 
-      if (updateError) throw updateError;
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
 
       toast.success("Usuário atualizado para Premium!");
       await loadAdminData();
