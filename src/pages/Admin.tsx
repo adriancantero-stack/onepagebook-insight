@@ -47,6 +47,9 @@ interface UserData {
   created_at: string;
   plan_type: string;
   summaries_count: number;
+  signup_language?: string;
+  signup_path?: string;
+  signup_country?: string;
 }
 
 const Admin = () => {
@@ -167,7 +170,10 @@ const Admin = () => {
         .select(`
           id,
           full_name,
-          created_at
+          created_at,
+          signup_language,
+          signup_path,
+          signup_country
         `);
 
       const { data: subscriptionsData } = await supabase
@@ -242,6 +248,9 @@ const Admin = () => {
           created_at: profile.created_at,
           plan_type: planType,
           summaries_count: summariesCount,
+          signup_language: profile.signup_language,
+          signup_path: profile.signup_path,
+          signup_country: profile.signup_country,
         };
       }) || [];
 
@@ -1581,6 +1590,9 @@ const Admin = () => {
                   <TableHead>Email</TableHead>
                   <TableHead>Nome</TableHead>
                   <TableHead>Data de Cadastro</TableHead>
+                  <TableHead>Idioma</TableHead>
+                  <TableHead>Origem</TableHead>
+                  <TableHead>País</TableHead>
                   <TableHead>Plano</TableHead>
                   <TableHead className="text-right">Resumos</TableHead>
                   <TableHead className="text-right">Ações</TableHead>
@@ -1593,6 +1605,27 @@ const Admin = () => {
                     <TableCell>{user.full_name}</TableCell>
                     <TableCell>
                       {new Date(user.created_at).toLocaleDateString("pt-BR")}
+                    </TableCell>
+                    <TableCell>
+                      {user.signup_language ? (
+                        <Badge variant="outline">{user.signup_language.toUpperCase()}</Badge>
+                      ) : (
+                        <span className="text-muted-foreground text-xs">-</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {user.signup_path ? (
+                        <span className="text-xs text-muted-foreground">{user.signup_path}</span>
+                      ) : (
+                        <span className="text-muted-foreground text-xs">-</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {user.signup_country ? (
+                        <span className="text-xs">{user.signup_country}</span>
+                      ) : (
+                        <span className="text-muted-foreground text-xs">-</span>
+                      )}
                     </TableCell>
                     <TableCell>
                       <Badge variant={user.plan_type === "premium" ? "default" : "secondary"}>
