@@ -41,13 +41,21 @@ const Auth = () => {
     
     try {
       if (isSignUp) {
+        // Capture signup metadata
+        const signupLanguage = localStorage.getItem("language") || navigator.language.split("-")[0] || "en";
+        const signupPath = window.location.pathname;
+        const signupCountry = navigator.language; // e.g., "pt-BR", "en-US", "es-ES"
+        
         // Signup
         const { error } = await supabase.auth.signUp({
           email,
           password,
           options: {
             data: {
-              full_name: fullName
+              full_name: fullName,
+              signup_language: signupLanguage,
+              signup_path: signupPath,
+              signup_country: signupCountry
             },
             emailRedirectTo: `${window.location.origin}/welcome`
           }
@@ -87,10 +95,20 @@ const Auth = () => {
     setError("");
     
     try {
+      // Capture signup metadata and pass via query params
+      const signupLanguage = localStorage.getItem("language") || navigator.language.split("-")[0] || "en";
+      const signupPath = window.location.pathname;
+      const signupCountry = navigator.language; // e.g., "pt-BR", "en-US", "es-ES"
+      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/welcome`
+          redirectTo: `${window.location.origin}/welcome`,
+          queryParams: {
+            signup_language: signupLanguage,
+            signup_path: signupPath,
+            signup_country: signupCountry
+          }
         }
       });
       

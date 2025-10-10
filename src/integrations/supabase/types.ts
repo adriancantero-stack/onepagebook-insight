@@ -324,6 +324,9 @@ export type Database = {
           full_name: string | null
           id: string
           preferred_language: string
+          signup_country: string | null
+          signup_language: string | null
+          signup_path: string | null
           updated_at: string
         }
         Insert: {
@@ -331,6 +334,9 @@ export type Database = {
           full_name?: string | null
           id: string
           preferred_language?: string
+          signup_country?: string | null
+          signup_language?: string | null
+          signup_path?: string | null
           updated_at?: string
         }
         Update: {
@@ -338,6 +344,9 @@ export type Database = {
           full_name?: string | null
           id?: string
           preferred_language?: string
+          signup_country?: string | null
+          signup_language?: string | null
+          signup_path?: string | null
           updated_at?: string
         }
         Relationships: []
