@@ -9,6 +9,18 @@ const Welcome = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Track sign_up event in Google Analytics
+    if (!sessionStorage.getItem('ga_signed')) {
+      const gtag = (window as any).gtag;
+      if (gtag) {
+        gtag('event', 'sign_up', {
+          method: 'email',
+          language: document.documentElement.lang || 'en'
+        });
+      }
+      sessionStorage.setItem('ga_signed', '1');
+    }
+
     // Auto-redirect after 5 seconds
     const timer = setTimeout(() => {
       navigate("/");
