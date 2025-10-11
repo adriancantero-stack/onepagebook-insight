@@ -3,12 +3,46 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Sparkles } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const Welcome = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   useEffect(() => {
+    const updateSignupMetadata = async () => {
+      // Check if there's pending signup metadata from OAuth (Google login)
+      const pendingLanguage = localStorage.getItem("pending_signup_language");
+      const pendingPath = localStorage.getItem("pending_signup_path");
+      const pendingCountry = localStorage.getItem("pending_signup_country");
+      
+      if (pendingLanguage || pendingPath || pendingCountry) {
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          
+          if (user) {
+            // Update user metadata
+            await supabase.auth.updateUser({
+              data: {
+                signup_language: pendingLanguage,
+                signup_path: pendingPath,
+                signup_country: pendingCountry
+              }
+            });
+            
+            // Clean up localStorage
+            localStorage.removeItem("pending_signup_language");
+            localStorage.removeItem("pending_signup_path");
+            localStorage.removeItem("pending_signup_country");
+          }
+        } catch (error) {
+          console.error("Error updating signup metadata:", error);
+        }
+      }
+    };
+    
+    updateSignupMetadata();
+    
     // Track sign_up event in Google Analytics
     if (!sessionStorage.getItem('ga_signed')) {
       const gtag = (window as any).gtag;
