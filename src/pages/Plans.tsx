@@ -190,22 +190,24 @@ const Plans = () => {
             ) : (
               <Button 
                 className="w-full py-6 bg-[#7B61FF] hover:bg-[#6951E6] text-white border-none shadow-sm transition-all rounded-xl" 
-                asChild
-              >
-                <a 
-                  href={billingCycle === "monthly" 
+                onClick={async () => {
+                  const { data: { user } } = await supabase.auth.getUser();
+                  const userId = user?.id || '';
+                  const successUrl = `${window.location.origin}/welcome?premium=true`;
+                  const cancelUrl = `${window.location.origin}/plans`;
+                  
+                  const stripeLink = billingCycle === "monthly" 
                     ? (i18n.language === "pt" 
-                        ? "https://buy.stripe.com/fZu28r50YbE76fuaKv3oA00"
-                        : "https://buy.stripe.com/7sY7sL2SQcIb6fu2dZ3oA02")
+                        ? `https://buy.stripe.com/fZu28r50YbE76fuaKv3oA00?client_reference_id=${userId}&success_url=${encodeURIComponent(successUrl)}&cancel_url=${encodeURIComponent(cancelUrl)}`
+                        : `https://buy.stripe.com/7sY7sL2SQcIb6fu2dZ3oA02?client_reference_id=${userId}&success_url=${encodeURIComponent(successUrl)}&cancel_url=${encodeURIComponent(cancelUrl)}`)
                     : (i18n.language === "pt"
-                        ? "https://buy.stripe.com/dRm4gzeByeQj0Va6uf3oA01"
-                        : "https://buy.stripe.com/6oUcN5fFCeQjdHWf0L3oA03")
-                  } 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                >
-                  {t("plans.premium.cta")}
-                </a>
+                        ? `https://buy.stripe.com/dRm4gzeByeQj0Va6uf3oA01?client_reference_id=${userId}&success_url=${encodeURIComponent(successUrl)}&cancel_url=${encodeURIComponent(cancelUrl)}`
+                        : `https://buy.stripe.com/6oUcN5fFCeQjdHWf0L3oA03?client_reference_id=${userId}&success_url=${encodeURIComponent(successUrl)}&cancel_url=${encodeURIComponent(cancelUrl)}`);
+                  
+                  window.location.href = stripeLink;
+                }}
+              >
+                {t("plans.premium.cta")}
               </Button>
             )}
           </Card>

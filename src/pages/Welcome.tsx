@@ -43,8 +43,36 @@ const Welcome = () => {
     
     updateSignupMetadata();
     
+    // Check if this is a premium conversion from Stripe
+    const urlParams = new URLSearchParams(window.location.search);
+    const isPremiumConversion = urlParams.get('premium') === 'true';
+    
+    if (isPremiumConversion) {
+      // Track purchase event in Google Analytics
+      if (!sessionStorage.getItem('ga_purchase_tracked')) {
+        const gtag = (window as any).gtag;
+        if (gtag) {
+          gtag('event', 'purchase', {
+            transaction_id: `premium_${Date.now()}`,
+            value: 27.00,
+            currency: 'BRL',
+            items: [{
+              item_id: 'premium_plan',
+              item_name: 'Premium Plan',
+              price: 27.00,
+              quantity: 1
+            }]
+          });
+          sessionStorage.setItem('ga_purchase_tracked', 'true');
+        }
+      }
+      
+      // Remove the query parameter
+      window.history.replaceState({}, document.title, '/welcome');
+    }
+    
     // Track sign_up event in Google Analytics
-    if (!sessionStorage.getItem('ga_signed')) {
+    if (!sessionStorage.getItem('ga_signed') && !isPremiumConversion) {
       const gtag = (window as any).gtag;
       if (gtag) {
         gtag('event', 'sign_up', {

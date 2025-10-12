@@ -54,6 +54,9 @@ enabled = true
 policy = "per_worker"
 inspector_port = 8083
 
+[functions.stripe-webhook]
+verify_jwt = false
+
 [functions.batch-generate-summaries]
 verify_jwt = false
 

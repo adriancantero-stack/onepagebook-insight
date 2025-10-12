@@ -1055,11 +1055,35 @@ const Admin = () => {
             <CardContent>
               <div className="text-2xl font-bold">{stats?.premiumUsers}</div>
               <p className="text-xs text-muted-foreground">
-                de {stats?.totalUsers} usuários
+                de {stats?.totalUsers} usuários ({stats?.totalUsers ? Math.round((stats.premiumUsers / stats.totalUsers) * 100) : 0}% conversão)
               </p>
             </CardContent>
           </Card>
         </div>
+
+        {/* Premium Conversions Card */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Crown className="h-5 w-5 text-primary" />
+              Conversões Premium
+            </CardTitle>
+            <CardDescription>
+              Últimas conversões para o plano Premium via Stripe
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">
+              As conversões são processadas automaticamente via webhook do Stripe. Os dados aparecem aqui após a atualização da assinatura do usuário.
+            </p>
+            <div className="mt-4">
+              <p className="text-lg font-semibold">Taxa de Conversão: {stats?.totalUsers ? Math.round((stats.premiumUsers / stats.totalUsers) * 100) : 0}%</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                {stats?.premiumUsers} de {stats?.totalUsers} usuários converteram para Premium
+              </p>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Catalog Management */}
         <Card>
