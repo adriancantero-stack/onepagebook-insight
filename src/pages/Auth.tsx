@@ -131,7 +131,7 @@ const Auth = () => {
           <LanguageSelector />
         </div>
         
-        <Card className="w-full max-w-lg border-border rounded-2xl shadow-sm p-6 sm:p-10 bg-card">
+        <Card className="w-full max-w-lg border-border rounded-2xl shadow-sm p-6 sm:p-10 bg-background">
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center">
             <div className="flex items-center gap-2">
@@ -170,7 +170,7 @@ const Auth = () => {
           
           <div className="relative">
             <Separator className="bg-border" />
-            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-3 text-sm text-muted-foreground">
+            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-3 text-sm text-muted-foreground">
               {t("auth.orDivider")}
             </span>
           </div>
@@ -185,7 +185,7 @@ const Auth = () => {
                   value={fullName} 
                   onChange={e => setFullName(e.target.value)} 
                   required 
-                  className="h-11 sm:h-12 rounded-xl border-input focus:border-primary transition-all text-base"
+                  className="h-11 sm:h-12 rounded-xl border-input focus:border-primary transition-all text-base bg-white"
                 />
               </div>
             )}
@@ -197,7 +197,7 @@ const Auth = () => {
                 value={email} 
                 onChange={e => setEmail(e.target.value)} 
                 required 
-                className="h-11 sm:h-12 rounded-xl border-input focus:border-primary transition-all text-base"
+                className="h-11 sm:h-12 rounded-xl border-input focus:border-primary transition-all text-base bg-white"
               />
             </div>
             <div className="space-y-2">
@@ -209,7 +209,7 @@ const Auth = () => {
                 onChange={e => setPassword(e.target.value)} 
                 required 
                 minLength={6} 
-                className="h-11 sm:h-12 rounded-xl border-input focus:border-primary transition-all text-base"
+                className="h-11 sm:h-12 rounded-xl border-input focus:border-primary transition-all text-base bg-white"
               />
             </div>
             <Button 
