@@ -266,10 +266,17 @@ const Admin = () => {
         };
       }) || [];
 
-      setUsers(usersWithData);
+      // Sort users - Adrian Cantero always first
+      const sortedUsers = usersWithData.sort((a, b) => {
+        if (a.email === 'adrian.cantero1@gmail.com') return -1;
+        if (b.email === 'adrian.cantero1@gmail.com') return 1;
+        return 0;
+      });
+
+      setUsers(sortedUsers);
 
       // Count users with incomplete data
-      const incomplete = usersWithData.filter(u => 
+      const incomplete = sortedUsers.filter(u => 
         !u.signup_language || !u.signup_path || !u.signup_country
       ).length;
       setIncompleteUsersCount(incomplete);
