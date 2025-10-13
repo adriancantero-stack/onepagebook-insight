@@ -480,4 +480,16 @@ export const pt = {
     culturalImpact: "Impacto cultural",
     bibliography: "Bibliografia",
   },
+  
+  profile: {
+    title: "Meu Perfil",
+    stats: "Estatísticas",
+    booksRead: "Livros Lidos",
+    summariesGenerated: "Resumos Gerados",
+    currentStreak: "Sequência Atual",
+    days: "dias",
+    maxLevel: "Nível Máximo",
+    toNextLevel: "para próximo nível",
+    needXP: "Faltam {{xp}} XP para"
+  },
 };

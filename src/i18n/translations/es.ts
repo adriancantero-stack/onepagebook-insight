@@ -471,4 +471,16 @@ export const es = {
     culturalImpact: "Impacto cultural",
     bibliography: "Bibliografía",
   },
+  
+  profile: {
+    title: "Mi Perfil",
+    stats: "Estadísticas",
+    booksRead: "Libros Leídos",
+    summariesGenerated: "Resúmenes Generados",
+    currentStreak: "Racha Actual",
+    days: "días",
+    maxLevel: "Nivel Máximo",
+    toNextLevel: "para siguiente nivel",
+    needXP: "Faltan {{xp}} XP para"
+  },
 };

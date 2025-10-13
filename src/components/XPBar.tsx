@@ -1,4 +1,5 @@
 import { calculateLevel, getXPForNextLevel, getXPProgress, formatXP } from '@/utils/xpCalculator';
+import { useTranslation } from 'react-i18next';
 
 interface XPBarProps {
   currentXP: number;
@@ -7,6 +8,7 @@ interface XPBarProps {
 }
 
 export const XPBar = ({ currentXP, level, showDetails = true }: XPBarProps) => {
+  const { t } = useTranslation();
   const levelInfo = calculateLevel(currentXP);
   const nextLevelXP = getXPForNextLevel(currentXP);
   const progress = getXPProgress(currentXP);
@@ -24,14 +26,14 @@ export const XPBar = ({ currentXP, level, showDetails = true }: XPBarProps) => {
                 {level}
               </p>
               <p className="text-xs text-muted-foreground">
-                {isMaxLevel ? 'Nível Máximo' : `${formatXP(currentXP)} / ${formatXP(nextLevelXP)} XP`}
+                {isMaxLevel ? t('profile.maxLevel') : `${formatXP(currentXP)} / ${formatXP(nextLevelXP)} XP`}
               </p>
             </div>
           </div>
           <div className="text-right">
             <p className="text-sm font-medium text-foreground">{formatXP(currentXP)} XP</p>
             <p className="text-xs text-muted-foreground">
-              {isMaxLevel ? '✨ Iluminado' : `${progress}% para próximo nível`}
+              {isMaxLevel ? '✨ ' + t('levels.Enlightened') : `${progress}% ${t('profile.toNextLevel')}`}
             </p>
           </div>
         </div>
@@ -56,8 +58,8 @@ export const XPBar = ({ currentXP, level, showDetails = true }: XPBarProps) => {
       {/* Next milestone */}
       {!isMaxLevel && showDetails && (
         <p className="text-xs text-center text-muted-foreground">
-          Faltam {formatXP(nextLevelXP - currentXP)} XP para <span className="font-medium text-purple-500">
-            {calculateLevel(nextLevelXP).name}
+          {t('profile.needXP', { xp: formatXP(nextLevelXP - currentXP) })} <span className="font-medium text-purple-500">
+            {t(`levels.${calculateLevel(nextLevelXP).name}`)}
           </span>
         </p>
       )}
