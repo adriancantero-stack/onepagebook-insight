@@ -18,22 +18,22 @@ export const XPBar = ({ currentXP, level, showDetails = true }: XPBarProps) => {
     <div className="w-full space-y-2">
       {/* Level Badge and XP Info */}
       {showDetails && (
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl">{levelInfo.icon}</span>
-            <div>
-              <p className={`font-poppins font-semibold ${levelInfo.color}`}>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 min-w-0 flex-1">
+            <span className="text-xl sm:text-2xl flex-shrink-0">{levelInfo.icon}</span>
+            <div className="min-w-0 flex-1">
+              <p className={`font-poppins font-semibold text-sm sm:text-base ${levelInfo.color} truncate`}>
                 {level}
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis">
                 {isMaxLevel ? t('profile.maxLevel') : `${formatXP(currentXP)} / ${formatXP(nextLevelXP)} XP`}
               </p>
             </div>
           </div>
-          <div className="text-right">
-            <p className="text-sm font-medium text-foreground">{formatXP(currentXP)} XP</p>
-            <p className="text-xs text-muted-foreground">
-              {isMaxLevel ? '✨ ' + t('levels.Enlightened') : `${progress}% ${t('profile.toNextLevel')}`}
+          <div className="text-right flex-shrink-0">
+            <p className="text-sm font-medium text-foreground whitespace-nowrap">{formatXP(currentXP)} XP</p>
+            <p className="text-xs text-muted-foreground whitespace-nowrap">
+              {isMaxLevel ? '✨ ' + t('levels.Enlightened') : `${progress}%`}
             </p>
           </div>
         </div>

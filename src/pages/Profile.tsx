@@ -124,7 +124,7 @@ export default function Profile() {
 
               {/* Profile Info */}
               <div className="flex-1 w-full text-center space-y-3 sm:space-y-4">
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
                     <h2 className="text-xl sm:text-2xl font-bold font-poppins text-foreground">
                       {profile.nickname || profile.full_name || 'Usuário'}
@@ -135,6 +135,12 @@ export default function Profile() {
                       </Badge>
                     )}
                   </div>
+                  
+                  {profile.nickname && profile.full_name && (
+                    <p className="text-xs sm:text-sm text-muted-foreground">
+                      {profile.full_name}
+                    </p>
+                  )}
                   
                   <div className="flex items-center justify-center gap-2">
                     <LevelBadge level={profile.level || 'Beginner'} xp={profile.xp || 0} />
