@@ -104,11 +104,11 @@ const Summary = () => {
     loadSummary();
   }, [id]);
 
-  // Track reading completion for XP
+  // Track reading completion for XP (only first time reading this specific summary)
   useEffect(() => {
-    if (loading || hasRecordedRead) return;
+    if (loading || hasRecordedRead || !summary || !id) return;
 
-    const handleScroll = () => {
+    const handleScroll = async () => {
       const scrollHeight = document.documentElement.scrollHeight;
       const scrollTop = document.documentElement.scrollTop;
       const clientHeight = document.documentElement.clientHeight;
@@ -119,17 +119,32 @@ const Summary = () => {
       if (scrollPercentage > 0.8 && !hasRecordedRead) {
         setHasRecordedRead(true);
         
-        // Add XP for reading summary
-        addXP('read_summary', 10);
-        
-        // Mark book as read (increments counter, updates streak)
-        markBookAsRead();
+        // Check if this specific summary was already read before by checking if XP was already awarded for it
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          // Check local storage to see if this summary was already read
+          const readSummariesKey = `read_summaries_${user.id}`;
+          const readSummaries = JSON.parse(localStorage.getItem(readSummariesKey) || '[]');
+          
+          // Only award XP if this summary ID hasn't been read before
+          if (!readSummaries.includes(id)) {
+            // Add to read list
+            readSummaries.push(id);
+            localStorage.setItem(readSummariesKey, JSON.stringify(readSummaries));
+            
+            // Add XP for reading summary
+            await addXP('read_summary', 10);
+            
+            // Mark book as read (increments counter, updates streak)
+            await markBookAsRead();
+          }
+        }
       }
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [loading, hasRecordedRead, addXP, markBookAsRead]);
+  }, [loading, hasRecordedRead, addXP, markBookAsRead, summary, id]);
 
   const loadSummary = async () => {
     try {
