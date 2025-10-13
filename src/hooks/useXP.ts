@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { calculateLevel } from '@/utils/xpCalculator';
+import { create } from 'zustand';
 
 interface XPResult {
   new_xp: number;
@@ -10,9 +11,28 @@ interface XPResult {
   leveled_up: boolean;
 }
 
+interface AchievementNotification {
+  show: boolean;
+  title: string;
+  description: string;
+  icon: string;
+  xpReward: number;
+}
+
+interface AchievementStore {
+  notification: AchievementNotification | null;
+  setNotification: (notification: AchievementNotification | null) => void;
+}
+
+export const useAchievementStore = create<AchievementStore>((set) => ({
+  notification: null,
+  setNotification: (notification) => set({ notification }),
+}));
+
 export function useXP() {
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
+  const setNotification = useAchievementStore((state) => state.setNotification);
 
   /**
    * Add XP to user and check for level-up
@@ -46,18 +66,25 @@ export function useXP() {
 
       const result = data[0] as XPResult;
 
-      // Show appropriate toast
+      // Show appropriate notification
       if (result.leveled_up) {
         const levelInfo = calculateLevel(result.new_xp);
-        toast({
-          title: `🎉 Level Up! ${levelInfo.icon}`,
-          description: `${t('toast.levelUp')} ${t(`levels.${result.new_level}`)}!`,
-          className: 'bg-gradient-to-r from-lilac-500 to-purple-500 text-white border-0'
+        
+        // Show level up animation
+        setNotification({
+          show: true,
+          title: `Level Up! ${t(`levels.${result.new_level}`)}`,
+          description: t('toast.levelUp'),
+          icon: levelInfo.icon,
+          xpReward: 100 // Bonus XP is already added by backend
         });
       } else {
         toast({
           title: `+${xpAmount} XP`,
-          description: eventType === 'read_summary' ? '📚 ' + t('toast.summaryCompleted') : '🎧 ' + t('toast.audioGenerated'),
+          description: eventType === 'read_summary' ? '📚 ' + t('toast.summaryCompleted') : 
+                      eventType === 'audio_generated' ? '🎧 ' + t('toast.audioGenerated') :
+                      eventType === 'feedback_given' ? '⭐ Avaliação enviada' :
+                      eventType === 'share_summary' ? '🔗 Resumo compartilhado' : '',
           className: 'bg-lilac-50 border-lilac-200'
         });
       }
