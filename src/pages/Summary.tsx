@@ -26,11 +26,13 @@ import type { BookSummary } from "@/types";
 import { getCachedAudio, saveAudioToCache } from "@/lib/cacheUtils";
 import { BuyOnAmazonButton } from "@/components/BuyOnAmazonButton";
 import { SummaryFeedback } from "@/components/SummaryFeedback";
+import { useXP } from "@/hooks/useXP";
 
 const Summary = () => {
   const { t, i18n } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
+  const { addXP, markBookAsRead } = useXP();
   const [summary, setSummary] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
@@ -39,6 +41,7 @@ const Summary = () => {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [bookCover, setBookCover] = useState<string | null>(null);
   const [relatedBooksWithCovers, setRelatedBooksWithCovers] = useState<any[]>([]);
+  const [hasRecordedRead, setHasRecordedRead] = useState(false);
 
   // Get related book recommendations based on theme - ALWAYS from same category and locale
   const relatedBooks = useMemo(() => {
@@ -100,6 +103,33 @@ const Summary = () => {
   useEffect(() => {
     loadSummary();
   }, [id]);
+
+  // Track reading completion for XP
+  useEffect(() => {
+    if (loading || hasRecordedRead) return;
+
+    const handleScroll = () => {
+      const scrollHeight = document.documentElement.scrollHeight;
+      const scrollTop = document.documentElement.scrollTop;
+      const clientHeight = document.documentElement.clientHeight;
+      
+      // Check if user scrolled at least 80% of the page
+      const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
+      
+      if (scrollPercentage > 0.8 && !hasRecordedRead) {
+        setHasRecordedRead(true);
+        
+        // Add XP for reading summary
+        addXP('read_summary', 10);
+        
+        // Mark book as read (increments counter, updates streak)
+        markBookAsRead();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [loading, hasRecordedRead, addXP, markBookAsRead]);
 
   const loadSummary = async () => {
     try {
@@ -676,6 +706,9 @@ const Summary = () => {
                 description: t("summary.cachedForFuture"),
               });
             }
+            
+            // Add XP for generating audio
+            addXP('audio_generated', 5);
           }
         } else {
           toast({

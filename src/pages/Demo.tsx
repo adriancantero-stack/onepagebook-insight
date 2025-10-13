@@ -9,10 +9,12 @@ import Footer from "@/components/Footer";
 import { FloatingHeader } from "@/components/FloatingHeader";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { useXP } from "@/hooks/useXP";
 
 const Demo = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const { addXP } = useXP();
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
@@ -88,6 +90,9 @@ const Demo = () => {
           title: t("summary.audioGenerated"),
           description: t("summary.audioReady"),
         });
+
+        // Add XP for generating demo audio
+        addXP('audio_generated', 5);
       }
     } catch (error: any) {
       console.error('Error generating demo audio:', error);

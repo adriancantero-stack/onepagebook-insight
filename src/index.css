@@ -479,3 +479,57 @@ All colors MUST be HSL.
     display: none;
   }
 }
+
+/* ============================================
+   ONEPAGEBOOK V2.0 - GAMIFICATION STYLES
+   ============================================ */
+
+/* Glassmorphism Card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(124, 92, 255, 0.2);
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(124, 92, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  box-shadow: 0 4px 16px rgba(124, 92, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* XP Bar with gradient and shine */
+.xp-bar {
+  background: linear-gradient(90deg, hsl(250, 100%, 68%), hsl(160, 80%, 68%));
+  position: relative;
+  overflow: hidden;
+}
+
+.xp-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shine 2.5s ease-in-out infinite;
+}
+
+/* Achievement unlock animation */
+.achievement-unlock {
+  animation: scaleIn 0.3s ease-out, float 3s ease-in-out infinite 0.3s;
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

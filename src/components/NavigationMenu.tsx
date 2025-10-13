@@ -17,7 +17,8 @@ import {
   Crown,
   HelpCircle,
   Mail,
-  LogOut
+  LogOut,
+  User
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
@@ -43,6 +44,11 @@ export const NavigationMenu = ({ onLogout }: NavigationMenuProps) => {
   };
 
   const menuItems = [
+    {
+      icon: User,
+      label: "Perfil",
+      onClick: () => navigate("/profile"),
+    },
     {
       icon: Compass,
       label: t("header.explore"),

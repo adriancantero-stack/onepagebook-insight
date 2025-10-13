@@ -23,6 +23,8 @@ const Terms = lazy(() => import("./pages/Terms"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Faq = lazy(() => import("./pages/Faq"));
 const Contact = lazy(() => import("./pages/Contact"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Achievements = lazy(() => import("./pages/Achievements"));
 
 const Admin = lazy(() => import("./pages/Admin"));
 const PopulateBooks = lazy(() => import("./pages/PopulateBooks"));
@@ -56,6 +58,8 @@ const App = () => (
             <Route path="/plans" element={<Plans />} />
             <Route path="/explore" element={<Explore />} />
             <Route path="/demo" element={<Demo />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/achievements" element={<Achievements />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/faq" element={<Faq />} />
