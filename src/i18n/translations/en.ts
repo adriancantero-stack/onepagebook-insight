@@ -92,6 +92,13 @@ export const en = {
     "nav.faq_short": "FAQ",
     "faq.title_long": "Frequently Asked Questions (FAQ)",
     
+    // Levels
+    "levels.Beginner": "Beginner",
+    "levels.Learner": "Learner",
+    "levels.Thinker": "Thinker",
+    "levels.Master": "Master",
+    "levels.Enlightened": "Enlightened",
+    
     // Home
     "home.title": "Generate practical one-page",
     "home.titleLine2": "book summaries",
@@ -236,6 +243,10 @@ export const en = {
     "toast.authError": "Authentication error",
     "toast.logoutSuccess": "Logged out successfully",
     "toast.paymentComingSoon": "Payment integration coming soon!",
+    "toast.tryAgain": "Please try again later",
+    "toast.levelUp": "You reached level",
+    "toast.summaryCompleted": "Summary completed!",
+    "toast.audioGenerated": "Audio generated!",
     
     // Limits
     "limit.toasts.summary.ok": "Summary generated! You've used {used}/10 this month.",

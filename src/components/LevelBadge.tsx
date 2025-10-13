@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { calculateLevel } from '@/utils/xpCalculator';
 
 interface LevelBadgeProps {
@@ -8,6 +9,7 @@ interface LevelBadgeProps {
 }
 
 export const LevelBadge = ({ level, xp, size = 'md', showIcon = true }: LevelBadgeProps) => {
+  const { t } = useTranslation();
   const levelInfo = calculateLevel(xp);
   
   const sizeClasses = {
@@ -33,7 +35,7 @@ export const LevelBadge = ({ level, xp, size = 'md', showIcon = true }: LevelBad
       `}
     >
       {showIcon && <span className={iconSizes[size]}>{levelInfo.icon}</span>}
-      <span>{level}</span>
+      <span>{t(`levels.${level}`)}</span>
     </div>
   );
 };

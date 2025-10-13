@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { calculateLevel } from '@/utils/xpCalculator';
@@ -11,6 +12,7 @@ interface XPResult {
 
 export function useXP() {
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
 
   /**
    * Add XP to user and check for level-up
@@ -35,8 +37,8 @@ export function useXP() {
       if (error) {
         console.error('Error adding XP:', error);
         toast({
-          title: 'Erro ao adicionar XP',
-          description: 'Tente novamente mais tarde',
+          title: t('toast.error'),
+          description: t('toast.tryAgain'),
           variant: 'destructive'
         });
         return null;
@@ -49,13 +51,13 @@ export function useXP() {
         const levelInfo = calculateLevel(result.new_xp);
         toast({
           title: `🎉 Level Up! ${levelInfo.icon}`,
-          description: `Você alcançou o nível ${result.new_level}!`,
+          description: `${t('toast.levelUp')} ${t(`levels.${result.new_level}`)}!`,
           className: 'bg-gradient-to-r from-lilac-500 to-purple-500 text-white border-0'
         });
       } else {
         toast({
           title: `+${xpAmount} XP`,
-          description: eventType === 'read_summary' ? '📚 Resumo completado!' : '🎧 Áudio gerado!',
+          description: eventType === 'read_summary' ? '📚 ' + t('toast.summaryCompleted') : '🎧 ' + t('toast.audioGenerated'),
           className: 'bg-lilac-50 border-lilac-200'
         });
       }

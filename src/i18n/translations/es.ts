@@ -92,6 +92,13 @@ export const es = {
     "nav.faq_short": "FAQ",
     "faq.title_long": "Preguntas frecuentes (FAQ)",
     
+    // Levels
+    "levels.Beginner": "Principiante",
+    "levels.Learner": "Aprendiz",
+    "levels.Thinker": "Pensador",
+    "levels.Master": "Maestro",
+    "levels.Enlightened": "Iluminado",
+    
     // Home
     "home.title": "Genera resúmenes prácticos",
     "home.titleLine2": "de libros en 1 página",
@@ -236,6 +243,10 @@ export const es = {
     "toast.authError": "Error de autenticación",
     "toast.logoutSuccess": "Sesión cerrada con éxito",
     "toast.paymentComingSoon": "¡Integración de pago próximamente!",
+    "toast.tryAgain": "Intenta de nuevo más tarde",
+    "toast.levelUp": "Alcanzaste el nivel",
+    "toast.summaryCompleted": "¡Resumen completado!",
+    "toast.audioGenerated": "¡Audio generado!",
     
     // Limits
     "limit.toasts.summary.ok": "¡Resumen generado! Llevas {used}/10 este mes.",
