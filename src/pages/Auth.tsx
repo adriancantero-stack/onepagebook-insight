@@ -135,15 +135,15 @@ const Auth = () => {
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center">
             <div className="flex items-center gap-2">
-              <BookOpen className="w-10 h-10 text-[#7B61FF]" />
-              <h1 className="text-3xl font-semibold text-[#1D1D1F] tracking-tight">OnePageBook</h1>
+              <BookOpen className="w-10 h-10 text-primary" />
+              <h1 className="text-3xl font-bold font-poppins bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent tracking-tight">OnePageBook</h1>
             </div>
           </div>
-          <p className="text-base font-medium text-[#7B61FF]">{t("auth.tagline")}</p>
-          <p className="text-lg text-[#86868B] leading-relaxed max-w-md mx-auto">
+          <p className="text-base font-medium text-primary">{t("auth.tagline")}</p>
+          <p className="text-lg text-muted-foreground leading-relaxed max-w-md mx-auto">
             {t("hero.sub")}
           </p>
-          <CardDescription className="text-base text-[#86868B]">
+          <CardDescription className="text-base text-muted-foreground">
             {t("auth.subtitle")}
           </CardDescription>
         </CardHeader>
@@ -151,7 +151,7 @@ const Auth = () => {
           <Button 
             type="button"
             variant="outline" 
-            className="w-full h-11 sm:h-12 rounded-xl border-[#E5E5EA] hover:bg-[#4285F4] hover:text-white transition-all duration-200 text-sm sm:text-base"
+            className="w-full h-11 sm:h-12 rounded-xl border-lilac-200 hover:bg-[#4285F4] hover:text-white transition-all duration-200 text-sm sm:text-base"
             onClick={handleGoogleSignIn}
             disabled={googleLoading}
           >
@@ -164,13 +164,13 @@ const Auth = () => {
             <span className="truncate">{googleLoading ? t("auth.signingIn") : t("auth.continueWithGoogle")}</span>
           </Button>
           
-          <p className="text-xs text-[#86868B] text-center">
+          <p className="text-xs text-muted-foreground text-center">
             {t("auth.googlePrivacy")}
           </p>
           
           <div className="relative">
-            <Separator className="bg-[#E5E5EA]" />
-            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-sm text-[#86868B]">
+            <Separator className="bg-lilac-200" />
+            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-sm text-muted-foreground">
               {t("auth.orDivider")}
             </span>
           </div>
@@ -178,26 +178,26 @@ const Auth = () => {
           <form onSubmit={handleAuth} className="space-y-4">
             {isSignUp && (
               <div className="space-y-2">
-                <Label htmlFor="fullName" className="text-sm font-medium text-[#1D1D1F]">{t("auth.fullName")}</Label>
+                <Label htmlFor="fullName" className="text-sm font-medium text-foreground">{t("auth.fullName")}</Label>
                 <Input 
                   id="fullName" 
                   type="text" 
                   value={fullName} 
                   onChange={e => setFullName(e.target.value)} 
                   required 
-                  className="h-11 sm:h-12 rounded-xl border-[#E5E5EA] focus:border-[#7B61FF] transition-all text-base"
+                  className="h-11 sm:h-12 rounded-xl border-lilac-200 focus:border-primary transition-all text-base"
                 />
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium text-[#1D1D1F]">{t("auth.email")}</Label>
+              <Label htmlFor="email" className="text-sm font-medium text-foreground">{t("auth.email")}</Label>
               <Input 
                 id="email" 
                 type="email" 
                 value={email} 
                 onChange={e => setEmail(e.target.value)} 
                 required 
-                className="h-11 sm:h-12 rounded-xl border-[#E5E5EA] focus:border-[#7B61FF] transition-all text-base"
+                className="h-11 sm:h-12 rounded-xl border-lilac-200 focus:border-primary transition-all text-base"
               />
             </div>
             <div className="space-y-2">

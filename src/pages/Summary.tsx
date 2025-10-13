@@ -747,24 +747,24 @@ const Summary = () => {
   if (!summary) return null;
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      <header className="border-b border-[#E5E5EA]">
+    <div className="min-h-screen bg-lilac-50 flex flex-col">
+      <header className="border-b border-lilac-200 bg-white/80 backdrop-blur-sm">
         <div className="container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-5 flex items-center justify-between relative">
-          <Button variant="ghost" onClick={() => navigate("/")} size="sm" className="hover:bg-[#F5F5F7] rounded-xl transition-all duration-200">
+          <Button variant="ghost" onClick={() => navigate("/")} size="sm" className="hover:bg-lilac-100 rounded-xl transition-all duration-200">
             <ArrowLeft className="w-4 h-4 mr-1 sm:mr-2" />
             <span className="hidden sm:inline">Home</span>
           </Button>
           <div className="flex items-center gap-2 absolute left-1/2 transform -translate-x-1/2">
-            <BookOpen className="w-6 h-6 text-[#7B61FF]" />
-            <h1 className="text-lg sm:text-xl font-semibold text-[#1D1D1F]">OnePageBook</h1>
+            <BookOpen className="w-6 h-6 text-primary" />
+            <h1 className="text-lg sm:text-xl font-bold font-poppins bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">OnePageBook</h1>
           </div>
           <LanguageSelector />
         </div>
       </header>
 
       <main className="container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-12 sm:py-16 max-w-5xl flex-1">
-        <Card className="p-8 sm:p-12 border-border rounded-2xl shadow-sm">
-          <div className="flex items-start gap-4 sm:gap-5 mb-6 sm:mb-8 pb-8 border-b border-border">
+        <Card className="p-8 sm:p-12 border-lilac-200 rounded-2xl shadow-sm bg-white">
+          <div className="flex items-start gap-4 sm:gap-5 mb-6 sm:mb-8 pb-8 border-b border-lilac-200">
             <div className="w-16 h-24 sm:w-20 sm:h-28 rounded-xl overflow-hidden shadow-md flex-shrink-0">
               <img 
                 src={bookCover || '/book-placeholder.png'} 
@@ -776,10 +776,10 @@ const Summary = () => {
               />
             </div>
             <div className="flex-1 min-w-0">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold mb-3 break-words tracking-tight text-[#1D1D1F]">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-poppins mb-3 break-words tracking-tight text-foreground">
                 {summary.canonical_title || summary.book_title}
               </h1>
-              <p className="text-base sm:text-lg text-[#86868B]">
+              <p className="text-base sm:text-lg text-muted-foreground">
                 {t("summary.by")} {summary.user_author || summary.canonical_author || summary.book_author || t("summary.unknownAuthor")}
                 {summary.year && <span className="text-sm ml-2">({summary.year})</span>}
               </p>

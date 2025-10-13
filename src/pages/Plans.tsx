@@ -74,22 +74,22 @@ const Plans = () => {
   const isPremium = currentPlan?.subscription_plans?.type === "premium";
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-lilac-50 flex flex-col">
       <FloatingHeader />
 
       <main className="container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-12 sm:py-20 flex-1">
         <div className="text-center mb-10 sm:mb-14">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold mb-4 text-[#1D1D1F] tracking-tight">{t("plans.title")}</h1>
-          <p className="text-lg text-[#86868B]">Escolha o plano ideal para você</p>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold font-poppins mb-4 text-foreground tracking-tight">{t("plans.title")}</h1>
+          <p className="text-lg text-muted-foreground">Escolha o plano ideal para você</p>
           
           {/* Billing Toggle */}
-          <div className="inline-flex items-center gap-2 bg-[#F5F5F7] p-1 rounded-xl mt-6">
+          <div className="inline-flex items-center gap-2 bg-lilac-100 p-1 rounded-xl mt-6">
             <button
               onClick={() => setBillingCycle("monthly")}
               className={`px-5 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
                 billingCycle === "monthly"
-                  ? "bg-white text-[#1D1D1F] shadow-sm"
-                  : "text-[#86868B] hover:text-[#1D1D1F]"
+                  ? "bg-white text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {t("plans.toggle.monthly")}

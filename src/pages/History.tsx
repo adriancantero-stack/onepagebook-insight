@@ -64,19 +64,19 @@ const History = () => {
   const isFree = subscription?.subscription_plans?.type === "free";
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-lilac-50 flex flex-col">
       <FloatingHeader />
 
       <main className="container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-8 sm:py-12 flex-1">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 sm:mb-12">
           <div>
-            <h1 className="text-4xl sm:text-5xl font-semibold text-[#1D1D1F] tracking-tight mb-2">{t("history.title")}</h1>
-            <p className="text-[#86868B]">Seus resumos salvos</p>
+            <h1 className="text-4xl sm:text-5xl font-bold font-poppins text-foreground tracking-tight mb-2">{t("history.title")}</h1>
+            <p className="text-muted-foreground">Seus resumos salvos</p>
           </div>
           {isFree && (
             <Button 
               onClick={() => navigate("/plans")} 
-              className="w-full sm:w-auto bg-[#7B61FF] hover:bg-[#6951E6] text-white border-none shadow-sm"
+              className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white border-none shadow-sm"
             >
               <Crown className="w-4 h-4 mr-2" />
               {t("history.upgrade")}
@@ -86,19 +86,19 @@ const History = () => {
 
 
         {summaries.length === 0 ? (
-          <Card className="p-16 text-center border-[#E5E5EA] rounded-2xl">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#F5F5F7] mb-6">
-              <BookOpen className="w-8 h-8 text-[#86868B]" />
+          <Card className="p-16 text-center border-lilac-200 rounded-2xl bg-white">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-lilac-100 mb-6">
+              <BookOpen className="w-8 h-8 text-primary" />
             </div>
-            <p className="text-[#1D1D1F] font-medium text-lg mb-2">
+            <p className="text-foreground font-medium text-lg mb-2">
               {t("history.empty")}
             </p>
-            <p className="text-sm text-[#86868B] mb-6">
+            <p className="text-sm text-muted-foreground mb-6">
               {t("history.emptyDesc")}
             </p>
             <Button 
               onClick={() => navigate("/")}
-              className="bg-[#7B61FF] hover:bg-[#6951E6] text-white border-none shadow-sm"
+              className="bg-primary hover:bg-primary/90 text-white border-none shadow-sm"
             >
               {t("history.generateFirst")}
             </Button>
@@ -108,30 +108,30 @@ const History = () => {
             {summaries.map((summary) => (
               <Card
                 key={summary.id}
-                className="p-6 hover:shadow-lg hover:scale-[1.01] cursor-pointer transition-all duration-200 border-[#E5E5EA] rounded-xl"
+                className="p-6 hover:shadow-lg hover:scale-[1.01] cursor-pointer transition-all duration-200 border-lilac-200 rounded-xl bg-white"
                 onClick={() => navigate(`/summary/${summary.id}`)}
               >
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-[#7B61FF]/10 rounded-xl">
-                    <BookOpen className="w-5 h-5 text-[#7B61FF]" />
+                  <div className="p-3 bg-primary/10 rounded-xl">
+                    <BookOpen className="w-5 h-5 text-primary" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-lg mb-1 text-[#1D1D1F]">
+                    <h3 className="font-semibold font-poppins text-lg mb-1 text-foreground">
                       {summary.book_title}
                     </h3>
                     {summary.book_author && (
-                      <p className="text-sm text-[#86868B] mb-2">
+                      <p className="text-sm text-muted-foreground mb-2">
                         {t("summary.by")} {summary.book_author}
                       </p>
                     )}
-                    <p className="text-xs text-[#86868B]">
+                    <p className="text-xs text-muted-foreground">
                       {new Date(summary.created_at).toLocaleDateString()}
                     </p>
                   </div>
                   <Button 
                     variant="outline" 
                     size="sm"
-                    className="border-[#E5E5EA] hover:border-[#7B61FF] hover:bg-[#7B61FF] hover:text-white transition-all"
+                    className="border-lilac-200 hover:border-primary hover:bg-primary hover:text-white transition-all"
                   >
                     Ver Resumo
                   </Button>
