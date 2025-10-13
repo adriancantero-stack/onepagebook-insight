@@ -89,21 +89,43 @@ Deno.serve(async (req) => {
 
     if (operation === 'list_users') {
       console.log('Fetching all users from auth...');
-      const { data: usersData, error: listError } = await supabaseAdmin.auth.admin.listUsers();
-      
-      if (listError) {
-        console.error('List users error:', listError);
+
+      try {
+        const perPage = 1000; // fetch a large page size to minimize requests
+        let page = 1;
+        let allUsers: any[] = [];
+
+        while (true) {
+          const { data: usersData, error: listError } = await supabaseAdmin.auth.admin.listUsers({ page, perPage });
+
+          if (listError) {
+            console.error('List users error:', listError);
+            return new Response(
+              JSON.stringify({ error: listError.message }),
+              { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+            );
+          }
+
+          const batch = usersData?.users || [];
+          allUsers = allUsers.concat(batch);
+          console.log(`Fetched page ${page} with ${batch.length} users (total so far: ${allUsers.length})`);
+
+          if (batch.length < perPage) break; // last page reached
+          page += 1;
+        }
+
+        console.log(`Found ${allUsers.length} users in auth`);
         return new Response(
-          JSON.stringify({ error: listError.message }),
+          JSON.stringify({ users: allUsers }),
+          { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      } catch (err) {
+        console.error('Unexpected error while listing users:', err);
+        return new Response(
+          JSON.stringify({ error: err instanceof Error ? err.message : 'Unknown error' }),
           { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
-
-      console.log(`Found ${usersData?.users?.length || 0} users in auth`);
-      return new Response(
-        JSON.stringify({ users: usersData.users }),
-        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
     }
 
     return new Response(
