@@ -235,6 +235,15 @@ const Admin = () => {
       const authUsers = authUsersResponse?.users || [];
       console.log(`Loaded ${authUsers.length} auth users with emails`);
       
+      // Helper function to capitalize first letter of each word
+      const capitalizeName = (name: string | null) => {
+        if (!name) return "N/A";
+        return name
+          .split(' ')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+          .join(' ');
+      };
+
       // Prepare users table data
       const usersWithData = profilesData?.map(profile => {
         const subscription = subscriptionsData?.find(s => s.user_id === profile.id);
@@ -245,7 +254,7 @@ const Admin = () => {
         return {
           id: profile.id,
           email: authUser?.email || "",
-          full_name: profile.full_name || "N/A",
+          full_name: capitalizeName(profile.full_name),
           created_at: profile.created_at,
           plan_type: planType,
           summaries_count: summariesCount,
@@ -1612,8 +1621,9 @@ const Admin = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Email</TableHead>
+                  <TableHead>#</TableHead>
                   <TableHead>Nome</TableHead>
+                  <TableHead>Email</TableHead>
                   <TableHead>Data de Cadastro</TableHead>
                   <TableHead>Idioma</TableHead>
                   <TableHead>Origem</TableHead>
@@ -1624,10 +1634,13 @@ const Admin = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {users.map((user) => (
+                {users.map((user, index) => (
                   <TableRow key={user.id}>
-                    <TableCell className="font-medium">{user.email}</TableCell>
-                    <TableCell>{user.full_name}</TableCell>
+                    <TableCell className="text-muted-foreground text-sm">
+                      {index + 1}
+                    </TableCell>
+                    <TableCell className="font-medium">{user.full_name}</TableCell>
+                    <TableCell>{user.email}</TableCell>
                     <TableCell>
                       {new Date(user.created_at).toLocaleDateString("pt-BR")}
                     </TableCell>
