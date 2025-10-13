@@ -229,10 +229,15 @@ const Admin = () => {
 
       if (authError) {
         console.error('Error fetching auth users:', authError);
-        toast.error("Erro ao carregar emails dos usuários");
+        toast({
+          title: "Erro ao carregar emails",
+          description: "Não foi possível carregar os emails dos usuários. Verifique os logs.",
+          variant: "destructive",
+        });
       }
 
       const authUsers = authUsersResponse?.users || [];
+      console.log(`Loaded ${authUsers.length} auth users with emails`);
       
       // Prepare users table data
       const usersWithData = profilesData?.map(profile => {

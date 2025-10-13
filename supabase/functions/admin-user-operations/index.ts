@@ -88,6 +88,7 @@ Deno.serve(async (req) => {
     }
 
     if (operation === 'list_users') {
+      console.log('Fetching all users from auth...');
       const { data: usersData, error: listError } = await supabaseAdmin.auth.admin.listUsers();
       
       if (listError) {
@@ -98,6 +99,7 @@ Deno.serve(async (req) => {
         );
       }
 
+      console.log(`Found ${usersData?.users?.length || 0} users in auth`);
       return new Response(
         JSON.stringify({ users: usersData.users }),
         { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
