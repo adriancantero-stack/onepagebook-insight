@@ -125,13 +125,13 @@ const Auth = () => {
     }
   };
 
-  return <div className="min-h-screen flex flex-col bg-background">
+  return <div className="min-h-screen flex flex-col bg-lilac-50">
       <div className="flex-1 flex items-center justify-center px-6 sm:px-12 py-8 sm:py-12">
         <div className="absolute top-4 right-4">
           <LanguageSelector />
         </div>
         
-        <Card className="w-full max-w-lg border-transparent rounded-2xl shadow-sm p-6 sm:p-10 bg-background">
+        <Card className="w-full max-w-lg border-border rounded-2xl shadow-sm p-6 sm:p-10 bg-card">
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center">
             <div className="flex items-center gap-2">
