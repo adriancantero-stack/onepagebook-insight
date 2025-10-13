@@ -25,6 +25,7 @@ import { SummarySection } from "@/components/SummarySection";
 import type { BookSummary } from "@/types";
 import { getCachedAudio, saveAudioToCache } from "@/lib/cacheUtils";
 import { BuyOnAmazonButton } from "@/components/BuyOnAmazonButton";
+import { SummaryFeedback } from "@/components/SummaryFeedback";
 
 const Summary = () => {
   const { t, i18n } = useTranslation();
@@ -829,6 +830,12 @@ const Summary = () => {
               className="flex-1 min-w-[140px] sm:min-w-[160px] text-sm sm:text-base py-6"
             />
           </div>
+
+          {/* Feedback Section */}
+          <SummaryFeedback 
+            summaryId={summary.id} 
+            userId={summary.user_id}
+          />
 
           {/* Related Books Section */}
           {relatedBooksWithCovers.length > 0 && (

@@ -378,6 +378,41 @@ export type Database = {
         }
         Relationships: []
       }
+      summary_feedback: {
+        Row: {
+          book_summary_id: string
+          comment: string | null
+          created_at: string
+          id: string
+          rating: number | null
+          user_id: string
+        }
+        Insert: {
+          book_summary_id: string
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rating?: number | null
+          user_id: string
+        }
+        Update: {
+          book_summary_id?: string
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rating?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "summary_feedback_book_summary_id_fkey"
+            columns: ["book_summary_id"]
+            isOneToOne: false
+            referencedRelation: "book_summaries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string | null
