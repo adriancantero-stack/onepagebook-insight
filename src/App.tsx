@@ -18,6 +18,7 @@ const Plans = lazy(() => import("./pages/Plans"));
 const Explore = lazy(() => import("./pages/Explore"));
 const Demo = lazy(() => import("./pages/Demo"));
 const Welcome = lazy(() => import("./pages/Welcome"));
+const PremiumWelcome = lazy(() => import("./pages/PremiumWelcome"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Faq = lazy(() => import("./pages/Faq"));
@@ -49,6 +50,7 @@ const App = () => (
             <Route path="/es/auth" element={<Auth />} />
             <Route path="/en/auth" element={<Auth />} />
             <Route path="/welcome" element={<Welcome />} />
+            <Route path="/premium-welcome" element={<PremiumWelcome />} />
             <Route path="/summary/:id" element={<Summary />} />
             <Route path="/history" element={<History />} />
             <Route path="/plans" element={<Plans />} />

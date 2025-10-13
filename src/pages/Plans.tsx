@@ -193,7 +193,7 @@ const Plans = () => {
                 onClick={async () => {
                   const { data: { user } } = await supabase.auth.getUser();
                   const userId = user?.id || '';
-                  const successUrl = `${window.location.origin}/welcome?premium=true`;
+                  const successUrl = `${window.location.origin}/premium-welcome`;
                   const cancelUrl = `${window.location.origin}/plans`;
                   
                   const stripeLink = billingCycle === "monthly" 
