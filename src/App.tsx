@@ -36,12 +36,12 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 const queryClient = new QueryClient();
 
 const App = () => (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <GlobalAchievementNotification />
-        <BrowserRouter>
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <GlobalAchievementNotification />
+      <BrowserRouter>
         <Suspense fallback={<div className="min-h-screen flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>}>
@@ -62,10 +62,10 @@ const App = () => (
             <Route path="/plans" element={<Plans />} />
             <Route path="/explore" element={<Explore />} />
             <Route path="/demo" element={<Demo />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/achievements" element={<Achievements />} />
-          <Route path="/ranking" element={<Ranking />} />
-          <Route path="/settings" element={<Settings />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/achievements" element={<Achievements />} />
+            <Route path="/ranking" element={<Ranking />} />
+            <Route path="/settings" element={<Settings />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/faq" element={<Faq />} />
