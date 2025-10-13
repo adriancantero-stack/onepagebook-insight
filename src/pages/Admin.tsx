@@ -105,6 +105,8 @@ const Admin = () => {
   const [isClearingAudioCache, setIsClearingAudioCache] = useState(false);
   const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
   const [upgradingUserId, setUpgradingUserId] = useState<string | null>(null);
+  const [isCompletingUserData, setIsCompletingUserData] = useState(false);
+  const [incompleteUsersCount, setIncompleteUsersCount] = useState<number>(0);
 
 
   useEffect(() => {
@@ -266,6 +268,12 @@ const Admin = () => {
 
       setUsers(usersWithData);
 
+      // Count users with incomplete data
+      const incomplete = usersWithData.filter(u => 
+        !u.signup_language || !u.signup_path || !u.signup_country
+      ).length;
+      setIncompleteUsersCount(incomplete);
+
       // Calculate user growth (last 30 days)
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
@@ -410,6 +418,68 @@ const Admin = () => {
       toast.error("Erro ao liberar Premium");
     } finally {
       setUpgradingUserId(null);
+    }
+  };
+
+  const handleCompleteUserData = async () => {
+    if (!confirm(`Deseja completar os dados de ${incompleteUsersCount} usuários com informações faltantes?\n\nSerá feito:\n- Idioma será definido como 'preferred_language' se vazio\n- Origem será definida como '/auth' se vazio\n- País não pode ser inferido e permanecerá vazio`)) {
+      return;
+    }
+
+    setIsCompletingUserData(true);
+    try {
+      // Get all profiles with incomplete data
+      const { data: profiles, error: fetchError } = await supabase
+        .from("profiles")
+        .select("id, signup_language, signup_path, signup_country, preferred_language");
+
+      if (fetchError) throw fetchError;
+
+      let updated = 0;
+      let errors = 0;
+
+      for (const profile of profiles || []) {
+        const updates: any = {};
+        let needsUpdate = false;
+
+        // Complete signup_language from preferred_language
+        if (!profile.signup_language && profile.preferred_language) {
+          updates.signup_language = profile.preferred_language;
+          needsUpdate = true;
+        }
+
+        // Set default signup_path if empty
+        if (!profile.signup_path) {
+          updates.signup_path = '/auth';
+          needsUpdate = true;
+        }
+
+        // Update profile if needed
+        if (needsUpdate) {
+          const { error: updateError } = await supabase
+            .from("profiles")
+            .update(updates)
+            .eq("id", profile.id);
+
+          if (updateError) {
+            console.error(`Error updating profile ${profile.id}:`, updateError);
+            errors++;
+          } else {
+            updated++;
+          }
+        }
+      }
+
+      toast.success(`Dados completados!`, {
+        description: `${updated} usuários atualizados, ${errors} erros`
+      });
+
+      await loadAdminData();
+    } catch (error) {
+      console.error("Error completing user data:", error);
+      toast.error("Erro ao completar dados dos usuários");
+    } finally {
+      setIsCompletingUserData(false);
     }
   };
 
@@ -1612,10 +1682,30 @@ const Admin = () => {
         {/* Users Table */}
         <Card>
           <CardHeader>
-            <CardTitle>Todos os Usuários</CardTitle>
-            <CardDescription>
-              Lista completa de usuários registrados na plataforma
-            </CardDescription>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>Todos os Usuários</CardTitle>
+                <CardDescription>
+                  Lista completa de usuários registrados na plataforma
+                  {incompleteUsersCount > 0 && (
+                    <span className="ml-2 text-amber-600 font-medium">
+                      ({incompleteUsersCount} com dados incompletos)
+                    </span>
+                  )}
+                </CardDescription>
+              </div>
+              {incompleteUsersCount > 0 && (
+                <Button
+                  onClick={handleCompleteUserData}
+                  disabled={isCompletingUserData}
+                  variant="outline"
+                  className="gap-2"
+                >
+                  <RefreshCw className={`h-4 w-4 ${isCompletingUserData ? 'animate-spin' : ''}`} />
+                  {isCompletingUserData ? 'Completando...' : 'Completar Dados Faltantes'}
+                </Button>
+              )}
+            </div>
           </CardHeader>
           <CardContent>
             <Table>
