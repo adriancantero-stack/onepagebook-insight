@@ -91,52 +91,52 @@ export default function Profile() {
     <div className="min-h-screen bg-lilac-50">
       <FloatingHeader />
       
-      <div className="container mx-auto px-4 py-8 pt-24">
+      <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 pt-20 sm:pt-24">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold font-poppins text-foreground mb-2">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold font-poppins text-foreground mb-2">
             Meu Perfil
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-sm sm:text-base text-muted-foreground">
             Acompanhe seu progresso e conquistas
           </p>
         </div>
 
         {/* Main Profile Card */}
-        <Card className="max-w-4xl mx-auto mb-8 bg-white/70 backdrop-blur-md border-lilac-200 shadow-xl">
-          <CardContent className="p-8">
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+        <Card className="max-w-4xl mx-auto mb-6 sm:mb-8 bg-white/70 backdrop-blur-md border-lilac-200 shadow-xl">
+          <CardContent className="p-4 sm:p-6 md:p-8">
+            <div className="flex flex-col items-center gap-4 sm:gap-6">
               {/* Avatar */}
               <div className="relative">
-                <Avatar className="h-24 w-24 border-4 border-lilac-200 shadow-lg">
-                  <AvatarImage src={profile.photo_url} />
-                  <AvatarFallback className="bg-gradient-to-br from-lilac-400 to-purple-500 text-white text-2xl font-poppins">
+                <Avatar className="h-20 w-20 sm:h-24 sm:w-24 border-4 border-lilac-200 shadow-lg">
+                  <AvatarImage src={profile.photo_url} className="object-cover" />
+                  <AvatarFallback className="bg-gradient-to-br from-lilac-400 to-purple-500 text-white text-xl sm:text-2xl font-poppins">
                     {profile.full_name?.charAt(0).toUpperCase() || 'U'}
                   </AvatarFallback>
                 </Avatar>
                 
                 {isPremium && (
                   <div className="absolute -bottom-1 -right-1 bg-premium-gold rounded-full p-1.5 shadow-lg">
-                    <Crown className="h-4 w-4 text-gray-900" />
+                    <Crown className="h-3 w-3 sm:h-4 sm:w-4 text-gray-900" />
                   </div>
                 )}
               </div>
 
               {/* Profile Info */}
-              <div className="flex-1 text-center md:text-left space-y-4">
+              <div className="flex-1 w-full text-center space-y-3 sm:space-y-4">
                 <div className="space-y-2">
-                  <div className="flex items-center justify-center md:justify-start gap-3">
-                    <h2 className="text-2xl font-bold font-poppins text-foreground">
-                      {profile.full_name || 'Usuário'}
+                  <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
+                    <h2 className="text-xl sm:text-2xl font-bold font-poppins text-foreground">
+                      {profile.nickname || profile.full_name || 'Usuário'}
                     </h2>
                     {isPremium && (
-                      <Badge className="bg-gradient-to-r from-premium-gold to-yellow-400 text-gray-900 border-0">
+                      <Badge className="bg-gradient-to-r from-premium-gold to-yellow-400 text-gray-900 border-0 text-xs sm:text-sm">
                         👑 Premium
                       </Badge>
                     )}
                   </div>
                   
-                  <div className="flex items-center justify-center md:justify-start gap-2">
+                  <div className="flex items-center justify-center gap-2">
                     <LevelBadge level={profile.level || 'Beginner'} xp={profile.xp || 0} />
                   </div>
                 </div>
@@ -145,23 +145,23 @@ export default function Profile() {
                 <XPBar currentXP={profile.xp || 0} level={profile.level || 'Beginner'} />
 
                 {/* Action Buttons */}
-                <div className="flex flex-wrap gap-2 justify-center md:justify-start pt-2">
+                <div className="flex flex-col sm:flex-row gap-2 justify-center pt-2 w-full">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => navigate('/achievements')}
-                    className="border-lilac-200 hover:bg-lilac-50"
+                    className="border-lilac-200 hover:bg-lilac-50 w-full sm:w-auto text-xs sm:text-sm"
                   >
-                    <Trophy className="h-4 w-4 mr-2" />
+                    <Trophy className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
                     Ver Conquistas
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => navigate('/settings')}
-                    className="border-lilac-200 hover:bg-lilac-50"
+                    className="border-lilac-200 hover:bg-lilac-50 w-full sm:w-auto text-xs sm:text-sm"
                   >
-                    <Settings className="h-4 w-4 mr-2" />
+                    <Settings className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
                     Configurações
                   </Button>
                 </div>
@@ -171,7 +171,7 @@ export default function Profile() {
         </Card>
 
         {/* Stats */}
-        <div className="max-w-4xl mx-auto mb-8">
+        <div className="max-w-4xl mx-auto mb-6 sm:mb-8">
           <ProfileStats
             totalBooksRead={profile.total_books_read || 0}
             totalSummariesGenerated={profile.total_summaries_generated || 0}
@@ -194,9 +194,9 @@ export default function Profile() {
                 <Loader2 className="h-6 w-6 animate-spin text-lilac-500" />
               </div>
             ) : userAchievements.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
-                <p>Nenhuma conquista desbloqueada ainda</p>
-                <p className="text-sm mt-1">Complete seu primeiro resumo para começar!</p>
+              <div className="text-center py-6 sm:py-8 text-muted-foreground">
+                <p className="text-sm sm:text-base">Nenhuma conquista desbloqueada ainda</p>
+                <p className="text-xs sm:text-sm mt-1">Complete seu primeiro resumo para começar!</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
