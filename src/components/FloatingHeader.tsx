@@ -53,9 +53,9 @@ export const FloatingHeader = ({ onLogout, showNavigation = true }: FloatingHead
             <BookOpen className="w-5 h-5 text-primary" />
             <span className="font-bold font-poppins text-sm bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">OnePageBook</span>
             {isPremium && (
-              <div className="flex items-center gap-1.5 bg-gradient-to-r from-premium-gold/20 to-yellow-400/20 border border-premium-gold/30 px-2.5 py-1 rounded-full shadow-sm">
-                <Crown className="w-3.5 h-3.5 text-premium-gold" fill="currentColor" />
-                <span className="text-xs font-medium bg-gradient-to-r from-premium-gold to-yellow-600 bg-clip-text text-transparent">Premium</span>
+              <div className="flex items-center gap-1.5 bg-gradient-to-r from-primary/10 to-purple-500/10 border border-primary/30 px-2.5 py-1 rounded-full shadow-sm">
+                <Crown className="w-3.5 h-3.5 text-primary" fill="currentColor" />
+                <span className="text-xs font-medium bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">Premium</span>
               </div>
             )}
           </div>
