@@ -125,18 +125,18 @@ const Auth = () => {
     }
   };
 
-  return <div className="min-h-screen flex flex-col bg-white">
+  return <div className="min-h-screen flex flex-col bg-background">
       <div className="flex-1 flex items-center justify-center px-6 sm:px-12 py-8 sm:py-12">
         <div className="absolute top-4 right-4">
           <LanguageSelector />
         </div>
         
-        <Card className="w-full max-w-lg border-transparent rounded-2xl shadow-sm p-6 sm:p-10">
+        <Card className="w-full max-w-lg border-border rounded-2xl shadow-sm p-6 sm:p-10 bg-card">
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center">
             <div className="flex items-center gap-2">
               <BookOpen className="w-10 h-10 text-primary" />
-              <h1 className="text-3xl font-bold font-poppins bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent tracking-tight">OnePageBook</h1>
+              <h1 className="text-3xl font-bold font-poppins bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent tracking-tight">OnePageBook</h1>
             </div>
           </div>
           <p className="text-base font-medium text-primary">{t("auth.tagline")}</p>
@@ -151,7 +151,7 @@ const Auth = () => {
           <Button 
             type="button"
             variant="outline" 
-            className="w-full h-11 sm:h-12 rounded-xl border-lilac-200 hover:bg-[#4285F4] hover:text-white transition-all duration-200 text-sm sm:text-base"
+            className="w-full h-11 sm:h-12 rounded-xl border-border hover:bg-[#4285F4] hover:text-white transition-all duration-200 text-sm sm:text-base"
             onClick={handleGoogleSignIn}
             disabled={googleLoading}
           >
@@ -169,8 +169,8 @@ const Auth = () => {
           </p>
           
           <div className="relative">
-            <Separator className="bg-lilac-200" />
-            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-sm text-muted-foreground">
+            <Separator className="bg-border" />
+            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-3 text-sm text-muted-foreground">
               {t("auth.orDivider")}
             </span>
           </div>
@@ -185,7 +185,7 @@ const Auth = () => {
                   value={fullName} 
                   onChange={e => setFullName(e.target.value)} 
                   required 
-                  className="h-11 sm:h-12 rounded-xl border-lilac-200 focus:border-primary transition-all text-base"
+                  className="h-11 sm:h-12 rounded-xl border-input focus:border-primary transition-all text-base"
                 />
               </div>
             )}
@@ -197,11 +197,11 @@ const Auth = () => {
                 value={email} 
                 onChange={e => setEmail(e.target.value)} 
                 required 
-                className="h-11 sm:h-12 rounded-xl border-lilac-200 focus:border-primary transition-all text-base"
+                className="h-11 sm:h-12 rounded-xl border-input focus:border-primary transition-all text-base"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-medium text-[#1D1D1F]">{t("auth.password")}</Label>
+              <Label htmlFor="password" className="text-sm font-medium text-foreground">{t("auth.password")}</Label>
               <Input 
                 id="password" 
                 type="password" 
@@ -209,12 +209,12 @@ const Auth = () => {
                 onChange={e => setPassword(e.target.value)} 
                 required 
                 minLength={6} 
-                className="h-11 sm:h-12 rounded-xl border-[#E5E5EA] focus:border-[#7B61FF] transition-all text-base"
+                className="h-11 sm:h-12 rounded-xl border-input focus:border-primary transition-all text-base"
               />
             </div>
             <Button 
               type="submit" 
-              className="w-full h-11 sm:h-12 bg-[#7B61FF] hover:bg-[#6951E6] rounded-xl text-white font-medium transition-all duration-200 text-sm sm:text-base" 
+              className="w-full h-11 sm:h-12 bg-primary hover:bg-primary/90 rounded-xl text-primary-foreground font-medium transition-all duration-200 text-sm sm:text-base" 
               disabled={loading || !email || !password || (isSignUp && !fullName)}
             >
               {loading 
@@ -235,7 +235,7 @@ const Auth = () => {
                   setIsSignUp(!isSignUp);
                   setError("");
                 }}
-                className="text-sm text-[#7B61FF] hover:text-[#6951E6]"
+                className="text-sm text-primary hover:text-primary/90"
               >
                 {isSignUp 
                   ? t("auth.haveAccount") 
