@@ -76,26 +76,26 @@ const Faq = () => {
   }, [t, jsonLd]);
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-lilac-50 flex flex-col">
       <FloatingHeader />
 
       <main className="flex-1 container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-16 max-w-4xl">
-          <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-[#1D1D1F] mb-4 text-center">{t("faq.title_long")}</h1>
+          <h1 className="text-4xl sm:text-5xl font-bold font-poppins tracking-tight text-foreground mb-4 text-center">{t("faq.title_long")}</h1>
           
           <div className="relative mb-10 mt-10">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#86868B]" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <Input
               type="search"
               placeholder={t("faq.search.placeholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 h-14 rounded-xl border-[#E5E5EA] bg-[#F5F5F7] text-base"
+              className="pl-12 h-14 rounded-xl border-lilac-200 bg-white text-base"
             />
           </div>
 
           {filteredFaqs.length === 0 ? (
-            <Card className="p-10 text-center border-[#E5E5EA] rounded-2xl">
-              <p className="text-[#86868B] text-lg">{t("faq.empty")}</p>
+            <Card className="p-10 text-center border-lilac-200 rounded-2xl bg-white">
+              <p className="text-muted-foreground text-lg">{t("faq.empty")}</p>
             </Card>
           ) : (
             <Accordion type="single" collapsible className="space-y-4">
@@ -103,12 +103,12 @@ const Faq = () => {
                 <AccordionItem
                   key={index}
                   value={`item-${index}`}
-                  className="border border-[#E5E5EA] rounded-xl px-6 hover:shadow-md transition-all duration-200"
+                  className="border border-lilac-200 rounded-xl px-6 hover:shadow-md transition-all duration-200 bg-white"
                 >
                   <AccordionTrigger className="text-left hover:no-underline py-5">
-                    <span className="font-medium text-[#1D1D1F]">{faq.q}</span>
+                    <span className="font-medium text-foreground">{faq.q}</span>
                   </AccordionTrigger>
-                  <AccordionContent className="text-[#86868B] pb-5 leading-relaxed">
+                  <AccordionContent className="text-muted-foreground pb-5 leading-relaxed">
                     {faq.a}
                   </AccordionContent>
                 </AccordionItem>
@@ -116,9 +116,9 @@ const Faq = () => {
             </Accordion>
           )}
 
-          <Card className="mt-12 p-10 text-center bg-[#F5F5F7] border-[#E5E5EA] rounded-2xl">
-            <p className="text-lg sm:text-xl mb-6 text-[#86868B] leading-relaxed">{t("faq.cta.contact")}</p>
-            <Button asChild className="bg-[#7B61FF] hover:bg-[#6951E6] rounded-xl px-8 py-6 text-base font-medium transition-all duration-200">
+          <Card className="mt-12 p-10 text-center bg-lilac-100 border-lilac-200 rounded-2xl">
+            <p className="text-lg sm:text-xl mb-6 text-muted-foreground leading-relaxed">{t("faq.cta.contact")}</p>
+            <Button asChild className="bg-primary hover:bg-primary/90 rounded-xl px-8 py-6 text-base font-medium transition-all duration-200">
               <Link to="/contact">{t("faq.contact")}</Link>
             </Button>
           </Card>
