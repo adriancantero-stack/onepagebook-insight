@@ -131,7 +131,7 @@ const Auth = () => {
           <LanguageSelector />
         </div>
         
-        <Card className="w-full max-w-lg border-border rounded-2xl shadow-sm p-6 sm:p-10 bg-background">
+        <Card className="w-full max-w-lg border-transparent rounded-2xl shadow-sm p-6 sm:p-10 bg-background">
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center">
             <div className="flex items-center gap-2">
