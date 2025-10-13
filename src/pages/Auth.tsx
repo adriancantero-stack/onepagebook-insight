@@ -125,7 +125,7 @@ const Auth = () => {
     }
   };
 
-  return <div className="min-h-screen flex flex-col bg-lilac-50">
+  return <div className="min-h-screen flex flex-col bg-background">
       <div className="flex-1 flex items-center justify-center px-6 sm:px-12 py-8 sm:py-12">
         <div className="absolute top-4 right-4">
           <LanguageSelector />
