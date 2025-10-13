@@ -321,7 +321,7 @@ export default function Settings() {
             {/* Current Avatar */}
             <div className="flex flex-col items-center gap-4">
               <Avatar className="h-32 w-32 border-4 border-lilac-200 shadow-lg">
-                <AvatarImage src={profile?.photo_url} />
+                <AvatarImage src={profile?.photo_url} className="object-cover" />
                 <AvatarFallback className="bg-gradient-to-br from-lilac-400 to-purple-500 text-white text-4xl font-poppins">
                   {profile?.full_name?.charAt(0).toUpperCase() || 'U'}
                 </AvatarFallback>
@@ -376,7 +376,7 @@ export default function Settings() {
                     }`}
                   >
                     <Avatar className="h-24 w-24 border-2 border-lilac-200">
-                      <AvatarImage src={avatar.url} />
+                      <AvatarImage src={avatar.url} className="object-cover" />
                     </Avatar>
                     {isUploading && selectedAvatar === avatar.url && (
                       <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-full">
@@ -404,7 +404,7 @@ export default function Settings() {
                     }`}
                   >
                     <Avatar className="h-24 w-24 border-2 border-lilac-200">
-                      <AvatarImage src={avatar.url} />
+                      <AvatarImage src={avatar.url} className="object-cover" />
                     </Avatar>
                     {isUploading && selectedAvatar === avatar.url && (
                       <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-full">
@@ -432,7 +432,7 @@ export default function Settings() {
                     }`}
                   >
                     <Avatar className="h-24 w-24 border-2 border-lilac-200">
-                      <AvatarImage src={avatar.url} />
+                      <AvatarImage src={avatar.url} className="object-cover" />
                     </Avatar>
                     {isUploading && selectedAvatar === avatar.url && (
                       <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-full">
@@ -460,7 +460,7 @@ export default function Settings() {
                     }`}
                   >
                     <Avatar className="h-24 w-24 border-2 border-lilac-200">
-                      <AvatarImage src={avatar.url} />
+                      <AvatarImage src={avatar.url} className="object-cover" />
                     </Avatar>
                     {isUploading && selectedAvatar === avatar.url && (
                       <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-full">
@@ -488,7 +488,7 @@ export default function Settings() {
                     }`}
                   >
                     <Avatar className="h-24 w-24 border-2 border-lilac-200">
-                      <AvatarImage src={avatar.url} />
+                      <AvatarImage src={avatar.url} className="object-cover" />
                     </Avatar>
                     {isUploading && selectedAvatar === avatar.url && (
                       <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-full">
@@ -516,7 +516,7 @@ export default function Settings() {
                     }`}
                   >
                     <Avatar className="h-24 w-24 border-2 border-lilac-200">
-                      <AvatarImage src={avatar.url} />
+                      <AvatarImage src={avatar.url} className="object-cover" />
                     </Avatar>
                     {isUploading && selectedAvatar === avatar.url && (
                       <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-full">
