@@ -30,6 +30,22 @@ const Welcome = () => {
               }
             });
             
+            // Also update the profiles table directly for OAuth users
+            await supabase
+              .from('profiles')
+              .update({
+                signup_language: pendingLanguage,
+                signup_path: pendingPath,
+                signup_country: pendingCountry
+              })
+              .eq('id', user.id);
+            
+            console.log('✅ Signup metadata updated for OAuth user:', {
+              language: pendingLanguage,
+              path: pendingPath,
+              country: pendingCountry
+            });
+            
             // Clean up localStorage
             localStorage.removeItem("pending_signup_language");
             localStorage.removeItem("pending_signup_path");
