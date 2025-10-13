@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
+import { useXP } from "@/hooks/useXP";
 
 interface SummaryFeedbackProps {
   summaryId: string;
@@ -14,6 +15,7 @@ interface SummaryFeedbackProps {
 
 export const SummaryFeedback = ({ summaryId, userId }: SummaryFeedbackProps) => {
   const { t } = useTranslation();
+  const { addXP } = useXP();
   const [rating, setRating] = useState<number>(0);
   const [hoveredRating, setHoveredRating] = useState<number>(0);
   const [comment, setComment] = useState("");
@@ -75,6 +77,9 @@ export const SummaryFeedback = ({ summaryId, userId }: SummaryFeedbackProps) => 
 
         if (error) throw error;
         toast.success(t("Obrigado pelo seu feedback!"));
+        
+        // Add XP for feedback (only on new feedback, not updates)
+        await addXP('feedback_given', 10);
       }
 
       await loadExistingFeedback();

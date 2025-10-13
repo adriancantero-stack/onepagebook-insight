@@ -472,6 +472,10 @@ const Summary = () => {
           title: summary.canonical_title || summary.book_title,
           text: shareText,
         });
+        
+        // Add XP for sharing
+        await addXP('share_summary', 5);
+        
         toast({
           title: t("summary.shared"),
         });
