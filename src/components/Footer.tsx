@@ -7,7 +7,7 @@ const Footer = () => {
   const contactEmail = "contact@onepagebook.ai";
 
   return (
-    <footer className="mt-auto">
+    <footer className="mt-auto border-t border-lilac-200/50">
       <div className="container mx-auto px-4 py-6">
         <div className="flex flex-col items-center justify-center gap-4 text-sm text-muted-foreground">
           <div className="flex flex-wrap items-center justify-center gap-2">

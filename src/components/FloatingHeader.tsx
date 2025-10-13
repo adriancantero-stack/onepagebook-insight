@@ -34,7 +34,7 @@ export const FloatingHeader = ({ onLogout, showNavigation = true }: FloatingHead
 
   return (
     <header className="w-full max-w-4xl mx-auto pt-4 px-4">
-      <div className="px-6 py-3 flex items-center justify-between">
+      <div className="px-6 py-3 flex items-center justify-between bg-white/70 backdrop-blur-md rounded-2xl border border-lilac-200 shadow-lg">
         <div className="flex-1">
           {showNavigation && (
             <Button 
@@ -51,11 +51,11 @@ export const FloatingHeader = ({ onLogout, showNavigation = true }: FloatingHead
         {showNavigation && (
           <div className="flex items-center gap-3 justify-center">
             <BookOpen className="w-5 h-5 text-primary" />
-            <span className="font-semibold text-sm">OnePageBook</span>
+            <span className="font-bold font-poppins text-sm bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">OnePageBook</span>
             {isPremium && (
-              <div className="flex items-center gap-1.5 bg-gradient-to-r from-[#7B61FF]/10 to-[#9D8CFF]/10 border border-[#7B61FF]/20 px-2.5 py-1 rounded-full">
-                <Crown className="w-3.5 h-3.5 text-[#7B61FF]" fill="#7B61FF" />
-                <span className="text-xs font-medium text-[#7B61FF]">Premium</span>
+              <div className="flex items-center gap-1.5 bg-gradient-to-r from-premium-gold/20 to-yellow-400/20 border border-premium-gold/30 px-2.5 py-1 rounded-full shadow-sm">
+                <Crown className="w-3.5 h-3.5 text-premium-gold" fill="currentColor" />
+                <span className="text-xs font-medium bg-gradient-to-r from-premium-gold to-yellow-600 bg-clip-text text-transparent">Premium</span>
               </div>
             )}
           </div>
