@@ -18,6 +18,18 @@ const PRESET_AVATARS = [
   { id: 'intellectual-1', url: '/avatars/intellectual-1.png', category: 'intellectual' },
   { id: 'intellectual-2', url: '/avatars/intellectual-2.png', category: 'intellectual' },
   { id: 'intellectual-3', url: '/avatars/intellectual-3.png', category: 'intellectual' },
+  { id: 'feminine-1', url: '/avatars/feminine-1.png', category: 'feminine' },
+  { id: 'feminine-2', url: '/avatars/feminine-2.png', category: 'feminine' },
+  { id: 'feminine-3', url: '/avatars/feminine-3.png', category: 'feminine' },
+  { id: 'masculine-1', url: '/avatars/masculine-1.png', category: 'masculine' },
+  { id: 'masculine-2', url: '/avatars/masculine-2.png', category: 'masculine' },
+  { id: 'masculine-3', url: '/avatars/masculine-3.png', category: 'masculine' },
+  { id: 'legendary-1', url: '/avatars/legendary-1.png', category: 'legendary' },
+  { id: 'legendary-2', url: '/avatars/legendary-2.png', category: 'legendary' },
+  { id: 'legendary-3', url: '/avatars/legendary-3.png', category: 'legendary' },
+  { id: 'cute-1', url: '/avatars/cute-1.png', category: 'cute' },
+  { id: 'cute-2', url: '/avatars/cute-2.png', category: 'cute' },
+  { id: 'cute-3', url: '/avatars/cute-3.png', category: 'cute' },
 ];
 
 export default function Settings() {
@@ -230,6 +242,10 @@ export default function Settings() {
 
   const funnyAvatars = PRESET_AVATARS.filter(a => a.category === 'funny');
   const intellectualAvatars = PRESET_AVATARS.filter(a => a.category === 'intellectual');
+  const feminineAvatars = PRESET_AVATARS.filter(a => a.category === 'feminine');
+  const masculineAvatars = PRESET_AVATARS.filter(a => a.category === 'masculine');
+  const legendaryAvatars = PRESET_AVATARS.filter(a => a.category === 'legendary');
+  const cuteAvatars = PRESET_AVATARS.filter(a => a.category === 'cute');
 
   return (
     <div className="min-h-screen bg-lilac-50">
@@ -377,6 +393,118 @@ export default function Settings() {
               <Label className="text-base font-medium">Avatares Intelectuais</Label>
               <div className="grid grid-cols-3 gap-4">
                 {intellectualAvatars.map((avatar) => (
+                  <button
+                    key={avatar.id}
+                    onClick={() => handlePresetAvatarSelect(avatar.url)}
+                    disabled={isUploading}
+                    className={`relative group transition-all ${
+                      selectedAvatar === avatar.url 
+                        ? 'ring-4 ring-lilac-500 rounded-full' 
+                        : 'hover:ring-2 hover:ring-lilac-300 rounded-full'
+                    }`}
+                  >
+                    <Avatar className="h-24 w-24 border-2 border-lilac-200">
+                      <AvatarImage src={avatar.url} />
+                    </Avatar>
+                    {isUploading && selectedAvatar === avatar.url && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-full">
+                        <Loader2 className="h-6 w-6 animate-spin text-white" />
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Feminine Avatars */}
+            <div className="space-y-3">
+              <Label className="text-base font-medium">Avatares Femininos</Label>
+              <div className="grid grid-cols-3 gap-4">
+                {feminineAvatars.map((avatar) => (
+                  <button
+                    key={avatar.id}
+                    onClick={() => handlePresetAvatarSelect(avatar.url)}
+                    disabled={isUploading}
+                    className={`relative group transition-all ${
+                      selectedAvatar === avatar.url 
+                        ? 'ring-4 ring-lilac-500 rounded-full' 
+                        : 'hover:ring-2 hover:ring-lilac-300 rounded-full'
+                    }`}
+                  >
+                    <Avatar className="h-24 w-24 border-2 border-lilac-200">
+                      <AvatarImage src={avatar.url} />
+                    </Avatar>
+                    {isUploading && selectedAvatar === avatar.url && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-full">
+                        <Loader2 className="h-6 w-6 animate-spin text-white" />
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Masculine Avatars */}
+            <div className="space-y-3">
+              <Label className="text-base font-medium">Avatares Masculinos</Label>
+              <div className="grid grid-cols-3 gap-4">
+                {masculineAvatars.map((avatar) => (
+                  <button
+                    key={avatar.id}
+                    onClick={() => handlePresetAvatarSelect(avatar.url)}
+                    disabled={isUploading}
+                    className={`relative group transition-all ${
+                      selectedAvatar === avatar.url 
+                        ? 'ring-4 ring-lilac-500 rounded-full' 
+                        : 'hover:ring-2 hover:ring-lilac-300 rounded-full'
+                    }`}
+                  >
+                    <Avatar className="h-24 w-24 border-2 border-lilac-200">
+                      <AvatarImage src={avatar.url} />
+                    </Avatar>
+                    {isUploading && selectedAvatar === avatar.url && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-full">
+                        <Loader2 className="h-6 w-6 animate-spin text-white" />
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Legendary Avatars */}
+            <div className="space-y-3">
+              <Label className="text-base font-medium">Avatares Lendários</Label>
+              <div className="grid grid-cols-3 gap-4">
+                {legendaryAvatars.map((avatar) => (
+                  <button
+                    key={avatar.id}
+                    onClick={() => handlePresetAvatarSelect(avatar.url)}
+                    disabled={isUploading}
+                    className={`relative group transition-all ${
+                      selectedAvatar === avatar.url 
+                        ? 'ring-4 ring-lilac-500 rounded-full' 
+                        : 'hover:ring-2 hover:ring-lilac-300 rounded-full'
+                    }`}
+                  >
+                    <Avatar className="h-24 w-24 border-2 border-lilac-200">
+                      <AvatarImage src={avatar.url} />
+                    </Avatar>
+                    {isUploading && selectedAvatar === avatar.url && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-full">
+                        <Loader2 className="h-6 w-6 animate-spin text-white" />
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Cute Avatars */}
+            <div className="space-y-3">
+              <Label className="text-base font-medium">Avatares Fofinhos</Label>
+              <div className="grid grid-cols-3 gap-4">
+                {cuteAvatars.map((avatar) => (
                   <button
                     key={avatar.id}
                     onClick={() => handlePresetAvatarSelect(avatar.url)}
