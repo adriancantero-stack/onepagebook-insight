@@ -229,11 +229,7 @@ const Admin = () => {
 
       if (authError) {
         console.error('Error fetching auth users:', authError);
-        toast({
-          title: "Erro ao carregar emails",
-          description: "Não foi possível carregar os emails dos usuários. Verifique os logs.",
-          variant: "destructive",
-        });
+        toast.error("Não foi possível carregar os emails dos usuários. Verifique os logs.");
       }
 
       const authUsers = authUsersResponse?.users || [];

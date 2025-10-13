@@ -437,17 +437,15 @@ const Home = () => {
 
       <main className="mx-auto max-w-4xl px-6 sm:px-12 lg:px-24 xl:px-32">
         <header className="w-full text-center pt-12 pb-6">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight animate-fade-in text-[#1D1D1F]">
-              OnePageBook
-            </h1>
-            {isPremium && (
-              <div className="flex items-center gap-1.5 bg-gradient-to-r from-[#7B61FF]/10 to-[#9D8CFF]/10 border border-[#7B61FF]/20 px-3 py-1.5 rounded-full">
-                <Crown className="w-4 h-4 text-[#7B61FF]" fill="#7B61FF" />
-                <span className="text-sm font-medium text-[#7B61FF]">Premium</span>
-              </div>
-            )}
-          </div>
+          {isPremium && (
+            <div className="flex items-center justify-center gap-1.5 bg-gradient-to-r from-[#7B61FF]/10 to-[#9D8CFF]/10 border border-[#7B61FF]/20 px-3 py-1.5 rounded-full mb-3 inline-flex">
+              <Crown className="w-4 h-4 text-[#7B61FF]" fill="#7B61FF" />
+              <span className="text-sm font-medium text-[#7B61FF]">Premium</span>
+            </div>
+          )}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight animate-fade-in text-[#1D1D1F]">
+            OnePageBook
+          </h1>
           <p className="mt-4 text-lg sm:text-xl text-[#86868B] leading-relaxed">
             {i18n.language === 'pt' ? 'Seu livro em uma página.' : 
              i18n.language === 'es' ? 'Tu libro en una página.' : 
