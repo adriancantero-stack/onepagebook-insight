@@ -454,7 +454,7 @@ const Home = () => {
         </header>
 
         <div className="mx-auto mt-8 max-w-2xl w-full">
-          <Card className="p-8 sm:p-10 border-transparent rounded-2xl shadow-sm">
+          <Card className="p-8 sm:p-10 border-transparent rounded-2xl shadow-sm bg-lilac-50">
             <div className="space-y-6">
             <div>
               <BookAutocomplete

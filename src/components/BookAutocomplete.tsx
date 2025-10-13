@@ -190,7 +190,7 @@ export const BookAutocomplete = ({
           onKeyDown={handleKeyDown}
           disabled={disabled}
           autoComplete="off"
-          className="h-12 text-base"
+          className="h-12 text-base bg-white"
         />
         {!hideExploreLink && (
           <div 
