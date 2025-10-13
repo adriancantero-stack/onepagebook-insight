@@ -888,6 +888,15 @@ Responde SOLO con el JSON, sin texto adicional.`
 
     console.log("Summary saved:", summary.id);
 
+    // Increment summaries counter and award XP
+    try {
+      await supabase.rpc('increment_summaries_generated', { p_user_id: user.id });
+      console.log("✅ Incremented summaries counter and awarded XP");
+    } catch (error) {
+      console.error("Failed to increment summaries:", error);
+    }
+
+
     // Try to find and attach cover_url from books catalog
     let coverUrl: string | null = null;
     const { data: existingBook } = await supabase

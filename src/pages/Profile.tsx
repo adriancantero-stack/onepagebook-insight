@@ -174,6 +174,7 @@ export default function Profile() {
         <div className="max-w-4xl mx-auto mb-8">
           <ProfileStats
             totalBooksRead={profile.total_books_read || 0}
+            totalSummariesGenerated={profile.total_summaries_generated || 0}
             streakDays={profile.streak_days || 0}
             memberSince={profile.created_at}
           />

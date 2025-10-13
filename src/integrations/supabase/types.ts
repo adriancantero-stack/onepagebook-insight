@@ -366,6 +366,7 @@ export type Database = {
           streak_days: number | null
           timezone: string | null
           total_books_read: number | null
+          total_summaries_generated: number
           updated_at: string
           xp: number | null
         }
@@ -383,6 +384,7 @@ export type Database = {
           streak_days?: number | null
           timezone?: string | null
           total_books_read?: number | null
+          total_summaries_generated?: number
           updated_at?: string
           xp?: number | null
         }
@@ -400,6 +402,7 @@ export type Database = {
           streak_days?: number | null
           timezone?: string | null
           total_books_read?: number | null
+          total_summaries_generated?: number
           updated_at?: string
           xp?: number | null
         }
@@ -634,6 +637,10 @@ export type Database = {
         Returns: boolean
       }
       increment_book_read: {
+        Args: { p_user_id: string }
+        Returns: undefined
+      }
+      increment_summaries_generated: {
         Args: { p_user_id: string }
         Returns: undefined
       }

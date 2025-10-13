@@ -3,17 +3,25 @@ import { Book, Flame, Clock } from 'lucide-react';
 
 interface ProfileStatsProps {
   totalBooksRead: number;
+  totalSummariesGenerated: number;
   streakDays: number;
   memberSince: string;
 }
 
-export const ProfileStats = ({ totalBooksRead, streakDays, memberSince }: ProfileStatsProps) => {
+export const ProfileStats = ({ totalBooksRead, totalSummariesGenerated, streakDays, memberSince }: ProfileStatsProps) => {
   // Calculate days since member
   const daysSinceMember = Math.floor(
     (new Date().getTime() - new Date(memberSince).getTime()) / (1000 * 60 * 60 * 24)
   );
 
   const stats = [
+    {
+      icon: Book,
+      label: 'Resumos Gerados',
+      value: totalSummariesGenerated,
+      color: 'from-primary to-purple-500',
+      bgColor: 'bg-lilac-100'
+    },
     {
       icon: Book,
       label: 'Livros Lidos',
@@ -38,7 +46,7 @@ export const ProfileStats = ({ totalBooksRead, streakDays, memberSince }: Profil
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {stats.map((stat, index) => (
         <Card
           key={index}
