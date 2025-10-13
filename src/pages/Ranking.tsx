@@ -201,18 +201,18 @@ export default function Ranking() {
 
         {/* Filters */}
         <Tabs value={filter} onValueChange={(v) => setFilter(v as typeof filter)} className="mb-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="global" className="gap-2">
+          <TabsList className="grid w-full grid-cols-3 h-auto">
+            <TabsTrigger value="global" className="gap-1 sm:gap-2 flex-col sm:flex-row py-2 sm:py-2.5">
               <Globe className="h-4 w-4" />
-              {t('ranking.global')}
+              <span className="text-xs sm:text-sm">{t('ranking.global')}</span>
             </TabsTrigger>
-            <TabsTrigger value="language" className="gap-2">
+            <TabsTrigger value="language" className="gap-1 sm:gap-2 flex-col sm:flex-row py-2 sm:py-2.5">
               <TrendingUp className="h-4 w-4" />
-              {t('ranking.byLanguage')}
+              <span className="text-xs sm:text-sm">{t('ranking.byLanguage')}</span>
             </TabsTrigger>
-            <TabsTrigger value="weekly" className="gap-2">
+            <TabsTrigger value="weekly" className="gap-1 sm:gap-2 flex-col sm:flex-row py-2 sm:py-2.5">
               <Calendar className="h-4 w-4" />
-              {t('ranking.weekly')}
+              <span className="text-xs sm:text-sm">{t('ranking.weekly')}</span>
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -236,36 +236,36 @@ export default function Ranking() {
               return (
                 <Card 
                   key={user.id}
-                  className={`p-4 transition-all hover:shadow-md ${
+                  className={`p-3 sm:p-4 transition-all hover:shadow-md ${
                     isCurrentUser ? 'border-primary bg-primary/5' : ''
                   }`}
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2 sm:gap-4">
                     {/* Rank */}
-                    <div className="flex items-center justify-center w-12">
+                    <div className="flex items-center justify-center w-8 sm:w-12 flex-shrink-0">
                       {getRankIcon(rank) || (
-                        <span className="text-lg font-bold text-muted-foreground">
+                        <span className="text-sm sm:text-lg font-bold text-muted-foreground">
                           #{rank}
                         </span>
                       )}
                     </div>
 
                     {/* Avatar */}
-                    <Avatar className="h-12 w-12">
+                    <Avatar className="h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0">
                       <AvatarImage src={user.photo_url || ''} />
-                      <AvatarFallback className="bg-primary text-primary-foreground">
+                      <AvatarFallback className="bg-primary text-primary-foreground text-sm sm:text-base">
                         {user.full_name?.[0] || '?'}
                       </AvatarFallback>
                     </Avatar>
 
                     {/* Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-semibold text-foreground truncate">
+                    <div className="flex-1 min-w-0 mr-2">
+                      <div className="flex items-center gap-1 sm:gap-2 mb-1">
+                        <h3 className="font-semibold text-sm sm:text-base text-foreground truncate">
                           {user.full_name || t('ranking.anonymous')}
                         </h3>
                         {isCurrentUser && (
-                          <Badge variant="outline" className="text-xs">
+                          <Badge variant="outline" className="text-[10px] sm:text-xs px-1 py-0 sm:px-2 sm:py-0.5 flex-shrink-0">
                             {t('ranking.you')}
                           </Badge>
                         )}
@@ -274,11 +274,11 @@ export default function Ranking() {
                     </div>
 
                     {/* Stats */}
-                    <div className="text-right">
-                      <div className="font-bold text-foreground">
+                    <div className="text-right flex-shrink-0">
+                      <div className="font-bold text-sm sm:text-base text-foreground whitespace-nowrap">
                         {user.xp.toLocaleString()} XP
                       </div>
-                      <div className="text-xs text-muted-foreground">
+                      <div className="text-[10px] sm:text-xs text-muted-foreground whitespace-nowrap">
                         {user.total_summaries_generated} {t('ranking.summaries')}
                       </div>
                     </div>
