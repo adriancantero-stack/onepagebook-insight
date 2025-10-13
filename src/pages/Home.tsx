@@ -389,7 +389,7 @@ const Home = () => {
   const isStep = (step: GenStep) => genState.step === step;
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-lilac-50 flex flex-col">
       {/* Generation Progress Overlay */}
       <div 
         id="gen-overlay" 

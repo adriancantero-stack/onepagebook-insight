@@ -393,7 +393,7 @@ const Explore = () => {
   }, [filterLevel, filterLang, sortBy]);
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-lilac-50 flex flex-col">
       <FloatingHeader />
 
       <main className="container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-8 sm:py-12 flex-1">
