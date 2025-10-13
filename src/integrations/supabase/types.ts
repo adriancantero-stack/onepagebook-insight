@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      achievements: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          requirement_type: string
+          requirement_value: number
+          xp_reward: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          requirement_type: string
+          requirement_value: number
+          xp_reward?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          requirement_type?: string
+          requirement_value?: number
+          xp_reward?: number | null
+        }
+        Relationships: []
+      }
       book_audio: {
         Row: {
           audio_url: string
@@ -323,31 +356,52 @@ export type Database = {
           created_at: string
           full_name: string | null
           id: string
+          last_read_date: string | null
+          level: string | null
+          photo_url: string | null
           preferred_language: string
           signup_country: string | null
           signup_language: string | null
           signup_path: string | null
+          streak_days: number | null
+          timezone: string | null
+          total_books_read: number | null
           updated_at: string
+          xp: number | null
         }
         Insert: {
           created_at?: string
           full_name?: string | null
           id: string
+          last_read_date?: string | null
+          level?: string | null
+          photo_url?: string | null
           preferred_language?: string
           signup_country?: string | null
           signup_language?: string | null
           signup_path?: string | null
+          streak_days?: number | null
+          timezone?: string | null
+          total_books_read?: number | null
           updated_at?: string
+          xp?: number | null
         }
         Update: {
           created_at?: string
           full_name?: string | null
           id?: string
+          last_read_date?: string | null
+          level?: string | null
+          photo_url?: string | null
           preferred_language?: string
           signup_country?: string | null
           signup_language?: string | null
           signup_path?: string | null
+          streak_days?: number | null
+          timezone?: string | null
+          total_books_read?: number | null
           updated_at?: string
+          xp?: number | null
         }
         Relationships: []
       }
@@ -409,6 +463,42 @@ export type Database = {
             columns: ["book_summary_id"]
             isOneToOne: false
             referencedRelation: "book_summaries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_achievements: {
+        Row: {
+          achievement_id: string
+          id: string
+          unlocked_at: string | null
+          user_id: string
+        }
+        Insert: {
+          achievement_id: string
+          id?: string
+          unlocked_at?: string | null
+          user_id: string
+        }
+        Update: {
+          achievement_id?: string
+          id?: string
+          unlocked_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_achievements_achievement_id_fkey"
+            columns: ["achievement_id"]
+            isOneToOne: false
+            referencedRelation: "achievements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_achievements_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -479,14 +569,62 @@ export type Database = {
           },
         ]
       }
+      xp_log: {
+        Row: {
+          created_at: string | null
+          event_type: string
+          id: string
+          user_id: string
+          xp_earned: number
+        }
+        Insert: {
+          created_at?: string | null
+          event_type: string
+          id?: string
+          user_id: string
+          xp_earned: number
+        }
+        Update: {
+          created_at?: string | null
+          event_type?: string
+          id?: string
+          user_id?: string
+          xp_earned?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "xp_log_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      add_xp: {
+        Args: { p_event_type: string; p_user_id: string; p_xp: number }
+        Returns: {
+          leveled_up: boolean
+          new_level: string
+          new_xp: number
+        }[]
+      }
       calculate_next_cron_run: {
         Args: { cron_expr: string; from_time?: string }
         Returns: string
+      }
+      check_achievements: {
+        Args: { p_user_id: string }
+        Returns: {
+          achievement_id: string
+          achievement_name: string
+          xp_reward: number
+        }[]
       }
       has_role: {
         Args: {
@@ -494,6 +632,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      increment_book_read: {
+        Args: { p_user_id: string }
+        Returns: undefined
       }
       normalize_cache_text: {
         Args: { text_input: string }
