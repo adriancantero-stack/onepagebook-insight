@@ -99,6 +99,33 @@ export const en = {
     "levels.Master": "Master",
     "levels.Enlightened": "Enlightened",
     
+    // Ranking
+    "ranking.title": "Global Ranking",
+    "ranking.subtitle": "Compare your progress with other readers",
+    "ranking.global": "Global",
+    "ranking.byLanguage": "By Language",
+    "ranking.weekly": "Weekly",
+    "ranking.you": "You",
+    "ranking.anonymous": "Anonymous",
+    "ranking.summaries": "summaries",
+    "ranking.share": "Share",
+    "ranking.shared": "Ranking shared!",
+    "ranking.sharedDesc": "Link copied to clipboard",
+    "ranking.shareText": "I'm #{{rank}} on OnePageBook with {{xp}} XP ({{level}})!",
+    "ranking.noData": "No data available",
+    "ranking.errorLoading": "Error loading ranking",
+    
+    // Achievements
+    "achievements.title": "Achievements",
+    "achievements.subtitle": "Keep reading to unlock more achievements",
+    "achievements.progress": "{{unlocked}} of {{total}} unlocked",
+    "achievements.all": "All",
+    "achievements.unlocked": "Unlocked",
+    "achievements.locked": "Locked",
+    "achievements.noAchievements": "No achievements in this category",
+    "achievements.share": "Share",
+    "achievements.shareText": "I unlocked {{count}} achievements on OnePageBook!",
+    
     // Home
     "home.title": "Generate practical one-page",
     "home.titleLine2": "book summaries",

@@ -18,7 +18,9 @@ import {
   HelpCircle,
   Mail,
   LogOut,
-  User
+  User,
+  Trophy,
+  Award
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
@@ -48,6 +50,16 @@ export const NavigationMenu = ({ onLogout }: NavigationMenuProps) => {
       icon: User,
       label: "Perfil",
       onClick: () => navigate("/profile"),
+    },
+    {
+      icon: Trophy,
+      label: t("ranking.title"),
+      onClick: () => navigate("/ranking"),
+    },
+    {
+      icon: Award,
+      label: t("achievements.title"),
+      onClick: () => navigate("/achievements"),
     },
     {
       icon: Compass,

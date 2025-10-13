@@ -99,6 +99,33 @@ export const es = {
     "levels.Master": "Maestro",
     "levels.Enlightened": "Iluminado",
     
+    // Ranking
+    "ranking.title": "Clasificación Global",
+    "ranking.subtitle": "Compara tu progreso con otros lectores",
+    "ranking.global": "Global",
+    "ranking.byLanguage": "Por Idioma",
+    "ranking.weekly": "Semanal",
+    "ranking.you": "Tú",
+    "ranking.anonymous": "Anónimo",
+    "ranking.summaries": "resúmenes",
+    "ranking.share": "Compartir",
+    "ranking.shared": "¡Clasificación compartida!",
+    "ranking.sharedDesc": "Enlace copiado al portapapeles",
+    "ranking.shareText": "¡Estoy en el #{{rank}} en OnePageBook con {{xp}} XP ({{level}})!",
+    "ranking.noData": "No hay datos disponibles",
+    "ranking.errorLoading": "Error al cargar clasificación",
+    
+    // Achievements
+    "achievements.title": "Logros",
+    "achievements.subtitle": "Sigue leyendo para desbloquear más logros",
+    "achievements.progress": "{{unlocked}} de {{total}} desbloqueados",
+    "achievements.all": "Todos",
+    "achievements.unlocked": "Desbloqueados",
+    "achievements.locked": "Bloqueados",
+    "achievements.noAchievements": "No hay logros en esta categoría",
+    "achievements.share": "Compartir",
+    "achievements.shareText": "¡Desbloqueé {{count}} logros en OnePageBook!",
+    
     // Home
     "home.title": "Genera resúmenes prácticos",
     "home.titleLine2": "de libros en 1 página",
