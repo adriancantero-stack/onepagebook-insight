@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Loader2 } from "lucide-react";
+import { Loader2, Crown } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import Footer from "@/components/Footer";
@@ -31,6 +31,7 @@ interface GenState {
 const Home = () => {
   const { t, i18n } = useTranslation();
   const [user, setUser] = useState<AuthUser | null>(null);
+  const [isPremium, setIsPremium] = useState(false);
   const [bookTitle, setBookTitle] = useState("");
   const [bookAuthor, setBookAuthor] = useState("");
   const [bookId, setBookId] = useState<string | null>(null);
@@ -99,6 +100,8 @@ const Home = () => {
       if (session?.user) {
         setUser(session.user);
         setIsCheckingAuth(false);
+        // Check premium status
+        checkPremiumStatus(session.user.id);
       } else {
         setUser(null);
       }
@@ -109,11 +112,14 @@ const Home = () => {
       if (session?.user) {
         setUser(session.user);
         setIsCheckingAuth(false);
+        // Check premium status
+        checkPremiumStatus(session.user.id);
       } else {
         setTimeout(() => {
           supabase.auth.getSession().then(({ data: { session: s2 } }) => {
             if (s2?.user) {
               setUser(s2.user);
+              checkPremiumStatus(s2.user.id);
             } else {
               navigate("/auth", { replace: true });
             }
@@ -125,6 +131,16 @@ const Home = () => {
 
     return () => subscription.unsubscribe();
   }, [navigate]);
+
+  const checkPremiumStatus = async (userId: string) => {
+    const { data } = await supabase
+      .from("user_subscriptions")
+      .select("subscription_plans(type)")
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    setIsPremium(data?.subscription_plans?.type === "premium");
+  };
 
   // Block scroll when overlay is open and prepare fun messages
   useEffect(() => {
@@ -421,9 +437,17 @@ const Home = () => {
 
       <main className="mx-auto max-w-4xl px-6 sm:px-12 lg:px-24 xl:px-32">
         <header className="w-full text-center pt-12 pb-6">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight animate-fade-in text-[#1D1D1F]">
-            OnePageBook
-          </h1>
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight animate-fade-in text-[#1D1D1F]">
+              OnePageBook
+            </h1>
+            {isPremium && (
+              <div className="flex items-center gap-1.5 bg-gradient-to-r from-[#7B61FF]/10 to-[#9D8CFF]/10 border border-[#7B61FF]/20 px-3 py-1.5 rounded-full">
+                <Crown className="w-4 h-4 text-[#7B61FF]" fill="#7B61FF" />
+                <span className="text-sm font-medium text-[#7B61FF]">Premium</span>
+              </div>
+            )}
+          </div>
           <p className="mt-4 text-lg sm:text-xl text-[#86868B] leading-relaxed">
             {i18n.language === 'pt' ? 'Seu livro em uma página.' : 
              i18n.language === 'es' ? 'Tu libro en una página.' : 
