@@ -9,23 +9,66 @@ const PremiumWelcome = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Track purchase event in Google Analytics
-    if (!sessionStorage.getItem('ga_purchase_tracked')) {
+    // GA4 Purchase Tracking com regras de idioma e preço
+    try {
+      // evita duplicar o evento na mesma sessão
+      if (sessionStorage.getItem('ga_purchase')) return;
+
+      // idioma: html lang -> prefixo da rota -> navegador
+      const htmlLang = (document.documentElement.lang || '').slice(0,2).toLowerCase();
+      const routeLang = (location.pathname.match(/^\/([a-z]{2})\//) || [])[1];
+      const lang = (htmlLang || routeLang || navigator.language.slice(0,2) || 'en').toLowerCase();
+
+      // tenta ler valor/moeda de atributos no HTML (se existir)
+      const dataEl = document.querySelector('[data-plan-price][data-currency]');
+      let value = dataEl ? Number(dataEl.getAttribute('data-plan-price')) : NaN;
+      let currency = dataEl ? (dataEl.getAttribute('data-currency') || '').toUpperCase() : '';
+
+      // permite override via querystring (ex.: ?price=14.9&currency=BRL)
+      const qs = new URLSearchParams(location.search);
+      const qsPrice = qs.get('price');
+      const qsCurrency = qs.get('currency');
+      if (!isNaN(Number(qsPrice))) value = Number(qsPrice);
+      if (qsCurrency) currency = qsCurrency.toUpperCase();
+
+      // fallback padrão por idioma (regra do produto)
+      if (isNaN(value) || !currency) {
+        if (lang === 'pt') {
+          value = 14.90;
+          currency = 'BRL';
+        } else {
+          value = 4.99;
+          currency = 'USD';
+        }
+      }
+
+      // transaction id: use o session_id da Stripe se veio no retorno
+      const sessionId = qs.get('session_id');
+      const transactionId = sessionId || ('opb_' + Date.now() + '_' + Math.random().toString(36).slice(2));
+
+      // dispara evento GA4 purchase
       const gtag = (window as any).gtag;
       if (gtag) {
         gtag('event', 'purchase', {
-          transaction_id: `premium_${Date.now()}`,
-          value: 27.00,
-          currency: 'BRL',
+          transaction_id: transactionId,
+          value: value,
+          currency: currency,
+          plan: 'premium',
+          language: lang,
+          method: 'stripe',
           items: [{
-            item_id: 'premium_plan',
-            item_name: 'Premium Plan',
-            price: 27.00,
+            item_id: 'opb_premium',
+            item_name: 'OnePageBook Premium',
+            price: value,
             quantity: 1
           }]
         });
-        sessionStorage.setItem('ga_purchase_tracked', 'true');
+        sessionStorage.setItem('ga_purchase', '1'); // trava anti-duplicação
+      } else {
+        console.warn('gtag() não encontrado. Confirme a tag GA4 no <head>.');
       }
+    } catch (e) {
+      console.error('Erro ao disparar GA4 purchase:', e);
     }
 
     // Auto-redirect after 8 seconds
