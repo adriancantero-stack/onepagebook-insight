@@ -14,6 +14,7 @@ import { toast } from '@/hooks/use-toast';
 interface RankingUser {
   id: string;
   full_name: string;
+  nickname: string | null;
   photo_url: string | null;
   xp: number;
   level: string;
@@ -42,7 +43,7 @@ export default function Ranking() {
       
       let query = supabase
         .from('profiles')
-        .select('id, full_name, photo_url, xp, level, total_books_read, total_summaries_generated, streak_days, preferred_language')
+        .select('id, full_name, nickname, photo_url, xp, level, total_books_read, total_summaries_generated, streak_days, preferred_language')
         .order('xp', { ascending: false })
         .limit(100);
 
@@ -75,7 +76,7 @@ export default function Ranking() {
           // User not in top 100, fetch their data separately
           const { data: userData } = await supabase
             .from('profiles')
-            .select('id, full_name, photo_url, xp, level, total_books_read, total_summaries_generated, streak_days, preferred_language')
+            .select('id, full_name, nickname, photo_url, xp, level, total_books_read, total_summaries_generated, streak_days, preferred_language')
             .eq('id', user.id)
             .single();
           
@@ -262,7 +263,7 @@ export default function Ranking() {
                     <div className="flex-1 min-w-0 mr-2">
                       <div className="flex items-center gap-1 sm:gap-2 mb-1">
                         <h3 className="font-semibold text-sm sm:text-base text-foreground truncate">
-                          {user.full_name || t('ranking.anonymous')}
+                          {user.nickname || user.full_name || t('ranking.anonymous')}
                         </h3>
                         {isCurrentUser && (
                           <Badge variant="outline" className="text-[10px] sm:text-xs px-1 py-0 sm:px-2 sm:py-0.5 flex-shrink-0">

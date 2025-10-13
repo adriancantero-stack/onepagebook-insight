@@ -27,6 +27,8 @@ export default function Settings() {
   const [isLoading, setIsLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
+  const [nickname, setNickname] = useState('');
+  const [isSavingNickname, setIsSavingNickname] = useState(false);
 
   useEffect(() => {
     loadProfile();
@@ -49,6 +51,7 @@ export default function Settings() {
 
       if (profileError) throw profileError;
       setProfile(profileData);
+      setNickname(profileData?.nickname || '');
     } catch (error: any) {
       console.error('Error loading profile:', error);
       toast({
@@ -162,6 +165,61 @@ export default function Settings() {
     }
   };
 
+  const handleNicknameUpdate = async () => {
+    if (!nickname.trim()) {
+      toast({
+        title: 'Nickname inválido',
+        description: 'O nickname não pode estar vazio',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    if (nickname.length < 3 || nickname.length > 20) {
+      toast({
+        title: 'Nickname inválido',
+        description: 'O nickname deve ter entre 3 e 20 caracteres',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    setIsSavingNickname(true);
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Usuário não autenticado');
+
+      const { error } = await supabase
+        .from('profiles')
+        .update({ nickname: nickname.trim() })
+        .eq('id', user.id);
+
+      if (error) {
+        if (error.code === '23505') {
+          throw new Error('Este nickname já está em uso');
+        }
+        throw error;
+      }
+
+      setProfile({ ...profile, nickname: nickname.trim() });
+      
+      toast({
+        title: 'Nickname atualizado!',
+        description: 'Seu nickname foi atualizado com sucesso',
+      });
+    } catch (error: any) {
+      console.error('Error updating nickname:', error);
+      toast({
+        title: 'Erro ao atualizar nickname',
+        description: error.message,
+        variant: 'destructive'
+      });
+    } finally {
+      setIsSavingNickname(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-lilac-50 flex items-center justify-center">
@@ -195,6 +253,49 @@ export default function Settings() {
             Personalize seu perfil
           </p>
         </div>
+
+        {/* Nickname Section */}
+        <Card className="bg-white/70 backdrop-blur-md border-lilac-200 shadow-xl mb-6">
+          <CardHeader>
+            <CardTitle className="font-poppins">Nickname</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="nickname" className="text-base font-medium">
+                Seu nickname público
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                Este é o nome que aparecerá no ranking e outras áreas públicas do app
+              </p>
+              <div className="flex gap-2">
+                <Input
+                  id="nickname"
+                  type="text"
+                  value={nickname}
+                  onChange={(e) => setNickname(e.target.value)}
+                  placeholder="Ex: LeitorPro123"
+                  maxLength={20}
+                  className="flex-1"
+                  disabled={isSavingNickname}
+                />
+                <Button 
+                  onClick={handleNicknameUpdate}
+                  disabled={isSavingNickname || !nickname.trim()}
+                  className="bg-lilac-500 hover:bg-lilac-600"
+                >
+                  {isSavingNickname ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    'Salvar'
+                  )}
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Mínimo 3 caracteres, máximo 20 caracteres
+              </p>
+            </div>
+          </CardContent>
+        </Card>
 
         <Card className="bg-white/70 backdrop-blur-md border-lilac-200 shadow-xl">
           <CardHeader>
