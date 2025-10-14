@@ -59,7 +59,7 @@ export const LandingHero = ({
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-3 lg:gap-4">
             <div className="flex flex-col items-center gap-3 group">
               <div className="rounded-2xl bg-gradient-to-br from-primary/20 to-purple-500/20 p-6 sm:p-8 lg:p-10 backdrop-blur-sm border border-primary/20 transition-transform group-hover:scale-110 px-[32px] mx-0">
-                <img src={heroBook} alt="Book" className="h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16" />
+                <img src={heroBook} alt="Book" className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28" />
               </div>
               <p className="text-xs sm:text-sm lg:text-base font-medium text-muted-foreground">{t("landing.hero.visual.book")}</p>
             </div>
@@ -68,7 +68,7 @@ export const LandingHero = ({
             
             <div className="flex flex-col items-center gap-3 group">
               <div className="rounded-2xl bg-gradient-to-br from-purple-500/20 to-primary/20 p-6 sm:p-8 lg:p-10 backdrop-blur-sm border border-purple-500/20 transition-transform group-hover:scale-110">
-                <img src={heroAI} alt="AI" className="h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16" />
+                <img src={heroAI} alt="AI" className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28" />
               </div>
               <p className="text-xs sm:text-sm lg:text-base font-medium text-muted-foreground">{t("landing.hero.visual.ai")}</p>
             </div>
@@ -77,7 +77,7 @@ export const LandingHero = ({
             
             <div className="flex flex-col items-center gap-3 group">
               <div className="rounded-2xl bg-gradient-to-br from-primary/20 to-purple-500/20 p-6 sm:p-8 lg:p-10 backdrop-blur-sm border border-primary/20 transition-transform group-hover:scale-110">
-                <img src={heroSummary} alt="Summary" className="h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16" />
+                <img src={heroSummary} alt="Summary" className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28" />
               </div>
               <p className="text-xs sm:text-sm lg:text-base font-medium text-muted-foreground">{t("landing.hero.visual.summary")}</p>
             </div>
