@@ -6,7 +6,7 @@ export const LandingLanguages = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="container mx-auto px-6 py-16 sm:px-12 sm:py-20 lg:px-24 bg-gradient-to-br from-lilac-50 via-purple-50/30 to-lilac-50">
+    <section className="container mx-auto px-6 py-12 sm:px-12 sm:py-16 lg:px-24 bg-gradient-to-br from-lilac-50 via-purple-50/30 to-lilac-50">
       <div className="mx-auto max-w-4xl text-center space-y-8">
         <div className="inline-flex items-center justify-center p-3 rounded-full bg-primary/10 mb-4">
           <Globe className="h-10 w-10 text-primary" />
