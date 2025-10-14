@@ -143,6 +143,10 @@ export const es = {
     "achievements.noAchievements": "No hay logros en esta categoría",
     "achievements.share": "Compartir",
     "achievements.shareText": "¡Desbloqueé {{count}} logros en OnePageBook!",
+    "achievements.achievement": "Logro",
+    "achievements.shareOnSocial": "Compartir en redes sociales",
+    "achievements.shared": "¡Logro compartido!",
+    "achievements.copiedToClipboard": "Enlace copiado al portapapeles",
     
     // Home
     "home.title": "Genera resúmenes prácticos",

@@ -143,6 +143,10 @@ export const en = {
     "achievements.noAchievements": "No achievements in this category",
     "achievements.share": "Share",
     "achievements.shareText": "I unlocked {{count}} achievements on OnePageBook!",
+    "achievements.achievement": "Achievement",
+    "achievements.shareOnSocial": "Share on social media",
+    "achievements.shared": "Achievement shared!",
+    "achievements.copiedToClipboard": "Link copied to clipboard",
     
     // Home
     "home.title": "Generate practical one-page",

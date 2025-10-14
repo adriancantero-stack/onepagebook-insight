@@ -61,6 +61,10 @@ export const pt = {
     "achievements.noAchievements": "Nenhuma conquista nesta categoria",
     "achievements.share": "Compartilhar",
     "achievements.shareText": "Desbloqueei {{count}} conquistas no OnePageBook!",
+    "achievements.achievement": "Conquista",
+    "achievements.shareOnSocial": "Compartilhar nas redes sociais",
+    "achievements.shared": "Conquista compartilhada!",
+    "achievements.copiedToClipboard": "Link copiado para área de transferência",
     
     // Home
     "home.title": "Gere resumos práticos",

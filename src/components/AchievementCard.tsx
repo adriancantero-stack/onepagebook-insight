@@ -1,5 +1,8 @@
 import { Card, CardContent } from '@/components/ui/card';
-import { Lock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Lock, Share2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { toast } from '@/hooks/use-toast';
 
 export interface AchievementCardProps {
   name: string;
@@ -18,6 +21,36 @@ export const AchievementCard = ({
   unlocked,
   unlocked_at
 }: AchievementCardProps) => {
+  const { t } = useTranslation();
+
+  const handleShare = async () => {
+    const text = `🎉 ${t('achievements.unlocked')}: ${name}!\n${description || ''}\n\n+${xp_reward} XP 🏆`;
+    const url = window.location.origin;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `${t('achievements.achievement')}: ${name}`,
+          text: text,
+          url: url
+        });
+      } catch (error) {
+        // User cancelled or error - fallback to clipboard
+        copyToClipboard(text, url);
+      }
+    } else {
+      copyToClipboard(text, url);
+    }
+  };
+
+  const copyToClipboard = (text: string, url: string) => {
+    navigator.clipboard.writeText(`${text}\n\n${url}`);
+    toast({
+      title: t('achievements.shared'),
+      description: t('achievements.copiedToClipboard')
+    });
+  };
+
   return (
     <Card
       className={`
@@ -49,9 +82,22 @@ export const AchievementCard = ({
 
           {/* Content */}
           <div className="flex-1 space-y-1">
-            <h3 className={`font-poppins font-semibold ${unlocked ? 'text-foreground' : 'text-muted-foreground'}`}>
-              {name}
-            </h3>
+            <div className="flex items-start justify-between gap-2">
+              <h3 className={`font-poppins font-semibold ${unlocked ? 'text-foreground' : 'text-muted-foreground'}`}>
+                {name}
+              </h3>
+              {unlocked && (
+                <Button
+                  onClick={handleShare}
+                  size="sm"
+                  variant="ghost"
+                  className="h-8 w-8 p-0 shrink-0 hover:bg-lilac-100 hover:text-lilac-600 transition-colors"
+                  title={t('achievements.shareOnSocial')}
+                >
+                  <Share2 className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
             {description && (
               <p className="text-xs text-muted-foreground line-clamp-2">
                 {description}
