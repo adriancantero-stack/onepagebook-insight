@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import heroBook from "@/assets/hero-book-optimized.webp";
-import heroAI from "@/assets/hero-ai-optimized.webp";
-import heroSummary from "@/assets/hero-summary-optimized.webp";
+import heroBook from "@/assets/hero-book-optimized.png";
+import heroAI from "@/assets/hero-ai-optimized.png";
+import heroSummary from "@/assets/hero-summary-optimized.png";
 interface LandingHeroProps {
   onCTA: () => void;
 }
