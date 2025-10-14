@@ -467,19 +467,19 @@ const Explore = () => {
     <div className="min-h-screen bg-lilac-50 flex flex-col">
       <FloatingHeader />
 
-      <main className="container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-8 sm:py-12 flex-1">
+      <main className="container mx-auto px-4 sm:px-8 lg:px-16 xl:px-24 py-6 sm:py-10 flex-1">
         {/* Apple-style Header */}
-        <div className="mb-10 sm:mb-16 text-center max-w-3xl mx-auto">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-[#1D1D1F] mb-4 tracking-tight">
+        <div className="mb-8 sm:mb-12 text-center max-w-3xl mx-auto px-2">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[#1D1D1F] mb-3 tracking-tight">
             {t("explore.header.title")}
           </h1>
-          <p className="text-lg sm:text-xl text-[#86868B] font-normal">
+          <p className="text-base sm:text-lg text-[#86868B] font-normal">
             {t("explore.header.subtitle")}
           </p>
         </div>
 
         {/* Centered Search Bar */}
-        <div className="mb-10 sm:mb-14 max-w-3xl mx-auto">
+        <div className="mb-8 sm:mb-12 max-w-3xl mx-auto">
           <div className="relative">
             <BookAutocomplete
               hideExploreLink={true}
@@ -513,9 +513,9 @@ const Explore = () => {
 
         {/* People Picks Section */}
         {featuredPeople.length > 0 && (
-          <section className="mb-10 sm:mb-14 max-w-6xl mx-auto">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl sm:text-3xl font-semibold text-[#1D1D1F]">
+          <section className="mb-8 sm:mb-12 max-w-6xl mx-auto">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-[#1D1D1F]">
                 {t('people.section_title')}
               </h2>
               <Button
@@ -535,8 +535,8 @@ const Explore = () => {
         )}
 
         {/* Minimalist Category Chips */}
-        <div className="mb-10 sm:mb-12 flex items-center gap-4 overflow-x-auto scrollbar-hide pb-2">
-          <div className="flex gap-2 flex-nowrap">
+        <div className="mb-6 sm:mb-8 flex items-center gap-3 overflow-x-auto scrollbar-hide pb-2">
+          <div className="flex gap-1.5 sm:gap-2 flex-nowrap">
             {sortedCategories.map(category => (
               <button
                 key={category.id}
@@ -545,7 +545,7 @@ const Explore = () => {
                   setQuery("");
                   setIsOpen(false);
                 }}
-                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 ${
+                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-200 ${
                   selectedCategory === category.id
                     ? 'bg-[#1D1D1F] text-white'
                     : 'bg-[#F5F5F7] text-[#1D1D1F] hover:bg-[#1D1D1F] hover:text-white'
@@ -563,7 +563,7 @@ const Explore = () => {
             className="ml-auto p-2 rounded-full bg-[#F5F5F7] hover:bg-[#1D1D1F] hover:text-white transition-all duration-200 shrink-0 disabled:opacity-50"
             title={t("explore.random")}
           >
-            <Shuffle className="w-5 h-5" />
+            <Shuffle className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
 

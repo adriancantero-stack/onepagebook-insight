@@ -67,7 +67,7 @@ export function PeopleChips({ people, onSelect, currentLanguage }: PeopleChipsPr
 
   return (
     <ScrollArea className="w-full whitespace-nowrap">
-      <div className="flex gap-3 pb-4">
+      <div className="flex gap-2 sm:gap-3 pb-3 sm:pb-4">
         {people.map((person) => {
           const displayName = getDisplayName(person);
           const role = getRole(person);
@@ -78,21 +78,21 @@ export function PeopleChips({ people, onSelect, currentLanguage }: PeopleChipsPr
               onClick={() => handleClick(person)}
               aria-label={`Abrir livros citados por ${displayName}`}
               className={cn(
-                "flex items-center gap-3 px-4 py-3 rounded-xl border",
+                "flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl border",
                 "bg-background hover:bg-accent transition-colors",
                 "min-w-fit cursor-pointer"
               )}
             >
-              <Avatar className="h-10 w-10">
+              <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
                 {person.avatar_url && <AvatarImage src={person.avatar_url} alt={displayName} />}
                 <AvatarFallback className="bg-primary text-primary-foreground">
                   {getInitials(displayName)}
                 </AvatarFallback>
               </Avatar>
               <div className="text-left">
-                <p className="font-medium text-sm">{displayName}</p>
+                <p className="font-medium text-xs sm:text-sm">{displayName}</p>
                 {role && (
-                  <p className="text-[11px] text-muted-foreground opacity-60">{role}</p>
+                  <p className="text-[10px] sm:text-[11px] text-muted-foreground opacity-60">{role}</p>
                 )}
               </div>
             </button>
