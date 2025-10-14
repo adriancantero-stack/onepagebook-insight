@@ -86,7 +86,7 @@ const History = () => {
 
 
         {summaries.length === 0 ? (
-          <Card className="p-16 text-center border-lilac-200 rounded-2xl bg-white">
+          <Card className="p-8 sm:p-16 text-center border-lilac-200 rounded-2xl bg-white">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-lilac-100 mb-6">
               <BookOpen className="w-8 h-8 text-primary" />
             </div>
@@ -98,25 +98,24 @@ const History = () => {
             </p>
             <Button 
               onClick={() => navigate("/")}
-              className="bg-primary hover:bg-primary/90 text-white border-none shadow-sm"
+              className="w-full sm:w-auto"
             >
               {t("history.generateFirst")}
             </Button>
           </Card>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {summaries.map((summary) => (
               <Card
                 key={summary.id}
-                className="p-6 hover:shadow-lg hover:scale-[1.01] cursor-pointer transition-all duration-200 border-lilac-200 rounded-xl bg-white"
-                onClick={() => navigate(`/summary/${summary.id}`)}
+                className="p-4 sm:p-6 hover:shadow-lg transition-all duration-200 border-lilac-200 rounded-xl bg-white"
               >
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-primary/10 rounded-xl">
+                <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
+                  <div className="p-3 bg-primary/10 rounded-xl shrink-0">
                     <BookOpen className="w-5 h-5 text-primary" />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold font-poppins text-lg mb-1 text-foreground">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold font-poppins text-base sm:text-lg mb-1 text-foreground break-words">
                       {summary.book_title}
                     </h3>
                     {summary.book_author && (
@@ -129,11 +128,12 @@ const History = () => {
                     </p>
                   </div>
                   <Button 
+                    onClick={() => navigate(`/summary/${summary.id}`)}
                     variant="outline" 
                     size="sm"
-                    className="border-lilac-200 hover:border-primary hover:bg-primary hover:text-white transition-all"
+                    className="w-full sm:w-auto shrink-0 border-lilac-200 hover:border-primary hover:bg-primary hover:text-white transition-all"
                   >
-                    Ver Resumo
+                    {t("history.viewSummary") || "Ver Resumo"}
                   </Button>
                 </div>
               </Card>
