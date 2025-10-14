@@ -8,6 +8,8 @@ import { Sparkles, Shuffle, Filter, BookOpen } from "lucide-react";
 import { FloatingHeader } from "@/components/FloatingHeader";
 import { BookAutocomplete } from "@/components/BookAutocomplete";
 import Footer from "@/components/Footer";
+import { PeopleChips, PersonPick } from "@/components/PeopleChips";
+import { PeopleShelf, BookPick } from "@/components/PeopleShelf";
 import { 
   Select,
   SelectContent,
@@ -60,6 +62,10 @@ const Explore = () => {
   const [bookCovers, setBookCovers] = useState<Record<string, string>>({});
   const [dbCategories, setDbCategories] = useState<{ id: string; name: string }[]>([]);
   const [dbBooks, setDbBooks] = useState<any[]>([]);
+  const [featuredPeople, setFeaturedPeople] = useState<PersonPick[]>([]);
+  const [selectedPerson, setSelectedPerson] = useState<PersonPick | null>(null);
+  const [personBooks, setPersonBooks] = useState<BookPick[]>([]);
+  const [isShelfOpen, setIsShelfOpen] = useState(false);
 
   // Create flat index filtered by current locale
   const flatIndex = useMemo(() => createFlatIndex(i18n.language), [i18n.language]);
@@ -165,6 +171,71 @@ const Explore = () => {
     };
     fetchBooks();
   }, [selectedCategory, i18n.language]);
+
+  // Fetch featured people
+  useEffect(() => {
+    const fetchFeaturedPeople = async () => {
+      const { data, error } = await supabase
+        .from('people_picks')
+        .select('*')
+        .eq('is_featured', true)
+        .order('sort_order', { ascending: true });
+
+      if (!error && data) {
+        setFeaturedPeople(data);
+      }
+    };
+    fetchFeaturedPeople();
+  }, []);
+
+  const handlePersonSelect = async (personId: string) => {
+    const person = featuredPeople.find(p => p.person_id === personId);
+    if (!person) return;
+
+    setSelectedPerson(person);
+
+    try {
+      const { data, error } = await supabase
+        .from('people_book_picks')
+        .select(`
+          id,
+          book_id,
+          source_url,
+          reason_pt,
+          reason_en,
+          reason_es,
+          confidence,
+          books (
+            id,
+            title,
+            author,
+            cover_url
+          )
+        `)
+        .eq('person_id', personId)
+        .neq('confidence', 'low');
+
+      if (error) throw error;
+
+      const books: BookPick[] = (data || []).map((pick: any) => ({
+        id: pick.id,
+        book_id: pick.book_id,
+        title: pick.books?.title || '',
+        author: pick.books?.author || '',
+        cover_url: pick.books?.cover_url,
+        source_url: pick.source_url,
+        reason: i18n.language === 'pt' ? pick.reason_pt : 
+                i18n.language === 'en' ? pick.reason_en : 
+                pick.reason_es,
+        confidence: pick.confidence
+      }));
+
+      setPersonBooks(books);
+      setIsShelfOpen(true);
+    } catch (error) {
+      console.error('Error fetching person books:', error);
+    }
+  };
 
   const handleInputChange = (value: string) => {
     setQuery(value);
@@ -440,6 +511,29 @@ const Explore = () => {
           </div>
         </div>
 
+        {/* People Picks Section */}
+        {featuredPeople.length > 0 && (
+          <section className="mb-10 sm:mb-14 max-w-6xl mx-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl sm:text-3xl font-semibold text-[#1D1D1F]">
+                {t('people.section_title')}
+              </h2>
+              <Button
+                variant="ghost"
+                onClick={() => navigate('/curation/people')}
+                className="text-sm text-[#86868B] hover:text-[#1D1D1F]"
+              >
+                {t('people.see_all')} →
+              </Button>
+            </div>
+            <PeopleChips
+              people={featuredPeople}
+              onSelect={handlePersonSelect}
+              currentLanguage={i18n.language}
+            />
+          </section>
+        )}
+
         {/* Minimalist Category Chips */}
         <div className="mb-10 sm:mb-12 flex items-center gap-4 overflow-x-auto scrollbar-hide pb-2">
           <div className="flex gap-2 flex-nowrap">
@@ -553,6 +647,24 @@ const Explore = () => {
           })}
         </div>
       </main>
+
+      {selectedPerson && (
+        <PeopleShelf
+          person={selectedPerson}
+          books={personBooks}
+          open={isShelfOpen}
+          onClose={() => setIsShelfOpen(false)}
+          currentLanguage={i18n.language}
+          translations={{
+            shelf_title: t('people.shelf_title'),
+            source: t('people.source'),
+            close: t('people.close'),
+            empty_person: t('people.empty_person'),
+            save: t('people.save'),
+            read_summary: t('people.read_summary')
+          }}
+        />
+      )}
 
       <Footer />
     </div>

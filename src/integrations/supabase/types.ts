@@ -351,6 +351,111 @@ export type Database = {
         }
         Relationships: []
       }
+      people_book_picks: {
+        Row: {
+          book_id: string | null
+          confidence: string
+          created_at: string | null
+          id: string
+          person_id: string
+          reason_en: string | null
+          reason_es: string | null
+          reason_pt: string | null
+          source_url: string
+        }
+        Insert: {
+          book_id?: string | null
+          confidence: string
+          created_at?: string | null
+          id?: string
+          person_id: string
+          reason_en?: string | null
+          reason_es?: string | null
+          reason_pt?: string | null
+          source_url: string
+        }
+        Update: {
+          book_id?: string | null
+          confidence?: string
+          created_at?: string | null
+          id?: string
+          person_id?: string
+          reason_en?: string | null
+          reason_es?: string | null
+          reason_pt?: string | null
+          source_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "people_book_picks_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "books"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "people_book_picks_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "people_picks"
+            referencedColumns: ["person_id"]
+          },
+        ]
+      }
+      people_picks: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          display_name: string
+          display_name_en: string | null
+          display_name_es: string | null
+          display_name_pt: string | null
+          id: string
+          is_featured: boolean | null
+          person_id: string
+          role: string | null
+          role_en: string | null
+          role_es: string | null
+          role_pt: string | null
+          sort_order: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          display_name: string
+          display_name_en?: string | null
+          display_name_es?: string | null
+          display_name_pt?: string | null
+          id?: string
+          is_featured?: boolean | null
+          person_id: string
+          role?: string | null
+          role_en?: string | null
+          role_es?: string | null
+          role_pt?: string | null
+          sort_order?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          display_name?: string
+          display_name_en?: string | null
+          display_name_es?: string | null
+          display_name_pt?: string | null
+          id?: string
+          is_featured?: boolean | null
+          person_id?: string
+          role?: string | null
+          role_en?: string | null
+          role_es?: string | null
+          role_pt?: string | null
+          sort_order?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string

@@ -1,5 +1,18 @@
 export const es = {
   translation: {
+    people: {
+      section_title: "Recomendaciones de personas que conoces",
+      see_all: "Ver todas",
+      shelf_title: "Libros frecuentemente citados por {{name}}",
+      source: "Fuente",
+      close: "Cerrar",
+      empty_person: "Próximamente más libros de esta persona",
+      save: "Guardar",
+      read_summary: "Leer resumen",
+      all_people_title: "Todas las Personas",
+      all_people_subtitle: "Explora recomendaciones de líderes y pensadores influyentes",
+      no_people: "No se encontraron personas"
+    },
     // Header
     "header.history": "Historial",
     "header.premium": "Premium",

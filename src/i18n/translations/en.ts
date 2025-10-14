@@ -1,5 +1,18 @@
 export const en = {
   translation: {
+    people: {
+      section_title: "Recommendations from people you know",
+      see_all: "See all",
+      shelf_title: "Books frequently cited by {{name}}",
+      source: "Source",
+      close: "Close",
+      empty_person: "More books from this person coming soon",
+      save: "Save",
+      read_summary: "Read summary",
+      all_people_title: "All People",
+      all_people_subtitle: "Explore recommendations from influential leaders and thinkers",
+      no_people: "No people found"
+    },
     // Header
     "header.history": "History",
     "header.premium": "Premium",
