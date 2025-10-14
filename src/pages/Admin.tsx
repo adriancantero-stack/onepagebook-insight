@@ -22,7 +22,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Users, FileText, TrendingUp, Crown, Download, BookOpen, ImagePlus, Sparkles, Upload, Trash2, RefreshCw, UserX } from "lucide-react";
+import { Users, FileText, TrendingUp, Crown, Download, BookOpen, ImagePlus, Sparkles, Upload, Trash2, RefreshCw, UserX, Merge } from "lucide-react";
 import { ManualCoverUpload } from "@/components/admin/ManualCoverUpload";
 import { bookCatalog } from "@/data/bookCatalog";
 import { Progress } from "@/components/ui/progress";
@@ -1463,6 +1463,23 @@ const Admin = () => {
                 </Button>
                 <p className="text-[10px] md:text-xs text-muted-foreground mt-2 text-center">
                   Remove todos os áudios em cache. Eles serão regenerados com o texto atualizado.
+                </p>
+              </div>
+
+              {/* Deduplicate Books Button */}
+              <div className="pt-4 border-t">
+                <Button 
+                  onClick={() => navigate('/deduplicate-books')}
+                  variant="outline"
+                  className="w-full h-auto py-2.5 md:py-3 whitespace-normal text-xs md:text-sm"
+                >
+                  <Merge className="mr-1.5 md:mr-2 h-3.5 w-3.5 md:h-4 md:w-4 shrink-0" />
+                  <span className="leading-tight">
+                    Deduplicar Livros
+                  </span>
+                </Button>
+                <p className="text-[10px] md:text-xs text-muted-foreground mt-2 text-center">
+                  Remove livros duplicados do catálogo mantendo apenas uma cópia de cada.
                 </p>
               </div>
 
