@@ -1103,11 +1103,11 @@ const Admin = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-background p-4 md:p-8">
+      <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
         <div className="flex items-center gap-2">
-          <Crown className="h-8 w-8 text-primary" />
-          <h1 className="text-4xl font-bold">Painel Administrativo</h1>
+          <Crown className="h-6 w-6 md:h-8 md:w-8 text-primary" />
+          <h1 className="text-2xl md:text-4xl font-bold">Painel Administrativo</h1>
         </div>
 
         {/* Stats Cards */}
@@ -1196,35 +1196,35 @@ const Admin = () => {
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Catalog Stats */}
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Total</p>
-                <p className="text-2xl font-bold">{catalogStats.total}</p>
+                <p className="text-xl md:text-2xl font-bold">{catalogStats.total}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">PT</p>
-                <p className="text-2xl font-bold">{catalogStats.pt}</p>
+                <p className="text-xl md:text-2xl font-bold">{catalogStats.pt}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">EN</p>
-                <p className="text-2xl font-bold">{catalogStats.en}</p>
+                <p className="text-xl md:text-2xl font-bold">{catalogStats.en}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">ES</p>
-                <p className="text-2xl font-bold">{catalogStats.es}</p>
+                <p className="text-xl md:text-2xl font-bold">{catalogStats.es}</p>
               </div>
             </div>
 
             {/* Summary, Cover, and Audio Stats */}
-            <div className="grid grid-cols-3 gap-4 pt-4 border-t">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t">
               <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium">Livros com Resumo</p>
-                  <Badge variant="secondary">{stats?.booksWithSummary || 0}</Badge>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-xs md:text-sm font-medium">Livros com Resumo</p>
+                  <Badge variant="secondary" className="shrink-0">{stats?.booksWithSummary || 0}</Badge>
                 </div>
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-muted-foreground">Livros sem Resumo</p>
-                  <Badge variant="outline">{stats?.booksWithoutSummary || 0}</Badge>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-xs md:text-sm text-muted-foreground">Livros sem Resumo</p>
+                  <Badge variant="outline" className="shrink-0">{stats?.booksWithoutSummary || 0}</Badge>
                 </div>
                 <Progress 
                   value={catalogStats.total > 0 ? ((stats?.booksWithSummary || 0) / catalogStats.total) * 100 : 0} 
@@ -1232,13 +1232,13 @@ const Admin = () => {
                 />
               </div>
               <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium">Livros com Capa</p>
-                  <Badge variant="secondary">{stats?.booksWithCover || 0}</Badge>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-xs md:text-sm font-medium">Livros com Capa</p>
+                  <Badge variant="secondary" className="shrink-0">{stats?.booksWithCover || 0}</Badge>
                 </div>
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-muted-foreground">Livros sem Capa</p>
-                  <Badge variant="outline">{stats?.booksWithoutCover || 0}</Badge>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-xs md:text-sm text-muted-foreground">Livros sem Capa</p>
+                  <Badge variant="outline" className="shrink-0">{stats?.booksWithoutCover || 0}</Badge>
                 </div>
                 <Progress 
                   value={catalogStats.total > 0 ? ((stats?.booksWithCover || 0) / catalogStats.total) * 100 : 0} 
@@ -1246,13 +1246,13 @@ const Admin = () => {
                 />
               </div>
               <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium">Áudios Gerados</p>
-                  <Badge variant="secondary">{stats?.totalAudios || 0}</Badge>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-xs md:text-sm font-medium">Áudios Gerados</p>
+                  <Badge variant="secondary" className="shrink-0">{stats?.totalAudios || 0}</Badge>
                 </div>
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-muted-foreground">Total</p>
-                  <span className="text-xs text-muted-foreground">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-xs md:text-sm text-muted-foreground">Total</p>
+                  <span className="text-xs text-muted-foreground shrink-0">
                     {stats?.totalAudios || 0} arquivos
                   </span>
                 </div>
@@ -1265,16 +1265,16 @@ const Admin = () => {
 
             {/* Import Buttons */}
             <div className="space-y-4">
-              <div className="grid grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                 <div className="space-y-2">
                   <Button 
                     onClick={handleImportGoogleBooks}
                     disabled={importing}
-                    className="w-full h-auto py-3 whitespace-normal"
+                    className="w-full h-auto py-2.5 md:py-3 whitespace-normal text-xs md:text-sm"
                     size="lg"
                   >
-                    <Download className="mr-2 h-4 w-4 shrink-0" />
-                    <span className="text-sm leading-tight">
+                    <Download className="mr-1.5 md:mr-2 h-3.5 w-3.5 md:h-4 md:w-4 shrink-0" />
+                    <span className="leading-tight">
                       {importing ? "Importando..." : "Importar Google Books"}
                     </span>
                   </Button>
@@ -1291,11 +1291,11 @@ const Admin = () => {
                     onClick={handleImportHardcodedCatalog}
                     disabled={importingCatalog}
                     variant="secondary"
-                    className="w-full h-auto py-3 whitespace-normal"
+                    className="w-full h-auto py-2.5 md:py-3 whitespace-normal text-xs md:text-sm"
                     size="lg"
                   >
-                    <Upload className="mr-2 h-4 w-4 shrink-0" />
-                    <span className="text-sm leading-tight">
+                    <Upload className="mr-1.5 md:mr-2 h-3.5 w-3.5 md:h-4 md:w-4 shrink-0" />
+                    <span className="leading-tight">
                       {importingCatalog ? "Importando..." : "Importar Catálogo"}
                     </span>
                   </Button>
@@ -1314,15 +1314,15 @@ const Admin = () => {
                     onClick={handlePopulateNewCategories}
                     disabled={importing}
                     variant="outline"
-                    className="w-full h-auto py-3 whitespace-normal"
+                    className="w-full h-auto py-2.5 md:py-3 whitespace-normal text-xs md:text-sm"
                     size="lg"
                   >
-                    <Sparkles className="mr-2 h-4 w-4 shrink-0" />
-                    <span className="text-sm leading-tight">
+                    <Sparkles className="mr-1.5 md:mr-2 h-3.5 w-3.5 md:h-4 md:w-4 shrink-0" />
+                    <span className="leading-tight">
                       {importing ? "Populando..." : "Popular Novas Categorias"}
                     </span>
                   </Button>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-[10px] md:text-xs text-muted-foreground">
                     Adiciona ~20 livros para cada nova categoria (Ficção, Romance, Suspense, etc.)
                   </p>
                 </div>
@@ -1332,11 +1332,11 @@ const Admin = () => {
                     onClick={handleValidateBooks}
                     disabled={isValidatingBooks}
                     variant="outline"
-                    className="w-full h-auto py-3 whitespace-normal"
+                    className="w-full h-auto py-2.5 md:py-3 whitespace-normal text-xs md:text-sm"
                     size="lg"
                   >
-                    <Sparkles className="mr-2 h-4 w-4 shrink-0" />
-                    <span className="text-sm leading-tight">
+                    <Sparkles className="mr-1.5 md:mr-2 h-3.5 w-3.5 md:h-4 md:w-4 shrink-0" />
+                    <span className="leading-tight">
                       {isValidatingBooks ? "Validando..." : "Validar Livros"}
                     </span>
                   </Button>
@@ -1365,11 +1365,11 @@ const Admin = () => {
                     onClick={() => handleMigrateCategories(false)}
                     disabled={isMigratingCategories}
                     variant="outline"
-                    className="w-full h-auto py-3 whitespace-normal"
+                    className="w-full h-auto py-2.5 md:py-3 whitespace-normal text-xs md:text-sm"
                     size="lg"
                   >
-                    <BookOpen className="mr-2 h-4 w-4 shrink-0" />
-                    <span className="text-sm leading-tight">
+                    <BookOpen className="mr-1.5 md:mr-2 h-3.5 w-3.5 md:h-4 md:w-4 shrink-0" />
+                    <span className="leading-tight">
                       {isMigratingCategories ? "Migrando..." : "Migrar Categorias"}
                     </span>
                   </Button>
@@ -1396,16 +1396,16 @@ const Admin = () => {
               </div>
 
               {/* Check and Generate Buttons */}
-              <div className="grid grid-cols-2 gap-4 pt-4 border-t">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 pt-4 border-t">
                 <div className="space-y-2">
                   <Button 
                     onClick={checkBooksWithoutCovers}
                     disabled={isCheckingCovers}
                     variant="outline"
-                    className="w-full h-auto py-3 whitespace-normal"
+                    className="w-full h-auto py-2.5 md:py-3 whitespace-normal text-xs md:text-sm"
                   >
-                    <ImagePlus className="mr-2 h-4 w-4 shrink-0" />
-                    <span className="text-sm leading-tight">
+                    <ImagePlus className="mr-1.5 md:mr-2 h-3.5 w-3.5 md:h-4 md:w-4 shrink-0" />
+                    <span className="leading-tight">
                       {isCheckingCovers ? "Verificando..." : "Verificar Capas"}
                     </span>
                   </Button>
@@ -1423,20 +1423,20 @@ const Admin = () => {
                       onClick={checkBooksWithoutSummaries}
                       disabled={isCheckingSummaries}
                       variant="outline"
-                      className="flex-1 h-auto py-3 whitespace-normal"
+                      className="flex-1 h-auto py-2.5 md:py-3 whitespace-normal text-xs md:text-sm"
                     >
-                      <Sparkles className="mr-2 h-4 w-4 shrink-0" />
-                      <span className="text-sm leading-tight">
+                      <Sparkles className="mr-1.5 md:mr-2 h-3.5 w-3.5 md:h-4 md:w-4 shrink-0" />
+                      <span className="leading-tight">
                         {isCheckingSummaries ? "Verificando..." : "Verificar Resumos"}
                       </span>
                     </Button>
                     <Button 
                       onClick={loadAdminData}
                       variant="outline"
-                      className="h-auto py-3"
+                      className="h-auto py-2.5 md:py-3 px-3"
                       title="Atualizar contagem de resumos"
                     >
-                      <RefreshCw className="h-4 w-4" />
+                      <RefreshCw className="h-3.5 w-3.5 md:h-4 md:w-4" />
                     </Button>
                   </div>
                   {cronSchedules.find(s => s.job_name === 'nightly-summary-check') && (
@@ -1454,14 +1454,14 @@ const Admin = () => {
                   onClick={handleClearAudioCache}
                   disabled={isClearingAudioCache}
                   variant="destructive"
-                  className="w-full h-auto py-3 whitespace-normal"
+                  className="w-full h-auto py-2.5 md:py-3 whitespace-normal text-xs md:text-sm"
                 >
-                  <Trash2 className="mr-2 h-4 w-4 shrink-0" />
-                  <span className="text-sm leading-tight">
+                  <Trash2 className="mr-1.5 md:mr-2 h-3.5 w-3.5 md:h-4 md:w-4 shrink-0" />
+                  <span className="leading-tight">
                     {isClearingAudioCache ? "Limpando cache..." : "Limpar Cache de Áudios"}
                   </span>
                 </Button>
-                <p className="text-xs text-muted-foreground mt-2 text-center">
+                <p className="text-[10px] md:text-xs text-muted-foreground mt-2 text-center">
                   Remove todos os áudios em cache. Eles serão regenerados com o texto atualizado.
                 </p>
               </div>
@@ -1705,13 +1705,13 @@ const Admin = () => {
         {/* Users Table */}
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <CardTitle>Todos os Usuários</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-lg md:text-xl">Todos os Usuários</CardTitle>
+                <CardDescription className="text-xs md:text-sm">
                   Lista completa de usuários registrados na plataforma
                   {incompleteUsersCount > 0 && (
-                    <span className="ml-2 text-amber-600 font-medium">
+                    <span className="block sm:inline sm:ml-2 text-amber-600 font-medium text-xs md:text-sm">
                       ({incompleteUsersCount} com dados incompletos)
                     </span>
                   )}
@@ -1722,89 +1722,93 @@ const Admin = () => {
                   onClick={handleCompleteUserData}
                   disabled={isCompletingUserData}
                   variant="outline"
-                  className="gap-2"
+                  className="gap-1.5 text-xs md:text-sm h-auto py-2 md:py-2.5 w-full sm:w-auto"
                 >
-                  <RefreshCw className={`h-4 w-4 ${isCompletingUserData ? 'animate-spin' : ''}`} />
-                  {isCompletingUserData ? 'Completando...' : 'Completar Dados Faltantes'}
+                  <RefreshCw className={`h-3 w-3 md:h-4 md:w-4 ${isCompletingUserData ? 'animate-spin' : ''}`} />
+                  <span className="whitespace-nowrap">
+                    {isCompletingUserData ? 'Completando...' : 'Completar Dados Faltantes'}
+                  </span>
                 </Button>
               )}
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>#</TableHead>
-                  <TableHead>Nome</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Data de Cadastro</TableHead>
-                  <TableHead>Idioma</TableHead>
-                  <TableHead>Origem</TableHead>
-                  <TableHead>País</TableHead>
-                  <TableHead>Plano</TableHead>
-                  <TableHead className="text-right">Resumos</TableHead>
-                  <TableHead className="text-right">Ações</TableHead>
+                  <TableHead className="text-xs md:text-sm">#</TableHead>
+                  <TableHead className="text-xs md:text-sm min-w-[120px]">Nome</TableHead>
+                  <TableHead className="hidden md:table-cell text-xs md:text-sm">Email</TableHead>
+                  <TableHead className="hidden lg:table-cell text-xs md:text-sm">Data de Cadastro</TableHead>
+                  <TableHead className="hidden lg:table-cell text-xs md:text-sm">Idioma</TableHead>
+                  <TableHead className="hidden xl:table-cell text-xs md:text-sm">Origem</TableHead>
+                  <TableHead className="hidden xl:table-cell text-xs md:text-sm">País</TableHead>
+                  <TableHead className="text-xs md:text-sm">Plano</TableHead>
+                  <TableHead className="text-right text-xs md:text-sm">Resumos</TableHead>
+                  <TableHead className="text-right text-xs md:text-sm min-w-[140px]">Ações</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {users.map((user, index) => (
                   <TableRow key={user.id}>
-                    <TableCell className="text-muted-foreground text-sm">
+                    <TableCell className="text-muted-foreground text-xs md:text-sm">
                       {index + 1}
                     </TableCell>
-                    <TableCell className="font-medium">{user.full_name}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>
+                    <TableCell className="font-medium text-xs md:text-sm">{user.full_name}</TableCell>
+                    <TableCell className="hidden md:table-cell text-xs md:text-sm">{user.email}</TableCell>
+                    <TableCell className="hidden lg:table-cell text-xs md:text-sm">
                       {new Date(user.created_at).toLocaleDateString("pt-BR")}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="hidden lg:table-cell">
                       {user.signup_language ? (
-                        <Badge variant="outline">{user.signup_language.toUpperCase()}</Badge>
+                        <Badge variant="outline" className="text-[10px] md:text-xs">{user.signup_language.toUpperCase()}</Badge>
                       ) : (
                         <span className="text-muted-foreground text-xs">-</span>
                       )}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="hidden xl:table-cell">
                       {user.signup_path ? (
-                        <span className="text-xs text-muted-foreground">{user.signup_path}</span>
+                        <span className="text-[10px] md:text-xs text-muted-foreground">{user.signup_path}</span>
                       ) : (
                         <span className="text-muted-foreground text-xs">-</span>
                       )}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="hidden xl:table-cell">
                       {user.signup_country ? (
-                        <span className="text-xs">{user.signup_country}</span>
+                        <span className="text-[10px] md:text-xs">{user.signup_country}</span>
                       ) : (
                         <span className="text-muted-foreground text-xs">-</span>
                       )}
                     </TableCell>
                     <TableCell>
-                      <Badge variant={user.plan_type === "premium" ? "default" : "secondary"}>
+                      <Badge variant={user.plan_type === "premium" ? "default" : "secondary"} className="text-[10px] md:text-xs">
                         {user.plan_type === "premium" ? "Premium" : "Free"}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-right">{user.summaries_count}</TableCell>
+                    <TableCell className="text-right text-xs md:text-sm">{user.summaries_count}</TableCell>
                     <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
+                      <div className="flex justify-end gap-1 md:gap-2">
                         <Button
                           size="sm"
                           variant="outline"
                           onClick={() => handleUpgradeToPremium(user.id, user.email, user.plan_type)}
                           disabled={upgradingUserId === user.id || user.plan_type === "premium"}
-                          className="gap-1"
+                          className="gap-0.5 md:gap-1 text-[10px] md:text-xs h-7 md:h-8 px-2 md:px-3"
                         >
-                          <Crown className="w-3 h-3" />
-                          {user.plan_type === "premium" ? "Premium" : "Liberar"}
+                          <Crown className="w-2.5 h-2.5 md:w-3 md:h-3" />
+                          <span className="hidden sm:inline">
+                            {user.plan_type === "premium" ? "Premium" : "Liberar"}
+                          </span>
                         </Button>
                         <Button
                           size="sm"
                           variant="destructive"
                           onClick={() => handleDeleteUser(user.id, user.email)}
                           disabled={deletingUserId === user.id}
-                          className="gap-1"
+                          className="gap-0.5 md:gap-1 text-[10px] md:text-xs h-7 md:h-8 px-2 md:px-3"
                         >
-                          <UserX className="w-3 h-3" />
-                          Deletar
+                          <UserX className="w-2.5 h-2.5 md:w-3 md:h-3" />
+                          <span className="hidden sm:inline">Deletar</span>
                         </Button>
                       </div>
                     </TableCell>
