@@ -130,11 +130,13 @@ export function PeopleChips({ people, onSelect, currentLanguage }: PeopleChipsPr
             "bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90",
             "text-primary-foreground font-semibold shadow-lg hover:shadow-xl",
             "transition-all duration-300 hover:scale-105",
-            "min-w-fit whitespace-nowrap"
+            "min-w-fit whitespace-nowrap group"
           )}
         >
-          <span className="text-xs sm:text-sm">{t('people.see_all')}</span>
-          <ArrowRight className="h-4 w-4" />
+          <span className="text-xs sm:text-sm group-hover:text-white transition-colors">
+            {t('people.see_all')}
+          </span>
+          <ArrowRight className="h-4 w-4 group-hover:text-white transition-colors" />
         </Button>
       </div>
       <ScrollBar orientation="horizontal" />
