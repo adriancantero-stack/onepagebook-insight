@@ -49,97 +49,77 @@ export const LandingLanguages = () => {
           <div className="absolute inset-0">
             {[
               // USA - mais pontos (costa oeste a leste)
-              { left: '11%', top: '32%', delay: '0s' },     // Califórnia
-              { left: '13%', top: '30%', delay: '0.1s' },   // Seattle
-              { left: '16%', top: '35%', delay: '0.2s' },   // Texas
-              { left: '18%', top: '32%', delay: '0.3s' },   // Chicago
-              { left: '20%', top: '30%', delay: '0.4s' },   // Nova York
-              { left: '19%', top: '34%', delay: '0.5s' },   // Florida
-              
+              { left: '14%', top: '27%', delay: '0s' },     // Seattle
+              { left: '14%', top: '31%', delay: '0.1s' },   // Califórnia
+              { left: '18%', top: '35%', delay: '0.2s' },   // Texas
+              { left: '19%', top: '31%', delay: '0.3s' },   // Chicago
+              { left: '22%', top: '30%', delay: '0.4s' },   // Nova York
+              { left: '21%', top: '35%', delay: '0.5s' },   // Flórida
+
               // Canadá
-              { left: '15%', top: '24%', delay: '0.6s' },
-              
-              // México
-              { left: '14%', top: '42%', delay: '0.7s' },
-              
-              // América Central
-              { left: '17%', top: '50%', delay: '0.8s' },
-              
+              { left: '17%', top: '24%', delay: '0.6s' },
+
+              // México e América Central
+              { left: '23%', top: '44%', delay: '0.7s' },   // México
+              { left: '24.5%', top: '50%', delay: '0.8s' }, // América Central
+
               // Brasil - mais pontos (norte a sul)
-              { left: '24%', top: '62%', delay: '0.9s' },   // Manaus (Norte)
-              { left: '26%', top: '64%', delay: '1s' },     // Fortaleza (Nordeste)
-              { left: '27%', top: '66%', delay: '1.1s' },   // Recife
-              { left: '28%', top: '68%', delay: '1.2s' },   // Salvador
-              { left: '27%', top: '72%', delay: '1.3s' },   // Brasília
-              { left: '28%', top: '74%', delay: '1.4s' },   // São Paulo/Rio
-              
+              { left: '31%', top: '62%', delay: '0.9s' },   // Manaus
+              { left: '33%', top: '64%', delay: '1s' },     // Nordeste
+              { left: '34%', top: '66%', delay: '1.1s' },   // Recife
+              { left: '33%', top: '68%', delay: '1.2s' },   // Salvador
+              { left: '32%', top: '70%', delay: '1.3s' },   // Brasília
+              { left: '33%', top: '73%', delay: '1.4s' },   // SP / Rio
+
               // Argentina
-              { left: '26%', top: '80%', delay: '1.5s' },
-              
+              { left: '32%', top: '82%', delay: '1.5s' },
+
               // Reino Unido - mais pontos
-              { left: '45%', top: '23%', delay: '1.6s' },   // Escócia
-              { left: '45.5%', top: '25%', delay: '1.7s' }, // Inglaterra Norte
-              { left: '45%', top: '27%', delay: '1.8s' },   // Londres
-              
+              { left: '46%', top: '23%', delay: '1.6s' },   // Escócia
+              { left: '46.5%', top: '25%', delay: '1.7s' }, // Inglaterra Norte
+              { left: '46%', top: '27%', delay: '1.8s' },   // Londres
+
               // Irlanda
-              { left: '43%', top: '26%', delay: '1.9s' },
-              
-              // Espanha - mais pontos
-              { left: '44%', top: '33%', delay: '2s' },     // Lisboa/Porto
-              { left: '46%', top: '33%', delay: '2.1s' },   // Madrid
-              { left: '47%', top: '34%', delay: '2.2s' },   // Barcelona
-              
-              // França
-              { left: '47%', top: '28%', delay: '2.3s' },
-              
-              // Alemanha
-              { left: '50%', top: '27%', delay: '2.4s' },
-              
-              // Itália
-              { left: '50%', top: '33%', delay: '2.5s' },
-              
-              // Europa Oriental
-              { left: '53%', top: '30%', delay: '2.6s' },
-              
-              // Norte da África
-              { left: '48%', top: '42%', delay: '2.7s' },
-              
-              // África Central
-              { left: '50%', top: '56%', delay: '2.8s' },
-              
+              { left: '44.2%', top: '26%', delay: '1.9s' },
+
+              // Espanha - mais pontos (inclui Portugal)
+              { left: '45%', top: '33%', delay: '2s' },     // Lisboa/Porto
+              { left: '47%', top: '33%', delay: '2.1s' },   // Madrid
+              { left: '48%', top: '34%', delay: '2.2s' },   // Barcelona
+
+              // França / Alemanha / Itália / Leste
+              { left: '48%', top: '29%', delay: '2.3s' },   // Paris
+              { left: '50.5%', top: '28%', delay: '2.4s' }, // Alemanha
+              { left: '50%', top: '35%', delay: '2.5s' },   // Itália
+              { left: '53%', top: '30%', delay: '2.6s' },   // Leste Europeu
+
+              // África
+              { left: '49%', top: '42%', delay: '2.7s' },   // Norte da África
+              { left: '51%', top: '57%', delay: '2.8s' },   // África Central
+
               // Angola - mais pontos
-              { left: '50%', top: '62%', delay: '2.9s' },   // Norte de Angola
-              { left: '51%', top: '64%', delay: '3s' },     // Luanda
-              { left: '52%', top: '66%', delay: '3.1s' },   // Sul de Angola
-              
+              { left: '50.5%', top: '62%', delay: '2.9s' }, // Norte de Angola
+              { left: '51.5%', top: '63%', delay: '3s' },   // Luanda
+              { left: '52%', top: '65%', delay: '3.1s' },   // Sul de Angola
+
               // Moçambique - mais pontos
-              { left: '56%', top: '63%', delay: '3.2s' },   // Norte de Moçambique
-              { left: '56%', top: '66%', delay: '3.3s' },   // Centro
-              { left: '55%', top: '68%', delay: '3.4s' },   // Maputo
-              
+              { left: '55.5%', top: '63%', delay: '3.2s' }, // Norte de Moçambique
+              { left: '56.5%', top: '66%', delay: '3.3s' }, // Centro
+              { left: '56%', top: '68%', delay: '3.4s' },   // Maputo
+
               // África do Sul
               { left: '53%', top: '72%', delay: '3.5s' },
-              
-              // Oriente Médio
-              { left: '55%', top: '38%', delay: '3.6s' },
-              
-              // Rússia
-              { left: '63%', top: '28%', delay: '3.7s' },
-              
-              // Índia
-              { left: '67%', top: '42%', delay: '3.8s' },
-              
-              // Sudeste Asiático
-              { left: '73%', top: '46%', delay: '3.9s' },
-              
-              // China
-              { left: '76%', top: '36%', delay: '4s' },
-              
-              // Japão
-              { left: '82%', top: '34%', delay: '4.1s' },
-              
-              // Austrália
-              { left: '84%', top: '72%', delay: '4.2s' },
+
+              // Oriente Médio / Ásia
+              { left: '56%', top: '38%', delay: '3.6s' },   // Oriente Médio
+              { left: '62%', top: '27%', delay: '3.7s' },   // Rússia
+              { left: '67%', top: '44%', delay: '3.8s' },   // Índia
+              { left: '72%', top: '46%', delay: '3.9s' },   // Sudeste Asiático
+              { left: '76%', top: '36%', delay: '4s' },     // China
+              { left: '82%', top: '32%', delay: '4.1s' },   // Japão
+
+              // Oceania
+              { left: '85%', top: '74%', delay: '4.2s' },   // Austrália
             ].map((dot, i) => (
               <div
                 key={i}
