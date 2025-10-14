@@ -31,7 +31,7 @@ export function ManualCoverUpload() {
         .from("books")
         .select("id, title, author, cover_url, lang")
         .eq("is_active", true)
-        .or("cover_url.is.null,cover_url.eq./book-placeholder.png,cover_url.eq./logo-gray.png")
+        .or("cover_url.is.null,cover_url.like.%book-placeholder%,cover_url.like.%logo-gray%,cover_url.eq.")
         .order("title")
         .limit(50);
 
