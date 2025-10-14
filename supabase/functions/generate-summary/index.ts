@@ -976,35 +976,43 @@ Return ONLY a JSON array of 1-3 tags: ["tag1", "tag2"]`;
 
         console.log("📋 Book tags:", tags);
 
-        // Insert into books catalog
-        const { error: bookInsertError } = await supabase
-          .from("books")
-          .insert({
-            title: finalCanonicalTitle,
-            author: finalCanonicalAuthor,
-            lang: language,
-            tags: tags,
-            is_active: true,
-            popularity: 1,
+        // Use upsert_book function to prevent duplicates
+        const { data: bookId, error: upsertError } = await supabase
+          .rpc('upsert_book', {
+            p_title: finalCanonicalTitle,
+            p_author: finalCanonicalAuthor,
+            p_lang: language,
+            p_tags: tags,
+            p_cover_url: null,
+            p_description: null,
+            p_category: null,
+            p_asin: null
           });
 
-        if (bookInsertError) {
-          console.error("Failed to add book to catalog:", bookInsertError);
+        if (upsertError) {
+          console.error("Failed to upsert book:", upsertError);
         } else {
-          console.log("✅ Book added to catalog successfully");
+          console.log("✅ Book upserted successfully, ID:", bookId);
         }
       } catch (error) {
         console.error("Error categorizing/adding book:", error);
       }
     } else {
-      // Book exists, increment popularity
-      const { error: updateError } = await supabase
-        .from("books")
-        .update({ popularity: supabase.rpc('increment', { x: 1 }) })
-        .eq("id", existingBook.id);
+      // Book exists, use upsert to increment popularity
+      const { data: bookId, error: upsertError } = await supabase
+        .rpc('upsert_book', {
+          p_title: finalCanonicalTitle,
+          p_author: finalCanonicalAuthor,
+          p_lang: language,
+          p_tags: [],
+          p_cover_url: null,
+          p_description: null,
+          p_category: null,
+          p_asin: null
+        });
         
-      if (!updateError) {
-        console.log("📈 Incremented book popularity");
+      if (!upsertError) {
+        console.log("📈 Book updated via upsert");
       }
     }
 

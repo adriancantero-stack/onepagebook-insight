@@ -794,6 +794,19 @@ export type Database = {
         Args: { "": string }
         Returns: string
       }
+      upsert_book: {
+        Args: {
+          p_asin?: string
+          p_author: string
+          p_category?: string
+          p_cover_url?: string
+          p_description?: string
+          p_lang: string
+          p_tags?: string[]
+          p_title: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       app_role: "admin" | "user"

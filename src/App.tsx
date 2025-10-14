@@ -32,6 +32,7 @@ const Settings = lazy(() => import("./pages/Settings"));
 const Admin = lazy(() => import("./pages/Admin"));
 const PopulateBooks = lazy(() => import("./pages/PopulateBooks"));
 const CurationPeople = lazy(() => import("./pages/CurationPeople"));
+const DeduplicateBooks = lazy(() => import("./pages/DeduplicateBooks"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -83,6 +84,7 @@ const App = () => (
             <Route path="/admin" element={<Admin />} />
             <Route path="/populate-books" element={<PopulateBooks />} />
             <Route path="/curation/people" element={<CurationPeople />} />
+            <Route path="/deduplicate-books" element={<DeduplicateBooks />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
