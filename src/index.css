@@ -24,21 +24,27 @@
     height: auto;
   }
   
-  /* Optimize font loading with font-display */
+  /* Optimize font loading */
   .font-poppins {
     font-family: 'Poppins', system-ui, sans-serif;
   }
   
-  /* Add will-change for animations to reduce paint time */
-  .animate-fade-in,
-  .animate-scale-in,
-  .hover\:scale-105:hover {
-    will-change: transform, opacity;
+  /* Reduce animations on mobile for better performance */
+  @media (max-width: 768px) {
+    .animate-fade-in,
+    .transition-all,
+    .hover\:scale-105:hover {
+      animation-duration: 0.2s !important;
+      transition-duration: 0.2s !important;
+    }
+    
+    .group:hover .group-hover\:scale-110 {
+      transform: scale(1.05) !important;
+    }
   }
   
   /* Contain layout shifts */
-  img,
-  video {
+  img {
     content-visibility: auto;
   }
   

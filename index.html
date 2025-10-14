@@ -42,27 +42,14 @@
     <meta name="twitter:description" content="Transform any book into practical insights with AI" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
-    <!-- Optimized Analytics - Load after page interactive -->
+    <!-- Google Analytics - Simple defer for better mobile performance -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17639307705"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'AW-17639307705', {'send_page_view': false});
-      gtag('config', 'G-6RMB54EK6L', {'send_page_view': false});
-      
-      // Load GA script after page load
-      window.addEventListener('load', function() {
-        var script = document.createElement('script');
-        script.src = 'https://www.googletagmanager.com/gtag/js?id=AW-17639307705';
-        script.async = true;
-        document.head.appendChild(script);
-        
-        // Send pageview after script loads
-        script.onload = function() {
-          gtag('event', 'page_view', {'send_to': 'AW-17639307705'});
-          gtag('event', 'page_view', {'send_to': 'G-6RMB54EK6L'});
-        };
-      });
+      gtag('config', 'AW-17639307705');
+      gtag('config', 'G-6RMB54EK6L');
     </script>
   </head>
 
