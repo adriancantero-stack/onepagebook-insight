@@ -15,7 +15,8 @@ export const LandingHero = ({ onCTA }: LandingHeroProps) => {
 
   return (
     <section className="container mx-auto px-4 py-12 sm:px-6 sm:py-16 lg:px-24 lg:py-20">
-      <div className="max-w-5xl mx-auto space-y-12">
+      {/* Single column layout - text above, icons below */}
+      <div className="max-w-5xl mx-auto space-y-12 flex flex-col">
         {/* Text Content - Centralized */}
         <div className="space-y-6 text-center">
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl xl:text-6xl animate-fade-in leading-tight">
