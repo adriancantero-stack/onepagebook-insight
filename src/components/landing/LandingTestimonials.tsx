@@ -1,4 +1,6 @@
 import { useTranslation } from "react-i18next";
+import { useState, useEffect } from "react";
+import { Star } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import ptPerson1 from "@/assets/testimonials/pt-person1.jpg";
 import ptPerson2 from "@/assets/testimonials/pt-person2.jpg";
@@ -16,6 +18,15 @@ interface LandingTestimonialsProps {
 
 export const LandingTestimonials = ({ lang }: LandingTestimonialsProps) => {
   const { t } = useTranslation();
+  
+  const [summaryCount, setSummaryCount] = useState(12547);
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSummaryCount(prev => prev + Math.floor(Math.random() * 3));
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   const testimonialImages = {
     pt: [ptPerson1, ptPerson2, ptPerson3],
@@ -24,18 +35,24 @@ export const LandingTestimonials = ({ lang }: LandingTestimonialsProps) => {
   };
 
   return (
-    <section className="container mx-auto px-6 py-16 sm:px-12 sm:py-24 lg:px-24">
-      <div className="mb-12 space-y-3 text-center">
+    <section className="container mx-auto px-6 py-16 sm:px-12 sm:py-24 lg:px-24 bg-gradient-to-b from-white to-lilac-50/30">
+      <div className="mb-12 text-center space-y-4">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
           {t("landing.testimonials.title")}
         </h2>
-        <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-          {t("landing.testimonials.subtitle")}
-        </p>
+        <div className="flex items-center justify-center gap-2 text-lg font-medium text-primary animate-pulse">
+          <span className="text-2xl">✨</span>
+          <span>{summaryCount.toLocaleString()} {t("landing.testimonials.weeklyCount")}</span>
+        </div>
       </div>
 
       <div className="grid gap-8 md:grid-cols-3">
-        <Card className="p-8 transition-all hover:shadow-lg">
+        <Card className="p-8 transition-all hover:shadow-lg bg-card border-border">
+          <div className="mb-4 flex gap-1">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+            ))}
+          </div>
           <p className="mb-6 italic text-muted-foreground">
             "{t("landing.testimonials.testimonial1.text")}"
           </p>
@@ -53,7 +70,12 @@ export const LandingTestimonials = ({ lang }: LandingTestimonialsProps) => {
           </div>
         </Card>
 
-        <Card className="p-8 transition-all hover:shadow-lg">
+        <Card className="p-8 transition-all hover:shadow-lg bg-card border-border">
+          <div className="mb-4 flex gap-1">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+            ))}
+          </div>
           <p className="mb-6 italic text-muted-foreground">
             "{t("landing.testimonials.testimonial2.text")}"
           </p>
@@ -71,7 +93,12 @@ export const LandingTestimonials = ({ lang }: LandingTestimonialsProps) => {
           </div>
         </Card>
 
-        <Card className="p-8 transition-all hover:shadow-lg">
+        <Card className="p-8 transition-all hover:shadow-lg bg-card border-border">
+          <div className="mb-4 flex gap-1">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+            ))}
+          </div>
           <p className="mb-6 italic text-muted-foreground">
             "{t("landing.testimonials.testimonial3.text")}"
           </p>
