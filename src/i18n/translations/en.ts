@@ -115,6 +115,11 @@ export const en = {
     "ranking.noData": "No data available",
     "ranking.errorLoading": "Error loading ranking",
     
+    // Profile
+    "profile.maxLevel": "Max Level Reached",
+    "profile.toNextLevel": "to next level",
+    "profile.needXP": "{{xp}} XP needed to reach",
+    
     // Achievements
     "achievements.title": "Achievements",
     "achievements.subtitle": "Keep reading to unlock more achievements",

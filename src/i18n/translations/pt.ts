@@ -33,6 +33,11 @@ export const pt = {
     "ranking.noData": "Nenhum dado disponível",
     "ranking.errorLoading": "Erro ao carregar ranking",
     
+    // Profile
+    "profile.maxLevel": "Nível Máximo Alcançado",
+    "profile.toNextLevel": "para o próximo nível",
+    "profile.needXP": "Faltam {{xp}} XP para alcançar",
+    
     // Achievements
     "achievements.title": "Conquistas",
     "achievements.subtitle": "Continue lendo para desbloquear mais conquistas",
