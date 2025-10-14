@@ -75,16 +75,11 @@ export function PeopleChips({ people, onSelect, currentLanguage }: PeopleChipsPr
   };
 
   return (
-    <ScrollArea className="w-full whitespace-nowrap">
-      <div className="flex gap-2 sm:gap-3 pb-3 sm:pb-4">
-        {displayedPeople.map((person, index) => {
+    <div className="w-full">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 mb-3 sm:mb-4">
+        {displayedPeople.map((person) => {
           const displayName = getDisplayName(person);
           const role = getRole(person);
-          
-          // Hide based on screen size
-          const isHidden = 
-            (index >= 2 && "md:hidden") || // Hide 3rd+ on mobile (show only 2)
-            (index >= 3 && "lg:hidden"); // Hide 4th on tablet (show only 3)
           
           return (
             <button
@@ -94,9 +89,7 @@ export function PeopleChips({ people, onSelect, currentLanguage }: PeopleChipsPr
               className={cn(
                 "flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl border",
                 "bg-background hover:bg-primary transition-all duration-300",
-                "min-w-fit cursor-pointer group",
-                index >= 2 && "hidden md:flex", // Show only on md+ (tablet+) for 3rd person
-                index >= 3 && "hidden lg:flex"  // Show only on lg+ (desktop) for 4th person
+                "cursor-pointer group w-full"
               )}
             >
               <Avatar className="h-8 w-8 sm:h-10 sm:w-10 shrink-0">
@@ -111,12 +104,12 @@ export function PeopleChips({ people, onSelect, currentLanguage }: PeopleChipsPr
                   {getInitials(displayName)}
                 </AvatarFallback>
               </Avatar>
-              <div className="text-left">
-                <p className="font-medium text-xs sm:text-sm group-hover:text-white transition-colors">
+              <div className="text-left min-w-0 flex-1">
+                <p className="font-medium text-xs sm:text-sm group-hover:text-white transition-colors truncate">
                   {displayName}
                 </p>
                 {role && (
-                  <p className="text-[10px] sm:text-[11px] text-muted-foreground opacity-60 group-hover:text-white/80 transition-colors">
+                  <p className="text-[10px] sm:text-[11px] text-muted-foreground opacity-60 group-hover:text-white/80 transition-colors truncate">
                     {role}
                   </p>
                 )}
@@ -124,26 +117,24 @@ export function PeopleChips({ people, onSelect, currentLanguage }: PeopleChipsPr
             </button>
           );
         })}
-        
-        {/* Ver Todos Button */}
-        <Button
-          onClick={() => navigate('/curation/people')}
-          variant="default"
-          className={cn(
-            "flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 rounded-xl",
-            "bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90",
-            "text-primary-foreground font-semibold shadow-lg hover:shadow-xl",
-            "transition-all duration-300 hover:scale-105",
-            "min-w-fit whitespace-nowrap group"
-          )}
-        >
-          <span className="text-xs sm:text-sm group-hover:text-white transition-colors">
-            {t('people.see_all')}
-          </span>
-          <ArrowRight className="h-4 w-4 group-hover:text-white transition-colors" />
-        </Button>
       </div>
-      <ScrollBar orientation="horizontal" />
-    </ScrollArea>
+      
+      {/* Ver Todos Button */}
+      <Button
+        onClick={() => navigate('/curation/people')}
+        variant="default"
+        className={cn(
+          "flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 rounded-xl w-full sm:w-auto",
+          "bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90",
+          "text-primary-foreground font-semibold shadow-lg hover:shadow-xl",
+          "transition-all duration-300 hover:scale-105 group"
+        )}
+      >
+        <span className="text-xs sm:text-sm group-hover:text-white transition-colors">
+          {t('people.see_all')}
+        </span>
+        <ArrowRight className="h-4 w-4 group-hover:text-white transition-colors" />
+      </Button>
+    </div>
   );
 }
