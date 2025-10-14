@@ -1,20 +1,21 @@
 import { useTranslation } from "react-i18next";
 import { BookOpen, Sparkles, FileText, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 interface LandingHeroProps {
   onCTA: () => void;
 }
-
-export const LandingHero = ({ onCTA }: LandingHeroProps) => {
-  const { t } = useTranslation();
-
+export const LandingHero = ({
+  onCTA
+}: LandingHeroProps) => {
+  const {
+    t
+  } = useTranslation();
   const scrollToHowItWorks = () => {
-    document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('how-it-works')?.scrollIntoView({
+      behavior: 'smooth'
+    });
   };
-
-  return (
-    <section className="container mx-auto px-4 py-12 sm:px-6 sm:py-16 lg:px-24 lg:py-20">
+  return <section className="container mx-auto px-4 py-12 sm:px-6 sm:py-16 lg:px-24 lg:py-20">
       {/* Single column layout - text above, icons below */}
       <div className="max-w-5xl mx-auto space-y-12 flex flex-col">
         {/* Text Content - Centralized */}
@@ -23,39 +24,38 @@ export const LandingHero = ({ onCTA }: LandingHeroProps) => {
             {t("landing.hero.headline")}
           </h1>
 
-          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground animate-fade-in max-w-3xl mx-auto" style={{animationDelay: "0.1s"}}>
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground animate-fade-in max-w-3xl mx-auto" style={{
+          animationDelay: "0.1s"
+        }}>
             {t("landing.hero.subheadline")}
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 pt-2 animate-fade-in justify-center" style={{animationDelay: "0.2s"}}>
-            <Button
-              size="lg"
-              onClick={onCTA}
-              className="h-11 px-6 text-sm font-medium shadow-lg transition-all hover:scale-105 sm:h-12 sm:px-8 sm:text-base lg:h-14 lg:px-10 lg:text-lg w-full sm:w-auto"
-            >
+          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 pt-2 animate-fade-in justify-center" style={{
+          animationDelay: "0.2s"
+        }}>
+            <Button size="lg" onClick={onCTA} className="h-11 px-6 text-sm font-medium shadow-lg transition-all hover:scale-105 sm:h-12 sm:px-8 sm:text-base lg:h-14 lg:px-10 lg:text-lg w-full sm:w-auto">
               {t("landing.hero.ctaPrimary")}
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={scrollToHowItWorks}
-              className="h-11 px-6 text-sm font-medium transition-all hover:scale-105 sm:h-12 sm:px-8 sm:text-base lg:h-14 lg:px-10 lg:text-lg w-full sm:w-auto"
-            >
+            <Button size="lg" variant="outline" onClick={scrollToHowItWorks} className="h-11 px-6 text-sm font-medium transition-all hover:scale-105 sm:h-12 sm:px-8 sm:text-base lg:h-14 lg:px-10 lg:text-lg w-full sm:w-auto">
               {t("landing.hero.ctaSecondary")}
             </Button>
           </div>
 
-          <p className="text-sm sm:text-base text-muted-foreground animate-fade-in flex items-center gap-2 justify-center" style={{animationDelay: "0.3s"}}>
+          <p className="text-sm sm:text-base text-muted-foreground animate-fade-in flex items-center gap-2 justify-center" style={{
+          animationDelay: "0.3s"
+        }}>
             <span className="text-lg">🌍</span>
             {t("landing.hero.socialProof")}
           </p>
         </div>
 
         {/* Visual Illustration - Below, Centralized */}
-        <div className="relative animate-fade-in pt-8 sm:pt-12" style={{animationDelay: "0.4s"}}>
+        <div className="relative animate-fade-in pt-8 sm:pt-12" style={{
+        animationDelay: "0.4s"
+      }}>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 lg:gap-12">
             <div className="flex flex-col items-center gap-3 group">
-              <div className="rounded-2xl bg-gradient-to-br from-primary/20 to-purple-500/20 p-6 sm:p-8 lg:p-10 backdrop-blur-sm border border-primary/20 transition-transform group-hover:scale-110">
+              <div className="rounded-2xl bg-gradient-to-br from-primary/20 to-purple-500/20 p-6 sm:p-8 lg:p-10 backdrop-blur-sm border border-primary/20 transition-transform group-hover:scale-110 px-[32px] mx-0">
                 <BookOpen className="h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16 text-primary" />
               </div>
               <p className="text-xs sm:text-sm lg:text-base font-medium text-muted-foreground">{t("landing.hero.visual.book")}</p>
@@ -81,6 +81,5 @@ export const LandingHero = ({ onCTA }: LandingHeroProps) => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
