@@ -48,32 +48,30 @@ export const LandingLanguages = () => {
           {/* Animated location dots on top of map */}
           <div className="absolute inset-0">
             {[
-              { left: '12%', top: '25%', delay: '0s' },     // West Coast USA
-              { left: '18%', top: '30%', delay: '0.2s' },   // Central USA
-              { left: '22%', top: '28%', delay: '0.4s' },   // East Coast USA
-              { left: '20%', top: '22%', delay: '0.6s' },   // Canada
-              { left: '25%', top: '48%', delay: '0.8s' },   // Mexico
-              { left: '27%', top: '58%', delay: '1s' },     // Central America
-              { left: '28%', top: '70%', delay: '1.2s' },   // Brazil
-              { left: '32%', top: '75%', delay: '1.4s' },   // South America
-              { left: '45%', top: '22%', delay: '1.6s' },   // UK
-              { left: '48%', top: '28%', delay: '1.8s' },   // Western Europe
-              { left: '52%', top: '25%', delay: '2s' },     // Central Europe
-              { left: '56%', top: '30%', delay: '2.2s' },   // Eastern Europe
-              { left: '50%', top: '38%', delay: '2.4s' },   // Mediterranean
-              { left: '48%', top: '50%', delay: '2.6s' },   // North Africa
-              { left: '52%', top: '58%', delay: '2.8s' },   // Central Africa
-              { left: '55%', top: '65%', delay: '3s' },     // South Africa
-              { left: '58%', top: '35%', delay: '3.2s' },   // Middle East
-              { left: '64%', top: '28%', delay: '3.4s' },   // Central Asia
-              { left: '68%', top: '38%', delay: '3.6s' },   // India
-              { left: '72%', top: '32%', delay: '3.8s' },   // Southeast Asia
-              { left: '78%', top: '28%', delay: '4s' },     // China
-              { left: '82%', top: '25%', delay: '4.2s' },   // Japan
-              { left: '85%', top: '32%', delay: '4.4s' },   // South Korea
-              { left: '76%', top: '52%', delay: '4.6s' },   // Indonesia
-              { left: '88%', top: '72%', delay: '4.8s' },   // Australia East
-              { left: '83%', top: '75%', delay: '5s' },     // Australia West
+              { left: '13%', top: '28%', delay: '0s' },     // West Coast USA
+              { left: '18%', top: '32%', delay: '0.2s' },   // Central USA
+              { left: '22%', top: '30%', delay: '0.4s' },   // East Coast USA
+              { left: '17%', top: '22%', delay: '0.6s' },   // Canada
+              { left: '24%', top: '50%', delay: '0.8s' },   // Mexico
+              { left: '27%', top: '62%', delay: '1s' },     // Colombia
+              { left: '28%', top: '68%', delay: '1.2s' },   // Brazil Norte
+              { left: '30%', top: '72%', delay: '1.4s' },   // Brazil Sul
+              { left: '29%', top: '78%', delay: '1.6s' },   // Argentina
+              { left: '45%', top: '25%', delay: '1.8s' },   // UK
+              { left: '48%', top: '28%', delay: '2s' },     // France
+              { left: '51%', top: '26%', delay: '2.2s' },   // Germany
+              { left: '54%', top: '32%', delay: '2.4s' },   // Poland
+              { left: '51%', top: '38%', delay: '2.6s' },   // Italy
+              { left: '49%', top: '48%', delay: '2.8s' },   // North Africa
+              { left: '52%', top: '56%', delay: '3s' },     // Central Africa
+              { left: '54%', top: '68%', delay: '3.2s' },   // South Africa
+              { left: '57%', top: '36%', delay: '3.4s' },   // Middle East
+              { left: '64%', top: '30%', delay: '3.6s' },   // Russia
+              { left: '68%', top: '40%', delay: '3.8s' },   // India
+              { left: '74%', top: '42%', delay: '4s' },     // Thailand
+              { left: '78%', top: '34%', delay: '4.2s' },   // China
+              { left: '84%', top: '30%', delay: '4.4s' },   // Japan
+              { left: '86%', top: '72%', delay: '4.6s' },   // Australia
             ].map((dot, i) => (
               <div
                 key={i}
