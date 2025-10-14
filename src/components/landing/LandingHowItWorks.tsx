@@ -21,7 +21,7 @@ export const LandingHowItWorks = ({ onCTA }: LandingHowItWorksProps) => {
             <Search className="h-10 w-10 text-white" />
           </div>
           <div className="space-y-2">
-            <div className="text-sm font-semibold text-primary">1️⃣</div>
+            <div className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-muted text-sm font-bold text-foreground mb-2">1</div>
             <h3 className="text-xl font-semibold">{t("landing.howItWorks.step1.title")}</h3>
             <p className="text-muted-foreground">{t("landing.howItWorks.step1.description")}</p>
           </div>
@@ -32,7 +32,7 @@ export const LandingHowItWorks = ({ onCTA }: LandingHowItWorksProps) => {
             <Sparkles className="h-10 w-10 text-white" />
           </div>
           <div className="space-y-2">
-            <div className="text-sm font-semibold text-primary">2️⃣</div>
+            <div className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-muted text-sm font-bold text-foreground mb-2">2</div>
             <h3 className="text-xl font-semibold">{t("landing.howItWorks.step2.title")}</h3>
             <p className="text-muted-foreground">{t("landing.howItWorks.step2.description")}</p>
           </div>
@@ -43,7 +43,7 @@ export const LandingHowItWorks = ({ onCTA }: LandingHowItWorksProps) => {
             <Download className="h-10 w-10 text-white" />
           </div>
           <div className="space-y-2">
-            <div className="text-sm font-semibold text-primary">3️⃣</div>
+            <div className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-muted text-sm font-bold text-foreground mb-2">3</div>
             <h3 className="text-xl font-semibold">{t("landing.howItWorks.step3.title")}</h3>
             <p className="text-muted-foreground">{t("landing.howItWorks.step3.description")}</p>
           </div>
