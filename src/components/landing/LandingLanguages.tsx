@@ -49,12 +49,12 @@ export const LandingLanguages = () => {
           <div className="absolute inset-0">
             {[
               // USA - mais pontos (costa oeste a leste)
-              { left: '14%', top: '27%', delay: '0s' },     // Seattle
-              { left: '14%', top: '31%', delay: '0.1s' },   // Califórnia
-              { left: '18%', top: '35%', delay: '0.2s' },   // Texas
-              { left: '19%', top: '31%', delay: '0.3s' },   // Chicago
-              { left: '22%', top: '30%', delay: '0.4s' },   // Nova York
-              { left: '21%', top: '35%', delay: '0.5s' },   // Flórida
+              { left: '12%', top: '29%', delay: '0s' },     // Seattle
+              { left: '11.5%', top: '32%', delay: '0.1s' }, // Califórnia
+              { left: '16%', top: '36%', delay: '0.2s' },   // Texas
+              { left: '19%', top: '30%', delay: '0.3s' },   // Chicago
+              { left: '21%', top: '29%', delay: '0.4s' },   // Nova York
+              { left: '20%', top: '35%', delay: '0.5s' },   // Flórida
 
               // Canadá
               { left: '17%', top: '24%', delay: '0.6s' },
@@ -75,12 +75,12 @@ export const LandingLanguages = () => {
               { left: '32%', top: '82%', delay: '1.5s' },
 
               // Reino Unido - mais pontos
-              { left: '46%', top: '23%', delay: '1.6s' },   // Escócia
-              { left: '46.5%', top: '25%', delay: '1.7s' }, // Inglaterra Norte
-              { left: '46%', top: '27%', delay: '1.8s' },   // Londres
+              { left: '46%', top: '24%', delay: '1.6s' },   // Escócia
+              { left: '46.5%', top: '26%', delay: '1.7s' }, // Inglaterra Norte
+              { left: '46.5%', top: '28%', delay: '1.8s' }, // Londres
 
               // Irlanda
-              { left: '44.2%', top: '26%', delay: '1.9s' },
+              { left: '44.5%', top: '27%', delay: '1.9s' },
 
               // Espanha - mais pontos (inclui Portugal)
               { left: '45%', top: '33%', delay: '2s' },     // Lisboa/Porto
