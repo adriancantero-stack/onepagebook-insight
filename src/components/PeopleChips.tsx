@@ -83,8 +83,14 @@ export function PeopleChips({ people, onSelect, currentLanguage }: PeopleChipsPr
                 "min-w-fit cursor-pointer"
               )}
             >
-              <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
-                {person.avatar_url && <AvatarImage src={person.avatar_url} alt={displayName} />}
+              <Avatar className="h-8 w-8 sm:h-10 sm:w-10 shrink-0">
+                {person.avatar_url && (
+                  <AvatarImage 
+                    src={person.avatar_url} 
+                    alt={displayName}
+                    className="object-cover"
+                  />
+                )}
                 <AvatarFallback className="bg-primary text-primary-foreground">
                   {getInitials(displayName)}
                 </AvatarFallback>
