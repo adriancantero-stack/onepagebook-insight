@@ -259,6 +259,7 @@ export type Database = {
         Row: {
           asin: string | null
           author: string
+          author_normalized: string | null
           category: string | null
           cover_url: string | null
           created_at: string
@@ -275,11 +276,13 @@ export type Database = {
           summary_generated_at: string | null
           tags: string[] | null
           title: string
+          title_normalized: string | null
           updated_at: string
         }
         Insert: {
           asin?: string | null
           author: string
+          author_normalized?: string | null
           category?: string | null
           cover_url?: string | null
           created_at?: string
@@ -296,11 +299,13 @@ export type Database = {
           summary_generated_at?: string | null
           tags?: string[] | null
           title: string
+          title_normalized?: string | null
           updated_at?: string
         }
         Update: {
           asin?: string | null
           author?: string
+          author_normalized?: string | null
           category?: string | null
           cover_url?: string | null
           created_at?: string
@@ -317,6 +322,7 @@ export type Database = {
           summary_generated_at?: string | null
           tags?: string[] | null
           title?: string
+          title_normalized?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -751,6 +757,15 @@ export type Database = {
       increment_summaries_generated: {
         Args: { p_user_id: string }
         Returns: undefined
+      }
+      merge_duplicate_books: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          author: string
+          deleted_count: number
+          kept_book_id: string
+          title: string
+        }[]
       }
       normalize_cache_text: {
         Args: { text_input: string }
