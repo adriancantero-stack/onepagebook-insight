@@ -18,6 +18,43 @@ export const pt = {
     "header.premium": "Premium",
     "header.logout": "Sair",
     
+    // Landing Page
+    landing: {
+      hero: {
+        headline: "Aprenda qualquer livro em minutos",
+        subheadline: "Obtenha resumos inteligentes com IA — grátis e em 3 idiomas",
+        ctaPrimary: "Começar agora — é grátis",
+        ctaSecondary: "Ver como funciona",
+        socialProof: "+5.000 resumos gerados por leitores em todo o mundo",
+        visual: { book: "Livro", ai: "IA", summary: "Resumo" }
+      },
+      benefits: {
+        title: "Por que usar o OnePageBook?",
+        ai: { title: "IA que entende o livro inteiro", description: "Gera resumos reais, não apenas sinopses genéricas" },
+        time: { title: "Economize horas", description: "Leia o essencial de cada livro em 3 minutos" },
+        multilingual: { title: "Multilíngue e acessível", description: "Português, Inglês e Espanhol — escolha seu idioma" }
+      },
+      howItWorks: {
+        title: "Como funciona",
+        step1: { title: "Escolha o livro ou cole o título", description: "Navegue por nossa biblioteca ou pesquise qualquer livro" },
+        step2: { title: "A IA analisa e resume o conteúdo", description: "Nossa IA processa o livro e extrai os insights essenciais" },
+        step3: { title: "Você lê, ouve ou baixa o resumo", description: "Receba em formato de leitura ou áudio, pronto para usar" },
+        cta: "Gerar meu primeiro resumo grátis"
+      },
+      languages: { title: "Disponível em 3 idiomas", global: "Leitores em 47 países já usam o OnePageBook" },
+      testimonials: { title: "O que leitores dizem", weeklyCount: "resumos gerados esta semana" },
+      footer: { tagline: "Aprenda mais rápido, leia mais livros, transforme conhecimento em ação", rights: "Todos os direitos reservados" },
+      finalCta: {
+        badge: "Junte-se a milhares de leitores",
+        headline: "Transforme sua forma de aprender hoje",
+        subtext: "Junte-se a milhares de leitores que já usam IA para crescer mais rápido",
+        cta: "Começar agora — grátis",
+        free: "Grátis para começar",
+        noCard: "Sem cartão de crédito",
+        instant: "Acesso instantâneo"
+      }
+    },
+    
     // Navigation
     "nav.faq": "FAQ",
     "nav.faq_short": "FAQ",
