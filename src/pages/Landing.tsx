@@ -98,9 +98,6 @@ const Landing = ({ lang }: LandingProps) => {
             {t("landing.footer.tagline")}
           </p>
           <Footer />
-          <div className="mt-6 pt-6 border-t border-border text-center text-xs text-muted-foreground">
-            © {new Date().getFullYear()} OnePageBook. {t("landing.footer.rights")}
-          </div>
         </div>
       </footer>
     </div>
