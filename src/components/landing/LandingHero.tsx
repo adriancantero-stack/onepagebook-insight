@@ -13,7 +13,7 @@ export const LandingHero = ({ onCTA }: LandingHeroProps) => {
   return (
     <section className="container mx-auto px-6 py-16 sm:px-12 sm:py-24 lg:px-24 lg:py-32">
       <div className="mx-auto max-w-4xl space-y-8 text-center">
-        <Badge variant="secondary" className="inline-flex items-center gap-2 px-4 py-2 text-sm font-normal">
+        <Badge variant="secondary" className="inline-flex items-center gap-2 px-4 py-2 text-sm font-normal bg-white/80 hover:bg-white border border-lilac-100">
           <Star className="h-3 w-3 fill-primary text-primary" />
           {t("landing.hero.badge")}
         </Badge>
