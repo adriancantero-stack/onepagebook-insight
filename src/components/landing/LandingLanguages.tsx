@@ -38,7 +38,7 @@ export const LandingLanguages = () => {
         </p>
 
         {/* World map with animated location dots */}
-        <div className="relative mx-auto max-w-4xl pt-8 pb-4">
+        <div className="relative mx-auto max-w-3xl pt-8 pb-4">
           <img 
             src={worldMap} 
             alt="World Map" 
