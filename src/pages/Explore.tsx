@@ -213,16 +213,28 @@ const Explore = () => {
           )
         `)
         .eq('person_id', personId)
-        .neq('confidence', 'low');
+        .neq('confidence', 'low')
+        .not('book_id', 'is', null); // Only fetch picks with valid book_id
 
       if (error) throw error;
 
-      const books: BookPick[] = (data || []).map((pick: any) => ({
+      // Remove duplicates based on book_id
+      const uniqueBooks = new Map<string, any>();
+      (data || []).forEach((pick: any) => {
+        if (pick.books?.title && pick.books?.author && pick.book_id) {
+          // Keep only the first occurrence of each book
+          if (!uniqueBooks.has(pick.book_id)) {
+            uniqueBooks.set(pick.book_id, pick);
+          }
+        }
+      });
+
+      const books: BookPick[] = Array.from(uniqueBooks.values()).map((pick: any) => ({
         id: pick.id,
         book_id: pick.book_id,
-        title: pick.books?.title || '',
-        author: pick.books?.author || '',
-        cover_url: pick.books?.cover_url,
+        title: pick.books.title,
+        author: pick.books.author,
+        cover_url: pick.books.cover_url,
         source_url: pick.source_url,
         reason: i18n.language === 'pt' ? pick.reason_pt : 
                 i18n.language === 'en' ? pick.reason_en : 
