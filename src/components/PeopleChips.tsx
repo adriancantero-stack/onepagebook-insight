@@ -1,6 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export interface PersonPick {
   id: string;
@@ -25,6 +29,11 @@ interface PeopleChipsProps {
 }
 
 export function PeopleChips({ people, onSelect, currentLanguage }: PeopleChipsProps) {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+  
+  // Limit display based on screen size
+  const displayedPeople = people.slice(0, 4); // Max 4 for desktop
   const getDisplayName = (person: PersonPick) => {
     if (currentLanguage === 'pt' && person.display_name_pt) return person.display_name_pt;
     if (currentLanguage === 'en' && person.display_name_en) return person.display_name_en;
@@ -68,9 +77,14 @@ export function PeopleChips({ people, onSelect, currentLanguage }: PeopleChipsPr
   return (
     <ScrollArea className="w-full whitespace-nowrap">
       <div className="flex gap-2 sm:gap-3 pb-3 sm:pb-4">
-        {people.map((person) => {
+        {displayedPeople.map((person, index) => {
           const displayName = getDisplayName(person);
           const role = getRole(person);
+          
+          // Hide based on screen size
+          const isHidden = 
+            (index >= 2 && "md:hidden") || // Hide 3rd+ on mobile (show only 2)
+            (index >= 3 && "lg:hidden"); // Hide 4th on tablet (show only 3)
           
           return (
             <button
@@ -80,7 +94,9 @@ export function PeopleChips({ people, onSelect, currentLanguage }: PeopleChipsPr
               className={cn(
                 "flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl border",
                 "bg-background hover:bg-accent transition-colors",
-                "min-w-fit cursor-pointer"
+                "min-w-fit cursor-pointer",
+                index >= 2 && "hidden md:flex", // Show only on md+ (tablet+) for 3rd person
+                index >= 3 && "hidden lg:flex"  // Show only on lg+ (desktop) for 4th person
               )}
             >
               <Avatar className="h-8 w-8 sm:h-10 sm:w-10 shrink-0">
@@ -104,6 +120,22 @@ export function PeopleChips({ people, onSelect, currentLanguage }: PeopleChipsPr
             </button>
           );
         })}
+        
+        {/* Ver Todos Button */}
+        <Button
+          onClick={() => navigate('/curation/people')}
+          variant="default"
+          className={cn(
+            "flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 rounded-xl",
+            "bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90",
+            "text-primary-foreground font-semibold shadow-lg hover:shadow-xl",
+            "transition-all duration-300 hover:scale-105",
+            "min-w-fit whitespace-nowrap"
+          )}
+        >
+          <span className="text-xs sm:text-sm">{t('people.see_all')}</span>
+          <ArrowRight className="h-4 w-4" />
+        </Button>
       </div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
