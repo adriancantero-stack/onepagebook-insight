@@ -514,18 +514,9 @@ const Explore = () => {
         {/* People Picks Section */}
         {featuredPeople.length > 0 && (
           <section className="mb-8 sm:mb-12 max-w-6xl mx-auto">
-            <div className="flex items-center justify-between mb-4 sm:mb-6">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-[#1D1D1F]">
-                {t('people.section_title')}
-              </h2>
-              <Button
-                variant="ghost"
-                onClick={() => navigate('/curation/people')}
-                className="text-sm text-[#86868B] hover:text-[#1D1D1F]"
-              >
-                {t('people.see_all')} →
-              </Button>
-            </div>
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-[#1D1D1F] mb-4 sm:mb-6">
+              {t('people.section_title')}
+            </h2>
             <PeopleChips
               people={featuredPeople}
               onSelect={handlePersonSelect}
