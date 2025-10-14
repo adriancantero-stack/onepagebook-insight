@@ -53,7 +53,7 @@ export const LandingHero = ({
         <div className="relative animate-fade-in pt-8 sm:pt-12" style={{
         animationDelay: "0.4s"
       }}>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-4 lg:gap-6">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-3 lg:gap-4">
             <div className="flex flex-col items-center gap-3 group">
               <div className="rounded-2xl bg-gradient-to-br from-primary/20 to-purple-500/20 p-6 sm:p-8 lg:p-10 backdrop-blur-sm border border-primary/20 transition-transform group-hover:scale-110 px-[32px] mx-0">
                 <BookOpen className="h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16 text-primary" />
