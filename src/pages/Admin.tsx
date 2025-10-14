@@ -23,6 +23,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Users, FileText, TrendingUp, Crown, Download, BookOpen, ImagePlus, Sparkles, Upload, Trash2, RefreshCw, UserX } from "lucide-react";
+import { ManualCoverUpload } from "@/components/admin/ManualCoverUpload";
 import { bookCatalog } from "@/data/bookCatalog";
 import { Progress } from "@/components/ui/progress";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
@@ -1525,6 +1526,11 @@ const Admin = () => {
                   </p>
                 </div>
               )}
+
+              {/* Manual Cover Upload Section */}
+              <div className="mt-6">
+                <ManualCoverUpload />
+              </div>
 
               {/* Summary Check Result */}
               {booksWithoutSummaries !== null && !batchGenerating && (
