@@ -93,8 +93,8 @@ export function PeopleChips({ people, onSelect, currentLanguage }: PeopleChipsPr
               aria-label={`Abrir livros citados por ${displayName}`}
               className={cn(
                 "flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl border",
-                "bg-background hover:bg-accent transition-colors",
-                "min-w-fit cursor-pointer",
+                "bg-background hover:bg-primary transition-all duration-300",
+                "min-w-fit cursor-pointer group",
                 index >= 2 && "hidden md:flex", // Show only on md+ (tablet+) for 3rd person
                 index >= 3 && "hidden lg:flex"  // Show only on lg+ (desktop) for 4th person
               )}
@@ -112,9 +112,13 @@ export function PeopleChips({ people, onSelect, currentLanguage }: PeopleChipsPr
                 </AvatarFallback>
               </Avatar>
               <div className="text-left">
-                <p className="font-medium text-xs sm:text-sm">{displayName}</p>
+                <p className="font-medium text-xs sm:text-sm group-hover:text-white transition-colors">
+                  {displayName}
+                </p>
                 {role && (
-                  <p className="text-[10px] sm:text-[11px] text-muted-foreground opacity-60">{role}</p>
+                  <p className="text-[10px] sm:text-[11px] text-muted-foreground opacity-60 group-hover:text-white/80 transition-colors">
+                    {role}
+                  </p>
                 )}
               </div>
             </button>
