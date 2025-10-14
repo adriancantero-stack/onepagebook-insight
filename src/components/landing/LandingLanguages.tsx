@@ -36,16 +36,42 @@ export const LandingLanguages = () => {
           {t("landing.languages.global")}
         </p>
 
-        {/* Decorative global presence visual */}
-        <div className="relative mx-auto max-w-md pt-8">
-          <div className="flex items-center justify-center gap-2 flex-wrap">
-            {[...Array(12)].map((_, i) => (
-              <div
-                key={i}
-                className="h-2 w-2 rounded-full bg-primary/40 animate-pulse"
-                style={{ animationDelay: `${i * 0.2}s` }}
-              />
-            ))}
+        {/* Decorative global presence visual - Stylized world map */}
+        <div className="relative mx-auto max-w-3xl pt-8">
+          <svg viewBox="0 0 800 400" className="w-full h-auto opacity-20" xmlns="http://www.w3.org/2000/svg">
+            {/* Simplified world map continents */}
+            <path d="M150,100 Q200,80 250,100 L280,120 L260,180 L200,190 L150,160 Z" fill="currentColor" className="text-primary" />
+            <path d="M300,120 L380,110 L420,140 L400,200 L320,210 L300,170 Z" fill="currentColor" className="text-primary" />
+            <path d="M450,130 Q520,120 580,140 L600,180 L550,220 L480,210 L450,170 Z" fill="currentColor" className="text-primary" />
+            <path d="M180,220 L240,210 L280,240 L260,300 L200,310 L170,270 Z" fill="currentColor" className="text-primary" />
+            <path d="M500,230 L580,220 L620,260 L600,320 L530,330 L500,280 Z" fill="currentColor" className="text-primary" />
+          </svg>
+          
+          {/* Animated dots on map */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="relative w-full h-full max-w-3xl">
+              {[
+                { left: '20%', top: '30%' },
+                { left: '35%', top: '35%' },
+                { left: '50%', top: '25%' },
+                { left: '65%', top: '40%' },
+                { left: '75%', top: '30%' },
+                { left: '25%', top: '60%' },
+                { left: '70%', top: '65%' },
+                { left: '45%', top: '55%' },
+              ].map((pos, i) => (
+                <div
+                  key={i}
+                  className="absolute h-3 w-3 rounded-full bg-primary animate-pulse"
+                  style={{ 
+                    left: pos.left, 
+                    top: pos.top,
+                    animationDelay: `${i * 0.3}s`,
+                    boxShadow: '0 0 10px rgba(139, 92, 246, 0.5)'
+                  }}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
