@@ -120,12 +120,21 @@ export default function CurationPeople() {
                     className="group relative flex flex-col items-center gap-3 p-6 rounded-2xl border bg-card hover:shadow-lg hover:border-primary/50 transition-all duration-200"
                   >
                     <div className="relative">
-                      <div className="w-20 h-20 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition-transform">
+                      <div className="w-20 h-20 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition-transform overflow-hidden">
                         {person.avatar_url ? (
-                          <img src={person.avatar_url} alt={displayName} className="w-full h-full rounded-full object-cover" />
-                        ) : (
-                          initials
-                        )}
+                          <img 
+                            src={person.avatar_url} 
+                            alt={displayName} 
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              // Fallback para iniciais se a imagem falhar
+                              e.currentTarget.style.display = 'none';
+                            }}
+                          />
+                        ) : null}
+                        <span className={person.avatar_url ? "absolute inset-0 flex items-center justify-center" : ""} style={person.avatar_url ? {display: 'none'} : {}}>
+                          {initials}
+                        </span>
                       </div>
                     </div>
                     <div className="text-center">
