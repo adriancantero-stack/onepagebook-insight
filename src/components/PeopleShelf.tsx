@@ -106,15 +106,6 @@ export function PeopleShelf({
           <DialogTitle className="text-xl">
             {translations.shelf_title.replace('{{name}}', getDisplayName())}
           </DialogTitle>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute right-4 top-4"
-            onClick={onClose}
-            aria-label={translations.close}
-          >
-            <X className="h-4 w-4" />
-          </Button>
         </DialogHeader>
 
         <ScrollArea className="max-h-[70vh] pr-4">
@@ -124,7 +115,9 @@ export function PeopleShelf({
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {books.map((book) => (
+              {books
+                .filter(book => book.title && book.author) // Filter out books with missing data
+                .map((book) => (
                 <div
                   key={book.id}
                   className="group relative rounded-xl border bg-card overflow-hidden hover:shadow-lg transition-shadow"
@@ -180,6 +173,13 @@ export function PeopleShelf({
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+          
+          {/* Show message if no valid books after filtering */}
+          {books.length > 0 && books.filter(b => b.title && b.author).length === 0 && (
+            <div className="text-center py-12 text-muted-foreground">
+              {translations.empty_person}
             </div>
           )}
         </ScrollArea>
