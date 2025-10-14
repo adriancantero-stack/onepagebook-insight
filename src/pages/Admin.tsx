@@ -267,11 +267,11 @@ const Admin = () => {
         };
       }) || [];
 
-      // Sort users - Adrian Cantero always first
+      // Sort users by created_at date - oldest first (Adrian Cantero always first)
       const sortedUsers = usersWithData.sort((a, b) => {
         if (a.email === 'adrian.cantero1@gmail.com') return -1;
         if (b.email === 'adrian.cantero1@gmail.com') return 1;
-        return 0;
+        return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
       });
 
       setUsers(sortedUsers);

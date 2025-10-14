@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Upload, Search, Image as ImageIcon } from "lucide-react";
+import { Upload, RefreshCw, Image as ImageIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface Book {
@@ -17,41 +17,42 @@ interface Book {
 }
 
 export function ManualCoverUpload() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<Book[]>([]);
+  const [booksWithoutCovers, setBooksWithoutCovers] = useState<Book[]>([]);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [searching, setSearching] = useState(false);
+  const [loading, setLoading] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleSearch = async () => {
-    if (!searchQuery.trim()) {
-      toast.error("Digite um título ou autor para buscar");
-      return;
-    }
-
-    setSearching(true);
+  // Load books without covers on mount
+  const loadBooksWithoutCovers = async () => {
+    setLoading(true);
     try {
       const { data, error } = await supabase
         .from("books")
         .select("id, title, author, cover_url, lang")
-        .or(`title.ilike.%${searchQuery}%,author.ilike.%${searchQuery}%`)
+        .eq("is_active", true)
+        .or("cover_url.is.null,cover_url.eq./book-placeholder.png,cover_url.eq./logo-gray.png")
         .order("title")
-        .limit(20);
+        .limit(50);
 
       if (error) throw error;
 
-      setSearchResults(data || []);
+      setBooksWithoutCovers(data || []);
       if (data?.length === 0) {
-        toast.info("Nenhum livro encontrado");
+        toast.success("Todos os livros já têm capas!");
       }
     } catch (error) {
-      console.error("Erro ao buscar livros:", error);
-      toast.error("Erro ao buscar livros");
+      console.error("Erro ao carregar livros:", error);
+      toast.error("Erro ao carregar livros sem capa");
     } finally {
-      setSearching(false);
+      setLoading(false);
     }
   };
+
+  // Load on mount
+  useState(() => {
+    loadBooksWithoutCovers();
+  });
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -101,13 +102,9 @@ export function ManualCoverUpload() {
 
       toast.success("Capa atualizada com sucesso!");
       
-      // Update selected book and search results
-      setSelectedBook({ ...selectedBook, cover_url: publicUrl });
-      setSearchResults(prev =>
-        prev.map(book =>
-          book.id === selectedBook.id ? { ...book, cover_url: publicUrl } : book
-        )
-      );
+      // Reload books without covers
+      await loadBooksWithoutCovers();
+      setSelectedBook(null);
 
       // Clear file input
       if (fileInputRef.current) {
@@ -129,76 +126,73 @@ export function ManualCoverUpload() {
           Upload Manual de Capas
         </CardTitle>
         <CardDescription>
-          Busque livros e faça upload manual das capas
+          Livros sem capa ou com placeholder ({booksWithoutCovers.length} encontrados)
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Search Section */}
-        <div className="space-y-4">
-          <div className="flex gap-2">
-            <Input
-              placeholder="Buscar por título ou autor..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            />
-            <Button onClick={handleSearch} disabled={searching}>
-              <Search className="h-4 w-4 mr-2" />
-              {searching ? "Buscando..." : "Buscar"}
-            </Button>
+        {loading ? (
+          <div className="text-center py-8 text-muted-foreground">
+            Carregando livros sem capa...
           </div>
+        ) : booksWithoutCovers.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground">
+            Todos os livros já possuem capas! 🎉
+          </div>
+        ) : (
+          <>
+            {/* Books Without Covers List */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <p className="text-sm text-muted-foreground">
+                  Selecione um livro para fazer upload da capa
+                </p>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={loadBooksWithoutCovers}
+                  disabled={loading}
+                >
+                  <RefreshCw className="h-3 w-3 mr-2" />
+                  Atualizar Lista
+                </Button>
+              </div>
 
-          {/* Search Results */}
-          {searchResults.length > 0 && (
-            <div className="border rounded-lg overflow-hidden">
-              <div className="max-h-[300px] overflow-y-auto">
-                {searchResults.map((book) => (
-                  <div
-                    key={book.id}
-                    className={`p-3 border-b hover:bg-accent cursor-pointer transition-colors ${
-                      selectedBook?.id === book.id ? "bg-accent" : ""
-                    }`}
-                    onClick={() => setSelectedBook(book)}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="w-12 h-16 bg-muted rounded flex-shrink-0 overflow-hidden">
-                        {book.cover_url ? (
-                          <img
-                            src={book.cover_url}
-                            alt={book.title}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
+              <div className="border rounded-lg overflow-hidden">
+                <div className="max-h-[400px] overflow-y-auto">
+                  {booksWithoutCovers.map((book) => (
+                    <div
+                      key={book.id}
+                      className={`p-3 border-b hover:bg-accent cursor-pointer transition-colors ${
+                        selectedBook?.id === book.id ? "bg-accent" : ""
+                      }`}
+                      onClick={() => setSelectedBook(book)}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="w-12 h-16 bg-muted rounded flex-shrink-0 overflow-hidden">
                           <div className="w-full h-full flex items-center justify-center">
                             <ImageIcon className="h-6 w-6 text-muted-foreground" />
                           </div>
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm truncate">{book.title}</p>
-                        <p className="text-xs text-muted-foreground truncate">{book.author}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Badge variant="secondary" className="text-[10px]">
-                            {book.lang.toUpperCase()}
-                          </Badge>
-                          {book.cover_url ? (
-                            <Badge variant="outline" className="text-[10px]">
-                              Com capa
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm truncate">{book.title}</p>
+                          <p className="text-xs text-muted-foreground truncate">{book.author}</p>
+                          <div className="flex items-center gap-2 mt-1">
+                            <Badge variant="secondary" className="text-[10px]">
+                              {book.lang.toUpperCase()}
                             </Badge>
-                          ) : (
                             <Badge variant="destructive" className="text-[10px]">
-                              Sem capa
+                              Precisa de Capa
                             </Badge>
-                          )}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
-          )}
-        </div>
+          </>
+        )}
 
         {/* Upload Section */}
         {selectedBook && (
