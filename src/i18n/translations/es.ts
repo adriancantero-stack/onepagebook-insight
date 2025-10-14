@@ -374,6 +374,16 @@ export const es = {
     "faq.a9": "Usamos SSL, límites de uso y buenas prácticas de privacidad. Mira nuestra Política de Privacidad.",
     "faq.q10": "¿Cómo contacto soporte?",
     "faq.a10": "Escríbenos a contact@onepagebook.ai. Te responderemos pronto.",
+    "faq.q11": "¿Cómo funciona el sistema de XP y niveles?",
+    "faq.a11": "Ganas XP al generar resúmenes, leer libros y mantener rachas diarias. Acumula XP para subir de nivel: Principiante, Aprendiz, Pensador, Maestro e Iluminado.",
+    "faq.q12": "¿Qué son los logros y cómo los desbloqueo?",
+    "faq.a12": "Los logros son premios especiales por completar desafíos como leer varios libros, mantener rachas o generar muchos resúmenes. ¡Cada logro da XP extra!",
+    "faq.q13": "¿Cómo funciona el ranking?",
+    "faq.a13": "El ranking muestra usuarios con más XP. Puedes ver ranking global, por idioma o semanal. ¡Compara tu progreso y comparte tu posición!",
+    "faq.q14": "¿Cómo configuro mi avatar y apodo?",
+    "faq.a14": "Ve a Configuración para elegir un avatar (predefinido o subir) y definir un apodo. Tu apodo aparecerá en el ranking en lugar de tu nombre real.",
+    "faq.q15": "¿Qué son las rachas?",
+    "faq.a15": "Las rachas cuentan cuántos días consecutivos lees resúmenes. ¡Mantener rachas largas desbloquea logros especiales y da mucho XP!",
     
     // Contact page
     "contact.title": "Ponte en Contacto",

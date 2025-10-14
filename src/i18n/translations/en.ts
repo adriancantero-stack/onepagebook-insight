@@ -374,6 +374,16 @@ export const en = {
     "faq.a9": "We use SSL, usage guardrails, and privacy best practices. See our Privacy Policy.",
     "faq.q10": "How do I contact support?",
     "faq.a10": "Email us at contact@onepagebook.ai. We'll get back to you ASAP.",
+    "faq.q11": "How does the XP and levels system work?",
+    "faq.a11": "You earn XP by generating summaries, reading books, and maintaining daily streaks. Accumulate XP to level up: Beginner, Learner, Thinker, Master, and Enlightened.",
+    "faq.q12": "What are achievements and how do I unlock them?",
+    "faq.a12": "Achievements are special rewards for completing challenges like reading multiple books, maintaining streaks, or generating many summaries. Each achievement gives bonus XP!",
+    "faq.q13": "How does the ranking work?",
+    "faq.a13": "The ranking shows users with the most XP. You can view global, by language, or weekly rankings. Compare your progress and share your position!",
+    "faq.q14": "How do I set up my avatar and nickname?",
+    "faq.a14": "Go to Settings to choose an avatar (preset or upload) and set a nickname. Your nickname will appear in the ranking instead of your real name.",
+    "faq.q15": "What are streaks?",
+    "faq.a15": "Streaks count how many consecutive days you read summaries. Maintaining long streaks unlocks special achievements and gives lots of XP!",
     
     // Contact page
     "contact.title": "Get in Touch",

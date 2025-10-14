@@ -373,6 +373,16 @@ export const pt = {
     "faq.a9": "Usamos SSL, guardrails de uso e boas práticas de privacidade. Veja nossa Política de Privacidade para detalhes.",
     "faq.q10": "Como falar com o suporte?",
     "faq.a10": "Envie um e-mail para contact@onepagebook.ai. Respondemos o quanto antes.",
+    "faq.q11": "Como funciona o sistema de XP e níveis?",
+    "faq.a11": "Você ganha XP ao gerar resumos, ler livros e manter sequências diárias. Acumule XP para subir de nível: Iniciante, Aprendiz, Pensador, Mestre e Iluminado.",
+    "faq.q12": "O que são conquistas e como desbloqueá-las?",
+    "faq.a12": "Conquistas são prêmios especiais que você ganha ao completar desafios, como ler vários livros, manter sequências ou gerar muitos resumos. Cada conquista dá XP extra!",
+    "faq.q13": "Como funciona o ranking?",
+    "faq.a13": "O ranking mostra os usuários com mais XP. Você pode ver o ranking global, por idioma ou semanal. Compare seu progresso e compartilhe sua posição!",
+    "faq.q14": "Como configuro meu avatar e nickname?",
+    "faq.a14": "Vá em Configurações para escolher um avatar (pré-definido ou upload) e definir um nickname. Seu nickname aparecerá no ranking no lugar do nome real.",
+    "faq.q15": "O que são sequências (streaks)?",
+    "faq.a15": "Sequências contam quantos dias consecutivos você lê resumos. Manter sequências longas desbloqueia conquistas especiais e dá muito XP!",
     
     // Contact page
     "contact.title": "Entre em Contato",

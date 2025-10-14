@@ -28,6 +28,11 @@ const Faq = () => {
     { q: t("faq.q8"), a: t("faq.a8") },
     { q: t("faq.q9"), a: t("faq.a9") },
     { q: t("faq.q10"), a: t("faq.a10") },
+    { q: t("faq.q11"), a: t("faq.a11") },
+    { q: t("faq.q12"), a: t("faq.a12") },
+    { q: t("faq.q13"), a: t("faq.a13") },
+    { q: t("faq.q14"), a: t("faq.a14") },
+    { q: t("faq.q15"), a: t("faq.a15") },
   ], [t]);
 
   const removeAccents = (str: string) => {
