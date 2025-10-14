@@ -281,22 +281,32 @@ const Admin = () => {
       ).length;
       setIncompleteUsersCount(incomplete);
 
-      // Calculate user growth (last 30 days)
+      // Calculate user growth (last 30 days) - using Brazil timezone
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
       const growthData = profilesData
         ?.filter(p => new Date(p.created_at) >= thirtyDaysAgo)
         .reduce((acc: any, curr) => {
-          const date = new Date(curr.created_at).toLocaleDateString("pt-BR");
-          acc[date] = (acc[date] || 0) + 1;
+          // Convert UTC to Brazil timezone (UTC-3)
+          const utcDate = new Date(curr.created_at);
+          const brazilDate = new Date(utcDate.getTime() - (3 * 60 * 60 * 1000));
+          const dateKey = brazilDate.toISOString().split('T')[0]; // YYYY-MM-DD format
+          acc[dateKey] = (acc[dateKey] || 0) + 1;
           return acc;
         }, {}) || {};
 
-      const growthArray = Object.entries(growthData).map(([date, count]) => ({
-        date,
-        users: count as number,
-      }));
+      // Sort dates chronologically and format for display
+      const growthArray = Object.entries(growthData)
+        .sort(([dateA], [dateB]) => dateA.localeCompare(dateB))
+        .map(([date, count]) => {
+          // Format to dd/MM/yyyy for display
+          const [year, month, day] = date.split('-');
+          return {
+            date: `${day}/${month}`,
+            users: count as number,
+          };
+        });
 
       setUserGrowth(growthArray);
 
