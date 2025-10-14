@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { PersonPick } from "./PeopleChips";
 
@@ -105,6 +105,9 @@ export function PeopleShelf({
           <DialogTitle className="text-xl">
             {translations.shelf_title.replace('{{name}}', getDisplayName())}
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            Lista de livros recomendados por {getDisplayName()}
+          </DialogDescription>
         </DialogHeader>
 
         <ScrollArea className="max-h-[70vh] pr-4">
