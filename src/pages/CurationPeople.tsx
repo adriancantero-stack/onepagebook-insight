@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { FloatingHeader } from "@/components/FloatingHeader";
 import Footer from "@/components/Footer";
-import { PeopleChips, PersonPick } from "@/components/PeopleChips";
+import { PersonPick } from "@/components/PeopleChips";
 import { PeopleShelf, BookPick } from "@/components/PeopleShelf";
 
 export default function CurationPeople() {
@@ -107,11 +107,37 @@ export default function CurationPeople() {
               {t('people.no_people', 'Nenhuma pessoa encontrada')}
             </div>
           ) : (
-            <PeopleChips
-              people={allPeople}
-              onSelect={handlePersonSelect}
-              currentLanguage={i18n.language}
-            />
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              {allPeople.map((person) => {
+                const displayName = person.display_name_pt || person.display_name_en || person.display_name_es || person.display_name;
+                const role = person.role_pt || person.role_en || person.role_es || person.role;
+                const initials = displayName.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+                
+                return (
+                  <button
+                    key={person.person_id}
+                    onClick={() => handlePersonSelect(person.person_id)}
+                    className="group relative flex flex-col items-center gap-3 p-6 rounded-2xl border bg-card hover:shadow-lg hover:border-primary/50 transition-all duration-200"
+                  >
+                    <div className="relative">
+                      <div className="w-20 h-20 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition-transform">
+                        {person.avatar_url ? (
+                          <img src={person.avatar_url} alt={displayName} className="w-full h-full rounded-full object-cover" />
+                        ) : (
+                          initials
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <h3 className="font-semibold text-sm">{displayName}</h3>
+                      {role && (
+                        <p className="text-xs text-muted-foreground mt-1">{role}</p>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           )}
         </div>
       </main>
