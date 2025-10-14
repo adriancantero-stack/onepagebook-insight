@@ -49,7 +49,7 @@ const Footer = () => {
               {t("footer.copyright", { year: currentYear })}
             </p>
             <p className="text-center text-xs md:hidden">
-              {t("footer.version")}
+              Versão 2.0
             </p>
           </div>
         </div>
