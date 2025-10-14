@@ -220,7 +220,7 @@ export function ManualCoverUpload() {
 
             <div>
               <Label htmlFor="cover-upload">Nova Capa (JPG, PNG, WEBP - máx 2MB)</Label>
-              <div className="mt-2 flex gap-2">
+              <div className="mt-2">
                 <Input
                   id="cover-upload"
                   ref={fileInputRef}
@@ -228,12 +228,13 @@ export function ManualCoverUpload() {
                   accept="image/*"
                   onChange={handleFileSelect}
                   disabled={uploading}
-                  className="flex-1"
                 />
-                <Button disabled={uploading} onClick={() => fileInputRef.current?.click()}>
-                  <Upload className="h-4 w-4 mr-2" />
-                  {uploading ? "Enviando..." : "Upload"}
-                </Button>
+                {uploading && (
+                  <p className="text-sm text-muted-foreground mt-2 flex items-center gap-2">
+                    <Upload className="h-4 w-4 animate-pulse" />
+                    Enviando capa...
+                  </p>
+                )}
               </div>
             </div>
           </div>
