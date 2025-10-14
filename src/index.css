@@ -14,15 +14,32 @@
     -moz-osx-font-smoothing: grayscale;
   }
   
+  /* Prevent layout shift */
+  body {
+    overflow-y: scroll;
+  }
+  
   img {
     max-width: 100%;
     height: auto;
   }
   
-  /* Optimize font loading */
+  /* Optimize font loading with font-display */
   .font-poppins {
     font-family: 'Poppins', system-ui, sans-serif;
-    font-display: swap;
+  }
+  
+  /* Add will-change for animations to reduce paint time */
+  .animate-fade-in,
+  .animate-scale-in,
+  .hover\:scale-105:hover {
+    will-change: transform, opacity;
+  }
+  
+  /* Contain layout shifts */
+  img,
+  video {
+    content-visibility: auto;
   }
   
   /* Critical CSS for above-the-fold content */

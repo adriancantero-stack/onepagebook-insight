@@ -37,6 +37,9 @@ export const LandingLibrary = ({ onCTA }: LandingLibraryProps) => {
                   alt={book.title}
                   className="aspect-[2/3] w-full object-cover transition-all group-hover:scale-110"
                   loading="lazy"
+                  width="300"
+                  height="450"
+                  decoding="async"
                 />
               </div>
               <Button onClick={onCTA} variant="outline" size="sm" className="w-full text-xs sm:text-sm">

@@ -72,7 +72,11 @@ const Landing = ({ lang }: LandingProps) => {
 
       <LandingHero onCTA={handleCTA} />
 
-      <Suspense fallback={<div className="min-h-[200px]" />}>
+      <Suspense fallback={
+        <div className="min-h-[200px] flex items-center justify-center">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      }>
         <LandingBenefits />
         <LandingHowItWorks />
         <LandingLibrary onCTA={handleCTA} />
