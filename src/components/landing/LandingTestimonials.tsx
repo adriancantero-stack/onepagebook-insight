@@ -62,6 +62,9 @@ export const LandingTestimonials = ({ lang }: LandingTestimonialsProps) => {
               alt={t("landing.testimonials.testimonial1.author")}
               className="h-12 w-12 rounded-full object-cover"
               loading="lazy"
+              decoding="async"
+              width="48"
+              height="48"
             />
             <div>
               <p className="font-semibold">{t("landing.testimonials.testimonial1.author")}</p>
@@ -85,6 +88,9 @@ export const LandingTestimonials = ({ lang }: LandingTestimonialsProps) => {
               alt={t("landing.testimonials.testimonial2.author")}
               className="h-12 w-12 rounded-full object-cover"
               loading="lazy"
+              decoding="async"
+              width="48"
+              height="48"
             />
             <div>
               <p className="font-semibold">{t("landing.testimonials.testimonial2.author")}</p>
@@ -108,6 +114,9 @@ export const LandingTestimonials = ({ lang }: LandingTestimonialsProps) => {
               alt={t("landing.testimonials.testimonial3.author")}
               className="h-12 w-12 rounded-full object-cover"
               loading="lazy"
+              decoding="async"
+              width="48"
+              height="48"
             />
             <div>
               <p className="font-semibold">{t("landing.testimonials.testimonial3.author")}</p>

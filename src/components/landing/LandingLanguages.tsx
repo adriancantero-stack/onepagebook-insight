@@ -43,6 +43,8 @@ export const LandingLanguages = () => {
             src={worldMap} 
             alt="World Map" 
             className="w-full h-auto opacity-40"
+            loading="lazy"
+            decoding="async"
           />
           
           {/* Animated location dots on top of map */}
