@@ -1,10 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { OptimizedImage } from "@/components/OptimizedImage";
-import heroBook from "@/assets/hero-book.png";
-import heroAI from "@/assets/hero-ai.png";
-import heroSummary from "@/assets/hero-summary.png";
+import heroBook from "@/assets/hero-book-optimized.webp";
+import heroAI from "@/assets/hero-ai-optimized.webp";
+import heroSummary from "@/assets/hero-summary-optimized.webp";
 interface LandingHeroProps {
   onCTA: () => void;
 }
@@ -60,7 +59,7 @@ export const LandingHero = ({
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-3 lg:gap-4">
             <div className="flex flex-col items-center gap-3 group">
               <div className="rounded-2xl bg-primary/5 p-6 sm:p-8 lg:p-10 border border-primary/10 transition-transform group-hover:scale-110 px-[32px] mx-0">
-                <OptimizedImage src={heroBook} alt="Book icon" className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28" priority />
+                <img src={heroBook} alt="Book icon" className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28" loading="eager" decoding="async" width="112" height="112" />
               </div>
               <p className="text-xs sm:text-sm lg:text-base font-medium text-muted-foreground">{t("landing.hero.visual.book")}</p>
             </div>
@@ -69,7 +68,7 @@ export const LandingHero = ({
             
             <div className="flex flex-col items-center gap-3 group">
               <div className="rounded-2xl bg-primary/5 p-6 sm:p-8 lg:p-10 border border-primary/10 transition-transform group-hover:scale-110">
-                <OptimizedImage src={heroAI} alt="AI icon" className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28" priority />
+                <img src={heroAI} alt="AI icon" className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28" loading="eager" decoding="async" width="112" height="112" />
               </div>
               <p className="text-xs sm:text-sm lg:text-base font-medium text-muted-foreground">{t("landing.hero.visual.ai")}</p>
             </div>
@@ -78,7 +77,7 @@ export const LandingHero = ({
             
             <div className="flex flex-col items-center gap-3 group">
               <div className="rounded-2xl bg-primary/5 p-6 sm:p-8 lg:p-10 border border-primary/10 transition-transform group-hover:scale-110">
-                <OptimizedImage src={heroSummary} alt="Summary icon" className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28" priority />
+                <img src={heroSummary} alt="Summary icon" className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28" loading="eager" decoding="async" width="112" height="112" />
               </div>
               <p className="text-xs sm:text-sm lg:text-base font-medium text-muted-foreground">{t("landing.hero.visual.summary")}</p>
             </div>
