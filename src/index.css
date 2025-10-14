@@ -18,6 +18,23 @@
     max-width: 100%;
     height: auto;
   }
+  
+  /* Optimize font loading */
+  .font-poppins {
+    font-family: 'Poppins', system-ui, sans-serif;
+    font-display: swap;
+  }
+  
+  /* Critical CSS for above-the-fold content */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 

@@ -5,10 +5,14 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- Fonts: Inter (body) + Poppins (titles) -->
+    <!-- Preconnect for critical resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="dns-prefetch" href="https://tqtaerijrqfkwxennxae.supabase.co" />
+    
+    <!-- Fonts: Inter (body) + Poppins (titles) - Optimized loading -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet"></noscript>
     <title>OnePageBook — AI Book Summaries in One Page</title>
     <meta name="description" content="Transform any book into practical insights in minutes. Generate intelligent book summaries in Portuguese, English, and Spanish with advanced AI." />
     <meta name="keywords" content="book summary, AI, artificial intelligence, OnePageBook, resumo de livros, resumen de libros" />
@@ -31,27 +35,15 @@
     <meta name="twitter:description" content="Transform any book into practical insights with AI" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17639307705"></script>
+    <!-- Defer Google Analytics for better performance -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'AW-17639307705');
-    </script>
-
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6RMB54EK6L"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
       gtag('config', 'G-6RMB54EK6L');
     </script>
-
-    <!-- Preconnect for performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="https://tqtaerijrqfkwxennxae.supabase.co" />
+    <script defer src="https://www.googletagmanager.com/gtag/js?id=AW-17639307705"></script>
   </head>
 
   <body>
