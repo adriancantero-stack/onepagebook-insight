@@ -25,7 +25,7 @@ export default function Achievements() {
   const progress = totalCount > 0 ? Math.round((unlockedCount / totalCount) * 100) : 0;
 
   const shareAchievements = async () => {
-    const text = `${t('achievements.shareText', { count: unlockedCount })}\n\n🚀 ${window.location.origin}`;
+    const text = t('achievements.shareText', { count: unlockedCount });
 
     if (navigator.share) {
       try {
@@ -35,10 +35,10 @@ export default function Achievements() {
         });
       } catch (error) {
         // User cancelled or error
-        copyToClipboard(text);
+        copyToClipboard(`${text}\n\n🚀 ${window.location.origin}`);
       }
     } else {
-      copyToClipboard(text);
+      copyToClipboard(`${text}\n\n🚀 ${window.location.origin}`);
     }
   };
 

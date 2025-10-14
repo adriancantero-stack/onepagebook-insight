@@ -106,11 +106,11 @@ export default function Ranking() {
   const shareRanking = async () => {
     if (!currentUser || !userRank) return;
 
-    const text = `${t('ranking.shareText', { 
+    const text = t('ranking.shareText', { 
       rank: userRank, 
       xp: currentUser.xp,
       level: t(`levels.${currentUser.level}`)
-    })}\n\n🚀 ${window.location.origin}`;
+    });
 
     if (navigator.share) {
       try {
@@ -120,10 +120,10 @@ export default function Ranking() {
         });
       } catch (error) {
         // User cancelled or error
-        copyToClipboard(text);
+        copyToClipboard(`${text}\n\n🚀 ${window.location.origin}`);
       }
     } else {
-      copyToClipboard(text);
+      copyToClipboard(`${text}\n\n🚀 ${window.location.origin}`);
     }
   };
 
