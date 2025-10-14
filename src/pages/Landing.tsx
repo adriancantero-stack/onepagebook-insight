@@ -61,10 +61,10 @@ const Landing = ({ lang }: LandingProps) => {
     <div className="min-h-screen bg-lilac-50">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-lilac-200/40 bg-gradient-to-r from-lilac-50/95 via-lilac-50/50 to-lilac-50/95 backdrop-blur supports-[backdrop-filter]:bg-lilac-50/60">
-        <div className="container mx-auto flex h-16 items-center justify-between px-6 sm:px-12 lg:px-24">
+        <div className="container mx-auto flex h-14 sm:h-16 items-center justify-between px-4 sm:px-6 lg:px-24">
           <div className="flex items-center gap-2">
-            <BookOpen className="h-5 w-5 text-primary" />
-            <span className="text-lg font-bold font-poppins bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">OnePageBook</span>
+            <BookOpen className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+            <span className="text-base sm:text-lg font-bold font-poppins bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">OnePageBook</span>
           </div>
           <LanguageSelector />
         </div>
@@ -81,13 +81,13 @@ const Landing = ({ lang }: LandingProps) => {
       </Suspense>
 
       {/* Footer */}
-      <footer className="border-t border-lilac-200 bg-gradient-to-b from-lilac-50 to-lilac-100 py-12">
-        <div className="container mx-auto px-6 text-center sm:px-12 lg:px-24">
-          <div className="mb-6 flex items-center justify-center gap-2">
-            <BookOpen className="h-6 w-6 text-primary" />
-            <span className="text-lg font-bold font-poppins bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">OnePageBook</span>
+      <footer className="border-t border-lilac-200 bg-gradient-to-b from-lilac-50 to-lilac-100 py-8 sm:py-12">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-24 text-center">
+          <div className="mb-4 sm:mb-6 flex items-center justify-center gap-2">
+            <BookOpen className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+            <span className="text-base sm:text-lg font-bold font-poppins bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">OnePageBook</span>
           </div>
-          <p className="mb-4 text-sm text-muted-foreground">{t("landing.footer.tagline")}</p>
+          <p className="mb-3 sm:mb-4 text-xs sm:text-sm text-muted-foreground px-4">{t("landing.footer.tagline")}</p>
           <Footer />
         </div>
       </footer>

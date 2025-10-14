@@ -19,16 +19,16 @@ export const LandingLibrary = ({ onCTA }: LandingLibraryProps) => {
   ];
 
   return (
-    <section className="border-t border-border bg-muted/30 py-16 sm:py-20">
-      <div className="container mx-auto px-6 sm:px-12 lg:px-24">
-        <h2 className="mb-12 text-center text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
+    <section className="border-t border-border bg-muted/30 py-12 sm:py-16 lg:py-20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-24">
+        <h2 className="mb-8 sm:mb-12 text-center text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold tracking-tight px-4">
           {t("landing.library.title")}
         </h2>
 
-        <div className="mx-auto grid max-w-4xl gap-8 sm:grid-cols-3">
+        <div className="mx-auto grid max-w-4xl gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-3">
           {featuredBooks.map((book, idx) => (
-            <div key={idx} className="group space-y-4 text-center transition-all hover:scale-105">
-              <div className="relative overflow-hidden rounded-xl shadow-lg">
+            <div key={idx} className="group space-y-3 sm:space-y-4 text-center transition-all hover:scale-105">
+              <div className="relative overflow-hidden rounded-lg sm:rounded-xl shadow-lg">
                 <Badge className="absolute right-2 top-2 z-10 bg-primary/90 text-xs">
                   {t("landing.library.previewBadge")}
                 </Badge>
@@ -39,7 +39,7 @@ export const LandingLibrary = ({ onCTA }: LandingLibraryProps) => {
                   loading="lazy"
                 />
               </div>
-              <Button onClick={onCTA} variant="outline" size="sm" className="w-full">
+              <Button onClick={onCTA} variant="outline" size="sm" className="w-full text-xs sm:text-sm">
                 {t("landing.library.generateCta")}
               </Button>
             </div>
