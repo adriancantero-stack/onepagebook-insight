@@ -85,14 +85,18 @@ export function PeopleShelf({
     }
 
     // Navigate to summary generation
-    navigate('/', { 
+    navigate('/home', { 
       state: { 
         bookTitle: book.title,
         bookAuthor: book.author,
         bookCover: book.cover_url,
+        bookId: book.book_id,
         source: `people_pick_${person.person_id}`
       } 
     });
+    
+    // Close the modal
+    onClose();
   };
 
   return (
