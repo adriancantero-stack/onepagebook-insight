@@ -122,7 +122,7 @@ export function PeopleShelf({
                 .map((book) => (
                 <div
                   key={book.id}
-                  className="group relative rounded-xl border bg-card overflow-hidden hover:shadow-lg transition-shadow"
+                  className="group relative rounded-xl border bg-card overflow-hidden hover:shadow-lg transition-shadow flex flex-col"
                 >
                   {/* Book Cover */}
                   <div className="aspect-[2/3] bg-gradient-to-br from-primary/20 to-secondary/20 relative">
@@ -142,21 +142,21 @@ export function PeopleShelf({
                   </div>
 
                   {/* Book Info */}
-            <div className="p-3 space-y-2">
-              <div>
-                <h4 className="font-medium text-sm line-clamp-2">{book.title}</h4>
-                <p className="text-xs text-muted-foreground line-clamp-1">{book.author}</p>
-              </div>
+                  <div className="p-3 space-y-2 flex-1 flex flex-col">
+                    <div className="flex-1">
+                      <h4 className="font-medium text-sm line-clamp-2">{book.title}</h4>
+                      <p className="text-xs text-muted-foreground line-clamp-1">{book.author}</p>
+                    </div>
 
-              {/* Action Button */}
-              <Button
-                size="sm"
-                className="w-full"
-                onClick={() => handleBookClick(book)}
-              >
-                {translations.read_summary}
-              </Button>
-            </div>
+                    {/* Action Button */}
+                    <Button
+                      size="sm"
+                      className="w-full mt-auto"
+                      onClick={() => handleBookClick(book)}
+                    >
+                      {translations.read_summary}
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>
