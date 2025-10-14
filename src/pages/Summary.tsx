@@ -158,27 +158,32 @@ const Summary = () => {
 
       let enriched = data as any;
 
-      // Try to enrich with ASIN and cover_url from public books catalog when missing
-      if (!enriched?.asin || !enriched?.cover_url) {
-        const title = enriched.canonical_title || enriched.book_title;
-        const author = enriched.canonical_author || enriched.book_author;
-        const lang = enriched.language;
-        const { data: book, error: bookErr } = await supabase
-          .from("books")
-          .select("asin, cover_url")
-          .eq("title", title)
-          .eq("author", author)
-          .eq("lang", lang)
-          .eq("is_active", true)
-          .maybeSingle();
-        if (!bookErr && book) {
-          if (book.asin && !enriched.asin) {
-            enriched = { ...enriched, asin: book.asin };
-          }
-          if (book.cover_url) {
-            setBookCover(book.cover_url);
-          }
+      // Always try to get cover_url and ASIN from the books catalog (it may have better quality)
+      const title = enriched.canonical_title || enriched.book_title;
+      const author = enriched.canonical_author || enriched.book_author;
+      const lang = enriched.language;
+      
+      const { data: book, error: bookErr } = await supabase
+        .from("books")
+        .select("asin, cover_url")
+        .eq("title", title)
+        .eq("author", author)
+        .eq("lang", lang)
+        .eq("is_active", true)
+        .maybeSingle();
+        
+      if (!bookErr && book) {
+        // Use ASIN from catalog if summary doesn't have one
+        if (book.asin && !enriched.asin) {
+          enriched = { ...enriched, asin: book.asin };
         }
+        // Always prefer cover from catalog (it's curated and higher quality)
+        if (book.cover_url) {
+          setBookCover(book.cover_url);
+        }
+      } else if (enriched.cover_url) {
+        // Fallback to cover from summary if exists
+        setBookCover(enriched.cover_url);
       }
 
       setSummary(enriched);
