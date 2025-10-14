@@ -133,7 +133,7 @@ const History = () => {
                     size="sm"
                     className="w-full sm:w-auto shrink-0 border-lilac-200 hover:border-primary hover:bg-primary hover:text-white transition-all"
                   >
-                    {t("history.viewSummary") || "Ver Resumo"}
+                    Ver Resumo
                   </Button>
                 </div>
               </Card>
