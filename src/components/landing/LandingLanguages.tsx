@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Globe } from "lucide-react";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import worldMap from "@/assets/world-map-dotted.png";
 
 export const LandingLanguages = () => {
@@ -39,12 +40,10 @@ export const LandingLanguages = () => {
 
         {/* World map with animated location dots */}
         <div className="relative mx-auto max-w-3xl pt-8 pb-4">
-          <img 
+          <OptimizedImage 
             src={worldMap} 
             alt="World Map" 
             className="w-full h-auto opacity-40"
-            loading="lazy"
-            decoding="async"
           />
           
           {/* Animated location dots on top of map */}

@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import atomicHabits from "@/assets/books/atomic-habits.jpg";
 import richDadPoorDad from "@/assets/books/rich-dad-poor-dad.jpg";
 import powerOfHabit from "@/assets/books/power-of-habit.jpg";
@@ -32,14 +33,10 @@ export const LandingLibrary = ({ onCTA }: LandingLibraryProps) => {
                 <Badge className="absolute right-2 top-2 z-10 bg-primary/90 text-xs">
                   {t("landing.library.previewBadge")}
                 </Badge>
-                <img
+                <OptimizedImage
                   src={book.image}
                   alt={book.title}
                   className="aspect-[2/3] w-full object-cover transition-all group-hover:scale-110"
-                  loading="lazy"
-                  width="300"
-                  height="450"
-                  decoding="async"
                 />
               </div>
               <Button onClick={onCTA} variant="outline" size="sm" className="w-full text-xs sm:text-sm">
