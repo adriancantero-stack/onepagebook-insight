@@ -761,10 +761,10 @@ export type Database = {
       merge_duplicate_books: {
         Args: Record<PropertyKey, never>
         Returns: {
-          author: string
+          book_author: string
+          book_title: string
           deleted_count: number
           kept_book_id: string
-          title: string
         }[]
       }
       normalize_cache_text: {
