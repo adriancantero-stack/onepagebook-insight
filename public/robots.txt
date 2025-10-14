@@ -1,4 +1,13 @@
+# Allow all crawlers
 User-agent: *
 Allow: /
 
+# Sitemap location
 Sitemap: https://onepagebook.ai/sitemap.xml
+
+# Disallow admin areas
+User-agent: *
+Disallow: /admin
+Disallow: /populate-books
+Disallow: /curation/
+Disallow: /deduplicate-books

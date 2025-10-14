@@ -35,7 +35,27 @@ const CurationPeople = lazy(() => import("./pages/CurationPeople"));
 const DeduplicateBooks = lazy(() => import("./pages/DeduplicateBooks"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
-const queryClient = new QueryClient();
+// Optimized QueryClient for better performance
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      gcTime: 1000 * 60 * 30, // 30 minutes (previously cacheTime)
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
+
+// Optimized loading fallback
+const LoadingFallback = () => (
+  <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="flex flex-col items-center gap-4">
+      <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+      <p className="text-sm text-muted-foreground">Carregando...</p>
+    </div>
+  </div>
+);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -44,9 +64,7 @@ const App = () => (
       <Sonner />
       <GlobalAchievementNotification />
       <BrowserRouter>
-        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-        </div>}>
+        <Suspense fallback={<LoadingFallback />}>
           <Routes>
             <Route path="/" element={<LandingRedirect />} />
             <Route path="/pt" element={<Landing lang="pt" />} />

@@ -3,27 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="theme-color" content="#8B5CF6" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
     
-    <!-- Preconnect for critical resources -->
+    <!-- Preconnect for critical resources - improved for mobile -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="dns-prefetch" href="https://tqtaerijrqfkwxennxae.supabase.co" />
-    
-    <!-- Preload critical images for faster LCP on mobile -->
-    <link rel="preload" as="image" href="/favicon.png" type="image/png" />
+    <link rel="preconnect" href="https://tqtaerijrqfkwxennxae.supabase.co" />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
     
     <!-- Critical CSS inline for faster FCP -->
     <style>
-      body{margin:0;font-family:system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-      #root{min-height:100vh}
-      img{content-visibility:auto}
+      body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
+      #root{min-height:100vh;display:flex;flex-direction:column}
+      img{content-visibility:auto;loading:lazy}
+      *{box-sizing:border-box}
+      .fade-in{opacity:0;animation:fadeIn .3s ease forwards}
+      @keyframes fadeIn{to{opacity:1}}
     </style>
     
-    <!-- Fonts: Inter (body) + Poppins (titles) - Optimized with font-display swap -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" as="style">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" media="print" onload="this.media='all'">
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet"></noscript>
+    <!-- Fonts: Inter (body) + Poppins (titles) - Optimized with subset and font-display -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap&subset=latin" as="style">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap&subset=latin" media="print" onload="this.media='all';this.onload=null">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap&subset=latin" rel="stylesheet"></noscript>
     <title>OnePageBook — AI Book Summaries in One Page</title>
     <meta name="description" content="Transform any book into practical insights in minutes. Generate intelligent book summaries in Portuguese, English, and Spanish with advanced AI." />
     <meta name="keywords" content="book summary, AI, artificial intelligence, OnePageBook, resumo de livros, resumen de libros" />
@@ -46,14 +50,20 @@
     <meta name="twitter:description" content="Transform any book into practical insights with AI" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
-    <!-- Google Analytics - Simple defer for better mobile performance -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17639307705"></script>
+    <!-- Google Analytics - Deferred for better mobile performance -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'AW-17639307705');
       gtag('config', 'G-6RMB54EK6L');
+      // Load GA script after page load
+      window.addEventListener('load', function() {
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=AW-17639307705';
+        document.head.appendChild(script);
+      });
     </script>
   </head>
 

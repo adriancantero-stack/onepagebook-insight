@@ -1,0 +1,28 @@
+{
+  "name": "OnePageBook - AI Book Summaries",
+  "short_name": "OnePageBook",
+  "description": "Transform any book into practical insights in minutes with AI-powered summaries",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#8B5CF6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity", "books"],
+  "screenshots": [],
+  "lang": "en",
+  "dir": "ltr"
+}
