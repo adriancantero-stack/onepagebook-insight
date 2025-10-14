@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { X, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -117,6 +116,9 @@ export function PeopleShelf({
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {books
                 .filter(book => book.title && book.author) // Filter out books with missing data
+                .filter((book, index, self) => 
+                  index === self.findIndex(b => b.book_id === book.book_id) // Remove duplicates by book_id
+                )
                 .map((book) => (
                 <div
                   key={book.id}
@@ -140,37 +142,21 @@ export function PeopleShelf({
                   </div>
 
                   {/* Book Info */}
-                  <div className="p-3 space-y-2">
-                    <div>
-                      <h4 className="font-medium text-sm line-clamp-2">{book.title}</h4>
-                      <p className="text-xs text-muted-foreground line-clamp-1">{book.author}</p>
-                    </div>
+            <div className="p-3 space-y-2">
+              <div>
+                <h4 className="font-medium text-sm line-clamp-2">{book.title}</h4>
+                <p className="text-xs text-muted-foreground line-clamp-1">{book.author}</p>
+              </div>
 
-                    {/* Source Badge */}
-                    {book.source_url && book.source_url !== '#' && (
-                      <a
-                        href={book.source_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <Badge variant="secondary" className="text-[10px] gap-1">
-                          {translations.source}
-                          <ExternalLink className="h-2.5 w-2.5" />
-                        </Badge>
-                      </a>
-                    )}
-
-                    {/* Action Button */}
-                    <Button
-                      size="sm"
-                      className="w-full"
-                      onClick={() => handleBookClick(book)}
-                    >
-                      {translations.read_summary}
-                    </Button>
-                  </div>
+              {/* Action Button */}
+              <Button
+                size="sm"
+                className="w-full"
+                onClick={() => handleBookClick(book)}
+              >
+                {translations.read_summary}
+              </Button>
+            </div>
                 </div>
               ))}
             </div>
