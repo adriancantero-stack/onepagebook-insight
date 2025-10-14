@@ -51,7 +51,7 @@ export const LandingHero = ({ onCTA }: LandingHeroProps) => {
         </div>
 
         {/* Visual Illustration - Below, Centralized */}
-        <div className="relative animate-fade-in" style={{animationDelay: "0.4s"}}>
+        <div className="relative animate-fade-in pt-8 sm:pt-12" style={{animationDelay: "0.4s"}}>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 lg:gap-12">
             <div className="flex flex-col items-center gap-3 group">
               <div className="rounded-2xl bg-gradient-to-br from-primary/20 to-purple-500/20 p-6 sm:p-8 lg:p-10 backdrop-blur-sm border border-primary/20 transition-transform group-hover:scale-110">
