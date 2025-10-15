@@ -39,15 +39,12 @@ export const LandingLanguages = () => {
         </p>
 
         {/* World map with animated location dots */}
-        <div className="relative mx-auto max-w-3xl pt-8 pb-4 rounded-2xl shadow-2xl overflow-hidden">
+        <div className="relative mx-auto max-w-3xl pt-8 pb-4">
           <OptimizedImage 
             src={worldMap} 
             alt="World Map" 
-            className="w-full h-auto opacity-30"
+            className="w-full h-auto opacity-40"
           />
-          
-          {/* Dark overlay for better contrast */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 pointer-events-none" />
           
           {/* Animated location dots on top of map */}
           <div className="absolute inset-0">
