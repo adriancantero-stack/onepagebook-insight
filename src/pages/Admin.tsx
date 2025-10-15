@@ -1267,47 +1267,57 @@ const Admin = () => {
           <CardContent>
             {stats?.usersByCountry && Object.keys(stats.usersByCountry).length > 0 ? (
               <div className="space-y-4">
-                {Object.entries(stats.usersByCountry)
-                  .sort(([, a], [, b]) => (b as number) - (a as number))
-                  .slice(0, 10)
-                  .map(([country, count]) => {
-                    const countryNames: Record<string, string> = {
-                      'pt-BR': '🇧🇷 Brasil',
-                      'en-US': '🇺🇸 Estados Unidos',
-                      'en-GB': '🇬🇧 Reino Unido',
-                      'en-CA': '🇨🇦 Canadá',
-                      'es-MX': '🇲🇽 México',
-                      'es-AR': '🇦🇷 Argentina',
-                      'es-CL': '🇨🇱 Chile',
-                      'es-UY': '🇺🇾 Uruguai',
-                      'es-ES': '🇪🇸 Espanha',
-                      'pt-PT': '🇵🇹 Portugal',
-                      'pt-AO': '🇦🇴 Angola',
-                      'pt-MZ': '🇲🇿 Moçambique',
-                      'en-IN': '🇮🇳 Índia',
-                      'en-PK': '🇵🇰 Paquistão',
-                      'pt': '🇧🇷 Brasil',
-                      'pt-US': '🇺🇸 US (PT)',
-                    };
-                    const displayName = countryNames[country] || `🌍 ${country}`;
-                    const percentage = stats.totalUsers ? Math.round(((count as number) / stats.totalUsers) * 100) : 0;
-                    
-                    return (
-                      <div key={country} className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium">{displayName}</span>
-                          <Badge variant="secondary">{count as number}</Badge>
+                {(() => {
+                  // Mapear códigos de país para nomes e consolidar duplicatas
+                  const countryNames: Record<string, string> = {
+                    'pt-BR': '🇧🇷 Brasil',
+                    'pt': '🇧🇷 Brasil',
+                    'pt-US': '🇺🇸 Estados Unidos',
+                    'en-US': '🇺🇸 Estados Unidos',
+                    'en-GB': '🇬🇧 Reino Unido',
+                    'en-CA': '🇨🇦 Canadá',
+                    'es-MX': '🇲🇽 México',
+                    'es-AR': '🇦🇷 Argentina',
+                    'es-CL': '🇨🇱 Chile',
+                    'es-UY': '🇺🇾 Uruguai',
+                    'es-ES': '🇪🇸 Espanha',
+                    'pt-PT': '🇵🇹 Portugal',
+                    'pt-AO': '🇦🇴 Angola',
+                    'pt-MZ': '🇲🇿 Moçambique',
+                    'en-IN': '🇮🇳 Índia',
+                    'en-PK': '🇵🇰 Paquistão',
+                  };
+
+                  // Consolidar contagens por país
+                  const consolidatedCountries: Record<string, number> = {};
+                  Object.entries(stats.usersByCountry).forEach(([code, count]) => {
+                    const countryName = countryNames[code] || `🌍 ${code}`;
+                    consolidatedCountries[countryName] = (consolidatedCountries[countryName] || 0) + (count as number);
+                  });
+
+                  return Object.entries(consolidatedCountries)
+                    .sort(([, a], [, b]) => (b as number) - (a as number))
+                    .slice(0, 10)
+                    .map(([countryName, count]) => {
+                      const percentage = stats.totalUsers ? Math.round(((count as number) / stats.totalUsers) * 100) : 0;
+                      
+                      return (
+                        <div key={countryName} className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium">{countryName}</span>
+                            <Badge variant="secondary">{count as number}</Badge>
+                          </div>
+                          <Progress 
+                            value={percentage} 
+                            className="h-2"
+                          />
+                          <p className="text-xs text-muted-foreground">
+                            {percentage}% dos usuários
+                          </p>
                         </div>
-                        <Progress 
-                          value={percentage} 
-                          className="h-2"
-                        />
-                        <p className="text-xs text-muted-foreground">
-                          {percentage}% dos usuários
-                        </p>
-                      </div>
-                    );
-                  })}
+                      );
+                    });
+                })()}
                 <p className="text-xs text-muted-foreground mt-4 pt-4 border-t">
                   Total de usuários com país registrado: {Object.values(stats.usersByCountry).reduce((a, b) => a + (b as number), 0)} de {stats.totalUsers}
                 </p>
