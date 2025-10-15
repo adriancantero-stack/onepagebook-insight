@@ -27,7 +27,7 @@ serve(async (req) => {
     // Get users who want notifications at this time
     const { data: profiles, error: profilesError } = await supabase
       .from("profiles")
-      .select("id, full_name, notification_time, notification_enabled, preferred_language, streak_days, last_read_date")
+      .select("id, full_name, notification_time, notification_enabled, preferred_language, streak_days, last_read_date, xp, level, total_books_read")
       .eq("notification_enabled", true)
       .eq("notification_email", true)
       .eq("notification_time", currentTime);
@@ -57,11 +57,24 @@ serve(async (req) => {
         return null;
       }
 
+      // Get last book read
+      const { data: lastBook } = await supabase
+        .from("book_summaries")
+        .select("book_title, book_author")
+        .eq("user_id", profile.id)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .single();
+
       return {
         email: user.email,
         name: profile.full_name || "Leitor",
         language: profile.preferred_language || "pt",
-        streak: profile.streak_days || 0
+        streak: profile.streak_days || 0,
+        xp: profile.xp || 0,
+        level: profile.level || "Beginner",
+        totalBooks: profile.total_books_read || 0,
+        lastBook: lastBook ? `${lastBook.book_title} - ${lastBook.book_author}` : null
       };
     }) || [];
 
@@ -77,37 +90,295 @@ serve(async (req) => {
           pt: {
             subject: "📚 Hora da sua leitura diária!",
             html: `
-              <h1>Olá, ${user.name}! 👋</h1>
-              <p>Não se esqueça de manter sua sequência de leitura!</p>
-              <p><strong>Sequência atual: ${user.streak} dias 🔥</strong></p>
-              <p>Acesse agora e continue aprendendo!</p>
-              <a href="${Deno.env.get("SUPABASE_URL")}" style="display: inline-block; padding: 12px 24px; background: #8B5CF6; color: white; text-decoration: none; border-radius: 6px; margin-top: 16px;">
-                Acessar OnePageBook
-              </a>
+              <!DOCTYPE html>
+              <html>
+              <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              </head>
+              <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f5f5;">
+                <table role="presentation" style="width: 100%; border-collapse: collapse;">
+                  <tr>
+                    <td align="center" style="padding: 40px 0;">
+                      <table role="presentation" style="width: 600px; max-width: 100%; border-collapse: collapse; background-color: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                        <!-- Header -->
+                        <tr>
+                          <td style="padding: 40px 40px 20px; background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); border-radius: 12px 12px 0 0;">
+                            <h1 style="margin: 0; color: white; font-size: 28px; font-weight: bold;">Olá, ${user.name}! 👋</h1>
+                          </td>
+                        </tr>
+                        
+                        <!-- Content -->
+                        <tr>
+                          <td style="padding: 40px;">
+                            <p style="margin: 0 0 24px; color: #374151; font-size: 16px; line-height: 1.6;">
+                              Está na hora de continuar sua jornada de aprendizado! Não deixe sua sequência cair.
+                            </p>
+                            
+                            <!-- Stats Grid -->
+                            <table role="presentation" style="width: 100%; border-collapse: collapse; margin: 24px 0;">
+                              <tr>
+                                <td style="padding: 20px; background-color: #FEF3C7; border-radius: 8px; width: 50%;">
+                                  <div style="text-align: center;">
+                                    <div style="font-size: 32px; font-weight: bold; color: #92400E; margin-bottom: 4px;">🔥 ${user.streak}</div>
+                                    <div style="font-size: 14px; color: #78350F;">dias de sequência</div>
+                                  </div>
+                                </td>
+                                <td style="width: 16px;"></td>
+                                <td style="padding: 20px; background-color: #DBEAFE; border-radius: 8px; width: 50%;">
+                                  <div style="text-align: center;">
+                                    <div style="font-size: 32px; font-weight: bold; color: #1E40AF; margin-bottom: 4px;">⭐ ${user.xp}</div>
+                                    <div style="font-size: 14px; color: #1E3A8A;">pontos XP</div>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr><td colspan="3" style="height: 16px;"></td></tr>
+                              <tr>
+                                <td style="padding: 20px; background-color: #D1FAE5; border-radius: 8px;">
+                                  <div style="text-align: center;">
+                                    <div style="font-size: 32px; font-weight: bold; color: #065F46; margin-bottom: 4px;">📚 ${user.totalBooks}</div>
+                                    <div style="font-size: 14px; color: #064E3B;">livros lidos</div>
+                                  </div>
+                                </td>
+                                <td style="width: 16px;"></td>
+                                <td style="padding: 20px; background-color: #E9D5FF; border-radius: 8px;">
+                                  <div style="text-align: center;">
+                                    <div style="font-size: 24px; font-weight: bold; color: #6B21A8; margin-bottom: 4px;">🎯 ${user.level}</div>
+                                    <div style="font-size: 14px; color: #5B21B6;">seu nível</div>
+                                  </div>
+                                </td>
+                              </tr>
+                            </table>
+                            
+                            ${user.lastBook ? `
+                            <div style="margin: 24px 0; padding: 16px; background-color: #F9FAFB; border-left: 4px solid #8B5CF6; border-radius: 4px;">
+                              <div style="font-size: 12px; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Último livro lido</div>
+                              <div style="font-size: 16px; color: #111827; font-weight: 500;">${user.lastBook}</div>
+                            </div>
+                            ` : ''}
+                            
+                            <table role="presentation" style="width: 100%; margin: 32px 0;">
+                              <tr>
+                                <td align="center">
+                                  <a href="https://onepagebook.com" style="display: inline-block; padding: 16px 32px; background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(139, 92, 246, 0.3);">
+                                    📖 Continuar Lendo
+                                  </a>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                        
+                        <!-- Footer -->
+                        <tr>
+                          <td style="padding: 24px 40px; background-color: #F9FAFB; border-radius: 0 0 12px 12px; text-align: center;">
+                            <p style="margin: 0; color: #6B7280; font-size: 14px;">
+                              Mantenha sua mente afiada, um livro por vez! 🧠✨
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </body>
+              </html>
             `
           },
           en: {
             subject: "📚 Time for your daily reading!",
             html: `
-              <h1>Hello, ${user.name}! 👋</h1>
-              <p>Don't forget to maintain your reading streak!</p>
-              <p><strong>Current streak: ${user.streak} days 🔥</strong></p>
-              <p>Access now and keep learning!</p>
-              <a href="${Deno.env.get("SUPABASE_URL")}" style="display: inline-block; padding: 12px 24px; background: #8B5CF6; color: white; text-decoration: none; border-radius: 6px; margin-top: 16px;">
-                Access OnePageBook
-              </a>
+              <!DOCTYPE html>
+              <html>
+              <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              </head>
+              <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f5f5;">
+                <table role="presentation" style="width: 100%; border-collapse: collapse;">
+                  <tr>
+                    <td align="center" style="padding: 40px 0;">
+                      <table role="presentation" style="width: 600px; max-width: 100%; border-collapse: collapse; background-color: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                        <!-- Header -->
+                        <tr>
+                          <td style="padding: 40px 40px 20px; background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); border-radius: 12px 12px 0 0;">
+                            <h1 style="margin: 0; color: white; font-size: 28px; font-weight: bold;">Hello, ${user.name}! 👋</h1>
+                          </td>
+                        </tr>
+                        
+                        <!-- Content -->
+                        <tr>
+                          <td style="padding: 40px;">
+                            <p style="margin: 0 0 24px; color: #374151; font-size: 16px; line-height: 1.6;">
+                              It's time to continue your learning journey! Don't let your streak fall.
+                            </p>
+                            
+                            <!-- Stats Grid -->
+                            <table role="presentation" style="width: 100%; border-collapse: collapse; margin: 24px 0;">
+                              <tr>
+                                <td style="padding: 20px; background-color: #FEF3C7; border-radius: 8px; width: 50%;">
+                                  <div style="text-align: center;">
+                                    <div style="font-size: 32px; font-weight: bold; color: #92400E; margin-bottom: 4px;">🔥 ${user.streak}</div>
+                                    <div style="font-size: 14px; color: #78350F;">day streak</div>
+                                  </div>
+                                </td>
+                                <td style="width: 16px;"></td>
+                                <td style="padding: 20px; background-color: #DBEAFE; border-radius: 8px; width: 50%;">
+                                  <div style="text-align: center;">
+                                    <div style="font-size: 32px; font-weight: bold; color: #1E40AF; margin-bottom: 4px;">⭐ ${user.xp}</div>
+                                    <div style="font-size: 14px; color: #1E3A8A;">XP points</div>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr><td colspan="3" style="height: 16px;"></td></tr>
+                              <tr>
+                                <td style="padding: 20px; background-color: #D1FAE5; border-radius: 8px;">
+                                  <div style="text-align: center;">
+                                    <div style="font-size: 32px; font-weight: bold; color: #065F46; margin-bottom: 4px;">📚 ${user.totalBooks}</div>
+                                    <div style="font-size: 14px; color: #064E3B;">books read</div>
+                                  </div>
+                                </td>
+                                <td style="width: 16px;"></td>
+                                <td style="padding: 20px; background-color: #E9D5FF; border-radius: 8px;">
+                                  <div style="text-align: center;">
+                                    <div style="font-size: 24px; font-weight: bold; color: #6B21A8; margin-bottom: 4px;">🎯 ${user.level}</div>
+                                    <div style="font-size: 14px; color: #5B21B6;">your level</div>
+                                  </div>
+                                </td>
+                              </tr>
+                            </table>
+                            
+                            ${user.lastBook ? `
+                            <div style="margin: 24px 0; padding: 16px; background-color: #F9FAFB; border-left: 4px solid #8B5CF6; border-radius: 4px;">
+                              <div style="font-size: 12px; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Last book read</div>
+                              <div style="font-size: 16px; color: #111827; font-weight: 500;">${user.lastBook}</div>
+                            </div>
+                            ` : ''}
+                            
+                            <table role="presentation" style="width: 100%; margin: 32px 0;">
+                              <tr>
+                                <td align="center">
+                                  <a href="https://onepagebook.com" style="display: inline-block; padding: 16px 32px; background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(139, 92, 246, 0.3);">
+                                    📖 Continue Reading
+                                  </a>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                        
+                        <!-- Footer -->
+                        <tr>
+                          <td style="padding: 24px 40px; background-color: #F9FAFB; border-radius: 0 0 12px 12px; text-align: center;">
+                            <p style="margin: 0; color: #6B7280; font-size: 14px;">
+                              Keep your mind sharp, one book at a time! 🧠✨
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </body>
+              </html>
             `
           },
           es: {
             subject: "📚 ¡Hora de tu lectura diaria!",
             html: `
-              <h1>¡Hola, ${user.name}! 👋</h1>
-              <p>¡No olvides mantener tu racha de lectura!</p>
-              <p><strong>Racha actual: ${user.streak} días 🔥</strong></p>
-              <p>¡Accede ahora y sigue aprendiendo!</p>
-              <a href="${Deno.env.get("SUPABASE_URL")}" style="display: inline-block; padding: 12px 24px; background: #8B5CF6; color: white; text-decoration: none; border-radius: 6px; margin-top: 16px;">
-                Acceder a OnePageBook
-              </a>
+              <!DOCTYPE html>
+              <html>
+              <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              </head>
+              <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f5f5;">
+                <table role="presentation" style="width: 100%; border-collapse: collapse;">
+                  <tr>
+                    <td align="center" style="padding: 40px 0;">
+                      <table role="presentation" style="width: 600px; max-width: 100%; border-collapse: collapse; background-color: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                        <!-- Header -->
+                        <tr>
+                          <td style="padding: 40px 40px 20px; background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); border-radius: 12px 12px 0 0;">
+                            <h1 style="margin: 0; color: white; font-size: 28px; font-weight: bold;">¡Hola, ${user.name}! 👋</h1>
+                          </td>
+                        </tr>
+                        
+                        <!-- Content -->
+                        <tr>
+                          <td style="padding: 40px;">
+                            <p style="margin: 0 0 24px; color: #374151; font-size: 16px; line-height: 1.6;">
+                              ¡Es hora de continuar tu viaje de aprendizaje! No dejes que tu racha caiga.
+                            </p>
+                            
+                            <!-- Stats Grid -->
+                            <table role="presentation" style="width: 100%; border-collapse: collapse; margin: 24px 0;">
+                              <tr>
+                                <td style="padding: 20px; background-color: #FEF3C7; border-radius: 8px; width: 50%;">
+                                  <div style="text-align: center;">
+                                    <div style="font-size: 32px; font-weight: bold; color: #92400E; margin-bottom: 4px;">🔥 ${user.streak}</div>
+                                    <div style="font-size: 14px; color: #78350F;">días de racha</div>
+                                  </div>
+                                </td>
+                                <td style="width: 16px;"></td>
+                                <td style="padding: 20px; background-color: #DBEAFE; border-radius: 8px; width: 50%;">
+                                  <div style="text-align: center;">
+                                    <div style="font-size: 32px; font-weight: bold; color: #1E40AF; margin-bottom: 4px;">⭐ ${user.xp}</div>
+                                    <div style="font-size: 14px; color: #1E3A8A;">puntos XP</div>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr><td colspan="3" style="height: 16px;"></td></tr>
+                              <tr>
+                                <td style="padding: 20px; background-color: #D1FAE5; border-radius: 8px;">
+                                  <div style="text-align: center;">
+                                    <div style="font-size: 32px; font-weight: bold; color: #065F46; margin-bottom: 4px;">📚 ${user.totalBooks}</div>
+                                    <div style="font-size: 14px; color: #064E3B;">libros leídos</div>
+                                  </div>
+                                </td>
+                                <td style="width: 16px;"></td>
+                                <td style="padding: 20px; background-color: #E9D5FF; border-radius: 8px;">
+                                  <div style="text-align: center;">
+                                    <div style="font-size: 24px; font-weight: bold; color: #6B21A8; margin-bottom: 4px;">🎯 ${user.level}</div>
+                                    <div style="font-size: 14px; color: #5B21B6;">tu nivel</div>
+                                  </div>
+                                </td>
+                              </tr>
+                            </table>
+                            
+                            ${user.lastBook ? `
+                            <div style="margin: 24px 0; padding: 16px; background-color: #F9FAFB; border-left: 4px solid #8B5CF6; border-radius: 4px;">
+                              <div style="font-size: 12px; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Último libro leído</div>
+                              <div style="font-size: 16px; color: #111827; font-weight: 500;">${user.lastBook}</div>
+                            </div>
+                            ` : ''}
+                            
+                            <table role="presentation" style="width: 100%; margin: 32px 0;">
+                              <tr>
+                                <td align="center">
+                                  <a href="https://onepagebook.com" style="display: inline-block; padding: 16px 32px; background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(139, 92, 246, 0.3);">
+                                    📖 Continuar Leyendo
+                                  </a>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                        
+                        <!-- Footer -->
+                        <tr>
+                          <td style="padding: 24px 40px; background-color: #F9FAFB; border-radius: 0 0 12px 12px; text-align: center;">
+                            <p style="margin: 0; color: #6B7280; font-size: 14px;">
+                              ¡Mantén tu mente afilada, un libro a la vez! 🧠✨
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </body>
+              </html>
             `
           }
         };
