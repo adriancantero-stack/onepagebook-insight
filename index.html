@@ -8,12 +8,10 @@
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/favicon.png" />
     
-    <!-- Preconnect for critical resources -->
+    <!-- Preconnect for critical resources - improved for mobile -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://tqtaerijrqfkwxennxae.supabase.co" />
-    
-    <!-- DNS prefetch for analytics (loaded later) -->
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
     
     
@@ -27,16 +25,10 @@
       @keyframes fadeIn{to{opacity:1}}
     </style>
     
-    <!-- Optimized fonts loading with swap for better LCP -->
-    <link 
-      rel="preload" 
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" 
-      as="style"
-      onload="this.onload=null;this.rel='stylesheet'"
-    >
-    <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
-    </noscript>
+    <!-- Fonts: Inter (body) + Poppins (titles) - Optimized with subset and font-display -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap&subset=latin" as="style">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap&subset=latin" media="print" onload="this.media='all';this.onload=null">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap&subset=latin" rel="stylesheet"></noscript>
     <title>OnePageBook — AI Book Summaries in One Page</title>
     <meta name="description" content="Transform any book into practical insights in minutes. Generate intelligent book summaries in Portuguese, English, and Spanish with advanced AI." />
     <meta name="keywords" content="book summary, AI, artificial intelligence, OnePageBook, resumo de livros, resumen de libros" />
@@ -59,28 +51,25 @@
     <meta name="twitter:description" content="Transform any book into practical insights with AI" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
-    <!-- Google Analytics - Deferred to after FCP for better LCP -->
+    <!-- Google Analytics - Deferred for better mobile performance -->
     <script>
-      // Defer analytics until after page is interactive
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-17639307705');
+      gtag('config', 'G-6RMB54EK6L');
+      // Load GA script after page load
       window.addEventListener('load', function() {
-        setTimeout(function() {
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'AW-17639307705');
-          gtag('config', 'G-6RMB54EK6L');
-          
-          var script = document.createElement('script');
-          script.async = true;
-          script.src = 'https://www.googletagmanager.com/gtag/js?id=AW-17639307705';
-          document.head.appendChild(script);
-        }, 3000); // Load after 3 seconds to prioritize content
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=AW-17639307705';
+        document.head.appendChild(script);
       });
     </script>
   </head>
 
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx" fetchpriority="high"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
