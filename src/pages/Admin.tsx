@@ -22,7 +22,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Users, FileText, TrendingUp, Crown, Download, BookOpen, ImagePlus, Sparkles, Upload, Trash2, RefreshCw, UserX, Merge } from "lucide-react";
+import { Users, FileText, TrendingUp, Crown, Download, BookOpen, ImagePlus, Sparkles, Upload, Trash2, RefreshCw, UserX, Merge, Globe } from "lucide-react";
 import { ManualCoverUpload } from "@/components/admin/ManualCoverUpload";
 import { bookCatalog } from "@/data/bookCatalog";
 import { Progress } from "@/components/ui/progress";
@@ -39,6 +39,11 @@ interface AdminStats {
   booksWithCover: number;
   booksWithoutCover: number;
   totalAudios: number;
+  usersByLanguage?: {
+    pt: number;
+    en: number;
+    es: number;
+  };
 }
 
 interface UserData {
@@ -176,7 +181,8 @@ const Admin = () => {
           created_at,
           signup_language,
           signup_path,
-          signup_country
+          signup_country,
+          preferred_language
         `);
 
       const { data: subscriptionsData } = await supabase
@@ -206,6 +212,13 @@ const Admin = () => {
         return acc;
       }, {}) || {};
 
+      // Calculate language distribution
+      const langCounts = profilesData?.reduce((acc: any, curr) => {
+        const lang = curr.preferred_language || 'pt';
+        acc[lang] = (acc[lang] || 0) + 1;
+        return acc;
+      }, {}) || {};
+
       // Get total audios count
       const { count: audiosCount } = await supabase
         .from("book_audio")
@@ -222,6 +235,11 @@ const Admin = () => {
         booksWithCover: 0,
         booksWithoutCover: 0,
         totalAudios: audiosCount || 0,
+        usersByLanguage: {
+          pt: langCounts.pt || 0,
+          en: langCounts.en || 0,
+          es: langCounts.es || 0,
+        }
       });
 
       // Get auth users via edge function (requires service role)
@@ -1158,6 +1176,62 @@ const Admin = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Language Distribution Card */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Globe className="h-5 w-5 text-primary" />
+              Distribuição de Usuários por Idioma
+            </CardTitle>
+            <CardDescription>
+              Idiomas preferidos pelos usuários da plataforma
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-3 gap-6">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">🇧🇷 Português</span>
+                  <Badge variant="secondary">{stats?.usersByLanguage?.pt || 0}</Badge>
+                </div>
+                <Progress 
+                  value={stats?.totalUsers ? ((stats.usersByLanguage?.pt || 0) / stats.totalUsers) * 100 : 0} 
+                  className="h-2"
+                />
+                <p className="text-xs text-muted-foreground">
+                  {stats?.totalUsers ? Math.round(((stats.usersByLanguage?.pt || 0) / stats.totalUsers) * 100) : 0}% dos usuários
+                </p>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">🇬🇧 Inglês</span>
+                  <Badge variant="secondary">{stats?.usersByLanguage?.en || 0}</Badge>
+                </div>
+                <Progress 
+                  value={stats?.totalUsers ? ((stats.usersByLanguage?.en || 0) / stats.totalUsers) * 100 : 0} 
+                  className="h-2"
+                />
+                <p className="text-xs text-muted-foreground">
+                  {stats?.totalUsers ? Math.round(((stats.usersByLanguage?.en || 0) / stats.totalUsers) * 100) : 0}% dos usuários
+                </p>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">🇪🇸 Espanhol</span>
+                  <Badge variant="secondary">{stats?.usersByLanguage?.es || 0}</Badge>
+                </div>
+                <Progress 
+                  value={stats?.totalUsers ? ((stats.usersByLanguage?.es || 0) / stats.totalUsers) * 100 : 0} 
+                  className="h-2"
+                />
+                <p className="text-xs text-muted-foreground">
+                  {stats?.totalUsers ? Math.round(((stats.usersByLanguage?.es || 0) / stats.totalUsers) * 100) : 0}% dos usuários
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Premium Conversions Card */}
         <Card>
