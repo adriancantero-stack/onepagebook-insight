@@ -552,6 +552,18 @@ export const pt = {
   
   profile: {
     title: "Meu Perfil",
+    subtitle: "Acompanhe seu progresso e conquistas",
+    errorLoading: "Erro ao carregar perfil",
+    tryAgainLater: "Tente novamente mais tarde",
+    profileNotFound: "Perfil não encontrado",
+    user: "Usuário",
+    premium: "Premium",
+    viewAchievements: "Ver Conquistas",
+    settings: "Configurações",
+    recentAchievements: "Conquistas Recentes",
+    noAchievements: "Nenhuma conquista desbloqueada ainda",
+    completeFirst: "Complete seu primeiro resumo para começar!",
+    viewAllAchievements: "Ver Todas as Conquistas",
     stats: "Estatísticas",
     booksRead: "Livros Lidos",
     summariesGenerated: "Resumos Gerados",

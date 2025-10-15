@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '@/integrations/supabase/client';
 import { FloatingHeader } from '@/components/FloatingHeader';
 import { XPBar } from '@/components/XPBar';
@@ -16,6 +17,7 @@ import { toast } from '@/hooks/use-toast';
 
 export default function Profile() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { userAchievements, isLoading: achievementsLoading } = useAchievements();
   
   const [profile, setProfile] = useState<any>(null);
@@ -60,8 +62,8 @@ export default function Profile() {
     } catch (error: any) {
       console.error('Error loading profile:', error);
       toast({
-        title: 'Erro ao carregar perfil',
-        description: 'Tente novamente mais tarde',
+        title: t('profile.errorLoading'),
+        description: t('profile.tryAgainLater'),
         variant: 'destructive'
       });
     } finally {
@@ -82,7 +84,7 @@ export default function Profile() {
   if (!profile) {
     return (
       <div className="min-h-screen bg-lilac-50 flex items-center justify-center">
-        <p>Perfil não encontrado</p>
+        <p>{t('profile.profileNotFound')}</p>
       </div>
     );
   }
@@ -95,10 +97,10 @@ export default function Profile() {
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold font-poppins text-foreground mb-2">
-            Meu Perfil
+            {t('profile.title')}
           </h1>
           <p className="text-sm sm:text-base text-muted-foreground">
-            Acompanhe seu progresso e conquistas
+            {t('profile.subtitle')}
           </p>
         </div>
 
@@ -127,11 +129,11 @@ export default function Profile() {
                 <div className="space-y-1">
                   <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
                     <h2 className="text-xl sm:text-2xl font-bold font-poppins text-foreground">
-                      {profile.nickname || profile.full_name || 'Usuário'}
+                      {profile.nickname || profile.full_name || t('profile.user')}
                     </h2>
                     {isPremium && (
                       <Badge className="bg-gradient-to-r from-premium-gold to-yellow-400 text-gray-900 border-0 text-xs sm:text-sm">
-                        👑 Premium
+                        👑 {t('profile.premium')}
                       </Badge>
                     )}
                   </div>
@@ -159,7 +161,7 @@ export default function Profile() {
                     className="border-lilac-200 hover:bg-lilac-50 w-full sm:w-auto text-xs sm:text-sm"
                   >
                     <Trophy className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
-                    Ver Conquistas
+                    {t('profile.viewAchievements')}
                   </Button>
                   <Button
                     variant="outline"
@@ -168,7 +170,7 @@ export default function Profile() {
                     className="border-lilac-200 hover:bg-lilac-50 w-full sm:w-auto text-xs sm:text-sm"
                   >
                     <Settings className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
-                    Configurações
+                    {t('profile.settings')}
                   </Button>
                 </div>
               </div>
@@ -191,7 +193,7 @@ export default function Profile() {
           <CardHeader>
             <CardTitle className="font-poppins flex items-center gap-2">
               <Trophy className="h-5 w-5 text-premium-gold" />
-              Conquistas Recentes
+              {t('profile.recentAchievements')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -201,8 +203,8 @@ export default function Profile() {
               </div>
             ) : userAchievements.length === 0 ? (
               <div className="text-center py-6 sm:py-8 text-muted-foreground">
-                <p className="text-sm sm:text-base">Nenhuma conquista desbloqueada ainda</p>
-                <p className="text-xs sm:text-sm mt-1">Complete seu primeiro resumo para começar!</p>
+                <p className="text-sm sm:text-base">{t('profile.noAchievements')}</p>
+                <p className="text-xs sm:text-sm mt-1">{t('profile.completeFirst')}</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -223,7 +225,7 @@ export default function Profile() {
                   onClick={() => navigate('/achievements')}
                   className="border-lilac-200 hover:bg-lilac-50"
                 >
-                  Ver Todas as Conquistas
+                  {t('profile.viewAllAchievements')}
                 </Button>
               </div>
             )}

@@ -461,6 +461,18 @@ export const en = {
   
   profile: {
     title: "My Profile",
+    subtitle: "Track your progress and achievements",
+    errorLoading: "Error loading profile",
+    tryAgainLater: "Try again later",
+    profileNotFound: "Profile not found",
+    user: "User",
+    premium: "Premium",
+    viewAchievements: "View Achievements",
+    settings: "Settings",
+    recentAchievements: "Recent Achievements",
+    noAchievements: "No achievements unlocked yet",
+    completeFirst: "Complete your first summary to get started!",
+    viewAllAchievements: "View All Achievements",
     stats: "Statistics",
     booksRead: "Books Read",
     summariesGenerated: "Summaries Generated",

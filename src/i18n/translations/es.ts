@@ -461,6 +461,18 @@ export const es = {
   
   profile: {
     title: "Mi Perfil",
+    subtitle: "Sigue tu progreso y logros",
+    errorLoading: "Error al cargar perfil",
+    tryAgainLater: "Inténtalo de nuevo más tarde",
+    profileNotFound: "Perfil no encontrado",
+    user: "Usuario",
+    premium: "Premium",
+    viewAchievements: "Ver Logros",
+    settings: "Configuración",
+    recentAchievements: "Logros Recientes",
+    noAchievements: "Aún no tienes logros desbloqueados",
+    completeFirst: "¡Completa tu primer resumen para comenzar!",
+    viewAllAchievements: "Ver Todos los Logros",
     stats: "Estadísticas",
     booksRead: "Libros Leídos",
     summariesGenerated: "Resúmenes Generados",
