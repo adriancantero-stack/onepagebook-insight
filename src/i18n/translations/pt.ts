@@ -85,8 +85,12 @@ export const pt = {
     
     // Profile
     "profile.maxLevel": "Nível Máximo Alcançado",
-    "profile.toNextLevel": "para o próximo nível",
-    "profile.needXP": "Faltam {{xp}} XP para alcançar",
+    "profile.stats": "Estatísticas",
+    "profile.booksRead": "Livros Lidos",
+    "profile.summariesGenerated": "Resumos Gerados",
+    "profile.currentStreak": "Dias Seguidos",
+    "profile.memberSince": "Dias Membro",
+    "profile.days": "dias",
     
     // Achievements
     "achievements.title": "Conquistas",

@@ -7,6 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Globe } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const languages = [
   { code: "pt", name: "Português", flag: "🇧🇷" },
@@ -17,9 +18,18 @@ const languages = [
 export const LanguageSelector = () => {
   const { i18n } = useTranslation();
 
-  const handleLanguageChange = (langCode: string) => {
+  const handleLanguageChange = async (langCode: string) => {
     i18n.changeLanguage(langCode);
     localStorage.setItem("language", langCode);
+    
+    // Update preferred_language in database
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      await supabase
+        .from('profiles')
+        .update({ preferred_language: langCode })
+        .eq('id', user.id);
+    }
   };
 
   const currentLanguage = languages.find((lang) => lang.code === i18n.language);

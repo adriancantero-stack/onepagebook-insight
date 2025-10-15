@@ -1,5 +1,6 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Book, Flame, Clock } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface ProfileStatsProps {
   totalBooksRead: number;
@@ -9,6 +10,8 @@ interface ProfileStatsProps {
 }
 
 export const ProfileStats = ({ totalBooksRead, totalSummariesGenerated, streakDays, memberSince }: ProfileStatsProps) => {
+  const { t } = useTranslation();
+  
   // Calculate days since member
   const daysSinceMember = Math.floor(
     (new Date().getTime() - new Date(memberSince).getTime()) / (1000 * 60 * 60 * 24)
@@ -17,28 +20,28 @@ export const ProfileStats = ({ totalBooksRead, totalSummariesGenerated, streakDa
   const stats = [
     {
       icon: Book,
-      label: 'Resumos Gerados',
+      label: t('profile.summariesGenerated'),
       value: totalSummariesGenerated,
       color: 'from-primary to-purple-500',
       bgColor: 'bg-lilac-100'
     },
     {
       icon: Book,
-      label: 'Livros Lidos',
+      label: t('profile.booksRead'),
       value: totalBooksRead,
       color: 'from-lilac-400 to-lilac-500',
       bgColor: 'bg-lilac-50'
     },
     {
       icon: Flame,
-      label: 'Dias Seguidos',
+      label: t('profile.currentStreak'),
       value: streakDays,
       color: 'from-orange-400 to-red-500',
       bgColor: 'bg-orange-50'
     },
     {
       icon: Clock,
-      label: 'Dias Membro',
+      label: t('profile.memberSince'),
       value: daysSinceMember,
       color: 'from-blue-400 to-purple-500',
       bgColor: 'bg-blue-50'
