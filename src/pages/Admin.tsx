@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button";
 import { Users, FileText, TrendingUp, Crown, Download, BookOpen, ImagePlus, Sparkles, Upload, Trash2, RefreshCw, UserX, Merge, Globe } from "lucide-react";
 import { ManualCoverUpload } from "@/components/admin/ManualCoverUpload";
 import { TestEmailNotification } from "@/components/admin/TestEmailNotification";
+import { TestPremiumEmail } from "@/components/admin/TestPremiumEmail";
 import { bookCatalog } from "@/data/bookCatalog";
 import { Progress } from "@/components/ui/progress";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
@@ -1772,7 +1773,10 @@ const Admin = () => {
               {/* Manual Cover Upload and Email Test Section */}
               <div className="mt-6 grid gap-6 md:grid-cols-2">
                 <ManualCoverUpload />
-                <TestEmailNotification />
+                <div className="space-y-6">
+                  <TestEmailNotification />
+                  <TestPremiumEmail />
+                </div>
               </div>
 
               {/* Summary Check Result */}
