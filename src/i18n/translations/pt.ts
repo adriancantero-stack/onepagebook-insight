@@ -84,6 +84,8 @@ export const pt = {
     "ranking.errorLoading": "Erro ao carregar ranking",
     
     // Profile
+    "profile.title": "Meu Perfil",
+    "profile.subtitle": "Acompanhe seu progresso e conquistas",
     "profile.maxLevel": "Nível Máximo Alcançado",
     "profile.stats": "Estatísticas",
     "profile.booksRead": "Livros Lidos",
