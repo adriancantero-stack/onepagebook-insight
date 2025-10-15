@@ -207,8 +207,8 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
             .cta-button { 
               display: inline-block; 
               padding: 16px 45px; 
-              background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); 
-              color: white; 
+              background: linear-gradient(135deg, #7C5CFF 0%, #6643FF 100%); 
+              color: #ffffff !important; 
               text-decoration: none; 
               border-radius: 12px; 
               margin: 20px 0;
