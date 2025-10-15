@@ -107,3 +107,6 @@ verify_jwt = false
 
 [functions.reset-streaks]
 verify_jwt = false
+
+[functions.test-notification-email]
+verify_jwt = false
