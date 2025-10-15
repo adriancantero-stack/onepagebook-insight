@@ -26,27 +26,21 @@ export const TestWelcomeEmail = () => {
     setIsLoading(true);
 
     try {
-      // Create a temporary test HTML to send
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/test-welcome-email`,
+      const { supabase } = await import("@/integrations/supabase/client");
+      
+      const { data, error } = await supabase.functions.invoke(
+        "test-welcome-email",
         {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-          },
-          body: JSON.stringify({
+          body: {
             email,
             userName,
             language,
-          }),
+          },
         }
       );
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Erro ao enviar email");
+      if (error) {
+        throw new Error(error.message || "Erro ao enviar email");
       }
 
       toast({
