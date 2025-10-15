@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Loader2, Upload, ArrowLeft } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { Loader2, Upload, ArrowLeft, Bell, Clock } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
 
@@ -41,6 +42,10 @@ export default function Settings() {
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [nickname, setNickname] = useState('');
   const [isSavingNickname, setIsSavingNickname] = useState(false);
+  const [notificationEnabled, setNotificationEnabled] = useState(true);
+  const [notificationEmail, setNotificationEmail] = useState(true);
+  const [notificationTime, setNotificationTime] = useState('09:00');
+  const [isSavingNotifications, setIsSavingNotifications] = useState(false);
 
   useEffect(() => {
     loadProfile();
@@ -64,6 +69,9 @@ export default function Settings() {
       if (profileError) throw profileError;
       setProfile(profileData);
       setNickname(profileData?.nickname || '');
+      setNotificationEnabled(profileData?.notification_enabled ?? true);
+      setNotificationEmail(profileData?.notification_email ?? true);
+      setNotificationTime(profileData?.notification_time || '09:00');
     } catch (error: any) {
       console.error('Error loading profile:', error);
       toast({
@@ -232,6 +240,47 @@ export default function Settings() {
     }
   };
 
+  const handleNotificationUpdate = async () => {
+    setIsSavingNotifications(true);
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Usuário não autenticado');
+
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          notification_enabled: notificationEnabled,
+          notification_email: notificationEmail,
+          notification_time: notificationTime
+        })
+        .eq('id', user.id);
+
+      if (error) throw error;
+
+      setProfile({
+        ...profile,
+        notification_enabled: notificationEnabled,
+        notification_email: notificationEmail,
+        notification_time: notificationTime
+      });
+      
+      toast({
+        title: 'Notificações atualizadas!',
+        description: 'Suas preferências de notificação foram salvas',
+      });
+    } catch (error: any) {
+      console.error('Error updating notifications:', error);
+      toast({
+        title: 'Erro ao atualizar notificações',
+        description: error.message,
+        variant: 'destructive'
+      });
+    } finally {
+      setIsSavingNotifications(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-lilac-50 flex items-center justify-center">
@@ -309,6 +358,85 @@ export default function Settings() {
               <p className="text-xs text-muted-foreground">
                 Mínimo 3 caracteres, máximo 20 caracteres
               </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Notifications Section */}
+        <Card className="bg-white/70 backdrop-blur-md border-lilac-200 shadow-xl mb-6">
+          <CardHeader>
+            <CardTitle className="font-poppins flex items-center gap-2">
+              <Bell className="h-5 w-5" />
+              Notificações
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <Label htmlFor="notification-enabled" className="text-base font-medium">
+                    Ativar notificações
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    Receba lembretes para manter sua sequência de leitura
+                  </p>
+                </div>
+                <Switch
+                  id="notification-enabled"
+                  checked={notificationEnabled}
+                  onCheckedChange={setNotificationEnabled}
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <Label htmlFor="notification-email" className="text-base font-medium">
+                    Notificações por email
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    Receba lembretes diretamente no seu email
+                  </p>
+                </div>
+                <Switch
+                  id="notification-email"
+                  checked={notificationEmail}
+                  onCheckedChange={setNotificationEmail}
+                  disabled={!notificationEnabled}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="notification-time" className="text-base font-medium flex items-center gap-2">
+                  <Clock className="h-4 w-4" />
+                  Horário das notificações
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Escolha o melhor horário para receber seus lembretes
+                </p>
+                <Input
+                  id="notification-time"
+                  type="time"
+                  value={notificationTime}
+                  onChange={(e) => setNotificationTime(e.target.value)}
+                  disabled={!notificationEnabled || !notificationEmail}
+                  className="max-w-[200px]"
+                />
+              </div>
+
+              <Button 
+                onClick={handleNotificationUpdate}
+                disabled={isSavingNotifications}
+                className="w-full bg-lilac-500 hover:bg-lilac-600"
+              >
+                {isSavingNotifications ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    Salvando...
+                  </>
+                ) : (
+                  'Salvar Preferências de Notificação'
+                )}
+              </Button>
             </div>
           </CardContent>
         </Card>

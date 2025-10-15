@@ -101,3 +101,9 @@ verify_jwt = false
 
 [functions.batch-generate-summaries]
 verify_jwt = false
+
+[functions.send-daily-reminders]
+verify_jwt = false
+
+[functions.reset-streaks]
+verify_jwt = false

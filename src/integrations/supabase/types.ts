@@ -470,6 +470,9 @@ export type Database = {
           last_read_date: string | null
           level: string | null
           nickname: string | null
+          notification_email: boolean | null
+          notification_enabled: boolean | null
+          notification_time: string | null
           photo_url: string | null
           preferred_language: string
           signup_country: string | null
@@ -489,6 +492,9 @@ export type Database = {
           last_read_date?: string | null
           level?: string | null
           nickname?: string | null
+          notification_email?: boolean | null
+          notification_enabled?: boolean | null
+          notification_time?: string | null
           photo_url?: string | null
           preferred_language?: string
           signup_country?: string | null
@@ -508,6 +514,9 @@ export type Database = {
           last_read_date?: string | null
           level?: string | null
           nickname?: string | null
+          notification_email?: boolean | null
+          notification_enabled?: boolean | null
+          notification_time?: string | null
           photo_url?: string | null
           preferred_language?: string
           signup_country?: string | null
