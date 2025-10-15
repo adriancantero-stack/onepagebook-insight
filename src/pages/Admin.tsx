@@ -26,6 +26,7 @@ import { Users, FileText, TrendingUp, Crown, Download, BookOpen, ImagePlus, Spar
 import { ManualCoverUpload } from "@/components/admin/ManualCoverUpload";
 import { TestEmailNotification } from "@/components/admin/TestEmailNotification";
 import { TestPremiumEmail } from "@/components/admin/TestPremiumEmail";
+import { TestWelcomeEmail } from "@/components/admin/TestWelcomeEmail";
 import { bookCatalog } from "@/data/bookCatalog";
 import { Progress } from "@/components/ui/progress";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
@@ -1776,6 +1777,7 @@ const Admin = () => {
                 <div className="space-y-6">
                   <TestEmailNotification />
                   <TestPremiumEmail />
+                  <TestWelcomeEmail />
                 </div>
               </div>
 
