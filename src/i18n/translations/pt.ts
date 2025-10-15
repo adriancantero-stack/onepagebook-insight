@@ -104,6 +104,7 @@ export const pt = {
     "profile.currentStreak": "Dias Seguidos",
     "profile.memberSince": "Dias Membro",
     "profile.days": "dias",
+    "profile.needXP": "Faltam {{xp}} XP para alcançar",
     
     // Achievements
     "achievements.title": "Conquistas",
