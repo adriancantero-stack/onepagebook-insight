@@ -86,6 +86,33 @@ serve(async (req) => {
       users.map(async (user) => {
         if (!user) return null;
 
+        // Translate level names
+        const levelTranslations = {
+          pt: {
+            'Beginner': 'Iniciante',
+            'Learner': 'Aprendiz',
+            'Thinker': 'Pensador',
+            'Master': 'Mestre',
+            'Enlightened': 'Iluminado'
+          },
+          en: {
+            'Beginner': 'Beginner',
+            'Learner': 'Learner',
+            'Thinker': 'Thinker',
+            'Master': 'Master',
+            'Enlightened': 'Enlightened'
+          },
+          es: {
+            'Beginner': 'Principiante',
+            'Learner': 'Aprendiz',
+            'Thinker': 'Pensador',
+            'Master': 'Maestro',
+            'Enlightened': 'Iluminado'
+          }
+        };
+
+        const translatedLevel = levelTranslations[user.language as keyof typeof levelTranslations]?.[user.level as keyof typeof levelTranslations.pt] || user.level;
+
         const messages = {
           pt: {
             subject: "📚 Hora da sua leitura diária!",
@@ -143,7 +170,7 @@ serve(async (req) => {
                                 <td style="width: 16px;"></td>
                                 <td style="padding: 20px; background-color: #E9D5FF; border-radius: 8px;">
                                   <div style="text-align: center;">
-                                    <div style="font-size: 24px; font-weight: bold; color: #6B21A8; margin-bottom: 4px;">🎯 ${user.level}</div>
+                                    <div style="font-size: 24px; font-weight: bold; color: #6B21A8; margin-bottom: 4px;">🎯 ${translatedLevel}</div>
                                     <div style="font-size: 14px; color: #5B21B6;">seu nível</div>
                                   </div>
                                 </td>
@@ -241,7 +268,7 @@ serve(async (req) => {
                                 <td style="width: 16px;"></td>
                                 <td style="padding: 20px; background-color: #E9D5FF; border-radius: 8px;">
                                   <div style="text-align: center;">
-                                    <div style="font-size: 24px; font-weight: bold; color: #6B21A8; margin-bottom: 4px;">🎯 ${user.level}</div>
+                                    <div style="font-size: 24px; font-weight: bold; color: #6B21A8; margin-bottom: 4px;">🎯 ${translatedLevel}</div>
                                     <div style="font-size: 14px; color: #5B21B6;">your level</div>
                                   </div>
                                 </td>
@@ -339,7 +366,7 @@ serve(async (req) => {
                                 <td style="width: 16px;"></td>
                                 <td style="padding: 20px; background-color: #E9D5FF; border-radius: 8px;">
                                   <div style="text-align: center;">
-                                    <div style="font-size: 24px; font-weight: bold; color: #6B21A8; margin-bottom: 4px;">🎯 ${user.level}</div>
+                                    <div style="font-size: 24px; font-weight: bold; color: #6B21A8; margin-bottom: 4px;">🎯 ${translatedLevel}</div>
                                     <div style="font-size: 14px; color: #5B21B6;">tu nivel</div>
                                   </div>
                                 </td>
