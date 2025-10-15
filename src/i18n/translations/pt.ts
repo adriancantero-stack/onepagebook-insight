@@ -588,6 +588,6 @@ export const pt = {
     days: "dias",
     maxLevel: "Nível Máximo",
     toNextLevel: "para próximo nível",
-    needXP: "Faltam {{xp}} XP para"
+    needXP: "Faltam {{xp}} XP para alcançar"
   },
 };
