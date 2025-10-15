@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GlobalAchievementNotification } from "@/components/GlobalAchievementNotification";
 import { GlobalXPCelebration } from "@/components/GlobalXPCelebration";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { lazy, Suspense } from "react";
 
 // Eager load critical routes
@@ -61,13 +62,14 @@ const LoadingFallback = () => (
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <GlobalAchievementNotification />
-      <GlobalXPCelebration />
-      <BrowserRouter>
-        <Suspense fallback={<LoadingFallback />}>
-          <Routes>
+      <ErrorBoundary>
+        <Toaster />
+        <Sonner />
+        <GlobalAchievementNotification />
+        <GlobalXPCelebration />
+        <BrowserRouter>
+          <Suspense fallback={<LoadingFallback />}>
+            <Routes>
             <Route path="/" element={<LandingRedirect />} />
             <Route path="/pt" element={<Landing lang="pt" />} />
             <Route path="/es" element={<Landing lang="es" />} />
@@ -110,6 +112,7 @@ const App = () => (
           </Routes>
         </Suspense>
       </BrowserRouter>
+      </ErrorBoundary>
     </TooltipProvider>
   </QueryClientProvider>
 );
