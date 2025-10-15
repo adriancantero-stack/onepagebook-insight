@@ -42,7 +42,54 @@ export const en = {
         cta: "Generate my first free summary"
       },
       languages: { title: "Available in 3 languages", global: "Readers in 47 countries already use OnePageBook" },
-      testimonials: { title: "What readers say", weeklyCount: "summaries generated this week" },
+      testimonials: { 
+        title: "What readers say", 
+        weeklyCount: "summaries generated this week",
+        testimonial1: {
+          text: "Amazing! I absorbed 5 books in a week.",
+          author: "Sarah Johnson",
+          role: "Entrepreneur"
+        },
+        testimonial2: {
+          text: "Straight to the point — perfect for busy people.",
+          author: "Michael Davis",
+          role: "Manager"
+        },
+        testimonial3: {
+          text: "The audio feature is amazing!",
+          author: "Emily Thompson",
+          role: "Consultant"
+        }
+      },
+      pricing: {
+        title: "Choose your plan",
+        valueProposition: "Less than a coffee ☕ — transform your learning forever.",
+        cancelAnytime: "Cancel anytime. No hassle."
+      },
+      plans: {
+        title: "Choose your plan",
+        free: {
+          title: "Free",
+          price: "$0",
+          period: "/month",
+          feature1: "10 free summaries",
+          feature2: "10 free audios",
+          feature3: "Access to basic library",
+          cta: "Start free"
+        },
+        premium: {
+          title: "Premium",
+          badge: "Recommended",
+          price: "$4.99",
+          period: "/month",
+          feature1: "Unlimited summaries",
+          feature2: "Unlimited full audio",
+          feature3: "Export to PDF",
+          feature4: "Unlimited history",
+          feature5: "Priority support",
+          cta: "Subscribe now"
+        }
+      },
       footer: { tagline: "Learn faster, read more books, transform knowledge into action", rights: "All rights reserved" },
       finalCta: {
         badge: "Join thousands of readers",

@@ -42,7 +42,54 @@ export const es = {
         cta: "Generar mi primer resumen gratis"
       },
       languages: { title: "Disponible en 3 idiomas", global: "Lectores en 47 países ya usan OnePageBook" },
-      testimonials: { title: "Lo que dicen los lectores", weeklyCount: "resúmenes generados esta semana" },
+      testimonials: { 
+        title: "Lo que dicen los lectores", 
+        weeklyCount: "resúmenes generados esta semana",
+        testimonial1: {
+          text: "¡Increíble! Absorbí 5 libros en una semana.",
+          author: "Sarah Johnson",
+          role: "Emprendedora"
+        },
+        testimonial2: {
+          text: "Directo al punto — perfecto para personas ocupadas.",
+          author: "Michael Davis",
+          role: "Gerente"
+        },
+        testimonial3: {
+          text: "¡La función de audio es sensacional!",
+          author: "Emily Thompson",
+          role: "Consultora"
+        }
+      },
+      pricing: {
+        title: "Elige tu plan",
+        valueProposition: "Menos que un café ☕ — transforma tu aprendizaje para siempre.",
+        cancelAnytime: "Cancela cuando quieras. Sin complicaciones."
+      },
+      plans: {
+        title: "Elige tu plan",
+        free: {
+          title: "Gratuito",
+          price: "$0",
+          period: "/mes",
+          feature1: "10 resúmenes gratis",
+          feature2: "10 audios gratis",
+          feature3: "Acceso a biblioteca básica",
+          cta: "Comenzar gratis"
+        },
+        premium: {
+          title: "Premium",
+          badge: "Recomendado",
+          price: "$4.99",
+          period: "/mes",
+          feature1: "Resúmenes ilimitados",
+          feature2: "Audio completo ilimitado",
+          feature3: "Exportar a PDF",
+          feature4: "Historial ilimitado",
+          feature5: "Soporte prioritario",
+          cta: "Suscribirse ahora"
+        }
+      },
       footer: { tagline: "Aprende más rápido, lee más libros, transforma conocimiento en acción", rights: "Todos los derechos reservados" },
       finalCta: {
         badge: "Únete a miles de lectores",
