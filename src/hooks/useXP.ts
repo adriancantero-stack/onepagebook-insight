@@ -19,20 +19,31 @@ interface AchievementNotification {
   xpReward: number;
 }
 
+interface XPCelebration {
+  show: boolean;
+  xpAmount: number;
+  message: string;
+}
+
 interface AchievementStore {
   notification: AchievementNotification | null;
   setNotification: (notification: AchievementNotification | null) => void;
+  xpCelebration: XPCelebration | null;
+  setXPCelebration: (celebration: XPCelebration | null) => void;
 }
 
 export const useAchievementStore = create<AchievementStore>((set) => ({
   notification: null,
   setNotification: (notification) => set({ notification }),
+  xpCelebration: null,
+  setXPCelebration: (xpCelebration) => set({ xpCelebration }),
 }));
 
 export function useXP() {
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
   const setNotification = useAchievementStore((state) => state.setNotification);
+  const setXPCelebration = useAchievementStore((state) => state.setXPCelebration);
 
   /**
    * Add XP to user and check for level-up
@@ -79,13 +90,19 @@ export function useXP() {
           xpReward: 100 // Bonus XP is already added by backend
         });
       } else {
-        toast({
-          title: `+${xpAmount} XP`,
-          description: eventType === 'read_summary' ? '📚 ' + t('toast.summaryCompleted') : 
-                      eventType === 'audio_generated' ? '🎧 ' + t('toast.audioGenerated') :
-                      eventType === 'feedback_given' ? '⭐ Avaliação enviada' :
-                      eventType === 'share_summary' ? '🔗 Resumo compartilhado' : '',
-          className: 'bg-lilac-50 border-lilac-200'
+        // Show XP celebration in center of screen
+        const celebrationMessages: { [key: string]: string } = {
+          'read_summary': '📚 ' + t('toast.summaryCompleted'),
+          'audio_generated': '🎧 ' + t('toast.audioGenerated'),
+          'feedback_given': '⭐ Avaliação enviada',
+          'share_summary': '🔗 Resumo compartilhado',
+          'summary_generated': '✨ Resumo criado com sucesso!'
+        };
+
+        setXPCelebration({
+          show: true,
+          xpAmount,
+          message: celebrationMessages[eventType] || 'Parabéns!'
         });
       }
 
