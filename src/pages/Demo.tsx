@@ -82,8 +82,8 @@ const Demo = () => {
         }
 
         // Play notification sound
-        const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBjCJ0fPTgjMGHm7A7+OZUQ8MW6ro7qZaEg1Dl97xwW8gBzKL1PTVhzcHIG/C8OShVhELVKni76peFgtCnd3zwG4fBzCJ0vLUhTYGHG3A7+SaUBALWKvo7alZEw1Dl9zxwW0eBjCK0vPTgzMGG23B8OWcUxELV6vn7qlYEwxBl9vxwGwdBi+J0fLSgjEGGm3A7+WbURAKWKzm76pXEgtBltrzv2sdBi6I0PHTgS8GGWu/7+WbUg8KV6vl7qhXEgpAldnxv2ocBi2IzvDSgC4GGGq+7uSaURAKVqrl7qdWEQk/lNjwvmobBiuGzO/Rfi0GFmm97uObUg4JVKjk7aZUEAg9ksju');
-        audio.volume = 0.3;
+        const audio = new Audio('/sounds/audio-generated.wav');
+        audio.volume = 0.5;
         audio.play().catch(e => console.warn('Could not play notification sound:', e));
 
         toast({

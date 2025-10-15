@@ -712,23 +712,10 @@ const Summary = () => {
         const completionSound = new Audio('data:audio/wav;base64,UklGRjIAAABXQVZFZm10IBIAAAABAAEAQB8AAEAfAAABAAgAAABmYWN0BAAAAAAAAABkYXRhAAAAAA==');
         completionSound.volume = 0.5;
         
-        // Create a simple pleasant beep using Web Audio API
-        const audioContext = new AudioContext();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.frequency.value = 880; // A5 note
-        oscillator.type = 'sine';
-        
-        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-        gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.01);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.5);
+        // Play notification sound
+        const audio = new Audio('/sounds/audio-generated.wav');
+        audio.volume = 0.5;
+        audio.play().catch(err => console.log('Audio play failed:', err));
 
         // Increment counter only if audio was newly generated (not cached)
         if (!data.cached) {
