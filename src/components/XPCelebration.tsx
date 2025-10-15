@@ -30,30 +30,9 @@ export const XPCelebration = ({ show, xpAmount, message, onComplete }: XPCelebra
   }, [show, onComplete]);
 
   const playSound = () => {
-    // Create a simple celebration sound using Web Audio API
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-    
-    // Create a sequence of ascending notes (major chord)
-    const notes = [523.25, 659.25, 783.99]; // C, E, G
-    const duration = 0.15;
-    
-    notes.forEach((frequency, index) => {
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
-      
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-      
-      oscillator.frequency.value = frequency;
-      oscillator.type = 'sine';
-      
-      const startTime = audioContext.currentTime + (index * duration);
-      gainNode.gain.setValueAtTime(0.3, startTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
-      
-      oscillator.start(startTime);
-      oscillator.stop(startTime + duration);
-    });
+    const audio = new Audio('/sounds/xp-gain.wav');
+    audio.volume = 0.5;
+    audio.play().catch(err => console.log('Audio play failed:', err));
   };
 
   const triggerConfetti = () => {
