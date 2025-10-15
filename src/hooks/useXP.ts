@@ -94,15 +94,17 @@ export function useXP() {
         const celebrationMessages: { [key: string]: string } = {
           'read_summary': '📚 ' + t('toast.summaryCompleted'),
           'audio_generated': '🎧 ' + t('toast.audioGenerated'),
+          'audio_listened': '🎵 Primeiro áudio escutado!',
           'feedback_given': '⭐ Avaliação enviada',
           'share_summary': '🔗 Resumo compartilhado',
-          'summary_generated': '✨ Resumo criado com sucesso!'
+          'summary_generated': '✨ Resumo criado com sucesso!',
+          'achievement_unlocked': '🏆 Conquista desbloqueada!'
         };
 
         setXPCelebration({
           show: true,
           xpAmount,
-          message: celebrationMessages[eventType] || 'Parabéns!'
+          message: celebrationMessages[eventType] || `+${xpAmount} XP ganhos!`
         });
       }
 
