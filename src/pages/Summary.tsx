@@ -740,11 +740,9 @@ const Summary = () => {
             // Award XP for first audio listen (10 XP)
             await addXP('audio_listened', 10);
           }
-        }
 
-        // Increment counter only if audio was newly generated (not cached)
-        if (!data.cached) {
-          if (user) {
+          // Increment counter only if audio was newly generated (not cached)
+          if (!data.cached) {
             const { data: subscription } = await supabase
               .from("user_subscriptions")
               .select("*, subscription_plans(*)")
@@ -764,14 +762,17 @@ const Summary = () => {
               });
             }
             
-            // Add XP for generating audio (only when newly generated)
-            addXP('audio_generated', 5);
+            // Add XP for generating audio (only when newly generated and NOT first listen)
+            // First listen already gave 10 XP, so only give 5 XP extra if this is a re-listen
+            if (existingPlay) {
+              addXP('audio_generated', 5);
+            }
+          } else {
+            toast({
+              title: t("summary.audioReady"),
+              description: "Áudio recuperado do cache",
+            });
           }
-        } else {
-          toast({
-            title: t("summary.audioReady"),
-            description: "Áudio recuperado do cache",
-          });
         }
       } else {
         throw new Error('No audio content received from server');
