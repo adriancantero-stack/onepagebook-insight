@@ -125,7 +125,7 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
             .benefit-item { padding: 10px 0; color: #2B1342; }
             .cta-button { 
               display: inline-block; 
-              padding: 16px 40px; 
+              padding: 16px 45px; 
               background: linear-gradient(135deg, #7C5CFF 0%, #6643FF 100%); 
               color: white; 
               text-decoration: none; 

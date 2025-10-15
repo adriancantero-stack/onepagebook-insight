@@ -129,14 +129,14 @@ const getTestEmailHTML = (userName: string, checkoutUrl: string, promoCode: stri
         }
         .cta-button { 
           display: inline-block;
-          background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+          background: linear-gradient(135deg, #7C5CFF 0%, #6643FF 100%);
           border-radius: 12px;
           color: #ffffff;
           font-size: 18px;
           font-weight: bold;
           text-decoration: none;
           padding: 16px 45px;
-          box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+          box-shadow: 0 4px 15px rgba(124, 92, 255, 0.3);
           transition: all 0.3s ease;
         }
         .small-text { 
