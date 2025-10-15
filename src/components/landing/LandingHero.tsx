@@ -44,7 +44,7 @@ export const LandingHero = ({
             </Button>
           </div>
 
-          <p className="text-sm sm:text-base text-muted-foreground animate-fade-in flex items-center gap-2 justify-center" style={{
+          <p className="text-sm sm:text-base text-muted-foreground animate-fade-in flex items-start gap-2 justify-center" style={{
           animationDelay: "0.3s"
         }}>
             <span className="text-base sm:text-lg inline-flex items-center">🌍</span>
