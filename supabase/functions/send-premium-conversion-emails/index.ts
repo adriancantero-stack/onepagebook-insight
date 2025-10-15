@@ -18,9 +18,9 @@ interface EmailTemplate {
 
 // Stripe checkout URLs by language/currency
 const STRIPE_CHECKOUT_URLS: Record<string, string> = {
-  pt: "https://buy.stripe.com/fZu28r50YbE76fuaKv", // BRL
-  en: "https://buy.stripe.com/7sY7sL2SQcIb6fu2dZ", // USD
-  es: "https://buy.stripe.com/7sY7sL2SQcIb6fu2dZ", // USD
+  pt: "https://buy.stripe.com/fZu28r50YbE76fuaKv3oA00?prefilled_promo_code=WELCOME40", // BRL
+  en: "https://buy.stripe.com/7sY7sL2SQcIb6fu2dZ3oA02?prefilled_promo_code=WELCOME40", // USD
+  es: "https://buy.stripe.com/7sY7sL2SQcIb6fu2dZ3oA02?prefilled_promo_code=WELCOME40", // USD
 };
 const PROMO_CODE = "WELCOME40";
 
@@ -214,7 +214,7 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
               <p class="urgency">Esta é sua última chance de receber este lembrete. O conhecimento não espera!</p>
               
               <center>
-                <a href="${checkoutUrl}?prefilled_promo_code=${PROMO_CODE}" class="cta-button">Quero Premium AGORA</a>
+                <a href="${checkoutUrl}" class="cta-button">Quero Premium AGORA</a>
               </center>
               
               <p style="text-align: center; font-size: 12px; color: #666; margin-top: 15px;">

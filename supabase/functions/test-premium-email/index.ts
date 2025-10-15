@@ -10,9 +10,9 @@ const corsHeaders = {
 
 // Stripe checkout URLs by language/currency
 const STRIPE_CHECKOUT_URLS: Record<string, string> = {
-  pt: "https://buy.stripe.com/fZu28r50YbE76fuaKv", // BRL
-  en: "https://buy.stripe.com/7sY7sL2SQcIb6fu2dZ", // USD
-  es: "https://buy.stripe.com/7sY7sL2SQcIb6fu2dZ", // USD
+  pt: "https://buy.stripe.com/fZu28r50YbE76fuaKv3oA00?prefilled_promo_code=WELCOME40", // BRL
+  en: "https://buy.stripe.com/7sY7sL2SQcIb6fu2dZ3oA02?prefilled_promo_code=WELCOME40", // USD
+  es: "https://buy.stripe.com/7sY7sL2SQcIb6fu2dZ3oA02?prefilled_promo_code=WELCOME40", // USD
 };
 const PROMO_CODE = "WELCOME40";
 
@@ -114,7 +114,7 @@ const getTestEmailHTML = (userName: string, checkoutUrl: string, promoCode: stri
           </p>
           
           <div class="button-container">
-            <a href="${checkoutUrl}?prefilled_promo_code=${promoCode}" class="cta-button">
+            <a href="${checkoutUrl}" class="cta-button">
               Quero Premium AGORA
             </a>
           </div>
