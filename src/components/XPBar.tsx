@@ -23,7 +23,7 @@ export const XPBar = ({ currentXP, level, showDetails = true }: XPBarProps) => {
             <span className="text-xl sm:text-2xl flex-shrink-0">{levelInfo.icon}</span>
             <div className="min-w-0 flex-1">
               <p className={`font-poppins font-semibold text-sm sm:text-base ${levelInfo.color} truncate`}>
-                {level}
+                {t(`levels.${level}`)}
               </p>
               <p className="text-xs text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis">
                 {isMaxLevel ? t('profile.maxLevel') : `${formatXP(currentXP)} / ${formatXP(nextLevelXP)} XP`}
