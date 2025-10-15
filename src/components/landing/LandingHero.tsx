@@ -47,7 +47,7 @@ export const LandingHero = ({
           <p className="text-sm sm:text-base text-muted-foreground animate-fade-in flex items-center gap-2 justify-center" style={{
           animationDelay: "0.3s"
         }}>
-            <span className="text-lg">🌍</span>
+            <span className="text-base sm:text-lg inline-flex items-center">🌍</span>
             {t("landing.hero.socialProof")}
           </p>
         </div>
