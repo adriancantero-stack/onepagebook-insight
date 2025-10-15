@@ -69,6 +69,43 @@ export function useXP() {
   const addToQueue = useAchievementStore((state) => state.addToQueue);
 
   /**
+   * Check for newly unlocked achievements
+   */
+  const checkAchievements = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase.rpc('check_achievements', {
+        p_user_id: user.id
+      });
+
+      if (error) {
+        console.error('Error checking achievements:', error);
+        return;
+      }
+
+      // Add each new achievement to the queue
+      if (data && data.length > 0) {
+        data.forEach((achievement: any) => {
+          addToQueue({
+            type: 'achievement',
+            data: {
+              show: true,
+              title: `🏆 ${achievement.achievement_name}`,
+              description: achievement.achievement_description || 'Nova conquista desbloqueada!',
+              icon: achievement.achievement_icon || '🏆',
+              xpReward: achievement.xp_reward || 0
+            }
+          });
+        });
+      }
+    } catch (error) {
+      console.error('Error in checkAchievements:', error);
+    }
+  };
+
+  /**
    * Add XP to user and check for level-up
    */
   const addXP = async (eventType: string, xpAmount: number): Promise<XPResult | null> => {
@@ -99,6 +136,9 @@ export function useXP() {
       }
 
       const result = data[0] as XPResult;
+
+      // Check for new achievements after gaining XP
+      await checkAchievements();
 
       // Show appropriate notification
       if (result.leveled_up) {
