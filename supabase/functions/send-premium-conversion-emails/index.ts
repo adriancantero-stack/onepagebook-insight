@@ -16,11 +16,17 @@ interface EmailTemplate {
   html: string;
 }
 
-const STRIPE_CHECKOUT_URL = "https://buy.stripe.com/PREMIUM_LINK_AQUI"; // Substituir com link real do Stripe
+// Stripe checkout URLs by language/currency
+const STRIPE_CHECKOUT_URLS: Record<string, string> = {
+  pt: "https://buy.stripe.com/fZu28r50YbE76fuaKv", // BRL
+  en: "https://buy.stripe.com/7sY7sL2SQcIb6fu2dZ", // USD
+  es: "https://buy.stripe.com/7sY7sL2SQcIb6fu2dZ", // USD
+};
 const PROMO_CODE = "WELCOME40";
 
 // Email templates in Portuguese
-const getEmailTemplate = (dayType: string, userName: string): EmailTemplate => {
+const getEmailTemplate = (dayType: string, userName: string, userLanguage: string = "pt"): EmailTemplate => {
+  const checkoutUrl = STRIPE_CHECKOUT_URLS[userLanguage] || STRIPE_CHECKOUT_URLS.pt;
   const templates: Record<string, EmailTemplate> = {
     day_3: {
       subject: "✨ Descubra todo o potencial do OnePageBook Premium",
@@ -70,7 +76,7 @@ const getEmailTemplate = (dayType: string, userName: string): EmailTemplate => {
               <p><strong>Transforme sua jornada de leitura agora!</strong></p>
               
               <center>
-                <a href="${STRIPE_CHECKOUT_URL}" class="cta-button">Quero ser Premium</a>
+                <a href="${checkoutUrl}" class="cta-button">Quero ser Premium</a>
               </center>
             </div>
             <div class="footer">
@@ -130,7 +136,7 @@ const getEmailTemplate = (dayType: string, userName: string): EmailTemplate => {
               <p><strong>Milhares de leitores já estão acelerando seu conhecimento. Você vem com a gente?</strong></p>
               
               <center>
-                <a href="${STRIPE_CHECKOUT_URL}" class="cta-button">Sim, quero Premium!</a>
+                <a href="${checkoutUrl}" class="cta-button">Sim, quero Premium!</a>
               </center>
             </div>
             <div class="footer">
@@ -208,7 +214,7 @@ const getEmailTemplate = (dayType: string, userName: string): EmailTemplate => {
               <p class="urgency">Esta é sua última chance de receber este lembrete. O conhecimento não espera!</p>
               
               <center>
-                <a href="${STRIPE_CHECKOUT_URL}?prefilled_promo_code=${PROMO_CODE}" class="cta-button">Quero Premium AGORA</a>
+                <a href="${checkoutUrl}?prefilled_promo_code=${PROMO_CODE}" class="cta-button">Quero Premium AGORA</a>
               </center>
               
               <p style="text-align: center; font-size: 12px; color: #666; margin-top: 15px;">
@@ -266,6 +272,7 @@ const handler = async (req: Request): Promise<Response> => {
         id,
         full_name,
         created_at,
+        preferred_language,
         user_subscriptions!inner(
           status,
           subscription_plans!inner(type)
@@ -327,7 +334,8 @@ const handler = async (req: Request): Promise<Response> => {
         }
 
         const userName = user.full_name || "Leitor";
-        const template = getEmailTemplate(emailType, userName);
+        const userLanguage = user.preferred_language || "pt";
+        const template = getEmailTemplate(emailType, userName, userLanguage);
 
         // Send email via Resend
         const { error: emailError } = await resend.emails.send({
