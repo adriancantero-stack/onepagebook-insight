@@ -44,6 +44,8 @@ interface AdminStats {
     en: number;
     es: number;
   };
+  usersByCountry?: Record<string, number>;
+  trafficSources?: Record<string, number>;
 }
 
 interface UserData {
@@ -219,6 +221,22 @@ const Admin = () => {
         return acc;
       }, {}) || {};
 
+      // Calculate country distribution
+      const countryCounts = profilesData?.reduce((acc: any, curr) => {
+        if (curr.signup_country) {
+          acc[curr.signup_country] = (acc[curr.signup_country] || 0) + 1;
+        }
+        return acc;
+      }, {}) || {};
+
+      // Calculate traffic source distribution
+      const trafficSources = profilesData?.reduce((acc: any, curr) => {
+        if (curr.signup_path) {
+          acc[curr.signup_path] = (acc[curr.signup_path] || 0) + 1;
+        }
+        return acc;
+      }, {}) || {};
+
       // Get total audios count
       const { count: audiosCount } = await supabase
         .from("book_audio")
@@ -239,7 +257,9 @@ const Admin = () => {
           pt: langCounts.pt || 0,
           en: langCounts.en || 0,
           es: langCounts.es || 0,
-        }
+        },
+        usersByCountry: countryCounts,
+        trafficSources: trafficSources,
       });
 
       // Get auth users via edge function (requires service role)
@@ -1230,6 +1250,126 @@ const Admin = () => {
                 </p>
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Country Distribution Card */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Globe className="h-5 w-5 text-primary" />
+              Distribuição por País
+            </CardTitle>
+            <CardDescription>
+              Países de origem dos usuários cadastrados
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {stats?.usersByCountry && Object.keys(stats.usersByCountry).length > 0 ? (
+              <div className="space-y-4">
+                {Object.entries(stats.usersByCountry)
+                  .sort(([, a], [, b]) => (b as number) - (a as number))
+                  .slice(0, 10)
+                  .map(([country, count]) => {
+                    const countryNames: Record<string, string> = {
+                      'pt-BR': '🇧🇷 Brasil',
+                      'en-US': '🇺🇸 Estados Unidos',
+                      'en-GB': '🇬🇧 Reino Unido',
+                      'en-CA': '🇨🇦 Canadá',
+                      'es-MX': '🇲🇽 México',
+                      'es-AR': '🇦🇷 Argentina',
+                      'es-CL': '🇨🇱 Chile',
+                      'es-UY': '🇺🇾 Uruguai',
+                      'es-ES': '🇪🇸 Espanha',
+                      'pt-PT': '🇵🇹 Portugal',
+                      'pt-AO': '🇦🇴 Angola',
+                      'pt-MZ': '🇲🇿 Moçambique',
+                      'en-IN': '🇮🇳 Índia',
+                      'en-PK': '🇵🇰 Paquistão',
+                      'pt': '🇧🇷 Brasil',
+                      'pt-US': '🇺🇸 US (PT)',
+                    };
+                    const displayName = countryNames[country] || `🌍 ${country}`;
+                    const percentage = stats.totalUsers ? Math.round(((count as number) / stats.totalUsers) * 100) : 0;
+                    
+                    return (
+                      <div key={country} className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">{displayName}</span>
+                          <Badge variant="secondary">{count as number}</Badge>
+                        </div>
+                        <Progress 
+                          value={percentage} 
+                          className="h-2"
+                        />
+                        <p className="text-xs text-muted-foreground">
+                          {percentage}% dos usuários
+                        </p>
+                      </div>
+                    );
+                  })}
+                <p className="text-xs text-muted-foreground mt-4 pt-4 border-t">
+                  Total de usuários com país registrado: {Object.values(stats.usersByCountry).reduce((a, b) => a + (b as number), 0)} de {stats.totalUsers}
+                </p>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">Nenhum dado de país disponível</p>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Traffic Sources Card */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-primary" />
+              Fontes de Tráfego
+            </CardTitle>
+            <CardDescription>
+              De onde os usuários estão vindo para se cadastrar
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {stats?.trafficSources && Object.keys(stats.trafficSources).length > 0 ? (
+              <div className="space-y-4">
+                {Object.entries(stats.trafficSources)
+                  .sort(([, a], [, b]) => (b as number) - (a as number))
+                  .map(([source, count]) => {
+                    const sourceNames: Record<string, string> = {
+                      '/auth': '🔐 Página de Login/Registro',
+                      '/': '🏠 Landing Page',
+                      '/pt': '🇧🇷 Landing PT',
+                      '/en': '🇬🇧 Landing EN',
+                      '/es': '🇪🇸 Landing ES',
+                      '/home': '🏠 Home',
+                      '/explore': '🔍 Explorar',
+                    };
+                    const displayName = sourceNames[source] || `📄 ${source}`;
+                    const percentage = stats.totalUsers ? Math.round(((count as number) / stats.totalUsers) * 100) : 0;
+                    
+                    return (
+                      <div key={source} className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">{displayName}</span>
+                          <Badge variant="secondary">{count as number}</Badge>
+                        </div>
+                        <Progress 
+                          value={percentage} 
+                          className="h-2"
+                        />
+                        <p className="text-xs text-muted-foreground">
+                          {percentage}% dos cadastros
+                        </p>
+                      </div>
+                    );
+                  })}
+                <p className="text-xs text-muted-foreground mt-4 pt-4 border-t">
+                  Total de usuários com origem registrada: {Object.values(stats.trafficSources).reduce((a, b) => a + (b as number), 0)} de {stats.totalUsers}
+                </p>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">Nenhum dado de tráfego disponível</p>
+            )}
           </CardContent>
         </Card>
 
