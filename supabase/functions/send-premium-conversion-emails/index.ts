@@ -255,7 +255,7 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
               <p class="urgency">Esta é sua última chance de receber este lembrete. O conhecimento não espera!</p>
               
               <center>
-                <a href="${checkoutUrl}" class="cta-button">Quero Premium AGORA</a>
+                <a href="${checkoutUrl}" class="cta-button" style="display: inline-block; padding: 16px 45px; background: linear-gradient(135deg, #7C5CFF 0%, #6643FF 100%); color: #ffffff !important; text-decoration: none; border-radius: 12px; margin: 20px 0; font-weight: bold; font-size: 18px; box-shadow: 0 4px 15px rgba(124, 92, 255, 0.3);">Quero Premium AGORA</a>
               </center>
               
               <p style="text-align: center; font-size: 13px; color: #666; margin-top: 15px;">
