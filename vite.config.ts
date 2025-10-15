@@ -106,16 +106,25 @@ export default defineConfig(({ mode }) => ({
         },
       },
     },
-    // Increase chunk size warning limit
-    chunkSizeWarningLimit: 1000,
-    // Minify for production
+    // Reduce initial bundle size
+    chunkSizeWarningLimit: 600,
+    // Aggressive minification for production
     minify: 'terser',
     terserOptions: {
       compress: {
         drop_console: mode === 'production',
         drop_debugger: mode === 'production',
+        pure_funcs: mode === 'production' ? ['console.log', 'console.debug'] : [],
+        passes: 2,
+      },
+      mangle: {
+        safari10: true,
       },
     },
+    // Enable CSS code splitting
+    cssCodeSplit: true,
+    // Source maps only for development
+    sourcemap: mode !== 'production',
   },
   // Optimize dependencies
   optimizeDeps: {
