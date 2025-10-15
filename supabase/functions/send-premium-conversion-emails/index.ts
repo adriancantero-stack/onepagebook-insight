@@ -36,23 +36,35 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
         <head>
           <meta charset="utf-8">
           <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { text-align: center; padding: 20px 0; }
-            .content { background: #f9f9f9; padding: 30px; border-radius: 10px; }
-            .benefits { margin: 20px 0; }
-            .benefit-item { padding: 10px 0; }
+            body { 
+              font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; 
+              line-height: 1.6; 
+              color: #2B1342;
+              background: linear-gradient(135deg, #F8F6FF 0%, #F0ECFF 100%);
+              margin: 0;
+              padding: 20px;
+            }
+            .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(124, 92, 255, 0.1); }
+            .header { text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #F8F6FF 0%, #E6DEFF 100%); }
+            .header h1 { color: #7C5CFF; font-size: 32px; font-weight: bold; margin: 0; }
+            .content { background: #ffffff; padding: 30px; }
+            .content p { color: #2B1342; margin: 16px 0; }
+            .benefits { margin: 25px 0; background: #F8F6FF; padding: 20px; border-radius: 12px; border-left: 4px solid #7C5CFF; }
+            .benefits h3 { color: #7C5CFF; margin-top: 0; }
+            .benefit-item { padding: 10px 0; color: #2B1342; }
             .cta-button { 
               display: inline-block; 
-              padding: 15px 30px; 
-              background: #10b981; 
+              padding: 16px 40px; 
+              background: linear-gradient(135deg, #7C5CFF 0%, #6643FF 100%); 
               color: white; 
               text-decoration: none; 
-              border-radius: 8px; 
+              border-radius: 12px; 
               margin: 20px 0;
               font-weight: bold;
+              font-size: 16px;
+              box-shadow: 0 4px 15px rgba(124, 92, 255, 0.3);
             }
-            .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
+            .footer { text-align: center; padding: 30px 20px; background: #F8F6FF; color: #666; font-size: 13px; border-top: 2px solid #E6DEFF; }
           </style>
         </head>
         <body>
@@ -81,7 +93,6 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
             </div>
             <div class="footer">
               <p>Abraços,<br>Equipe OnePageBook</p>
-              <p>Para parar de receber esses emails, <a href="#">clique aqui</a></p>
             </div>
           </div>
         </body>
@@ -96,24 +107,35 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
         <head>
           <meta charset="utf-8">
           <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { text-align: center; padding: 20px 0; }
-            .content { background: #f9f9f9; padding: 30px; border-radius: 10px; }
-            .highlight { background: #fef3c7; padding: 15px; border-radius: 8px; margin: 20px 0; }
-            .benefits { margin: 20px 0; }
-            .benefit-item { padding: 10px 0; }
+            body { 
+              font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; 
+              line-height: 1.6; 
+              color: #2B1342;
+              background: linear-gradient(135deg, #F8F6FF 0%, #F0ECFF 100%);
+              margin: 0;
+              padding: 20px;
+            }
+            .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(124, 92, 255, 0.1); }
+            .header { text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #F8F6FF 0%, #E6DEFF 100%); }
+            .header h1 { color: #7C5CFF; font-size: 32px; font-weight: bold; margin: 0; }
+            .content { background: #ffffff; padding: 30px; }
+            .content p { color: #2B1342; margin: 16px 0; }
+            .benefits { margin: 25px 0; background: #F8F6FF; padding: 20px; border-radius: 12px; border-left: 4px solid #7C5CFF; }
+            .benefits h3 { color: #7C5CFF; margin-top: 0; }
+            .benefit-item { padding: 10px 0; color: #2B1342; }
             .cta-button { 
               display: inline-block; 
-              padding: 15px 30px; 
-              background: #10b981; 
+              padding: 16px 40px; 
+              background: linear-gradient(135deg, #7C5CFF 0%, #6643FF 100%); 
               color: white; 
               text-decoration: none; 
-              border-radius: 8px; 
+              border-radius: 12px; 
               margin: 20px 0;
               font-weight: bold;
+              font-size: 16px;
+              box-shadow: 0 4px 15px rgba(124, 92, 255, 0.3);
             }
-            .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
+            .footer { text-align: center; padding: 30px 20px; background: #F8F6FF; color: #666; font-size: 13px; border-top: 2px solid #E6DEFF; }
           </style>
         </head>
         <body>
@@ -141,7 +163,6 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
             </div>
             <div class="footer">
               <p>Leia mais, aprenda mais!<br>Equipe OnePageBook</p>
-              <p>Para parar de receber esses emails, <a href="#">clique aqui</a></p>
             </div>
           </div>
         </body>
@@ -156,35 +177,55 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
         <head>
           <meta charset="utf-8">
           <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { text-align: center; padding: 20px 0; }
-            .content { background: #f9f9f9; padding: 30px; border-radius: 10px; }
-            .discount-box { 
-              background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-              color: white;
-              padding: 25px; 
-              border-radius: 12px; 
-              margin: 25px 0;
-              text-align: center;
+            body { 
+              font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; 
+              line-height: 1.6; 
+              color: #2B1342;
+              background: linear-gradient(135deg, #F8F6FF 0%, #F0ECFF 100%);
+              margin: 0;
+              padding: 20px;
             }
-            .discount-box h2 { margin: 0; font-size: 32px; }
-            .discount-box p { margin: 10px 0 0 0; font-size: 18px; }
-            .benefits { margin: 20px 0; }
-            .benefit-item { padding: 10px 0; }
+            .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(124, 92, 255, 0.1); }
+            .header { text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #F8F6FF 0%, #E6DEFF 100%); }
+            .header h1 { color: #7C5CFF; font-size: 32px; font-weight: bold; margin: 0; }
+            .content { background: #ffffff; padding: 30px; }
+            .content p { color: #2B1342; margin: 16px 0; }
+            .discount-box { 
+              background: linear-gradient(135deg, #7C5CFF 0%, #6643FF 100%);
+              color: white;
+              padding: 30px; 
+              border-radius: 16px; 
+              margin: 30px 0;
+              text-align: center;
+              box-shadow: 0 8px 25px rgba(124, 92, 255, 0.3);
+            }
+            .discount-box h2 { margin: 0; font-size: 56px; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); }
+            .discount-box p { margin: 10px 0 0 0; font-size: 22px; font-weight: 500; }
+            .discount-validity { font-size: 14px; margin-top: 20px; color: #F0ECFF; font-weight: 600; }
+            .benefits { margin: 25px 0; background: #F8F6FF; padding: 20px; border-radius: 12px; border-left: 4px solid #7C5CFF; }
+            .benefit-item { padding: 10px 0; color: #2B1342; }
             .cta-button { 
               display: inline-block; 
-              padding: 15px 40px; 
-              background: #dc2626; 
+              padding: 16px 45px; 
+              background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); 
               color: white; 
               text-decoration: none; 
-              border-radius: 8px; 
+              border-radius: 12px; 
               margin: 20px 0;
               font-weight: bold;
               font-size: 18px;
+              box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
             }
-            .urgency { color: #dc2626; font-weight: bold; }
-            .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
+            .urgency { 
+              color: #dc2626; 
+              font-weight: bold; 
+              padding: 15px;
+              background: #fef2f2;
+              border-radius: 8px;
+              border-left: 4px solid #dc2626;
+              margin: 25px 0;
+            }
+            .footer { text-align: center; padding: 30px 20px; background: #F8F6FF; color: #666; font-size: 13px; border-top: 2px solid #E6DEFF; }
           </style>
         </head>
         <body>
@@ -202,7 +243,7 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
               <div class="discount-box">
                 <h2>40% OFF</h2>
                 <p>no primeiro mês Premium!</p>
-                <p style="font-size: 14px; margin-top: 15px;">⏰ Válido por apenas 7 dias</p>
+                <p class="discount-validity">⏰ Válido por apenas 7 dias</p>
               </div>
               
               <div class="benefits">
@@ -217,13 +258,12 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
                 <a href="${checkoutUrl}" class="cta-button">Quero Premium AGORA</a>
               </center>
               
-              <p style="text-align: center; font-size: 12px; color: #666; margin-top: 15px;">
+              <p style="text-align: center; font-size: 13px; color: #666; margin-top: 15px;">
                 Desconto aplicado automaticamente no checkout
               </p>
             </div>
             <div class="footer">
               <p>Sucesso na sua jornada!<br>Equipe OnePageBook</p>
-              <p>Para parar de receber esses emails, <a href="#">clique aqui</a></p>
             </div>
           </div>
         </body>

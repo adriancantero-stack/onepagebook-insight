@@ -24,55 +24,144 @@ const getTestEmailHTML = (userName: string, checkoutUrl: string, promoCode: stri
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f5f5f5; margin: 0; padding: 0; }
-        .container { max-width: 600px; margin: 20px auto; padding: 20px; background-color: #ffffff; }
-        .test-banner { background-color: #fbbf24; padding: 10px; text-align: center; margin-bottom: 20px; }
-        .test-banner-text { color: #000; font-size: 14px; font-weight: bold; margin: 0; }
-        .header { text-align: center; padding: 20px 0; }
-        .header h1 { color: #333; font-size: 32px; font-weight: bold; margin: 20px 0; }
-        .content { padding: 0 20px; }
-        .text { color: #333; font-size: 16px; line-height: 24px; margin: 16px 0; }
-        .discount-box { 
-          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-          border-radius: 12px;
-          padding: 25px;
-          text-align: center;
-          margin: 25px 0;
+        body { 
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; 
+          line-height: 1.6; 
+          color: #2B1342; 
+          background: linear-gradient(135deg, #F8F6FF 0%, #F0ECFF 100%);
+          margin: 0; 
+          padding: 0; 
         }
-        .discount-title { color: #ffffff; font-size: 48px; font-weight: bold; margin: 0; }
-        .discount-subtitle { color: #ffffff; font-size: 20px; margin: 10px 0; }
-        .discount-validity { color: #ffffff; font-size: 14px; margin: 15px 0 0 0; }
-        .benefits { margin: 20px 0; }
-        .benefit-item { color: #333; font-size: 16px; line-height: 32px; margin: 0; }
-        .urgency { color: #dc2626; font-size: 16px; font-weight: bold; line-height: 24px; margin: 20px 0; }
-        .button-container { text-align: center; margin: 30px 0; }
+        .container { 
+          max-width: 600px; 
+          margin: 20px auto; 
+          padding: 0; 
+          background-color: #ffffff; 
+          border-radius: 16px;
+          overflow: hidden;
+          box-shadow: 0 4px 20px rgba(124, 92, 255, 0.1);
+        }
+        .test-banner { 
+          background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); 
+          padding: 12px; 
+          text-align: center; 
+        }
+        .test-banner-text { 
+          color: #000; 
+          font-size: 14px; 
+          font-weight: bold; 
+          margin: 0; 
+        }
+        .header { 
+          text-align: center; 
+          padding: 30px 20px 20px;
+          background: linear-gradient(135deg, #F8F6FF 0%, #E6DEFF 100%);
+        }
+        .header h1 { 
+          color: #7C5CFF; 
+          font-size: 32px; 
+          font-weight: bold; 
+          margin: 0; 
+        }
+        .content { 
+          padding: 30px 30px; 
+        }
+        .text { 
+          color: #2B1342; 
+          font-size: 16px; 
+          line-height: 26px; 
+          margin: 16px 0; 
+        }
+        .discount-box { 
+          background: linear-gradient(135deg, #7C5CFF 0%, #6643FF 100%);
+          border-radius: 16px;
+          padding: 30px;
+          text-align: center;
+          margin: 30px 0;
+          box-shadow: 0 8px 25px rgba(124, 92, 255, 0.3);
+        }
+        .discount-title { 
+          color: #ffffff; 
+          font-size: 56px; 
+          font-weight: bold; 
+          margin: 0;
+          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .discount-subtitle { 
+          color: #ffffff; 
+          font-size: 22px; 
+          margin: 10px 0;
+          font-weight: 500;
+        }
+        .discount-validity { 
+          color: #F0ECFF; 
+          font-size: 14px; 
+          margin: 20px 0 0 0;
+          font-weight: 600;
+        }
+        .benefits { 
+          margin: 25px 0; 
+          background: #F8F6FF;
+          padding: 20px;
+          border-radius: 12px;
+          border-left: 4px solid #7C5CFF;
+        }
+        .benefit-item { 
+          color: #2B1342; 
+          font-size: 16px; 
+          line-height: 32px; 
+          margin: 8px 0; 
+        }
+        .urgency { 
+          color: #dc2626; 
+          font-size: 16px; 
+          font-weight: bold; 
+          line-height: 24px; 
+          margin: 25px 0;
+          padding: 15px;
+          background: #fef2f2;
+          border-radius: 8px;
+          border-left: 4px solid #dc2626;
+        }
+        .button-container { 
+          text-align: center; 
+          margin: 30px 0; 
+        }
         .cta-button { 
           display: inline-block;
-          background-color: #dc2626;
-          border-radius: 8px;
+          background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+          border-radius: 12px;
           color: #ffffff;
           font-size: 18px;
           font-weight: bold;
           text-decoration: none;
-          padding: 15px 40px;
+          padding: 16px 45px;
+          box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+          transition: all 0.3s ease;
         }
-        .small-text { color: #666; font-size: 12px; text-align: center; margin: 15px 0; }
+        .small-text { 
+          color: #666; 
+          font-size: 13px; 
+          text-align: center; 
+          margin: 15px 0; 
+        }
         .code-info { 
-          background-color: #f9fafb;
-          padding: 15px;
-          border-radius: 8px;
-          font-size: 12px;
-          color: #666;
-          margin: 20px 0;
-          border: 1px solid #e5e7eb;
+          background: linear-gradient(135deg, #F8F6FF 0%, #E6DEFF 100%);
+          padding: 20px;
+          border-radius: 12px;
+          font-size: 13px;
+          color: #2B1342;
+          margin: 25px 0;
+          border: 2px solid #D1C1FF;
         }
         .footer { 
           color: #666;
           font-size: 14px;
           text-align: center;
           margin-top: 40px;
-          padding-top: 20px;
-          border-top: 1px solid #eee;
+          padding: 30px 20px;
+          background: #F8F6FF;
+          border-top: 2px solid #E6DEFF;
         }
       </style>
     </head>
