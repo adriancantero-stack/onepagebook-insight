@@ -3,18 +3,19 @@ import { AchievementAnimation } from './AchievementAnimation';
 import { useAchievementStore } from '@/hooks/useXP';
 
 export const GlobalAchievementNotification = () => {
-  const { notification, setNotification } = useAchievementStore();
+  const { notification, setNotification, processQueue } = useAchievementStore();
 
   useEffect(() => {
     if (notification?.show) {
-      // Auto-clear after animation completes
+      // Auto-clear after animation completes and process next item
       const timer = setTimeout(() => {
         setNotification(null);
+        processQueue();
       }, 6000);
 
       return () => clearTimeout(timer);
     }
-  }, [notification, setNotification]);
+  }, [notification, setNotification, processQueue]);
 
   if (!notification) return null;
 

@@ -3,18 +3,19 @@ import { XPCelebration } from './XPCelebration';
 import { useAchievementStore } from '@/hooks/useXP';
 
 export const GlobalXPCelebration = () => {
-  const { xpCelebration, setXPCelebration } = useAchievementStore();
+  const { xpCelebration, setXPCelebration, processQueue } = useAchievementStore();
 
   useEffect(() => {
     if (xpCelebration?.show) {
-      // Auto-clear after animation completes
+      // Auto-clear after animation completes and process next item
       const timer = setTimeout(() => {
         setXPCelebration(null);
+        processQueue();
       }, 3500);
 
       return () => clearTimeout(timer);
     }
-  }, [xpCelebration, setXPCelebration]);
+  }, [xpCelebration, setXPCelebration, processQueue]);
 
   if (!xpCelebration) return null;
 

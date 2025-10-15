@@ -30,20 +30,43 @@ interface AchievementStore {
   setNotification: (notification: AchievementNotification | null) => void;
   xpCelebration: XPCelebration | null;
   setXPCelebration: (celebration: XPCelebration | null) => void;
+  celebrationQueue: Array<{ type: 'achievement' | 'xp', data: AchievementNotification | XPCelebration }>;
+  addToQueue: (item: { type: 'achievement' | 'xp', data: AchievementNotification | XPCelebration }) => void;
+  processQueue: () => void;
 }
 
-export const useAchievementStore = create<AchievementStore>((set) => ({
+export const useAchievementStore = create<AchievementStore>((set, get) => ({
   notification: null,
   setNotification: (notification) => set({ notification }),
   xpCelebration: null,
   setXPCelebration: (xpCelebration) => set({ xpCelebration }),
+  celebrationQueue: [],
+  addToQueue: (item) => {
+    set((state) => ({ celebrationQueue: [...state.celebrationQueue, item] }));
+    // Se não há nada sendo exibido, processa a fila
+    if (!get().notification && !get().xpCelebration) {
+      get().processQueue();
+    }
+  },
+  processQueue: () => {
+    const { celebrationQueue } = get();
+    if (celebrationQueue.length === 0) return;
+    
+    const [nextItem, ...rest] = celebrationQueue;
+    set({ celebrationQueue: rest });
+    
+    if (nextItem.type === 'achievement') {
+      set({ notification: nextItem.data as AchievementNotification });
+    } else {
+      set({ xpCelebration: nextItem.data as XPCelebration });
+    }
+  },
 }));
 
 export function useXP() {
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
-  const setNotification = useAchievementStore((state) => state.setNotification);
-  const setXPCelebration = useAchievementStore((state) => state.setXPCelebration);
+  const addToQueue = useAchievementStore((state) => state.addToQueue);
 
   /**
    * Add XP to user and check for level-up
@@ -81,13 +104,16 @@ export function useXP() {
       if (result.leveled_up) {
         const levelInfo = calculateLevel(result.new_xp);
         
-        // Show level up animation
-        setNotification({
-          show: true,
-          title: `Level Up! ${t(`levels.${result.new_level}`)}`,
-          description: t('toast.levelUp'),
-          icon: levelInfo.icon,
-          xpReward: 100 // Bonus XP is already added by backend
+        // Add level up animation to queue
+        addToQueue({
+          type: 'achievement',
+          data: {
+            show: true,
+            title: `Level Up! ${t(`levels.${result.new_level}`)}`,
+            description: t('toast.levelUp'),
+            icon: levelInfo.icon,
+            xpReward: 100
+          }
         });
       } else {
         // Show XP celebration in center of screen
@@ -101,10 +127,13 @@ export function useXP() {
           'achievement_unlocked': '🏆 Conquista desbloqueada!'
         };
 
-        setXPCelebration({
-          show: true,
-          xpAmount,
-          message: celebrationMessages[eventType] || `+${xpAmount} XP ganhos!`
+        addToQueue({
+          type: 'xp',
+          data: {
+            show: true,
+            xpAmount,
+            message: celebrationMessages[eventType] || `+${xpAmount} XP ganhos!`
+          }
         });
       }
 
