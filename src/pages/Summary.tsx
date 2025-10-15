@@ -717,9 +717,33 @@ const Summary = () => {
         audio.volume = 0.5;
         audio.play().catch(err => console.log('Audio play failed:', err));
 
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        // Check if this is the first time user listens to this audio
+        if (user && summary?.id) {
+          const { data: existingPlay } = await supabase
+            .from('user_audio_plays')
+            .select('id')
+            .eq('user_id', user.id)
+            .eq('book_summary_id', summary.id)
+            .maybeSingle();
+
+          // If first time listening, award XP and track it
+          if (!existingPlay) {
+            await supabase
+              .from('user_audio_plays')
+              .insert({
+                user_id: user.id,
+                book_summary_id: summary.id
+              });
+
+            // Award XP for first audio listen (10 XP)
+            await addXP('audio_listened', 10);
+          }
+        }
+
         // Increment counter only if audio was newly generated (not cached)
         if (!data.cached) {
-          const { data: { user } } = await supabase.auth.getUser();
           if (user) {
             const { data: subscription } = await supabase
               .from("user_subscriptions")
@@ -740,7 +764,7 @@ const Summary = () => {
               });
             }
             
-            // Add XP for generating audio
+            // Add XP for generating audio (only when newly generated)
             addXP('audio_generated', 5);
           }
         } else {

@@ -629,6 +629,27 @@ export type Database = {
           },
         ]
       }
+      user_audio_plays: {
+        Row: {
+          book_summary_id: string
+          id: string
+          played_at: string
+          user_id: string
+        }
+        Insert: {
+          book_summary_id: string
+          id?: string
+          played_at?: string
+          user_id: string
+        }
+        Update: {
+          book_summary_id?: string
+          id?: string
+          played_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string | null
