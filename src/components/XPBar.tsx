@@ -58,7 +58,7 @@ export const XPBar = ({ currentXP, level, showDetails = true }: XPBarProps) => {
       {/* Next milestone */}
       {!isMaxLevel && showDetails && (
         <p className="text-xs text-center text-muted-foreground">
-          {t('profile.needXP', { xp: formatXP(nextLevelXP - currentXP) })} <span className="font-medium text-purple-500">
+          {t('profile.needXP', { xp: formatXP(nextLevelXP - currentXP), defaultValue: 'Faltam {{xp}} XP para alcançar' })} <span className="font-medium text-purple-500">
             {t(`levels.${calculateLevel(nextLevelXP).name}`)}
           </span>
         </p>
