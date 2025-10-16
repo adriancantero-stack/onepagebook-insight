@@ -18,22 +18,22 @@ export const PracticalExamples = ({ examples }: PracticalExamplesProps) => {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {examples.map((example, index) => (
         <Card
           key={index}
-          className="p-6 border-l-4 border-l-primary hover:shadow-md transition-shadow"
+          className="p-4 sm:p-6 border-l-4 border-l-primary hover:shadow-md transition-shadow"
         >
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {/* Title */}
-            <div className="flex items-start gap-3">
-              <Lightbulb className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-              <h4 className="font-semibold text-lg">{example.title}</h4>
+            <div className="flex items-start gap-2 sm:gap-3">
+              <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0 mt-0.5" />
+              <h4 className="font-semibold text-base sm:text-lg">{example.title}</h4>
             </div>
 
             {/* Context */}
-            <div className="pl-8 space-y-2">
-              <div className="flex items-start gap-2 text-sm">
+            <div className="pl-6 sm:pl-8 space-y-2">
+              <div className="flex items-start gap-2 text-xs sm:text-sm">
                 <span className="font-medium text-muted-foreground shrink-0">
                   Contexto:
                 </span>
@@ -43,8 +43,8 @@ export const PracticalExamples = ({ examples }: PracticalExamplesProps) => {
               </div>
 
               {/* Application */}
-              <div className="flex items-start gap-2 text-sm">
-                <Target className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2 text-xs sm:text-sm">
+                <Target className="w-3 h-3 sm:w-4 sm:h-4 text-primary shrink-0 mt-0.5" />
                 <div>
                   <span className="font-medium text-muted-foreground">
                     Aplicação:
@@ -56,8 +56,8 @@ export const PracticalExamples = ({ examples }: PracticalExamplesProps) => {
               </div>
 
               {/* Expected Result */}
-              <div className="flex items-start gap-2 text-sm bg-primary/5 p-3 rounded-lg">
-                <TrendingUp className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2 text-xs sm:text-sm bg-primary/5 p-2 sm:p-3 rounded-lg">
+                <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 text-primary shrink-0 mt-0.5" />
                 <div>
                   <span className="font-medium text-primary">
                     Resultado Esperado:

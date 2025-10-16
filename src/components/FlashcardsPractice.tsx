@@ -114,24 +114,26 @@ export const FlashcardsPractice = ({ flashcards }: FlashcardsPracticeProps) => {
       </Card>
 
       {/* Navigation buttons */}
-      <div className="flex justify-between gap-4">
+      <div className="flex justify-between gap-2 sm:gap-4">
         <Button
           onClick={handlePrevious}
           disabled={currentIndex === 0}
           variant="outline"
-          className="flex-1"
+          className="flex-1 text-xs sm:text-sm"
         >
-          <ChevronLeft className="w-4 h-4 mr-1" />
-          Anterior
+          <ChevronLeft className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+          <span className="hidden xs:inline">Anterior</span>
+          <span className="xs:hidden">Ant</span>
         </Button>
         <Button
           onClick={handleNext}
           disabled={currentIndex === flashcards.length - 1}
           variant="outline"
-          className="flex-1"
+          className="flex-1 text-xs sm:text-sm"
         >
-          Próximo
-          <ChevronRight className="w-4 h-4 ml-1" />
+          <span className="hidden xs:inline">Próximo</span>
+          <span className="xs:hidden">Prox</span>
+          <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1" />
         </Button>
       </div>
     </div>
