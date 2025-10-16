@@ -4,6 +4,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, Authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
 serve(async (req) => {
@@ -13,7 +14,7 @@ serve(async (req) => {
 
   try {
     const { summaryId, type } = await req.json();
-    
+    console.log('[generate-learning-content] invoked', { type, summaryId });
     if (!summaryId || !type) {
       return new Response(
         JSON.stringify({ error: 'summaryId and type are required' }),
