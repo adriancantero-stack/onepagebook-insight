@@ -95,33 +95,33 @@ export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => 
     <div className="mt-10 sm:mt-12 pt-10 border-t border-[#E5E5EA]">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <Card className="border-[#E5E5EA] rounded-2xl overflow-hidden">
-          <CollapsibleTrigger className="w-full p-6 flex items-center justify-between hover:bg-muted/50 transition-colors">
-            <div className="flex items-center gap-3">
-              <BookOpen className="w-6 h-6 text-primary" />
+          <CollapsibleTrigger className="w-full p-4 sm:p-6 flex items-center justify-between hover:bg-muted/50 transition-colors">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 text-primary shrink-0" />
               <div className="text-left">
-                <h3 className="text-xl font-semibold text-foreground">
+                <h3 className="text-lg sm:text-xl font-semibold text-foreground">
                   {t("summary.deepenKnowledge")}
                 </h3>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                   {t("summary.deepenKnowledgeDesc")}
                 </p>
               </div>
             </div>
             <ChevronDown
-              className={`w-5 h-5 text-muted-foreground transition-transform ${
+              className={`w-5 h-5 text-muted-foreground transition-transform shrink-0 ${
                 isOpen ? 'rotate-180' : ''
               }`}
             />
           </CollapsibleTrigger>
 
           <CollapsibleContent className="animate-accordion-down">
-            <div className="p-6 pt-0 space-y-6">
+            <div className="p-4 sm:p-6 pt-0 space-y-4 sm:space-y-6">
               {/* Flashcards Section */}
                 <div className="space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div className="flex items-center gap-2">
-                    <Target className="w-5 h-5 text-primary" />
-                    <h4 className="font-semibold">{t("summary.flashcardsTitle")}</h4>
+                    <Target className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0" />
+                    <h4 className="text-sm sm:text-base font-semibold">{t("summary.flashcardsTitle")}</h4>
                   </div>
                   {!flashcards && (
                     <Button
@@ -146,11 +146,11 @@ export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => 
               </div>
 
               {/* Practical Examples Section */}
-              <div className="space-y-4 pt-6 border-t border-border">
+              <div className="space-y-4 pt-4 sm:pt-6 border-t border-border">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div className="flex items-center gap-2">
-                    <Lightbulb className="w-5 h-5 text-primary" />
-                    <h4 className="font-semibold">{t("summary.practicalExamplesTitle")}</h4>
+                    <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0" />
+                    <h4 className="text-sm sm:text-base font-semibold">{t("summary.practicalExamplesTitle")}</h4>
                   </div>
                   {!examples && (
                     <Button
