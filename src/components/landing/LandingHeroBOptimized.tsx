@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
+import { DemoCarousel } from "./DemoCarousel";
 
 interface LandingHeroBOptimizedProps {
   onCTA: () => void;
@@ -59,21 +60,9 @@ export default function LandingHeroBOptimized({ onCTA }: LandingHeroBOptimizedPr
             </div>
           </div>
 
-          {/* Visual Demo Placeholder */}
+          {/* Visual Demo Carousel */}
           <div className="relative mt-8 lg:mt-0">
-            <div className="aspect-[4/3] rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary/10 to-purple-100/50 shadow-xl sm:shadow-2xl border border-primary/20 flex items-center justify-center p-4">
-              <p className="text-xs sm:text-sm text-muted-foreground text-center">
-                [Carrossel de demonstração visual:<br />
-                Resumo → Áudio → Flashcards → Exemplos]
-              </p>
-            </div>
-
-            <div className="absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-4 bg-background p-3 sm:p-4 rounded-lg sm:rounded-xl shadow-lg border max-w-[200px] sm:max-w-none">
-              <p className="text-xs sm:text-sm font-medium">
-                Seu cérebro não quer só ler.<br />
-                Ele quer <span className="text-primary">entender, lembrar e aplicar.</span>
-              </p>
-            </div>
+            <DemoCarousel />
           </div>
         </div>
       </div>
