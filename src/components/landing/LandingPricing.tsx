@@ -79,6 +79,14 @@ export const LandingPricing = ({ onCTA }: LandingPricingProps) => {
                 <Check className="h-5 w-5 shrink-0 text-primary" />
                 <span>{t("landing.plans.premium.feature5")}</span>
               </li>
+              <li className="flex items-start gap-2">
+                <Check className="h-5 w-5 shrink-0 text-primary" />
+                <span>{t("landing.plans.premium.feature6")}</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="h-5 w-5 shrink-0 text-primary" />
+                <span>{t("landing.plans.premium.feature7")}</span>
+              </li>
             </ul>
 
             <Button onClick={onCTA} className="mb-4 w-full shadow-lg transition-all hover:scale-105">
