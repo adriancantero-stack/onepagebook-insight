@@ -27,8 +27,31 @@ export default function LandingRedirect() {
         
         const targetLang = langMap[browserLang] || "pt";
         
-        // Redirect to the appropriate language version
-        navigate(`/${targetLang}`, { replace: true });
+        // Check if A/B test is active and determine variant
+        const { data: config } = await supabase
+          .from('ab_test_config')
+          .select('is_active, split_percentage')
+          .single();
+
+        // Check if session already has a variant
+        const existingVariant = localStorage.getItem('ab_test_variant');
+        
+        let variant = 'A';
+        
+        if (config?.is_active) {
+          if (existingVariant) {
+            variant = existingVariant;
+          } else {
+            // Random split
+            const random = Math.random() * 100;
+            variant = random < (config.split_percentage || 50) ? 'A' : 'B';
+            localStorage.setItem('ab_test_variant', variant);
+          }
+        }
+        
+        // Redirect to appropriate landing page
+        const suffix = variant === 'B' ? '2' : '';
+        navigate(`/${targetLang}${suffix}`, { replace: true });
       }
       
       setIsChecking(false);

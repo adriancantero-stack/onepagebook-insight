@@ -14,6 +14,98 @@ export type Database = {
   }
   public: {
     Tables: {
+      ab_test_config: {
+        Row: {
+          ended_at: string | null
+          id: string
+          is_active: boolean | null
+          split_percentage: number | null
+          started_at: string | null
+          winner_variant: string | null
+        }
+        Insert: {
+          ended_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          split_percentage?: number | null
+          started_at?: string | null
+          winner_variant?: string | null
+        }
+        Update: {
+          ended_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          split_percentage?: number | null
+          started_at?: string | null
+          winner_variant?: string | null
+        }
+        Relationships: []
+      }
+      ab_test_conversions: {
+        Row: {
+          conversion_type: string
+          created_at: string | null
+          id: string
+          language: string
+          session_id: string
+          variant: string
+        }
+        Insert: {
+          conversion_type: string
+          created_at?: string | null
+          id?: string
+          language: string
+          session_id: string
+          variant: string
+        }
+        Update: {
+          conversion_type?: string
+          created_at?: string | null
+          id?: string
+          language?: string
+          session_id?: string
+          variant?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ab_test_conversions_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "ab_test_sessions"
+            referencedColumns: ["session_id"]
+          },
+        ]
+      }
+      ab_test_sessions: {
+        Row: {
+          created_at: string | null
+          id: string
+          language: string
+          referrer: string | null
+          session_id: string
+          user_agent: string | null
+          variant: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          language: string
+          referrer?: string | null
+          session_id: string
+          user_agent?: string | null
+          variant: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          language?: string
+          referrer?: string | null
+          session_id?: string
+          user_agent?: string | null
+          variant?: string
+        }
+        Relationships: []
+      }
       achievements: {
         Row: {
           created_at: string | null

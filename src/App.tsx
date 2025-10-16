@@ -12,6 +12,7 @@ import { lazy, Suspense } from "react";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import Landing from "./pages/Landing";
+import LandingB from "./pages/LandingB";
 import LandingRedirect from "./pages/LandingRedirect";
 
 // Lazy load secondary routes
@@ -30,6 +31,7 @@ const Profile = lazy(() => import("./pages/Profile"));
 const Achievements = lazy(() => import("./pages/Achievements"));
 const Ranking = lazy(() => import("./pages/Ranking"));
 const Settings = lazy(() => import("./pages/Settings"));
+const ABTestDashboard = lazy(() => import("./pages/ABTestDashboard"));
 
 const Admin = lazy(() => import("./pages/Admin"));
 const PopulateBooks = lazy(() => import("./pages/PopulateBooks"));
@@ -74,6 +76,9 @@ const App = () => (
             <Route path="/pt" element={<Landing lang="pt" />} />
             <Route path="/es" element={<Landing lang="es" />} />
             <Route path="/en" element={<Landing lang="en" />} />
+            <Route path="/pt2" element={<LandingB lang="pt" />} />
+            <Route path="/es2" element={<LandingB lang="es" />} />
+            <Route path="/en2" element={<LandingB lang="en" />} />
             <Route path="/home" element={<Home />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/pt/auth" element={<Auth />} />
@@ -104,6 +109,7 @@ const App = () => (
             <Route path="/en/privacy" element={<Privacy />} />
             <Route path="/en/faq" element={<Faq />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/admin/ab-test" element={<ABTestDashboard />} />
             <Route path="/populate-books" element={<PopulateBooks />} />
             <Route path="/curation/people" element={<CurationPeople />} />
             <Route path="/deduplicate-books" element={<DeduplicateBooks />} />
