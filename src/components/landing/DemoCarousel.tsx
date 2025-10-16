@@ -99,51 +99,51 @@ const slides = [
     description: "Memorize conceitos-chave facilmente",
     color: "from-orange-500 to-red-500",
     content: (
-      <div className="relative w-full h-full flex items-center justify-center p-2">
-        <motion.div
-          className="bg-white rounded-lg shadow-2xl w-full sm:w-4/5 h-full sm:h-4/5 flex flex-col border-2 border-primary/20 relative overflow-hidden"
-          animate={{ rotateY: [0, 0, 0, 180, 180, 180, 0] }}
-          transition={{ duration: 6, repeat: Infinity, times: [0, 0.3, 0.4, 0.5, 0.8, 0.9, 1] }}
-          style={{ transformStyle: "preserve-3d" }}
-        >
-          {/* Front - Question */}
+      <div className="relative w-full h-full flex items-center justify-center p-4">
+        <div className="relative w-full sm:w-3/4 lg:w-2/3 aspect-[3/2] max-h-[200px] sm:max-h-[250px]" style={{ perspective: "1000px" }}>
           <motion.div
-            className="absolute inset-0 flex flex-col justify-between p-4 sm:p-6"
-            style={{ backfaceVisibility: "hidden" }}
+            className="absolute inset-0"
+            animate={{ rotateY: [0, 0, 0, 180, 180, 180, 0] }}
+            transition={{ duration: 6, repeat: Infinity, times: [0, 0.3, 0.4, 0.5, 0.8, 0.9, 1] }}
+            style={{ transformStyle: "preserve-3d" }}
           >
-            <div className="flex-1 flex flex-col justify-center items-center text-center gap-3 sm:gap-4">
-              <div className="inline-flex px-3 py-1 bg-primary/10 rounded-full">
-                <span className="text-xs font-medium text-primary">Pergunta</span>
+            {/* Front - Question */}
+            <div
+              className="absolute inset-0 bg-white rounded-lg shadow-xl flex flex-col justify-between p-4 sm:p-6 border-2 border-primary/20"
+              style={{ backfaceVisibility: "hidden" }}
+            >
+              <div className="flex-1 flex flex-col justify-center items-center text-center gap-2 sm:gap-3">
+                <div className="inline-flex px-3 py-1 bg-primary/10 rounded-full">
+                  <span className="text-xs font-medium text-primary">Pergunta</span>
+                </div>
+                <p className="text-sm sm:text-base font-semibold text-foreground px-2">
+                  O que são hábitos atômicos?
+                </p>
               </div>
-              <p className="text-sm sm:text-base lg:text-lg font-semibold text-foreground px-4">
-                O que são hábitos atômicos?
-              </p>
+              <div className="text-center text-xs text-muted-foreground">
+                Toque para ver a resposta
+              </div>
             </div>
-            <div className="text-center text-xs text-muted-foreground">
-              Toque para ver a resposta
+
+            {/* Back - Answer */}
+            <div
+              className="absolute inset-0 bg-gradient-to-br from-primary/5 to-purple-50 rounded-lg shadow-xl flex flex-col justify-between p-4 sm:p-6 border-2 border-primary/20"
+              style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+            >
+              <div className="flex-1 flex flex-col justify-center items-center text-center gap-2 sm:gap-3">
+                <div className="inline-flex px-3 py-1 bg-green-100 rounded-full">
+                  <span className="text-xs font-medium text-green-700">Resposta</span>
+                </div>
+                <p className="text-xs sm:text-sm text-foreground/90 px-2 leading-relaxed">
+                  Pequenas mudanças que, quando repetidas consistentemente, geram resultados extraordinários ao longo do tempo.
+                </p>
+              </div>
+              <div className="text-center text-xs text-muted-foreground">
+                Auto-flip em progresso
+              </div>
             </div>
           </motion.div>
-
-          {/* Back - Answer */}
-          <motion.div
-            className="absolute inset-0 flex flex-col justify-between p-4 sm:p-6 bg-gradient-to-br from-primary/5 to-purple-50"
-            style={{ backfaceVisibility: "hidden", rotateY: "180deg" }}
-          >
-            <div className="flex-1 flex flex-col justify-center items-center text-center gap-3 sm:gap-4">
-              <div className="inline-flex px-3 py-1 bg-green-100 rounded-full">
-                <span className="text-xs font-medium text-green-700">Resposta</span>
-              </div>
-              <p className="text-xs sm:text-sm text-foreground/90 px-4 leading-relaxed">
-                Pequenas mudanças que, quando repetidas consistentemente, geram resultados extraordinários ao longo do tempo.
-              </p>
-            </div>
-            <div className="text-center text-xs text-muted-foreground">
-              Auto-flip em progresso
-            </div>
-          </motion.div>
-
-          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-primary/5 pointer-events-none" />
-        </motion.div>
+        </div>
       </div>
     ),
   },
