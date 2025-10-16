@@ -47,7 +47,7 @@ export const pt = {
       finalCta: {
         badge: "Junte-se a milhares de leitores",
         headline: "Transforme sua forma de aprender hoje",
-        subtext: "Junte-se a milhares de leitores que já usam IA para crescer mais rápido",
+        subtext: "📚 Não basta ler. Você precisa entender. Lembrar. E aplicar. Torne-se 1% melhor por dia. Em menos de 10 minutos.",
         cta: "Começar agora — grátis",
         free: "Grátis para começar",
         noCard: "Sem cartão de crédito",
