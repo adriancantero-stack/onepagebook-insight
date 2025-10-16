@@ -47,17 +47,17 @@ export const es = {
         weeklyCount: "resúmenes generados esta semana",
         testimonial1: {
           text: "Aprendí más aquí en 3 días que en 6 meses de lectura suelta.",
-          author: "Carlos Silva",
+          author: "Diego Martínez",
           role: "Emprendedor"
         },
         testimonial2: {
           text: "Creé el hábito de aprender 1 idea por día. Mi vida cambió.",
-          author: "Ana Santos",
+          author: "María García",
           role: "Diseñadora"
         },
         testimonial3: {
           text: "Lo uso en el carro, en la pausa del trabajo, en el baño. ¡Es adictivo!",
-          author: "Bruno Costa",
+          author: "Carlos Rodríguez",
           role: "Consultor"
         }
       },

@@ -47,17 +47,17 @@ export const en = {
         weeklyCount: "summaries generated this week",
         testimonial1: {
           text: "I learned more here in 3 days than in 6 months of random reading.",
-          author: "Carlos Silva",
+          author: "James Anderson",
           role: "Entrepreneur"
         },
         testimonial2: {
           text: "I created the habit of learning 1 idea per day. My life changed.",
-          author: "Ana Santos",
+          author: "Sarah Mitchell",
           role: "Designer"
         },
         testimonial3: {
           text: "I use it in the car, during work breaks, in the bathroom. It's addictive!",
-          author: "Bruno Costa",
+          author: "Michael Roberts",
           role: "Consultant"
         }
       },
