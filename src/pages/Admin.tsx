@@ -544,79 +544,51 @@ const Admin = () => {
 
   const handleImportGoogleBooks = async () => {
     setImporting(true);
-    setImportProgress(null);
-
+    setImportProgress({ current: 0, total: 100, lang: 'multi' });
+    
+    toast.info("Importando 100 livros diversificados...", {
+      description: "Google Books + Open Library, múltiplas categorias"
+    });
+    
     try {
-      const languages = ['pt', 'en', 'es'];
-      const targetPerLang = 100;
-      let totalImported = 0;
-      let totalSkipped = 0;
+      const { data, error } = await supabase.functions.invoke("daily-book-import");
 
-      for (const lang of languages) {
-        setImportProgress({ current: 0, total: targetPerLang, lang });
+      if (error) throw error;
+
+      if (data?.stats) {
+        const { inserted, skipped, errors, target } = data.stats;
         
-        let imported = 0;
-        let attempts = 0;
-        const maxAttempts = 200; // Try up to 200 books to get 100 unique ones
+        setImportProgress({ current: inserted, total: target, lang: 'done' });
         
-        const categories = lang === 'pt' 
-          ? ['negócios', 'autoajuda', 'psicologia', 'saúde', 'desenvolvimento pessoal']
-          : lang === 'es'
-          ? ['negocios', 'autoayuda', 'psicología', 'salud', 'desarrollo personal']
-          : ['business', 'self-help', 'psychology', 'health', 'personal development'];
-
-        while (imported < targetPerLang && attempts < maxAttempts) {
-          const category = categories[attempts % categories.length];
-          
-          try {
-            // Fetch small batch from Google Books
-            const { data, error } = await supabase.functions.invoke("import-google-books", {
-              body: { 
-                lang,
-                target: 20, // Small batches
-                categories: [category]
-              }
-            });
-
-            if (error) {
-              console.error(`Error importing ${lang}:`, error);
-              break;
-            }
-
-            if (data?.stats) {
-              imported += data.stats.inserted || 0;
-              totalSkipped += data.stats.skipped || 0;
-              setImportProgress({ current: imported, total: targetPerLang, lang });
-            }
-
-            attempts += 20;
-            
-            // Small delay between requests
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-          } catch (error) {
-            console.error(`Error in batch for ${lang}:`, error);
-            break;
-          }
+        if (inserted > 0) {
+          toast.success("Importação concluída!", {
+            description: `✅ ${inserted} livros importados, ⏭️ ${skipped} já existiam${errors > 0 ? `, ⚠️ ${errors} erros` : ''}`
+          });
+        } else if (skipped > 0) {
+          toast.info("Todos os livros já existiam no catálogo", {
+            description: `${skipped} livros encontrados mas já estavam cadastrados`
+          });
+        } else {
+          toast.warning("Nenhum livro foi importado", {
+            description: "Tente novamente ou verifique os logs"
+          });
         }
 
-        totalImported += imported;
-        toast.success(`${lang.toUpperCase()}: ${imported} livros importados`);
+        // Show import log if available
+        if (data.log && data.log.length > 0) {
+          console.log("📋 Import Log:", data.log.join('\n'));
+        }
       }
-
-      toast.success("Importação concluída!", {
-        description: `${totalImported} livros importados, ${totalSkipped} já existiam`
-      });
 
       await loadAdminData();
     } catch (error) {
       console.error("Import error:", error);
-      toast.error("Erro", {
-        description: "Falha ao importar livros"
+      toast.error("Erro ao importar livros", {
+        description: error instanceof Error ? error.message : "Falha na importação"
       });
     } finally {
       setImporting(false);
-      setImportProgress(null);
+      setTimeout(() => setImportProgress(null), 2000);
     }
   };
 

@@ -116,3 +116,6 @@ verify_jwt = false
 
 [functions.test-welcome-email]
 verify_jwt = false
+
+[functions.daily-book-import]
+verify_jwt = false
