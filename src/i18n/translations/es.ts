@@ -46,19 +46,19 @@ export const es = {
         title: "Lo que dicen los lectores", 
         weeklyCount: "resúmenes generados esta semana",
         testimonial1: {
-          text: "¡Increíble! Absorbí 5 libros en una semana.",
-          author: "Sarah Johnson",
-          role: "Emprendedora"
+          text: "Aprendí más aquí en 3 días que en 6 meses de lectura suelta.",
+          author: "Carlos Silva",
+          role: "Emprendedor"
         },
         testimonial2: {
-          text: "Directo al punto — perfecto para personas ocupadas.",
-          author: "Michael Davis",
-          role: "Gerente"
+          text: "Creé el hábito de aprender 1 idea por día. Mi vida cambió.",
+          author: "Ana Santos",
+          role: "Diseñadora"
         },
         testimonial3: {
-          text: "¡La función de audio es sensacional!",
-          author: "Emily Thompson",
-          role: "Consultora"
+          text: "Lo uso en el carro, en la pausa del trabajo, en el baño. ¡Es adictivo!",
+          author: "Bruno Costa",
+          role: "Consultor"
         }
       },
       pricing: {
@@ -94,7 +94,7 @@ export const es = {
       finalCta: {
         badge: "Únete a miles de lectores",
         headline: "Transforma tu forma de aprender hoy",
-        subtext: "Únete a miles de lectores que ya usan IA para crecer más rápido",
+        subtext: "📚 No basta con leer. Necesitas entender. Recordar. Y aplicar. Conviértete en 1% mejor cada día. En menos de 10 minutos.",
         cta: "Comenzar ahora — es gratis",
         free: "Gratis para comenzar",
         noCard: "Sin tarjeta de crédito",

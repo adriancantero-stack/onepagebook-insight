@@ -46,18 +46,18 @@ export const en = {
         title: "What readers say", 
         weeklyCount: "summaries generated this week",
         testimonial1: {
-          text: "Amazing! I absorbed 5 books in a week.",
-          author: "Sarah Johnson",
+          text: "I learned more here in 3 days than in 6 months of random reading.",
+          author: "Carlos Silva",
           role: "Entrepreneur"
         },
         testimonial2: {
-          text: "Straight to the point — perfect for busy people.",
-          author: "Michael Davis",
-          role: "Manager"
+          text: "I created the habit of learning 1 idea per day. My life changed.",
+          author: "Ana Santos",
+          role: "Designer"
         },
         testimonial3: {
-          text: "The audio feature is amazing!",
-          author: "Emily Thompson",
+          text: "I use it in the car, during work breaks, in the bathroom. It's addictive!",
+          author: "Bruno Costa",
           role: "Consultant"
         }
       },
@@ -94,7 +94,7 @@ export const en = {
       finalCta: {
         badge: "Join thousands of readers",
         headline: "Transform the way you learn today",
-        subtext: "Join thousands of readers who already use AI to grow faster",
+        subtext: "📚 It's not enough to read. You need to understand. Remember. And apply. Become 1% better every day. In less than 10 minutes.",
         cta: "Start now — it's free",
         free: "Free to start",
         noCard: "No credit card",
