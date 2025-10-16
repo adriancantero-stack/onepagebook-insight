@@ -947,7 +947,7 @@ const Summary = () => {
                       <img
                         src={(book as any).cover || "/book-placeholder.png"}
                         alt={book.title}
-                        className="w-full sm:w-16 h-48 sm:h-24 object-cover rounded-lg shrink-0"
+                        className="w-full sm:w-16 h-48 sm:h-24 object-contain rounded-lg shrink-0"
                         onError={(e) => {
                           e.currentTarget.src = "/book-placeholder.png";
                         }}
