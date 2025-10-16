@@ -479,19 +479,19 @@ const Explore = () => {
     <div className="min-h-screen bg-lilac-50 flex flex-col">
       <FloatingHeader />
 
-      <main className="container mx-auto px-4 sm:px-8 lg:px-16 xl:px-24 py-6 sm:py-10 flex-1">
+      <main className="container mx-auto px-3 sm:px-8 lg:px-16 xl:px-24 py-4 sm:py-10 flex-1">
         {/* Apple-style Header */}
-        <div className="mb-8 sm:mb-12 text-center max-w-3xl mx-auto px-2">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[#1D1D1F] mb-3 tracking-tight">
+        <div className="mb-6 sm:mb-12 text-center max-w-3xl mx-auto px-2">
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-semibold text-[#1D1D1F] mb-2 tracking-tight">
             {t("explore.header.title")}
           </h1>
-          <p className="text-base sm:text-lg text-[#86868B] font-normal">
+          <p className="text-sm sm:text-lg text-[#86868B] font-normal">
             {t("explore.header.subtitle")}
           </p>
         </div>
 
         {/* Centered Search Bar */}
-        <div className="mb-8 sm:mb-12 max-w-3xl mx-auto">
+        <div className="mb-6 sm:mb-12 max-w-3xl mx-auto">
           <div className="relative">
             <BookAutocomplete
               hideExploreLink={true}
@@ -525,8 +525,8 @@ const Explore = () => {
 
         {/* People Picks Section */}
         {featuredPeople.length > 0 && (
-          <section className="mb-8 sm:mb-12 max-w-6xl mx-auto">
-            <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-[#1D1D1F] mb-4 sm:mb-6">
+          <section className="mb-6 sm:mb-12 max-w-6xl mx-auto">
+            <h2 className="text-lg sm:text-2xl lg:text-3xl font-semibold text-[#1D1D1F] mb-3 sm:mb-6">
               {t('people.section_title')}
             </h2>
             <PeopleChips
@@ -538,7 +538,7 @@ const Explore = () => {
         )}
 
         {/* Minimalist Category Chips */}
-        <div className="mb-6 sm:mb-8 flex items-center gap-3 overflow-x-auto scrollbar-hide pb-2">
+        <div className="mb-4 sm:mb-8 flex items-center gap-2 overflow-x-auto scrollbar-hide pb-2">
           <div className="flex gap-1.5 sm:gap-2 flex-nowrap">
             {sortedCategories.map(category => (
               <button
@@ -548,7 +548,7 @@ const Explore = () => {
                   setQuery("");
                   setIsOpen(false);
                 }}
-                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-200 ${
+                className={`px-2.5 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-200 ${
                   selectedCategory === category.id
                     ? 'bg-[#1D1D1F] text-white'
                     : 'bg-[#F5F5F7] text-[#1D1D1F] hover:bg-[#1D1D1F] hover:text-white'
@@ -563,17 +563,17 @@ const Explore = () => {
           <button
             onClick={handleRandomBook}
             disabled={allBooks.length === 0}
-            className="ml-auto p-2 rounded-full bg-[#F5F5F7] hover:bg-[#1D1D1F] hover:text-white transition-all duration-200 shrink-0 disabled:opacity-50"
+            className="ml-auto p-1.5 sm:p-2 rounded-full bg-[#F5F5F7] hover:bg-[#1D1D1F] hover:text-white transition-all duration-200 shrink-0 disabled:opacity-50"
             title={t("explore.random")}
           >
-            <Shuffle className="w-4 h-4 sm:w-5 sm:h-5" />
+            <Shuffle className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
           </button>
         </div>
 
         {/* Sort - Condensed */}
-        <div className="flex items-center gap-3 mb-8">
+        <div className="flex items-center gap-2 mb-4 sm:mb-8">
           <Select value={sortBy} onValueChange={(v: any) => setSortBy(v)}>
-            <SelectTrigger className="w-[200px] border-[#E5E5EA] bg-white hover:border-[#1D1D1F] transition-colors">
+            <SelectTrigger className="w-full sm:w-[200px] text-sm border-[#E5E5EA] bg-white hover:border-[#1D1D1F] transition-colors">
               <SelectValue placeholder={t("sort.label")} />
             </SelectTrigger>
             <SelectContent className="bg-white border-[#E5E5EA]">
@@ -585,7 +585,7 @@ const Explore = () => {
         </div>
 
         {/* Apple-style Book Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
           {allBooks.map((book, index) => {
             const coverKey = `${book.title.toLowerCase()}-${book.author.toLowerCase()}`;
             const coverUrl = (book as any).cover_url || bookCovers[coverKey];
@@ -593,35 +593,35 @@ const Explore = () => {
             return (
               <Card 
                 key={`${book.title}-${index}`}
-                className="p-5 flex flex-col h-full border-[#E5E5EA] hover:shadow-lg hover:scale-[1.02] transition-all duration-200 ease-in-out bg-white group"
+                className="p-3 sm:p-5 flex flex-col h-full border-[#E5E5EA] hover:shadow-lg hover:scale-[1.02] transition-all duration-200 ease-in-out bg-white group"
               >
                 {/* Book Cover */}
-                <div className="flex items-center gap-4 mb-4">
+                <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
                   <img 
                     src={coverUrl || '/book-placeholder.png'} 
                     alt={`${book.title} cover`}
-                    className="w-16 h-24 object-cover rounded-md shadow-sm"
+                    className="w-12 h-18 sm:w-16 sm:h-24 object-cover rounded-md shadow-sm"
                     onError={(e) => {
                       e.currentTarget.src = '/book-placeholder.png';
                     }}
                   />
 
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-base text-[#1D1D1F] line-clamp-2 mb-1 leading-snug">
+                    <h3 className="font-semibold text-sm sm:text-base text-[#1D1D1F] line-clamp-2 mb-1 leading-snug">
                       {book.title}
                     </h3>
-                    <p className="text-sm text-[#86868B] line-clamp-1">
+                    <p className="text-xs sm:text-sm text-[#86868B] line-clamp-1">
                       {book.author}
                     </p>
                   </div>
                 </div>
 
                 {/* Badges - Fixed height for alignment */}
-                <div className="flex items-center gap-2 min-h-[28px] mb-4">
+                <div className="flex items-center gap-1.5 sm:gap-2 min-h-[24px] sm:min-h-[28px] mb-3 sm:mb-4">
                   {book.badge && (
                     <Badge 
                       variant="secondary" 
-                      className="text-xs bg-[#E5E5EA] text-[#1D1D1F] border-none"
+                      className="text-[10px] sm:text-xs bg-[#E5E5EA] text-[#1D1D1F] border-none px-1.5 py-0.5"
                     >
                       {t(`badges.${book.badge}`)}
                     </Badge>
@@ -629,7 +629,7 @@ const Explore = () => {
                   {book.level && (
                     <Badge 
                       variant="outline" 
-                      className="text-xs border-[#E5E5EA] text-[#86868B]"
+                      className="text-[10px] sm:text-xs border-[#E5E5EA] text-[#86868B] px-1.5 py-0.5"
                     >
                       {t(`filters.level.${book.level}`)}
                     </Badge>
@@ -639,10 +639,10 @@ const Explore = () => {
                 {/* Generate Summary Button - Pushed to bottom */}
                 <Button
                   onClick={() => handleSummarize(book, book.id!, "grid")}
-                  className="w-full mt-auto bg-[#7B61FF] hover:bg-[#6951E6] text-white border-none shadow-sm transition-all duration-200"
+                  className="w-full mt-auto bg-[#7B61FF] hover:bg-[#6951E6] text-white border-none shadow-sm transition-all duration-200 text-xs sm:text-sm py-2"
                   aria-label={`${t("explore.summarize")} ${book.title} — ${book.author}`}
                 >
-                  <Sparkles className="w-4 h-4 mr-2" />
+                  <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
                   {t("explore.summarize")}
                 </Button>
               </Card>
