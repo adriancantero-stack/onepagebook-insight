@@ -33,11 +33,11 @@ export const PracticalExamples = ({ examples }: PracticalExamplesProps) => {
 
             {/* Context */}
             <div className="pl-6 sm:pl-8 space-y-2">
-              <div className="flex items-start gap-2 text-xs sm:text-sm">
-                <span className="font-medium text-muted-foreground shrink-0">
+              <div className="text-xs sm:text-sm">
+                <span className="font-medium text-muted-foreground">
                   Contexto:
                 </span>
-                <p className="text-foreground leading-relaxed">
+                <p className="text-foreground leading-relaxed text-justify mt-1">
                   {example.context}
                 </p>
               </div>
