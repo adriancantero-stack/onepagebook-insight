@@ -1,11 +1,12 @@
 import { Suspense, lazy, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { BookOpen } from "lucide-react";
 import { useABTest } from "@/hooks/useABTest";
 import { useSEO } from "@/hooks/useSEO";
-import logoGray from "@/assets/logo-gray.png";
 import { LandingTestimonials } from "@/components/landing/LandingTestimonials";
 import { LandingFinalCTA } from "@/components/landing/LandingFinalCTA";
+import { LanguageSelector } from "@/components/LanguageSelector";
 
 const LandingHeroBOptimized = lazy(() => import("@/components/landing/LandingHeroBOptimized"));
 const LandingComparisonTable = lazy(() => import("@/components/landing/LandingComparisonTable"));
@@ -57,13 +58,14 @@ export default function LandingB({ lang }: LandingBProps) {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="container mx-auto flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
-        <img src={logoGray} alt="OnePageBook" className="h-6 sm:h-8" />
-        <div className="flex gap-1 sm:gap-2">
-          <a href="/pt2" className={`px-2 sm:px-3 py-1 rounded text-sm sm:text-base ${lang === 'pt' ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'}`}>PT</a>
-          <a href="/en2" className={`px-2 sm:px-3 py-1 rounded text-sm sm:text-base ${lang === 'en' ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'}`}>EN</a>
-          <a href="/es2" className={`px-2 sm:px-3 py-1 rounded text-sm sm:text-base ${lang === 'es' ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'}`}>ES</a>
+    <div className="min-h-screen bg-lilac-50">
+      <header className="sticky top-0 z-50 w-full border-b border-lilac-200/40 bg-gradient-to-r from-lilac-50/95 via-lilac-50/50 to-lilac-50/95 backdrop-blur supports-[backdrop-filter]:bg-lilac-50/60">
+        <div className="container mx-auto flex h-14 sm:h-16 items-center justify-between px-4 sm:px-6 lg:px-24">
+          <div className="flex items-center gap-2">
+            <BookOpen className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+            <span className="text-base sm:text-lg font-bold font-poppins bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">OnePageBook</span>
+          </div>
+          <LanguageSelector />
         </div>
       </header>
 
