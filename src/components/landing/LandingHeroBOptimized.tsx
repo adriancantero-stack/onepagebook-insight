@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { Play } from "lucide-react";
 
 interface LandingHeroBOptimizedProps {
   onCTA: () => void;
@@ -57,13 +56,6 @@ export default function LandingHeroBOptimized({ onCTA }: LandingHeroBOptimizedPr
               >
                 Ver Como Funciona
               </Button>
-            </div>
-
-            <div className="flex items-center justify-center lg:justify-start gap-2 text-xs sm:text-sm text-muted-foreground">
-              <Play className="h-3 w-3 sm:h-4 sm:w-4 text-primary shrink-0" />
-              <span className="font-medium cursor-pointer hover:text-foreground transition-colors">
-                👀 Assistir demonstração (37s)
-              </span>
             </div>
           </div>
 
