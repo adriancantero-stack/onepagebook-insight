@@ -108,8 +108,8 @@ export const XPCelebration = ({ show, xpAmount, message, onComplete }: XPCelebra
             <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 blur-3xl opacity-50 animate-pulse" />
             
             {/* Main card */}
-            <div className="relative bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 p-1 rounded-3xl">
-              <div className="bg-background rounded-3xl p-12 text-center space-y-6">
+            <div className="relative bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 p-1 rounded-2xl">
+              <div className="bg-background rounded-2xl p-6 text-center space-y-3">
                 {/* XP Amount */}
                 <motion.div
                   initial={{ scale: 0 }}
@@ -122,7 +122,7 @@ export const XPCelebration = ({ show, xpAmount, message, onComplete }: XPCelebra
                     duration: 0.5,
                     times: [0, 0.6, 0.8, 1]
                   }}
-                  className="text-8xl font-black bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent"
+                  className="text-4xl font-black bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent"
                 >
                   +{xpAmount}
                 </motion.div>
@@ -132,7 +132,7 @@ export const XPCelebration = ({ show, xpAmount, message, onComplete }: XPCelebra
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
-                  className="text-4xl font-bold text-foreground"
+                  className="text-2xl font-bold text-foreground"
                 >
                   XP
                 </motion.div>
@@ -142,7 +142,7 @@ export const XPCelebration = ({ show, xpAmount, message, onComplete }: XPCelebra
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.4 }}
-                  className="flex justify-center gap-2 text-5xl"
+                  className="flex justify-center gap-1 text-2xl"
                 >
                   {[...Array(3)].map((_, i) => (
                     <motion.span
@@ -168,7 +168,7 @@ export const XPCelebration = ({ show, xpAmount, message, onComplete }: XPCelebra
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
-                  className="text-xl text-muted-foreground max-w-md"
+                  className="text-sm text-muted-foreground max-w-xs"
                 >
                   {message}
                 </motion.div>
