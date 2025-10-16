@@ -91,7 +91,7 @@ export const FlashcardsPractice = ({ flashcards }: FlashcardsPracticeProps) => {
             <p className="text-lg text-center leading-relaxed">
               {currentCard.question}
             </p>
-            <div className="mt-6 text-sm text-muted-foreground">
+            <div className="mt-3 sm:mt-4 text-xs sm:text-sm text-muted-foreground">
               Clique para ver a resposta
             </div>
           </div>
@@ -106,7 +106,7 @@ export const FlashcardsPractice = ({ flashcards }: FlashcardsPracticeProps) => {
             <p className="text-lg text-center leading-relaxed">
               {currentCard.answer}
             </p>
-            <div className="mt-6 text-sm text-muted-foreground">
+            <div className="mt-3 sm:mt-4 text-xs sm:text-sm text-muted-foreground">
               Clique para voltar à pergunta
             </div>
           </div>
