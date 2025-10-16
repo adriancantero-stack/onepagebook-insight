@@ -27,6 +27,7 @@ import { getCachedAudio, saveAudioToCache } from "@/lib/cacheUtils";
 import { BuyOnAmazonButton } from "@/components/BuyOnAmazonButton";
 import { SummaryFeedback } from "@/components/SummaryFeedback";
 import { useXP } from "@/hooks/useXP";
+import { LearningEnhancement } from "@/components/LearningEnhancement";
 
 const Summary = () => {
   const { t, i18n } = useTranslation();
@@ -927,6 +928,9 @@ const Summary = () => {
             summaryId={summary.id} 
             userId={summary.user_id}
           />
+
+          {/* Learning Enhancement Section */}
+          <LearningEnhancement summaryId={summary.id} />
 
           {/* Related Books Section */}
           {relatedBooksWithCovers.length > 0 && (

@@ -119,3 +119,6 @@ verify_jwt = false
 
 [functions.daily-book-import]
 verify_jwt = false
+
+[functions.generate-learning-content]
+verify_jwt = true

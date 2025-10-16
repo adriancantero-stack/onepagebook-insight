@@ -127,6 +127,41 @@ export type Database = {
         }
         Relationships: []
       }
+      book_flashcards: {
+        Row: {
+          answer: string
+          book_summary_id: string
+          card_order: number
+          created_at: string
+          id: string
+          question: string
+        }
+        Insert: {
+          answer: string
+          book_summary_id: string
+          card_order?: number
+          created_at?: string
+          id?: string
+          question: string
+        }
+        Update: {
+          answer?: string
+          book_summary_id?: string
+          card_order?: number
+          created_at?: string
+          id?: string
+          question?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "book_flashcards_book_summary_id_fkey"
+            columns: ["book_summary_id"]
+            isOneToOne: false
+            referencedRelation: "book_summaries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       book_import_history: {
         Row: {
           books_imported: number | null
@@ -178,6 +213,7 @@ export type Database = {
           pitfalls: string | null
           plan_7_days: string | null
           practical_applications: string
+          practical_examples: Json | null
           routine: string | null
           source: string | null
           summary_text: string
@@ -207,6 +243,7 @@ export type Database = {
           pitfalls?: string | null
           plan_7_days?: string | null
           practical_applications: string
+          practical_examples?: Json | null
           routine?: string | null
           source?: string | null
           summary_text: string
@@ -236,6 +273,7 @@ export type Database = {
           pitfalls?: string | null
           plan_7_days?: string | null
           practical_applications?: string
+          practical_examples?: Json | null
           routine?: string | null
           source?: string | null
           summary_text?: string
