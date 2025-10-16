@@ -379,7 +379,7 @@ const handler = async (req: Request): Promise<Response> => {
 
         // Send email via Resend
         const { error: emailError } = await resend.emails.send({
-          from: "OnePageBook <welcome@send.onepagebook.ai>",
+          from: "OnePageBook <offers@send.onepagebook.ai>",
           to: [authUser.user.email],
           subject: template.subject,
           html: template.html,

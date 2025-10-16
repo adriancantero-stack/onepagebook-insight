@@ -420,7 +420,7 @@ serve(async (req) => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              from: "OnePageBook <welcome@send.onepagebook.ai>",
+              from: "OnePageBook <reminders@send.onepagebook.ai>",
               to: [user.email],
               subject: message.subject,
               html: message.html,
