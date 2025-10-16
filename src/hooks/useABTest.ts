@@ -23,20 +23,14 @@ export const useABTest = () => {
       // Create new session
       const newSessionId = crypto.randomUUID();
       
-      // Get config to check if test is active
-      const { data: config } = await supabase
-        .from('ab_test_config')
-        .select('is_active, split_percentage')
-        .single();
-
-      // If test is not active, default to variant A
-      if (!config?.is_active) {
-        storedVariant = 'A';
-      } else {
-        // Random split based on config percentage
-        const random = Math.random() * 100;
-        storedVariant = random < (config.split_percentage || 50) ? 'A' : 'B';
-      }
+      // Derive variant and language from URL
+      const pathSegment = window.location.pathname.split('/')[1] || 'pt';
+      
+      // Normalize language: remove "2" suffix (pt2 -> pt, en2 -> en, etc.)
+      const normalizedLanguage = pathSegment.replace(/2$/, '');
+      
+      // Derive variant: if path ends with "2", it's variant B, otherwise A
+      storedVariant = pathSegment.endsWith('2') ? 'B' : 'A';
 
       // Store session
       localStorage.setItem(SESSION_KEY, newSessionId);
@@ -45,13 +39,11 @@ export const useABTest = () => {
       setSessionId(newSessionId);
       setVariant(storedVariant);
 
-      // Record session in database
-      const language = window.location.pathname.split('/')[1] || 'pt';
-      
+      // Record session in database with normalized language
       await supabase.from('ab_test_sessions').insert({
         session_id: newSessionId,
         variant: storedVariant,
-        language: language,
+        language: normalizedLanguage,
         user_agent: navigator.userAgent,
         referrer: document.referrer
       });
@@ -63,12 +55,14 @@ export const useABTest = () => {
   const trackConversion = async (conversionType: 'cta_click' | 'signup' | 'premium_click') => {
     if (!sessionId || !variant) return;
 
-    const language = window.location.pathname.split('/')[1] || 'pt';
+    // Normalize language from URL (remove "2" suffix)
+    const pathSegment = window.location.pathname.split('/')[1] || 'pt';
+    const normalizedLanguage = pathSegment.replace(/2$/, '');
 
     await supabase.from('ab_test_conversions').insert({
       session_id: sessionId,
       variant,
-      language,
+      language: normalizedLanguage,
       conversion_type: conversionType
     });
   };

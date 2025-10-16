@@ -27,26 +27,43 @@ export default function LandingRedirect() {
         
         const targetLang = langMap[browserLang] || "pt";
         
-        // Check if A/B test is active and determine variant
-        const { data: config } = await supabase
-          .from('ab_test_config')
-          .select('is_active, split_percentage')
-          .single();
+        // Get A/B test config from backend function
+        let config = null;
+        try {
+          const { data, error } = await supabase.functions.invoke('get-ab-test-config');
+          if (!error && data) {
+            config = data;
+          }
+        } catch (error) {
+          console.error('Error fetching A/B config:', error);
+        }
 
         // Check if session already has a variant
         const existingVariant = localStorage.getItem('ab_test_variant');
         
         let variant = 'A';
         
+        // If test is active, determine variant
         if (config?.is_active) {
           if (existingVariant) {
             variant = existingVariant;
           } else {
-            // Random split
+            // Random split based on config
             const random = Math.random() * 100;
             variant = random < (config.split_percentage || 50) ? 'A' : 'B';
             localStorage.setItem('ab_test_variant', variant);
           }
+        } else if (config?.winner_variant) {
+          // Test ended, use winner
+          variant = config.winner_variant;
+        } else if (existingVariant) {
+          // Use existing variant if available
+          variant = existingVariant;
+        } else {
+          // Fallback to 50/50 split if config unavailable
+          const random = Math.random() * 100;
+          variant = random < 50 ? 'A' : 'B';
+          localStorage.setItem('ab_test_variant', variant);
         }
         
         // Redirect to appropriate landing page

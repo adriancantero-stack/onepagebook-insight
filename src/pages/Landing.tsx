@@ -5,6 +5,7 @@ import { BookOpen } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import Footer from "@/components/Footer";
 import { useSEO } from "@/hooks/useSEO";
+import { useABTest } from "@/hooks/useABTest";
 import { LandingHero } from "@/components/landing/LandingHero";
 
 // Lazy load sections below the fold for better performance
@@ -23,6 +24,7 @@ interface LandingProps {
 const Landing = ({ lang }: LandingProps) => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
+  const { trackConversion } = useABTest();
 
   const seoConfigs = {
     pt: {
@@ -56,6 +58,7 @@ const Landing = ({ lang }: LandingProps) => {
   }, [lang, i18n]);
 
   const handleCTA = () => {
+    trackConversion('cta_click');
     navigate(`/auth?lang=${lang}`);
   };
 
