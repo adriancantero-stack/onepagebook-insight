@@ -438,6 +438,10 @@ export const en = {
     "faq.a14": "Go to Settings to choose an avatar (preset or upload) and set a nickname. Your nickname will appear in the ranking instead of your real name.",
     "faq.q15": "What are streaks?",
     "faq.a15": "Streaks count how many consecutive days you read summaries. Maintaining long streaks unlocks special achievements and gives lots of XP!",
+    "faq.q16": "What are interactive flashcards?",
+    "faq.a16": "Flashcards are AI-generated study cards with key concepts from the book. Use them to memorize and review content efficiently. Available for Premium users.",
+    "faq.q17": "What are practical applicable examples?",
+    "faq.a17": "These are real, concrete situations showing how to apply the book's ideas in daily life. AI generates personalized examples so you can implement concepts immediately. Available for Premium users.",
     
     // Contact page
     "contact.title": "Get in Touch",

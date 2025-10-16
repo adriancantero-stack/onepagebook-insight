@@ -438,6 +438,10 @@ export const es = {
     "faq.a14": "Ve a Configuración para elegir un avatar (predefinido o subir) y definir un apodo. Tu apodo aparecerá en el ranking en lugar de tu nombre real.",
     "faq.q15": "¿Qué son las rachas?",
     "faq.a15": "Las rachas cuentan cuántos días consecutivos lees resúmenes. ¡Mantener rachas largas desbloquea logros especiales y da mucho XP!",
+    "faq.q16": "¿Qué son las flashcards interactivas?",
+    "faq.a16": "Las flashcards son tarjetas de estudio generadas por IA con conceptos clave del libro. Úsalas para memorizar y repasar el contenido de forma eficiente. Disponible para usuarios Premium.",
+    "faq.q17": "¿Qué son los ejemplos prácticos aplicables?",
+    "faq.a17": "Son situaciones reales y concretas de cómo aplicar las ideas del libro en el día a día. La IA genera ejemplos personalizados para que implementes los conceptos de inmediato. Disponible para usuarios Premium.",
     
     // Contact page
     "contact.title": "Ponte en Contacto",

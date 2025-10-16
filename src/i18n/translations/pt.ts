@@ -471,6 +471,10 @@ export const pt = {
     "faq.a14": "Vá em Configurações para escolher um avatar (pré-definido ou upload) e definir um nickname. Seu nickname aparecerá no ranking no lugar do nome real.",
     "faq.q15": "O que são sequências (streaks)?",
     "faq.a15": "Sequências contam quantos dias consecutivos você lê resumos. Manter sequências longas desbloqueia conquistas especiais e dá muito XP!",
+    "faq.q16": "O que são flashcards interativos?",
+    "faq.a16": "Flashcards são cartões de estudo gerados pela IA com conceitos-chave do livro. Use-os para memorizar e revisar o conteúdo de forma eficiente. Disponível para usuários Premium.",
+    "faq.q17": "O que são exemplos práticos aplicáveis?",
+    "faq.a17": "São situações reais e concretas de como aplicar as ideias do livro no dia a dia. A IA gera exemplos personalizados para você implementar os conceitos imediatamente. Disponível para usuários Premium.",
     
     // Contact page
     "contact.title": "Entre em Contato",
