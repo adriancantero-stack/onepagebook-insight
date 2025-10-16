@@ -112,7 +112,7 @@ export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => 
             <div className="p-6 pt-0 space-y-6">
               {/* Flashcards Section */}
                 <div className="space-y-4">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div className="flex items-center gap-2">
                     <Target className="w-5 h-5 text-primary" />
                     <h4 className="font-semibold">{t("summary.flashcardsTitle")}</h4>
@@ -122,7 +122,7 @@ export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => 
                       onClick={handleGenerateFlashcards}
                       disabled={loadingFlashcards}
                       size="sm"
-                      className="rounded-xl"
+                      className="rounded-xl w-full sm:w-auto"
                     >
                       {loadingFlashcards ? (
                         <>
@@ -141,7 +141,7 @@ export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => 
 
               {/* Practical Examples Section */}
               <div className="space-y-4 pt-6 border-t border-border">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div className="flex items-center gap-2">
                     <Lightbulb className="w-5 h-5 text-primary" />
                     <h4 className="font-semibold">{t("summary.practicalExamplesTitle")}</h4>
@@ -152,7 +152,7 @@ export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => 
                       disabled={loadingExamples}
                       size="sm"
                       variant="outline"
-                      className="rounded-xl"
+                      className="rounded-xl w-full sm:w-auto"
                     >
                       {loadingExamples ? (
                         <>
