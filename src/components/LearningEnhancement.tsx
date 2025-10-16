@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible";
@@ -13,6 +14,7 @@ interface LearningEnhancementProps {
 }
 
 export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => {
+  const { t } = useTranslation();
   console.log('🎯 LearningEnhancement mounted with summaryId:', summaryId);
   const [isOpen, setIsOpen] = useState(false);
   const [flashcards, setFlashcards] = useState<any[] | null>(null);
@@ -36,15 +38,15 @@ export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => 
       
       if (!data.cached) {
         toast({
-          title: "Flashcards gerados!",
-          description: `${data.flashcards.length} cards criados para prática`
+          title: t("summary.flashcardsGenerated"),
+          description: t("summary.flashcardsDesc", { count: data.flashcards.length })
         });
       }
     } catch (error) {
       console.error('Error generating flashcards:', error);
       toast({
         variant: "destructive",
-        title: "Erro ao gerar flashcards",
+        title: t("summary.errorFlashcards"),
         description: error instanceof Error ? error.message : "Tente novamente"
       });
     } finally {
@@ -67,15 +69,15 @@ export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => 
       
       if (!data.cached) {
         toast({
-          title: "Exemplos gerados!",
-          description: `${data.examples.length} cenários práticos criados`
+          title: t("summary.examplesGenerated"),
+          description: t("summary.examplesDesc", { count: data.examples.length })
         });
       }
     } catch (error) {
       console.error('Error generating examples:', error);
       toast({
         variant: "destructive",
-        title: "Erro ao gerar exemplos",
+        title: t("summary.errorExamples"),
         description: error instanceof Error ? error.message : "Tente novamente"
       });
     } finally {
@@ -92,10 +94,10 @@ export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => 
               <BookOpen className="w-6 h-6 text-primary" />
               <div className="text-left">
                 <h3 className="text-xl font-semibold text-foreground">
-                  Aprofundar Conhecimento
+                  {t("summary.deepenKnowledge")}
                 </h3>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Flashcards e exemplos práticos para fixar o conteúdo
+                  {t("summary.deepenKnowledgeDesc")}
                 </p>
               </div>
             </div>
@@ -109,11 +111,11 @@ export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => 
           <CollapsibleContent className="animate-accordion-down">
             <div className="p-6 pt-0 space-y-6">
               {/* Flashcards Section */}
-              <div className="space-y-4">
+                <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Target className="w-5 h-5 text-primary" />
-                    <h4 className="font-semibold">Flashcards para Prática</h4>
+                    <h4 className="font-semibold">{t("summary.flashcardsTitle")}</h4>
                   </div>
                   {!flashcards && (
                     <Button
@@ -125,10 +127,10 @@ export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => 
                       {loadingFlashcards ? (
                         <>
                           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Gerando...
+                          {t("summary.generatingContent")}
                         </>
                       ) : (
-                        '🎯 Gerar Flashcards'
+                        t("summary.generateFlashcards")
                       )}
                     </Button>
                   )}
@@ -142,7 +144,7 @@ export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Lightbulb className="w-5 h-5 text-primary" />
-                    <h4 className="font-semibold">Exemplos Práticos</h4>
+                    <h4 className="font-semibold">{t("summary.practicalExamplesTitle")}</h4>
                   </div>
                   {!examples && (
                     <Button
@@ -155,10 +157,10 @@ export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => 
                       {loadingExamples ? (
                         <>
                           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Gerando...
+                          {t("summary.generatingContent")}
                         </>
                       ) : (
-                        '💡 Gerar Exemplos'
+                        t("summary.generateExamples")
                       )}
                     </Button>
                   )}
