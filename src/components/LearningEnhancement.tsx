@@ -28,11 +28,14 @@ export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => 
     
     setLoadingFlashcards(true);
     try {
+      const { data: sessionRes } = await supabase.auth.getSession();
+      const token = sessionRes?.session?.access_token;
       const { data, error } = await supabase.functions.invoke('generate-learning-content', {
-        body: { summaryId, type: 'flashcards' }
+        body: { summaryId, type: 'flashcards' },
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
 
-      if (error) throw error;
+      if (error || (data as any)?.error) throw new Error((error as any)?.message || (data as any)?.error);
 
       setFlashcards(data.flashcards);
       
@@ -47,7 +50,7 @@ export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => 
       toast({
         variant: "destructive",
         title: t("summary.errorFlashcards"),
-        description: error instanceof Error ? error.message : "Tente novamente"
+        description: error instanceof Error ? error.message : String(error)
       });
     } finally {
       setLoadingFlashcards(false);
@@ -59,11 +62,14 @@ export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => 
     
     setLoadingExamples(true);
     try {
+      const { data: sessionRes } = await supabase.auth.getSession();
+      const token = sessionRes?.session?.access_token;
       const { data, error } = await supabase.functions.invoke('generate-learning-content', {
-        body: { summaryId, type: 'examples' }
+        body: { summaryId, type: 'examples' },
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
 
-      if (error) throw error;
+      if (error || (data as any)?.error) throw new Error((error as any)?.message || (data as any)?.error);
 
       setExamples(data.examples);
       
@@ -78,7 +84,7 @@ export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => 
       toast({
         variant: "destructive",
         title: t("summary.errorExamples"),
-        description: error instanceof Error ? error.message : "Tente novamente"
+        description: error instanceof Error ? error.message : String(error)
       });
     } finally {
       setLoadingExamples(false);
