@@ -56,16 +56,16 @@ export const PracticalExamples = ({ examples }: PracticalExamplesProps) => {
               </div>
 
               {/* Expected Result */}
-              <div className="flex items-start gap-2 text-xs sm:text-sm bg-primary/5 p-2 sm:p-3 rounded-lg">
-                <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 text-primary shrink-0 mt-0.5" />
-                <div>
+              <div className="text-xs sm:text-sm bg-primary/5 p-2 sm:p-3 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 text-primary" />
                   <span className="font-medium text-primary">
                     Resultado Esperado:
                   </span>
-                  <p className="text-foreground leading-relaxed mt-1">
-                    {example.expected_result}
-                  </p>
                 </div>
+                <p className="text-foreground leading-relaxed mt-1">
+                  {example.expected_result}
+                </p>
               </div>
             </div>
           </div>
