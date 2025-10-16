@@ -47,8 +47,7 @@ export const BookAutocomplete = ({
         const { count, error } = await supabase
           .from('books')
           .select('*', { count: 'exact', head: true })
-          .eq('is_active', true)
-          .eq('lang', lang);
+          .eq('is_active', true);
 
         if (error) throw error;
         setBooksCount(count || 0);
@@ -59,7 +58,7 @@ export const BookAutocomplete = ({
     };
 
     fetchBooksCount();
-  }, [lang]);
+  }, []);
 
   const fetchSuggestions = useCallback(async (query: string) => {
     if (query.length < 2 || bookSelected) {
