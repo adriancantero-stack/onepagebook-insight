@@ -463,6 +463,7 @@ const Home = () => {
                 onBookSelect={handleBookSelect}
                 disabled={loading}
                 lang={i18n.language}
+                authorFilled={!!bookAuthor}
               />
               {selectedBookFeedback && (
                 <div className="mt-2 text-xs text-primary font-medium">

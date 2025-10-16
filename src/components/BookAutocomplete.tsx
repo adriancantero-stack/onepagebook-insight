@@ -21,6 +21,7 @@ interface BookAutocompleteProps {
   disabled?: boolean;
   lang: string;
   hideExploreLink?: boolean;
+  authorFilled?: boolean; // Para desabilitar autocomplete quando autor já está preenchido
 }
 
 export const BookAutocomplete = ({ 
@@ -29,7 +30,8 @@ export const BookAutocomplete = ({
   onBookSelect, 
   disabled,
   lang,
-  hideExploreLink = false
+  hideExploreLink = false,
+  authorFilled = false
 }: BookAutocompleteProps) => {
   const { t } = useTranslation();
   const [suggestions, setSuggestions] = useState<Book[]>([]);
@@ -61,7 +63,7 @@ export const BookAutocomplete = ({
   }, []);
 
   const fetchSuggestions = useCallback(async (query: string) => {
-    if (query.length < 2 || bookSelected) {
+    if (query.length < 2 || bookSelected || authorFilled) {
       setSuggestions([]);
       setShowDropdown(false);
       return;
@@ -83,7 +85,7 @@ export const BookAutocomplete = ({
     } finally {
       setLoading(false);
     }
-  }, [lang, bookSelected]);
+  }, [lang, bookSelected, authorFilled]);
 
   useEffect(() => {
     if (debounceRef.current) {
