@@ -9,9 +9,9 @@ export default function LandingHowItWorksB({ onCTA }: LandingHowItWorksBProps) {
   const steps = [
     { icon: Search, title: "Escolha um livro", desc: "(ou digite qualquer título)" },
     { icon: Sparkles, title: "Receba o resumo em 1 página", desc: "Gerado com IA avançada" },
+    { icon: Headphones, title: "Escute com voz realista", desc: "No seu ritmo" },
     { icon: Brain, title: "Estude com flashcards inteligentes", desc: "Memorização ativa" },
     { icon: TestTube, title: "Veja exemplos práticos", desc: "De aplicação real" },
-    { icon: Headphones, title: "Escute com voz realista", desc: "No seu ritmo" },
     { icon: Share2, title: "Salve, exporte ou compartilhe", desc: "PDF, áudio ou link" },
   ];
 
