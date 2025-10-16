@@ -13,6 +13,7 @@ interface LearningEnhancementProps {
 }
 
 export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => {
+  console.log('🎯 LearningEnhancement mounted with summaryId:', summaryId);
   const [isOpen, setIsOpen] = useState(false);
   const [flashcards, setFlashcards] = useState<any[] | null>(null);
   const [examples, setExamples] = useState<any[] | null>(null);
