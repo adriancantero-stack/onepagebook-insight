@@ -247,7 +247,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send email via Resend
     const { error: emailError, data } = await resend.emails.send({
-      from: "OnePageBook <onboarding@resend.dev>",
+      from: "OnePageBook <welcome@send.onepagebook.ai>",
       to: [email],
       subject: "🧪 TESTE - Última chance: 40% OFF no OnePageBook Premium",
       html,
