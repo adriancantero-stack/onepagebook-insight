@@ -943,19 +943,19 @@ const Summary = () => {
                     className="p-6 border-[#E5E5EA] rounded-2xl hover:shadow-lg hover:scale-[1.02] transition-all duration-200 cursor-pointer"
                     onClick={() => navigate("/home", { state: { bookTitle: book.title, bookAuthor: book.author } })}
                   >
-                    <div className="flex items-start gap-4">
+                    <div className="flex flex-col sm:flex-row items-start gap-4">
                       <img
                         src={(book as any).cover || "/book-placeholder.png"}
                         alt={book.title}
-                        className="w-16 h-24 object-cover rounded-lg shrink-0"
+                        className="w-full sm:w-16 h-48 sm:h-24 object-cover rounded-lg shrink-0"
                         onError={(e) => {
                           e.currentTarget.src = "/book-placeholder.png";
                         }}
                       />
-                      <div className="flex-1 min-w-0">
+                      <div className="flex-1 min-w-0 w-full">
                         <h4 className="font-semibold text-base mb-2 line-clamp-2 text-[#1D1D1F]">{book.title}</h4>
                         <p className="text-sm text-[#86868B] mb-3 line-clamp-1">{book.author}</p>
-                        <Button size="sm" variant="ghost" className="h-8 text-sm px-3 hover:bg-[#7B61FF] hover:text-white rounded-lg transition-all duration-200">
+                        <Button size="sm" variant="ghost" className="h-8 text-sm px-3 hover:bg-[#7B61FF] hover:text-white rounded-lg transition-all duration-200 w-full sm:w-auto">
                           {t("summary.summarize")}
                         </Button>
                       </div>
