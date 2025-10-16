@@ -822,7 +822,7 @@ const Summary = () => {
       </header>
 
       <main className="container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-12 sm:py-16 max-w-5xl flex-1">
-        <Card className="p-8 sm:p-12 border-lilac-200 rounded-2xl shadow-sm bg-white">
+        <Card className="p-4 sm:p-8 md:p-12 border-lilac-200 rounded-2xl shadow-sm bg-white">
           <div className="flex items-start gap-4 sm:gap-5 mb-6 sm:mb-8 pb-8 border-b border-lilac-200">
             <div className="w-16 h-24 sm:w-20 sm:h-28 rounded-xl overflow-hidden shadow-md flex-shrink-0">
               <img 
@@ -846,7 +846,7 @@ const Summary = () => {
           </div>
 
 
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             <SummarySection title={t("sections.oneLiner")} content={summary.one_liner} />
             <SummarySection title={t("sections.keyIdeas")} content={summary.key_ideas || summary.main_ideas} />
             <SummarySection title={t("sections.actions")} content={summary.actions || (summary.practical_applications ? summary.practical_applications.split('\n').filter((s: string) => s.trim()) : null)} />
@@ -859,23 +859,23 @@ const Summary = () => {
 
           {/* Audio Player Section - appears above buttons after generation */}
           {isGeneratingAudio && (
-            <div className="mt-8 sm:mt-10 pt-8 border-t border-[#E5E5EA] animate-fade-in">
-              <div className="flex items-center gap-3 mb-4">
-                <Loader2 className="w-5 h-5 animate-spin text-[#7B61FF]" />
-                <h3 className="text-xl font-semibold text-[#1D1D1F]">
+            <div className="mt-6 sm:mt-8 md:mt-10 pt-6 sm:pt-8 border-t border-[#E5E5EA] animate-fade-in">
+              <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin text-[#7B61FF]" />
+                <h3 className="text-lg sm:text-xl font-semibold text-[#1D1D1F]">
                   {t("summary.generating")}...
                 </h3>
               </div>
-              <div className="space-y-3 p-6 bg-[#F5F5F7] rounded-2xl">
-                <Skeleton className="h-16 w-full rounded-xl" />
-                <Skeleton className="h-4 w-3/4 rounded-xl" />
+              <div className="space-y-2 sm:space-y-3 p-4 sm:p-6 bg-[#F5F5F7] rounded-2xl">
+                <Skeleton className="h-12 sm:h-16 w-full rounded-xl" />
+                <Skeleton className="h-3 sm:h-4 w-3/4 rounded-xl" />
               </div>
             </div>
           )}
 
           {showAudioPlayer && audioSrc && (
-            <div className="mt-8 sm:mt-10 pt-8 border-t border-[#E5E5EA] animate-fade-in">
-              <h3 className="text-xl font-semibold mb-4 text-[#1D1D1F]">
+            <div className="mt-6 sm:mt-8 md:mt-10 pt-6 sm:pt-8 border-t border-[#E5E5EA] animate-fade-in">
+              <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-[#1D1D1F]">
                 🔊 {t("summary.audioPlayer")}
               </h3>
               <AudioPlayer 
@@ -884,7 +884,7 @@ const Summary = () => {
             </div>
           )}
 
-          <div className="flex flex-wrap items-center justify-center gap-3 mt-8 sm:mt-10 pt-8 border-t border-[#E5E5EA] w-full">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-6 sm:mt-8 md:mt-10 pt-6 sm:pt-8 border-t border-[#E5E5EA] w-full">
             <Button 
               onClick={handleListenSummary} 
               disabled={isGeneratingAudio}
@@ -934,13 +934,13 @@ const Summary = () => {
 
           {/* Related Books Section */}
           {relatedBooksWithCovers.length > 0 && (
-            <div className="mt-10 sm:mt-12 pt-10 border-t border-[#E5E5EA]">
-              <h3 className="text-2xl sm:text-3xl font-semibold mb-6 text-[#1D1D1F] tracking-tight">{t("summary.relatedBooks")}</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
+            <div className="mt-8 sm:mt-10 md:mt-12 pt-8 sm:pt-10 border-t border-[#E5E5EA]">
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 sm:mb-6 text-[#1D1D1F] tracking-tight">{t("summary.relatedBooks")}</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 md:gap-6">
                 {relatedBooksWithCovers.map((book: Book, index: number) => (
                   <Card 
                     key={index}
-                    className="p-6 border-[#E5E5EA] rounded-2xl hover:shadow-lg hover:scale-[1.02] transition-all duration-200 cursor-pointer"
+                    className="p-4 sm:p-6 border-[#E5E5EA] rounded-2xl hover:shadow-lg hover:scale-[1.02] transition-all duration-200 cursor-pointer"
                     onClick={() => navigate("/home", { state: { bookTitle: book.title, bookAuthor: book.author } })}
                   >
                     <div className="flex flex-col sm:flex-row items-start gap-4">
