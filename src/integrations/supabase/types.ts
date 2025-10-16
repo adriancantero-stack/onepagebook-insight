@@ -778,6 +778,39 @@ export type Database = {
           },
         ]
       }
+      welcome_emails_queue: {
+        Row: {
+          created_at: string
+          email: string
+          error_message: string | null
+          full_name: string | null
+          id: string
+          language: string | null
+          sent_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          error_message?: string | null
+          full_name?: string | null
+          id?: string
+          language?: string | null
+          sent_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          error_message?: string | null
+          full_name?: string | null
+          id?: string
+          language?: string | null
+          sent_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       xp_log: {
         Row: {
           created_at: string | null
