@@ -58,12 +58,12 @@ export default function LandingB({ lang }: LandingBProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="container mx-auto flex items-center justify-between px-6 py-4">
-        <img src={logoGray} alt="OnePageBook" className="h-8" />
-        <div className="flex gap-2">
-          <a href="/pt2" className={`px-3 py-1 rounded ${lang === 'pt' ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'}`}>PT</a>
-          <a href="/en2" className={`px-3 py-1 rounded ${lang === 'en' ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'}`}>EN</a>
-          <a href="/es2" className={`px-3 py-1 rounded ${lang === 'es' ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'}`}>ES</a>
+      <header className="container mx-auto flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
+        <img src={logoGray} alt="OnePageBook" className="h-6 sm:h-8" />
+        <div className="flex gap-1 sm:gap-2">
+          <a href="/pt2" className={`px-2 sm:px-3 py-1 rounded text-sm sm:text-base ${lang === 'pt' ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'}`}>PT</a>
+          <a href="/en2" className={`px-2 sm:px-3 py-1 rounded text-sm sm:text-base ${lang === 'en' ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'}`}>EN</a>
+          <a href="/es2" className={`px-2 sm:px-3 py-1 rounded text-sm sm:text-base ${lang === 'es' ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'}`}>ES</a>
         </div>
       </header>
 
