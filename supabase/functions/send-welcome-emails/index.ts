@@ -63,9 +63,9 @@ const getEmailContent = (language: string, userName: string): WelcomeEmailConten
       ctaButton: "Começar Agora",
       ctaUrl: "https://onepagebook.com.br/home",
       footer1: "Você está recebendo este email porque criou uma conta no OnePageBook.",
-      footer2: "Para não perder nossas atualizações, adicione onboarding@resend.dev aos seus contatos.",
+      footer2: "Para não perder nossas atualizações, adicione welcome@send.onepagebook.ai aos seus contatos.",
       addContactTitle: "📧 Adicione-nos aos Contatos",
-      addContactDesc: "Para garantir que você receba todos os nossos emails e não os perca na pasta de spam, adicione <strong>onboarding@resend.dev</strong> à sua lista de contatos.",
+      addContactDesc: "Para garantir que você receba todos os nossos emails e não os perca na pasta de spam, adicione <strong>welcome@send.onepagebook.ai</strong> à sua lista de contatos.",
     },
     en: {
       subject: "🎉 Welcome to OnePageBook!",
@@ -93,9 +93,9 @@ const getEmailContent = (language: string, userName: string): WelcomeEmailConten
       ctaButton: "Get Started",
       ctaUrl: "https://onepagebook.com/home",
       footer1: "You're receiving this email because you created an account at OnePageBook.",
-      footer2: "To not miss our updates, add onboarding@resend.dev to your contacts.",
+      footer2: "To not miss our updates, add welcome@send.onepagebook.ai to your contacts.",
       addContactTitle: "📧 Add Us to Contacts",
-      addContactDesc: "To ensure you receive all our emails and don't miss them in your spam folder, add <strong>onboarding@resend.dev</strong> to your contact list.",
+      addContactDesc: "To ensure you receive all our emails and don't miss them in your spam folder, add <strong>welcome@send.onepagebook.ai</strong> to your contact list.",
     },
     es: {
       subject: "🎉 ¡Bienvenido a OnePageBook!",
@@ -123,9 +123,9 @@ const getEmailContent = (language: string, userName: string): WelcomeEmailConten
       ctaButton: "Comenzar Ahora",
       ctaUrl: "https://onepagebook.com/home",
       footer1: "Estás recibiendo este correo porque creaste una cuenta en OnePageBook.",
-      footer2: "Para no perderte nuestras actualizaciones, agrega onboarding@resend.dev a tus contactos.",
+      footer2: "Para no perderte nuestras actualizaciones, agrega welcome@send.onepagebook.ai a tus contactos.",
       addContactTitle: "📧 Agréganos a Contactos",
-      addContactDesc: "Para asegurar que recibas todos nuestros correos y no los pierdas en la carpeta de spam, agrega <strong>onboarding@resend.dev</strong> a tu lista de contactos.",
+      addContactDesc: "Para asegurar que recibas todos nuestros correos y no los pierdas en la carpeta de spam, agrega <strong>welcome@send.onepagebook.ai</strong> a tu lista de contactos.",
     },
   };
 
@@ -457,7 +457,7 @@ const handler = async (req: Request): Promise<Response> => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            from: "OnePageBook <onboarding@resend.dev>",
+            from: "OnePageBook <welcome@send.onepagebook.ai>",
             to: [emailRecord.email],
             subject: content.subject,
             html: htmlContent,
