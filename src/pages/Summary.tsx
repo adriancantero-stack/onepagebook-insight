@@ -923,14 +923,14 @@ const Summary = () => {
             />
           </div>
 
+          {/* Learning Enhancement Section */}
+          <LearningEnhancement summaryId={summary.id} />
+
           {/* Feedback Section */}
           <SummaryFeedback 
             summaryId={summary.id} 
             userId={summary.user_id}
           />
-
-          {/* Learning Enhancement Section */}
-          <LearningEnhancement summaryId={summary.id} />
 
           {/* Related Books Section */}
           {relatedBooksWithCovers.length > 0 && (
