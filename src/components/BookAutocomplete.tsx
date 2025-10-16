@@ -37,8 +37,29 @@ export const BookAutocomplete = ({
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [bookSelected, setBookSelected] = useState(false);
+  const [booksCount, setBooksCount] = useState<number | null>(null);
   const debounceRef = useRef<number>();
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const fetchBooksCount = async () => {
+      try {
+        const { count, error } = await supabase
+          .from('books')
+          .select('*', { count: 'exact', head: true })
+          .eq('is_active', true)
+          .eq('lang', lang);
+
+        if (error) throw error;
+        setBooksCount(count || 0);
+      } catch (error) {
+        console.error("Error fetching books count:", error);
+        setBooksCount(null);
+      }
+    };
+
+    fetchBooksCount();
+  }, [lang]);
 
   const fetchSuggestions = useCallback(async (query: string) => {
     if (query.length < 2 || bookSelected) {
@@ -193,7 +214,7 @@ export const BookAutocomplete = ({
           className="h-12 text-base bg-white"
         />
         {!hideExploreLink && (
-          <div className="text-xs text-center px-1">
+          <div className="text-xs text-center px-1 flex items-center justify-center gap-1.5 flex-wrap">
             <span className="text-muted-foreground/60">
               {lang === "en" ? "Don't know the title? " : lang === "es" ? "¿No sabes el título? " : "Não sabe o título? "}
             </span>
@@ -205,6 +226,11 @@ export const BookAutocomplete = ({
             >
               {lang === "en" ? "Browse catalog" : lang === "es" ? "Explorar catálogo" : "Explorar catálogo"}
             </button>
+            {booksCount !== null && (
+              <span className="text-muted-foreground/80 font-semibold">
+                +{booksCount.toLocaleString()} {lang === "en" ? "books!" : lang === "es" ? "libros!" : "livros!"}
+              </span>
+            )}
           </div>
         )}
       </div>
