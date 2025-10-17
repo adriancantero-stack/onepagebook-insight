@@ -24,52 +24,8 @@ export function ManualCoverUpload() {
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Load books with pagination and server-side search
-  const loadBooksWithoutCovers = async (reset = false) => {
-    setLoading(true);
-    try {
-      const start = reset ? 0 : page * PAGE_SIZE;
-      const end = start + PAGE_SIZE - 1;
-
-      let query = supabase
-        .from("books")
-        .select("id, title, author, cover_url, lang")
-        .eq("is_active", true)
-        .order("title", { ascending: true })
-        .range(start, end);
-
-      if (searchQuery.trim()) {
-        const pattern = `%${searchQuery.trim()}%`;
-        query = query.or(`title.ilike.${pattern},author.ilike.${pattern}`);
-      }
-
-      const { data, error } = await query;
-      if (error) throw error;
-
-      if (reset) {
-        setBooksWithoutCovers(data || []);
-        setFilteredBooks(data || []);
-        setPage(1);
-      } else {
-        const merged = [...filteredBooks, ...(data || [])];
-        setBooksWithoutCovers(merged);
-        setFilteredBooks(merged);
-        setPage((p) => p + 1);
-      }
-
-      const length = data?.length ?? 0;
-      setHasMore(length === PAGE_SIZE);
-    } catch (error) {
-      console.error("Erro ao carregar livros:", error);
-      toast.error("Erro ao carregar livros");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // Load books with pagination and server-side search
   const loadBooksWithoutCovers = async (reset = false) => {
@@ -268,6 +224,18 @@ export function ManualCoverUpload() {
                     ))}
                   </div>
                 </div>
+                {hasMore && (
+                  <div className="mt-3 flex justify-center">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      disabled={loading}
+                      onClick={() => loadBooksWithoutCovers(false)}
+                    >
+                      Carregar mais livros
+                    </Button>
+                  </div>
+                )}
               </div>
             )}
           </>
