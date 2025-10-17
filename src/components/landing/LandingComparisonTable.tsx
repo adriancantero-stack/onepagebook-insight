@@ -1,14 +1,16 @@
+import { useTranslation } from "react-i18next";
 import { Check, X } from "lucide-react";
 
 export default function LandingComparisonTable() {
+  const { t } = useTranslation();
   return (
     <section className="container mx-auto px-4 sm:px-6 lg:px-12 xl:px-24 py-12 sm:py-16 lg:py-24">
       <div className="text-center mb-8 sm:mb-12">
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-3 sm:mb-4">
-          Mais do que resumos.
+          {t("landing.comparison.title")}
         </h2>
         <p className="text-base sm:text-lg lg:text-xl text-muted-foreground px-4">
-          Um sistema de <span className="text-primary font-semibold">aprendizagem acelerada</span>.
+          {t("landing.comparison.subtitle")}
         </p>
       </div>
 
@@ -22,23 +24,23 @@ export default function LandingComparisonTable() {
           <ul className="space-y-2 text-sm">
             <li className="flex items-center gap-2">
               <Check className="h-4 w-4 text-green-600 shrink-0" />
-              <span>IA avançada (PT, EN, ES)</span>
+              <span>{t("landing.comparison.features.ai")}</span>
             </li>
             <li className="flex items-center gap-2">
               <Check className="h-4 w-4 text-green-600 shrink-0" />
-              <span>Flashcards interativos</span>
+              <span>{t("landing.comparison.features.flashcards")}</span>
             </li>
             <li className="flex items-center gap-2">
               <Check className="h-4 w-4 text-green-600 shrink-0" />
-              <span>Exemplos aplicáveis</span>
+              <span>{t("landing.comparison.features.examples")}</span>
             </li>
             <li className="flex items-center gap-2">
               <Check className="h-4 w-4 text-green-600 shrink-0" />
-              <span>Geração sob demanda</span>
+              <span>{t("landing.comparison.features.ondemand")}</span>
             </li>
             <li className="flex items-center gap-2">
               <Check className="h-4 w-4 text-green-600 shrink-0" />
-              <span>Exportação PDF / áudio</span>
+              <span>{t("landing.comparison.features.export")}</span>
             </li>
           </ul>
         </div>
@@ -85,7 +87,7 @@ export default function LandingComparisonTable() {
           <table className="min-w-full border-collapse bg-background rounded-xl shadow-lg overflow-hidden">
             <thead>
               <tr className="bg-gradient-to-r from-primary/10 to-purple-50">
-                <th className="p-3 lg:p-4 text-left text-sm lg:text-base font-semibold">Recurso</th>
+                <th className="p-3 lg:p-4 text-left text-sm lg:text-base font-semibold">{t("landing.comparison.feature")}</th>
                 <th className="p-3 lg:p-4 text-center text-sm lg:text-base font-semibold bg-primary/20">
                   <span className="text-primary">OnePageBook</span>
                 </th>
@@ -96,11 +98,11 @@ export default function LandingComparisonTable() {
             </thead>
             <tbody>
               {[
-                { feature: "IA avançada (PT, EN, ES)", opb: true, b: "partial", m: true, h: true },
-                { feature: "Flashcards interativos", opb: true, b: false, m: false, h: false },
-                { feature: "Exemplos aplicáveis", opb: true, b: false, m: false, h: false },
-                { feature: "Geração sob demanda", opb: true, b: false, m: false, h: false },
-                { feature: "Exportação PDF / áudio", opb: true, b: false, m: true, h: true },
+                { feature: t("landing.comparison.features.ai"), opb: true, b: "partial", m: true, h: true },
+                { feature: t("landing.comparison.features.flashcards"), opb: true, b: false, m: false, h: false },
+                { feature: t("landing.comparison.features.examples"), opb: true, b: false, m: false, h: false },
+                { feature: t("landing.comparison.features.ondemand"), opb: true, b: false, m: false, h: false },
+                { feature: t("landing.comparison.features.export"), opb: true, b: false, m: true, h: true },
               ].map((row, idx) => (
                 <tr key={idx} className="border-t hover:bg-muted/30 transition-colors">
                   <td className="p-3 lg:p-4 text-sm lg:text-base font-medium">{row.feature}</td>

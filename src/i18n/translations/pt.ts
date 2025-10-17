@@ -52,6 +52,18 @@ export const pt = {
         free: "Grátis para começar",
         noCard: "Sem cartão de crédito",
         instant: "Acesso instantâneo"
+      },
+      comparison: {
+        title: "Mais do que resumos.",
+        subtitle: "Um sistema de aprendizagem acelerada.",
+        feature: "Recurso",
+        features: {
+          ai: "IA avançada (PT, EN, ES)",
+          flashcards: "Flashcards interativos",
+          examples: "Exemplos aplicáveis",
+          ondemand: "Geração sob demanda",
+          export: "Exportação PDF / áudio"
+        }
       }
     },
     

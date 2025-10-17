@@ -101,6 +101,18 @@ export const en = {
         free: "Free to start",
         noCard: "No credit card",
         instant: "Instant access"
+      },
+      comparison: {
+        title: "More than summaries.",
+        subtitle: "An accelerated learning system.",
+        feature: "Feature",
+        features: {
+          ai: "Advanced AI (PT, EN, ES)",
+          flashcards: "Interactive flashcards",
+          examples: "Applicable examples",
+          ondemand: "On‑demand generation",
+          export: "PDF / audio export"
+        }
       }
     },
     

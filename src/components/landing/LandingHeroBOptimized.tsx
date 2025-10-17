@@ -18,47 +18,40 @@ export default function LandingHeroBOptimized({ onCTA }: LandingHeroBOptimizedPr
       <div className="container mx-auto px-4 sm:px-6 lg:px-12 xl:px-24">
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-16 items-center">
           {/* Text Content */}
-          <div className="space-y-6 sm:space-y-8 text-center lg:text-left">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-              <span className="bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                Aprenda o Essencial
-              </span>
-              <br />
-              de Qualquer Livro em 5 Minutos
-            </h1>
+      <div className="space-y-6 sm:space-y-8 text-center lg:text-left">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
+          <span className="bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            {t("landing.hero.headline")}
+          </span>
+        </h1>
 
-            <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground leading-relaxed">
-              Resumos com IA + Flashcards + Áudio + Ação.
-              <br />
-              <span className="font-semibold text-foreground">
-                Transforme leitura em transformação real — todos os dias.
-              </span>
-            </p>
+        <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground leading-relaxed">
+          {t("landing.hero.subheadline")}
+        </p>
 
-            <p className="text-sm sm:text-base text-muted-foreground">
-              Para quem quer aprender mais em menos tempo — e aplicar na vida real.
-              Tudo gerado com inteligência artificial de última geração.
-            </p>
+        <p className="text-sm sm:text-base text-muted-foreground">
+          {t("landing.finalCta.subtext")}
+        </p>
 
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
-              <Button
-                size="lg"
-                onClick={onCTA}
-                className="h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl transition-all w-full sm:w-auto"
-              >
-                Comece de Graça Agora
-              </Button>
-              
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={scrollToHowItWorks}
-                className="h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg font-semibold w-full sm:w-auto"
-              >
-                Ver Como Funciona
-              </Button>
-            </div>
-          </div>
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
+          <Button
+            size="lg"
+            onClick={onCTA}
+            className="h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl transition-all w-full sm:w-auto"
+          >
+            {t("landing.hero.ctaPrimary")}
+          </Button>
+          
+          <Button
+            size="lg"
+            variant="outline"
+            onClick={scrollToHowItWorks}
+            className="h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg font-semibold w-full sm:w-auto"
+          >
+            {t("landing.hero.ctaSecondary")}
+          </Button>
+        </div>
+      </div>
 
           {/* Visual Demo Carousel */}
           <div className="relative mt-8 lg:mt-0">

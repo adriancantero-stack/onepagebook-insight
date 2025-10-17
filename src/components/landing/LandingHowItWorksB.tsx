@@ -1,4 +1,5 @@
-import { Search, Sparkles, Brain, TestTube, Headphones, Share2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { Search, Sparkles, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface LandingHowItWorksBProps {
@@ -6,19 +7,18 @@ interface LandingHowItWorksBProps {
 }
 
 export default function LandingHowItWorksB({ onCTA }: LandingHowItWorksBProps) {
+  const { t } = useTranslation();
+
   const steps = [
-    { icon: Search, title: "Escolha um livro", desc: "(ou digite qualquer título)" },
-    { icon: Sparkles, title: "Receba o resumo em 1 página", desc: "Gerado com IA avançada" },
-    { icon: Headphones, title: "Escute com voz realista", desc: "No seu ritmo" },
-    { icon: Brain, title: "Estude com flashcards inteligentes", desc: "Memorização ativa" },
-    { icon: TestTube, title: "Veja exemplos práticos", desc: "De aplicação real" },
-    { icon: Share2, title: "Salve, exporte ou compartilhe", desc: "PDF, áudio ou link" },
+    { icon: Search, title: t("landing.howItWorks.step1.title"), desc: t("landing.howItWorks.step1.description") },
+    { icon: Sparkles, title: t("landing.howItWorks.step2.title"), desc: t("landing.howItWorks.step2.description") },
+    { icon: Download, title: t("landing.howItWorks.step3.title"), desc: t("landing.howItWorks.step3.description") },
   ];
 
   return (
     <section id="how-it-works" className="container mx-auto px-4 sm:px-6 lg:px-12 xl:px-24 py-12 sm:py-16 lg:py-24 bg-gradient-to-b from-background to-primary/5">
       <h2 className="mb-8 sm:mb-12 lg:mb-16 text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight">
-        Como Funciona
+        {t("landing.howItWorks.title")}
       </h2>
 
       <div className="grid gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-3 mb-8 sm:mb-12">
@@ -38,19 +38,16 @@ export default function LandingHowItWorksB({ onCTA }: LandingHowItWorksBProps) {
         ))}
       </div>
 
-      <p className="text-center text-base sm:text-lg lg:text-xl text-muted-foreground mb-6 sm:mb-8 px-4">
-        Tudo isso em menos de 10 minutos. <span className="text-primary font-semibold">Todos os dias.</span>
-      </p>
-
       <div className="text-center px-4">
         <Button
           size="lg"
           onClick={onCTA}
           className="h-12 sm:h-14 px-6 sm:px-10 text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl transition-all w-full sm:w-auto"
         >
-          Comece Agora de Graça
+          {t("landing.howItWorks.cta")}
         </Button>
       </div>
     </section>
   );
 }
+
