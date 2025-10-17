@@ -113,6 +113,22 @@ export const en = {
           ondemand: "On‑demand generation",
           export: "PDF / audio export"
         }
+      },
+      demo: {
+        slide1: { title: "One‑page summary", desc: "Key ideas organized and ready to read" },
+        slide2: { title: "Realistic audio", desc: "Listen while driving or working out" },
+        slide3: { title: "Interactive flashcards", desc: "Memorize key concepts easily" },
+        slide4: { title: "Practical examples", desc: "Apply knowledge in real life" },
+        labels: {
+          question: "Question",
+          answer: "Answer",
+          tap: "Tap to reveal the answer",
+          autoFlip: "Auto‑flip in progress"
+        },
+        sample: {
+          question: "What are atomic habits?",
+          answer: "Small changes repeated consistently that compound into extraordinary results over time."
+        }
       }
     },
     

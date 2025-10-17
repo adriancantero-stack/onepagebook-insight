@@ -64,6 +64,22 @@ export const pt = {
           ondemand: "Geração sob demanda",
           export: "Exportação PDF / áudio"
         }
+      },
+      demo: {
+        slide1: { title: "Resumo em 1 página", desc: "Principais ideias organizadas e prontas para ler" },
+        slide2: { title: "Áudio realista", desc: "Ouça enquanto dirige ou malha" },
+        slide3: { title: "Flashcards interativos", desc: "Memorize conceitos‑chave facilmente" },
+        slide4: { title: "Exemplos práticos", desc: "Aplique o conhecimento na vida real" },
+        labels: {
+          question: "Pergunta",
+          answer: "Resposta",
+          tap: "Toque para ver a resposta",
+          autoFlip: "Auto‑flip em progresso"
+        },
+        sample: {
+          question: "O que são hábitos atômicos?",
+          answer: "Pequenas mudanças que, quando repetidas consistentemente, geram resultados extraordinários ao longo do tempo."
+        }
       }
     },
     
