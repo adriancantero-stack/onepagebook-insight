@@ -17,28 +17,52 @@ interface Book {
 }
 
 export function ManualCoverUpload() {
+  const PAGE_SIZE = 200;
   const [booksWithoutCovers, setBooksWithoutCovers] = useState<Book[]>([]);
   const [filteredBooks, setFilteredBooks] = useState<Book[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Load all books
-  const loadBooksWithoutCovers = async () => {
+  // Load books with pagination and server-side search
+  const loadBooksWithoutCovers = async (reset = false) => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      const start = reset ? 0 : page * PAGE_SIZE;
+      const end = start + PAGE_SIZE - 1;
+
+      let query = supabase
         .from("books")
         .select("id, title, author, cover_url, lang")
         .eq("is_active", true)
-        .order("title");
+        .order("title", { ascending: true })
+        .range(start, end);
 
+      if (searchQuery.trim()) {
+        const pattern = `%${searchQuery.trim()}%`;
+        query = query.or(`title.ilike.${pattern},author.ilike.${pattern}`);
+      }
+
+      const { data, error } = await query;
       if (error) throw error;
 
-      setBooksWithoutCovers(data || []);
-      setFilteredBooks(data || []);
+      if (reset) {
+        setBooksWithoutCovers(data || []);
+        setFilteredBooks(data || []);
+        setPage(1);
+      } else {
+        const merged = [...filteredBooks, ...(data || [])];
+        setBooksWithoutCovers(merged);
+        setFilteredBooks(merged);
+        setPage((p) => p + 1);
+      }
+
+      const length = data?.length ?? 0;
+      setHasMore(length === PAGE_SIZE);
     } catch (error) {
       console.error("Erro ao carregar livros:", error);
       toast.error("Erro ao carregar livros");
@@ -47,26 +71,54 @@ export function ManualCoverUpload() {
     }
   };
 
-  // Filter books based on search query
-  useEffect(() => {
-    if (!searchQuery.trim()) {
-      setFilteredBooks(booksWithoutCovers);
-      return;
+  // Load books with pagination and server-side search
+  const loadBooksWithoutCovers = async (reset = false) => {
+    setLoading(true);
+    try {
+      const start = reset ? 0 : booksWithoutCovers.length;
+      const end = start + PAGE_SIZE - 1;
+
+      let query = supabase
+        .from("books")
+        .select("id, title, author, cover_url, lang")
+        .eq("is_active", true)
+        .order("title", { ascending: true })
+        .range(start, end);
+
+      if (searchQuery.trim()) {
+        const pattern = `%${searchQuery.trim()}%`;
+        query = query.or(`title.ilike.${pattern},author.ilike.${pattern}`);
+      }
+
+      const { data, error } = await query;
+      if (error) throw error;
+
+      if (reset) {
+        setBooksWithoutCovers(data || []);
+        setFilteredBooks(data || []);
+      } else {
+        const merged = [...booksWithoutCovers, ...(data || [])];
+        setBooksWithoutCovers(merged);
+        setFilteredBooks(merged);
+      }
+
+      const length = data?.length ?? 0;
+      setHasMore(length === PAGE_SIZE);
+    } catch (error) {
+      console.error("Erro ao carregar livros:", error);
+      toast.error("Erro ao carregar livros");
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const query = searchQuery.toLowerCase();
-    const filtered = booksWithoutCovers.filter(
-      (book) =>
-        book.title.toLowerCase().includes(query) ||
-        book.author.toLowerCase().includes(query)
-    );
-    setFilteredBooks(filtered);
-  }, [searchQuery, booksWithoutCovers]);
-
-  // Load on mount
+  // Trigger server-side search when query changes (debounced)
   useEffect(() => {
-    loadBooksWithoutCovers();
-  }, []);
+    const t = setTimeout(() => {
+      loadBooksWithoutCovers(true);
+    }, 300);
+    return () => clearTimeout(t);
+  }, [searchQuery]);
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -175,7 +227,7 @@ export function ManualCoverUpload() {
                   <Button 
                     variant="outline" 
                     size="sm"
-                    onClick={loadBooksWithoutCovers}
+                    onClick={() => loadBooksWithoutCovers(true)}
                     disabled={loading}
                   >
                     <RefreshCw className="h-3 w-3 mr-2" />
