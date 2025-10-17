@@ -41,10 +41,10 @@ const Auth = () => {
     
     try {
       if (isSignUp) {
-        // Capture signup metadata
-        const signupLanguage = localStorage.getItem("language") || navigator.language.split("-")[0] || "en";
-        const signupPath = window.location.pathname;
-        const signupCountry = navigator.language; // e.g., "pt-BR", "en-US", "es-ES"
+        // Capture signup metadata - prioritize landing page data if available
+        const signupLanguage = localStorage.getItem("pending_signup_language") || localStorage.getItem("language") || navigator.language.split("-")[0] || "en";
+        const signupPath = localStorage.getItem("pending_signup_path") || window.location.pathname;
+        const signupCountry = localStorage.getItem("pending_signup_country") || navigator.language; // e.g., "pt-BR", "en-US", "es-ES"
         
         // Signup
         const { error } = await supabase.auth.signUp({
@@ -61,6 +61,12 @@ const Auth = () => {
           }
         });
         if (error) throw error;
+        
+        // Clear pending signup data after successful signup
+        localStorage.removeItem("pending_signup_language");
+        localStorage.removeItem("pending_signup_path");
+        localStorage.removeItem("pending_signup_country");
+        
         toast({
           title: t("toast.success")
         });

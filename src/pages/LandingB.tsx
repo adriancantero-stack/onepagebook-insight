@@ -52,6 +52,10 @@ export default function LandingB({ lang }: LandingBProps) {
 
   const handleCTA = () => {
     trackConversion('cta_click');
+    // Store landing page metadata before redirecting to auth
+    localStorage.setItem("pending_signup_language", lang);
+    localStorage.setItem("pending_signup_path", window.location.pathname);
+    localStorage.setItem("pending_signup_country", navigator.language);
     navigate(`/auth?lang=${lang}`);
   };
 

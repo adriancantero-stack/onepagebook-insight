@@ -17,7 +17,14 @@ interface LandingTestimonialsProps {
 }
 
 export const LandingTestimonials = ({ lang }: LandingTestimonialsProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  
+  // Force language sync
+  useEffect(() => {
+    if (i18n.language !== lang) {
+      i18n.changeLanguage(lang);
+    }
+  }, [lang, i18n]);
   
   const [summaryCount, setSummaryCount] = useState(12547);
   
