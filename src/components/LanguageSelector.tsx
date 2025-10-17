@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -17,6 +18,8 @@ const languages = [
 
 export const LanguageSelector = () => {
   const { i18n } = useTranslation();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLanguageChange = async (langCode: string) => {
     i18n.changeLanguage(langCode);
@@ -29,6 +32,16 @@ export const LanguageSelector = () => {
         .from('profiles')
         .update({ preferred_language: langCode })
         .eq('id', user.id);
+    }
+
+    // If on landing page, navigate to the new language route preserving variant
+    const pathSegment = location.pathname.split('/')[1] || '';
+    const isVariantB = pathSegment.endsWith('2');
+    const landingRoutes = ['pt', 'en', 'es', 'pt2', 'en2', 'es2'];
+    
+    if (landingRoutes.includes(pathSegment)) {
+      const newRoute = isVariantB ? `/${langCode}2` : `/${langCode}`;
+      navigate(newRoute);
     }
   };
 
