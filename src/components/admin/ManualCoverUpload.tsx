@@ -25,7 +25,7 @@ export function ManualCoverUpload() {
   const [loading, setLoading] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Load all books (up to 100 most recent)
+  // Load all books
   const loadBooksWithoutCovers = async () => {
     setLoading(true);
     try {
@@ -33,8 +33,7 @@ export function ManualCoverUpload() {
         .from("books")
         .select("id, title, author, cover_url, lang")
         .eq("is_active", true)
-        .order("created_at", { ascending: false })
-        .limit(100);
+        .order("title");
 
       if (error) throw error;
 
