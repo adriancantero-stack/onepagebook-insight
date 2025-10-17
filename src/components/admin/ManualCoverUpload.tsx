@@ -203,9 +203,17 @@ export function ManualCoverUpload() {
                       >
                         <div className="flex items-start gap-3">
                           <div className="w-12 h-16 bg-muted rounded flex-shrink-0 overflow-hidden">
-                            <div className="w-full h-full flex items-center justify-center">
-                              <ImageIcon className="h-6 w-6 text-muted-foreground" />
-                            </div>
+                            {book.cover_url ? (
+                              <img
+                                src={book.cover_url}
+                                alt={book.title}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center">
+                                <ImageIcon className="h-6 w-6 text-muted-foreground" />
+                              </div>
+                            )}
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="font-medium text-sm truncate">{book.title}</p>
