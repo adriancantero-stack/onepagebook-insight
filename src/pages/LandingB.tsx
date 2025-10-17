@@ -46,10 +46,8 @@ export default function LandingB({ lang }: LandingBProps) {
   });
 
   useEffect(() => {
-    if (lang !== i18n.language) {
-      i18n.changeLanguage(lang);
-      localStorage.setItem("i18nextLng", lang);
-    }
+    i18n.changeLanguage(lang);
+    localStorage.setItem("language", lang);
   }, [lang, i18n]);
 
   const handleCTA = () => {
