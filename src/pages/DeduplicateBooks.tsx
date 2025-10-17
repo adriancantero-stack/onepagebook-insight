@@ -68,7 +68,8 @@ const DeduplicateBooks = () => {
             <AlertTitle>Como funciona</AlertTitle>
             <AlertDescription>
               <ul className="list-disc list-inside space-y-1 mt-2">
-                <li>Identifica livros com mesmo título e autor (case-insensitive)</li>
+                <li>Identifica livros com mesmo título e autor <strong>no mesmo idioma</strong> (case-insensitive)</li>
+                <li><strong>✅ Mantém livros em idiomas diferentes</strong> (PT, EN, ES são preservados)</li>
                 <li>Mantém o livro mais antigo e desativa os duplicados</li>
                 <li>Soma a popularidade de todos os duplicados</li>
                 <li>Atualiza referências em recomendações de pessoas famosas</li>
