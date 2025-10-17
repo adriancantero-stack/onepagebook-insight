@@ -48,8 +48,8 @@ const Welcome = () => {
               country: pendingCountry
             });
             
-            // Track signup conversion for A/B test
-            await trackConversion('signup');
+            // Track signup conversion for A/B test (non-blocking)
+            trackConversion('signup').catch(err => console.error('Error tracking signup:', err));
             
             // Clean up localStorage
             localStorage.removeItem("pending_signup_language");

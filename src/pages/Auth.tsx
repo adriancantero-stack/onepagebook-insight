@@ -64,8 +64,8 @@ const Auth = () => {
         });
         if (error) throw error;
         
-        // Track signup conversion for A/B test
-        await trackConversion('signup');
+        // Track signup conversion for A/B test (non-blocking)
+        trackConversion('signup').catch(err => console.error('Error tracking signup:', err));
         
         // Clear pending signup data after successful signup
         localStorage.removeItem("pending_signup_language");
