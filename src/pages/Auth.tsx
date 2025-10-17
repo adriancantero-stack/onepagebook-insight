@@ -11,6 +11,7 @@ import { BookOpen } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import Footer from "@/components/Footer";
 import { Separator } from "@/components/ui/separator";
+import { useABTest } from "@/hooks/useABTest";
 const Auth = () => {
   const {
     t
@@ -23,6 +24,7 @@ const Auth = () => {
   const [error, setError] = useState<string>("");
   const [googleLoading, setGoogleLoading] = useState(false);
   const navigate = useNavigate();
+  const { trackConversion } = useABTest();
   useEffect(() => {
     supabase.auth.getSession().then(({
       data: {
@@ -61,6 +63,9 @@ const Auth = () => {
           }
         });
         if (error) throw error;
+        
+        // Track signup conversion for A/B test
+        await trackConversion('signup');
         
         // Clear pending signup data after successful signup
         localStorage.removeItem("pending_signup_language");

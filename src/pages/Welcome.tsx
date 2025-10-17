@@ -4,10 +4,12 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useABTest } from "@/hooks/useABTest";
 
 const Welcome = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { trackConversion } = useABTest();
 
   useEffect(() => {
     const updateSignupMetadata = async () => {
@@ -45,6 +47,9 @@ const Welcome = () => {
               path: pendingPath,
               country: pendingCountry
             });
+            
+            // Track signup conversion for A/B test
+            await trackConversion('signup');
             
             // Clean up localStorage
             localStorage.removeItem("pending_signup_language");
