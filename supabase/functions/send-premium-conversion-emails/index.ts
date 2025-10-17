@@ -292,18 +292,12 @@ const handler = async (req: Request): Promise<Response> => {
       errors: 0,
     };
 
-    // Calculate target dates
-    const threeDaysAgo = new Date(now);
-    threeDaysAgo.setDate(now.getDate() - 3);
-    threeDaysAgo.setHours(0, 0, 0, 0);
-
-    const fiveDaysAgo = new Date(now);
-    fiveDaysAgo.setDate(now.getDate() - 5);
-    fiveDaysAgo.setHours(0, 0, 0, 0);
-
-    const sevenDaysAgo = new Date(now);
-    sevenDaysAgo.setDate(now.getDate() - 7);
-    sevenDaysAgo.setHours(0, 0, 0, 0);
+    // Calculate account age in days
+    const getAccountAgeInDays = (createdAt: string): number => {
+      const created = new Date(createdAt);
+      const diffMs = now.getTime() - created.getTime();
+      return Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    };
 
     // Get all free users who haven't received emails yet
     const { data: freeUsers, error: usersError } = await supabase
@@ -330,24 +324,16 @@ const handler = async (req: Request): Promise<Response> => {
 
     for (const user of freeUsers || []) {
       try {
-        const userCreatedAt = new Date(user.created_at);
+        const accountAge = getAccountAgeInDays(user.created_at);
         let emailType: string | null = null;
 
         // Check which email to send based on account age
-        if (
-          userCreatedAt.getTime() >= sevenDaysAgo.getTime() &&
-          userCreatedAt.getTime() < sevenDaysAgo.getTime() + 86400000
-        ) {
+        // Use >= to catch users even if cron timing doesn't align perfectly
+        if (accountAge >= 7) {
           emailType = "day_7";
-        } else if (
-          userCreatedAt.getTime() >= fiveDaysAgo.getTime() &&
-          userCreatedAt.getTime() < fiveDaysAgo.getTime() + 86400000
-        ) {
+        } else if (accountAge >= 5) {
           emailType = "day_5";
-        } else if (
-          userCreatedAt.getTime() >= threeDaysAgo.getTime() &&
-          userCreatedAt.getTime() < threeDaysAgo.getTime() + 86400000
-        ) {
+        } else if (accountAge >= 3) {
           emailType = "day_3";
         }
 
