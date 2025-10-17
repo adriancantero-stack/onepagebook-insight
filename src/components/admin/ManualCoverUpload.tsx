@@ -23,7 +23,7 @@ export function ManualCoverUpload() {
   const [loading, setLoading] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Load books without covers on mount
+  // Load all books (up to 100 most recent)
   const loadBooksWithoutCovers = async () => {
     setLoading(true);
     try {
@@ -31,19 +31,15 @@ export function ManualCoverUpload() {
         .from("books")
         .select("id, title, author, cover_url, lang")
         .eq("is_active", true)
-        .or("cover_url.is.null,cover_url.like.%book-placeholder%,cover_url.like.%logo-gray%,cover_url.eq.")
-        .order("title")
-        .limit(50);
+        .order("created_at", { ascending: false })
+        .limit(100);
 
       if (error) throw error;
 
       setBooksWithoutCovers(data || []);
-      if (data?.length === 0) {
-        toast.success("Todos os livros já têm capas!");
-      }
     } catch (error) {
       console.error("Erro ao carregar livros:", error);
-      toast.error("Erro ao carregar livros sem capa");
+      toast.error("Erro ao carregar livros");
     } finally {
       setLoading(false);
     }
@@ -123,20 +119,20 @@ export function ManualCoverUpload() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <ImageIcon className="h-5 w-5" />
-          Upload Manual de Capas
+          Upload/Trocar Capas de Livros
         </CardTitle>
         <CardDescription>
-          Livros sem capa ou com placeholder ({booksWithoutCovers.length} encontrados)
+          Gerencie capas de livros - {booksWithoutCovers.length} livros disponíveis
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {loading ? (
           <div className="text-center py-8 text-muted-foreground">
-            Carregando livros sem capa...
+            Carregando livros...
           </div>
         ) : booksWithoutCovers.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
-            Todos os livros já possuem capas! 🎉
+            Nenhum livro encontrado
           </div>
         ) : (
           <>
@@ -144,7 +140,7 @@ export function ManualCoverUpload() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <p className="text-sm text-muted-foreground">
-                  Selecione um livro para fazer upload da capa
+                  Selecione um livro para fazer upload ou trocar a capa
                 </p>
                 <Button 
                   variant="outline" 
@@ -153,7 +149,7 @@ export function ManualCoverUpload() {
                   disabled={loading}
                 >
                   <RefreshCw className="h-3 w-3 mr-2" />
-                  Atualizar Lista
+                  Atualizar
                 </Button>
               </div>
 
@@ -180,8 +176,8 @@ export function ManualCoverUpload() {
                             <Badge variant="secondary" className="text-[10px]">
                               {book.lang.toUpperCase()}
                             </Badge>
-                            <Badge variant="destructive" className="text-[10px]">
-                              Precisa de Capa
+                            <Badge variant={book.cover_url ? "default" : "destructive"} className="text-[10px]">
+                              {book.cover_url ? "✓ Com Capa" : "✗ Sem Capa"}
                             </Badge>
                           </div>
                         </div>
