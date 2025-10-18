@@ -71,7 +71,7 @@ const History = () => {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 sm:mb-12">
           <div>
             <h1 className="text-4xl sm:text-5xl font-bold font-poppins text-foreground tracking-tight mb-2">{t("history.title")}</h1>
-            <p className="text-muted-foreground">Seus resumos salvos</p>
+            <p className="text-muted-foreground">{t("history.subtitle")}</p>
           </div>
           {isFree && (
             <Button 
@@ -133,7 +133,7 @@ const History = () => {
                     size="sm"
                     className="w-full sm:w-auto shrink-0 border-lilac-200 hover:border-primary hover:bg-primary hover:text-white transition-all"
                   >
-                    Ver Resumo
+                    {t("history.viewSummary")}
                   </Button>
                 </div>
               </Card>

@@ -267,10 +267,12 @@ export const pt = {
     
     // History
     "history.title": "Histórico de Resumos",
+    "history.subtitle": "Seus resumos salvos",
     "history.upgrade": "Fazer Upgrade",
     "history.empty": "Você ainda não tem resumos",
     "history.emptyDesc": "Gere seu primeiro resumo para começar!",
     "history.generateFirst": "Gerar Primeiro Resumo",
+    "history.viewSummary": "Ver Resumo",
     "history.loading": "Carregando...",
     
     // Plans

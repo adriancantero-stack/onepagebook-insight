@@ -317,10 +317,12 @@ export const en = {
     
     // History
     "history.title": "Summary History",
+    "history.subtitle": "Your saved summaries",
     "history.upgrade": "Upgrade",
     "history.empty": "You don't have any summaries yet",
     "history.emptyDesc": "Generate your first summary to get started!",
     "history.generateFirst": "Generate First Summary",
+    "history.viewSummary": "View Summary",
     "history.loading": "Loading...",
     
     // Plans

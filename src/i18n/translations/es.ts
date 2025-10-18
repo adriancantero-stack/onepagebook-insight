@@ -317,10 +317,12 @@ export const es = {
     
     // History
     "history.title": "Historial de Resúmenes",
+    "history.subtitle": "Tus resúmenes guardados",
     "history.upgrade": "Actualizar",
     "history.empty": "Aún no tienes resúmenes",
     "history.emptyDesc": "¡Genera tu primer resumen para comenzar!",
     "history.generateFirst": "Generar Primer Resumen",
+    "history.viewSummary": "Ver Resumen",
     "history.loading": "Cargando...",
     
     // Plans
