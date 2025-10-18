@@ -25,6 +25,7 @@ export function ManualCoverUpload() {
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
+  const [coverFilter, setCoverFilter] = useState<'all' | 'with' | 'without'>('all');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Load books with pagination and server-side search
@@ -44,6 +45,13 @@ export function ManualCoverUpload() {
       if (searchQuery.trim()) {
         const pattern = `%${searchQuery.trim()}%`;
         query = query.or(`title.ilike.${pattern},author.ilike.${pattern}`);
+      }
+
+      // Apply cover filter
+      if (coverFilter === 'with') {
+        query = query.not('cover_url', 'is', null);
+      } else if (coverFilter === 'without') {
+        query = query.is('cover_url', null);
       }
 
       const { data, error } = await query;
@@ -68,13 +76,13 @@ export function ManualCoverUpload() {
     }
   };
 
-  // Trigger server-side search when query changes (debounced)
+  // Trigger server-side search when query or filter changes (debounced)
   useEffect(() => {
     const t = setTimeout(() => {
       loadBooksWithoutCovers(true);
     }, 300);
     return () => clearTimeout(t);
-  }, [searchQuery]);
+  }, [searchQuery, coverFilter]);
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -158,16 +166,42 @@ export function ManualCoverUpload() {
           </div>
         ) : (
           <>
-            {/* Search Input */}
-            <div className="space-y-2">
-              <Label htmlFor="book-search">Buscar Livro</Label>
-              <Input
-                id="book-search"
-                type="text"
-                placeholder="Digite título ou autor..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+            {/* Search and Filter */}
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="book-search">Buscar Livro</Label>
+                <Input
+                  id="book-search"
+                  type="text"
+                  placeholder="Digite título ou autor..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              
+              <div className="flex gap-2">
+                <Button
+                  variant={coverFilter === 'all' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setCoverFilter('all')}
+                >
+                  Todos
+                </Button>
+                <Button
+                  variant={coverFilter === 'with' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setCoverFilter('with')}
+                >
+                  Com Capa
+                </Button>
+                <Button
+                  variant={coverFilter === 'without' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setCoverFilter('without')}
+                >
+                  Sem Capa
+                </Button>
+              </div>
             </div>
 
             {filteredBooks.length === 0 ? (
