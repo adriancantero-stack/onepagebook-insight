@@ -49,7 +49,7 @@ export const SummaryFeedback = ({ summaryId, userId }: SummaryFeedbackProps) => 
 
   const handleSubmit = async () => {
     if (rating === 0 && !comment.trim()) {
-      toast.error(t("Forneça pelo menos uma avaliação ou comentário"));
+      toast.error(t("feedback.provideRatingOrComment"));
       return;
     }
 
@@ -69,14 +69,14 @@ export const SummaryFeedback = ({ summaryId, userId }: SummaryFeedbackProps) => 
           .eq("id", existingFeedback.id);
 
         if (error) throw error;
-        toast.success(t("Avaliação atualizada com sucesso!"));
+        toast.success(t("feedback.feedbackUpdated"));
       } else {
         const { error } = await supabase
           .from("summary_feedback")
           .insert(feedbackData);
 
         if (error) throw error;
-        toast.success(t("Obrigado pelo seu feedback!"));
+        toast.success(t("feedback.thankYou"));
         
         // Add XP for feedback (only on new feedback, not updates)
         await addXP('feedback_given', 10);
@@ -86,7 +86,7 @@ export const SummaryFeedback = ({ summaryId, userId }: SummaryFeedbackProps) => 
       setShowForm(false);
     } catch (error) {
       console.error("Error submitting feedback:", error);
-      toast.error(t("Erro ao enviar avaliação"));
+      toast.error(t("feedback.errorSubmitting"));
     } finally {
       setIsSubmitting(false);
     }
@@ -98,7 +98,7 @@ export const SummaryFeedback = ({ summaryId, userId }: SummaryFeedbackProps) => 
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
             <MessageSquare className="h-5 w-5" />
-            {t("Sua Avaliação")}
+            {t("feedback.yourFeedback")}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -120,7 +120,7 @@ export const SummaryFeedback = ({ summaryId, userId }: SummaryFeedbackProps) => 
             <p className="text-sm text-muted-foreground mb-3">{existingFeedback.comment}</p>
           )}
           <Button variant="outline" size="sm" onClick={() => setShowForm(true)}>
-            {t("Editar Avaliação")}
+            {t("feedback.editFeedback")}
           </Button>
         </CardContent>
       </Card>
@@ -132,16 +132,16 @@ export const SummaryFeedback = ({ summaryId, userId }: SummaryFeedbackProps) => 
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg">
           <MessageSquare className="h-5 w-5" />
-          {t("Avalie este Resumo")}
+          {t("feedback.rateThisSummary")}
         </CardTitle>
         <CardDescription>
-          {t("Sua opinião nos ajuda a melhorar! Avalie e deixe sugestões.")}
+          {t("feedback.yourOpinionHelps")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
           <label className="text-sm font-medium mb-2 block">
-            {t("Avaliação (opcional)")}
+            {t("feedback.ratingOptional")}
           </label>
           <div className="flex gap-1">
             {[1, 2, 3, 4, 5].map((star) => (
@@ -162,12 +162,12 @@ export const SummaryFeedback = ({ summaryId, userId }: SummaryFeedbackProps) => 
 
         <div>
           <label className="text-sm font-medium mb-2 block">
-            {t("Comentários ou Sugestões (opcional)")}
+            {t("feedback.commentsOptional")}
           </label>
           <Textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            placeholder={t("Compartilhe suas sugestões de melhoria...")}
+            placeholder={t("feedback.shareSuggestions")}
             rows={4}
             maxLength={1000}
           />
@@ -178,11 +178,11 @@ export const SummaryFeedback = ({ summaryId, userId }: SummaryFeedbackProps) => 
 
         <div className="flex gap-2">
           <Button onClick={handleSubmit} disabled={isSubmitting}>
-            {isSubmitting ? t("Enviando...") : t("Enviar Avaliação")}
+            {isSubmitting ? t("feedback.sending") : t("feedback.submitFeedback")}
           </Button>
           {showForm && (
             <Button variant="outline" onClick={() => setShowForm(false)}>
-              {t("Cancelar")}
+              {t("feedback.cancel")}
             </Button>
           )}
         </div>

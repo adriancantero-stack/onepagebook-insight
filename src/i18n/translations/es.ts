@@ -289,6 +289,22 @@ export const es = {
     "summary.errorFlashcards": "Error al generar flashcards",
     "summary.errorExamples": "Error al generar ejemplos",
     
+    // Feedback
+    "feedback.rateThisSummary": "Evalúa este Resumen",
+    "feedback.yourOpinionHelps": "¡Tu opinión nos ayuda a mejorar! Evalúa y deja sugerencias.",
+    "feedback.ratingOptional": "Evaluación (opcional)",
+    "feedback.commentsOptional": "Comentarios o Sugerencias (opcional)",
+    "feedback.shareSuggestions": "Comparte tus sugerencias de mejora...",
+    "feedback.submitFeedback": "Enviar Evaluación",
+    "feedback.sending": "Enviando...",
+    "feedback.cancel": "Cancelar",
+    "feedback.yourFeedback": "Tu Evaluación",
+    "feedback.editFeedback": "Editar Evaluación",
+    "feedback.provideRatingOrComment": "Proporciona al menos una evaluación o comentario",
+    "feedback.feedbackUpdated": "¡Evaluación actualizada con éxito!",
+    "feedback.thankYou": "¡Gracias por tu opinión!",
+    "feedback.errorSubmitting": "Error al enviar evaluación",
+    
     // Sections
     "sections.oneLiner": "Lo esencial del libro",
     "sections.keyIdeas": "Ideas que importan",

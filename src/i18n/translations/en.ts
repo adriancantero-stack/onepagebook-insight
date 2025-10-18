@@ -289,6 +289,22 @@ export const en = {
     "summary.errorFlashcards": "Error generating flashcards",
     "summary.errorExamples": "Error generating examples",
     
+    // Feedback
+    "feedback.rateThisSummary": "Rate this Summary",
+    "feedback.yourOpinionHelps": "Your opinion helps us improve! Rate and leave suggestions.",
+    "feedback.ratingOptional": "Rating (optional)",
+    "feedback.commentsOptional": "Comments or Suggestions (optional)",
+    "feedback.shareSuggestions": "Share your improvement suggestions...",
+    "feedback.submitFeedback": "Submit Feedback",
+    "feedback.sending": "Sending...",
+    "feedback.cancel": "Cancel",
+    "feedback.yourFeedback": "Your Feedback",
+    "feedback.editFeedback": "Edit Feedback",
+    "feedback.provideRatingOrComment": "Please provide at least a rating or comment",
+    "feedback.feedbackUpdated": "Feedback updated successfully!",
+    "feedback.thankYou": "Thank you for your feedback!",
+    "feedback.errorSubmitting": "Error submitting feedback",
+    
     // Sections
     "sections.oneLiner": "The book essentials",
     "sections.keyIdeas": "Insights that matter",
