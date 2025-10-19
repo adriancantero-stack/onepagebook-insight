@@ -32,6 +32,7 @@ const Achievements = lazy(() => import("./pages/Achievements"));
 const Ranking = lazy(() => import("./pages/Ranking"));
 const Settings = lazy(() => import("./pages/Settings"));
 const ABTestDashboard = lazy(() => import("./pages/ABTestDashboard"));
+const TestReminders = lazy(() => import("./pages/TestReminders"));
 
 const Admin = lazy(() => import("./pages/Admin"));
 const PopulateBooks = lazy(() => import("./pages/PopulateBooks"));
@@ -110,6 +111,7 @@ const App = () => (
             <Route path="/en/faq" element={<Faq />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/admin/ab-test" element={<ABTestDashboard />} />
+            <Route path="/admin/test-reminders" element={<TestReminders />} />
             <Route path="/populate-books" element={<PopulateBooks />} />
             <Route path="/curation/people" element={<CurationPeople />} />
             <Route path="/deduplicate-books" element={<DeduplicateBooks />} />
