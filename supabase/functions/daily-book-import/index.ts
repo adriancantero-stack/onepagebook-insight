@@ -286,6 +286,18 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Record import start
+    const { data: historyRecord } = await supabase
+      .from('book_import_history')
+      .insert({
+        status: 'running',
+        books_imported: 0
+      })
+      .select()
+      .single();
+
+    const historyId = historyRecord?.id;
+
     // Insert books
     if (booksToImport.length > 0) {
       console.log(`\n💾 Inserting ${booksToImport.length} books...`);
@@ -320,6 +332,18 @@ Deno.serve(async (req) => {
       importLog.push('ℹ️ No new books to import');
     }
 
+    // Update import history
+    if (historyId) {
+      await supabase
+        .from('book_import_history')
+        .update({
+          status: 'completed',
+          books_imported: totalInserted,
+          completed_at: new Date().toISOString()
+        })
+        .eq('id', historyId);
+    }
+
     const result = {
       success: true,
       stats: {
@@ -337,6 +361,25 @@ Deno.serve(async (req) => {
   } catch (error) {
     console.error('❌ Error in daily-book-import function:', error);
     const errorMsg = error instanceof Error ? error.message : String(error);
+    
+    // Try to record error in history
+    try {
+      const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+      const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+      const supabase = createClient(supabaseUrl, supabaseKey);
+      
+      await supabase
+        .from('book_import_history')
+        .insert({
+          status: 'failed',
+          books_imported: 0,
+          error_message: errorMsg,
+          completed_at: new Date().toISOString()
+        });
+    } catch (historyError) {
+      console.error('Failed to record error in history:', historyError);
+    }
+    
     return new Response(
       JSON.stringify({ 
         success: false, 
