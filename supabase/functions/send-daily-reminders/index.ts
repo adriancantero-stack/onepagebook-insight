@@ -433,14 +433,21 @@ serve(async (req) => {
               },
               body: JSON.stringify({
                 from: "OnePageBook <reminders@send.onepagebook.ai>",
+                reply_to: "support@onepagebook.ai",
                 to: [user.email],
                 subject: message.subject,
                 html: message.html,
                 text: message.text,
                 headers: {
                   'List-Unsubscribe': `<${unsubscribeUrl}>`,
-                  'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click'
-                }
+                  'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+                  'X-Entity-Ref-ID': `user-${profile.id}`,
+                  'Precedence': 'bulk'
+                },
+                tags: [
+                  { name: 'category', value: 'daily-reminder' },
+                  { name: 'language', value: language }
+                ]
               }),
             });
 
