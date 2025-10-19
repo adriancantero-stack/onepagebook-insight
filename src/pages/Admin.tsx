@@ -1831,6 +1831,26 @@ const Admin = () => {
                   <TestEmailNotification />
                   <TestPremiumEmail />
                   <TestWelcomeEmail />
+                  
+                  {/* Daily Reminders Test */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-base">
+                        📧 Testar Lembretes Diários
+                      </CardTitle>
+                      <CardDescription className="text-xs">
+                        Enviar lembretes para todos os usuários agora
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Button
+                        onClick={() => navigate('/admin/test-reminders')}
+                        className="w-full gap-2"
+                      >
+                        Ir para Teste de Lembretes
+                      </Button>
+                    </CardContent>
+                  </Card>
                 </div>
               </div>
 
