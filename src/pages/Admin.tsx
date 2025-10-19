@@ -51,6 +51,11 @@ interface AdminStats {
   trafficSources?: Record<string, number>;
 }
 
+interface DailyMetrics {
+  booksImportedLast24h: number;
+  summariesGeneratedLast24h: number;
+}
+
 interface UserData {
   id: string;
   email: string;
@@ -118,6 +123,7 @@ const Admin = () => {
   const [upgradingUserId, setUpgradingUserId] = useState<string | null>(null);
   const [isCompletingUserData, setIsCompletingUserData] = useState(false);
   const [incompleteUsersCount, setIncompleteUsersCount] = useState<number>(0);
+  const [dailyMetrics, setDailyMetrics] = useState<DailyMetrics | null>(null);
 
 
   useEffect(() => {
@@ -151,7 +157,7 @@ const Admin = () => {
       }
 
       setIsAdmin(true);
-      await loadAdminData();
+      await Promise.all([loadAdminData(), loadDailyMetrics()]);
     } catch (error) {
       console.error("Error checking admin access:", error);
       navigate("/");
@@ -172,6 +178,35 @@ const Admin = () => {
       }
     } catch (error) {
       console.error('Error loading cron schedules:', error);
+    }
+  };
+
+  const loadDailyMetrics = async () => {
+    try {
+      const now = new Date();
+      const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
+      // Get books imported in last 24h from book_import_history
+      const { data: importHistory } = await supabase
+        .from("book_import_history")
+        .select("books_imported")
+        .gte("started_at", twentyFourHoursAgo.toISOString())
+        .eq("status", "completed");
+
+      const booksImportedLast24h = importHistory?.reduce((sum, record) => sum + (record.books_imported || 0), 0) || 0;
+
+      // Get summaries generated in last 24h
+      const { count: summariesLast24h } = await supabase
+        .from("book_summaries")
+        .select("*", { count: 'exact', head: true })
+        .gte("created_at", twentyFourHoursAgo.toISOString());
+
+      setDailyMetrics({
+        booksImportedLast24h,
+        summariesGeneratedLast24h: summariesLast24h || 0,
+      });
+    } catch (error) {
+      console.error("Error loading daily metrics:", error);
     }
   };
 
@@ -1171,6 +1206,52 @@ const Admin = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Daily Metrics Card */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-primary" />
+              Métricas das Últimas 24 Horas
+            </CardTitle>
+            <CardDescription>
+              Atividade recente da plataforma
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Download className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">Livros Importados</span>
+                  </div>
+                  <Badge variant="secondary" className="text-lg px-3 py-1">
+                    {dailyMetrics?.booksImportedLast24h || 0}
+                  </Badge>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Novos livros adicionados ao catálogo via importação automática
+                </p>
+              </div>
+              
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <FileText className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">Resumos Gerados</span>
+                  </div>
+                  <Badge variant="secondary" className="text-lg px-3 py-1">
+                    {dailyMetrics?.summariesGeneratedLast24h || 0}
+                  </Badge>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Resumos criados pelos usuários nas últimas 24 horas
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Language Distribution Card */}
         <Card>
