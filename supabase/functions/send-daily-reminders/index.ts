@@ -18,19 +18,14 @@ serve(async (req) => {
   try {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Get current time in HH:mm format
-    const now = new Date();
-    const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-    
-    console.log(`Checking for users to notify at ${currentTime}`);
+    console.log(`Sending daily reminders to all users with notifications enabled`);
 
-    // Get users who want notifications at this time
+    // Get all users who want email notifications (ignoring notification_time)
     const { data: profiles, error: profilesError } = await supabase
       .from("profiles")
       .select("id, full_name, notification_time, notification_enabled, preferred_language, streak_days, last_read_date, xp, level, total_books_read")
       .eq("notification_enabled", true)
-      .eq("notification_email", true)
-      .eq("notification_time", currentTime);
+      .eq("notification_email", true);
 
     if (profilesError) {
       console.error("Error fetching profiles:", profilesError);
