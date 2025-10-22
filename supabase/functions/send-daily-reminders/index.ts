@@ -143,7 +143,7 @@ serve(async (req) => {
             const messages = {
               pt: {
                 subject: "📚 Hora da sua leitura diária!",
-                text: `Olá, ${userName}!\n\nEstá na hora de continuar sua jornada de aprendizado! Não deixe sua sequência cair.\n\n🔥 ${profile.streak_days || 0} dias de sequência\n⭐ ${profile.xp || 0} pontos XP\n📚 ${profile.total_books_read || 0} livros lidos\n🎯 ${translatedLevel}\n${lastBookText ? `\nÚltimo livro lido: ${lastBookText}` : ''}\n\nContinue lendo: https://onepagebook.com\n\nMantenha sua mente afiada, um livro por vez!\n\nPara gerenciar suas notificações, acesse: ${unsubscribeUrl}`,
+                text: `Olá, ${userName}!\n\nEstá na hora de continuar sua jornada de aprendizado! Não deixe sua sequência cair.\n\n🔥 ${profile.streak_days || 0} dias de sequência\n⭐ ${profile.xp || 0} pontos XP\n📚 ${profile.total_books_read || 0} livros lidos\n🎯 ${translatedLevel}\n${lastBookText ? `\nÚltimo livro lido: ${lastBookText}` : ''}\n\nContinue lendo: https://onepagebook.ai/home\n\nMantenha sua mente afiada, um livro por vez!\n\nPara gerenciar suas notificações, acesse: ${unsubscribeUrl}`,
                 html: `
                   <!DOCTYPE html>
                   <html>
@@ -208,7 +208,7 @@ serve(async (req) => {
                                 <table role="presentation" style="width: 100%; margin: 32px 0;">
                                   <tr>
                                     <td align="center">
-                                      <a href="https://onepagebook.com" style="display: inline-block; padding: 16px 32px; background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(139, 92, 246, 0.3);">
+                                      <a href="https://onepagebook.ai/home" style="display: inline-block; padding: 16px 32px; background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(139, 92, 246, 0.3);">
                                         📖 Continuar Lendo
                                       </a>
                                     </td>
@@ -236,7 +236,7 @@ serve(async (req) => {
               },
               en: {
                 subject: "📚 Time for your daily reading!",
-                text: `Hello, ${userName}!\n\nIt's time to continue your learning journey! Don't let your streak fall.\n\n🔥 ${profile.streak_days || 0} day streak\n⭐ ${profile.xp || 0} XP points\n📚 ${profile.total_books_read || 0} books read\n🎯 ${translatedLevel}\n${lastBookText ? `\nLast book read: ${lastBookText}` : ''}\n\nContinue reading: https://onepagebook.com\n\nKeep your mind sharp, one book at a time!\n\nTo manage your notifications, visit: ${unsubscribeUrl}`,
+                text: `Hello, ${userName}!\n\nIt's time to continue your learning journey! Don't let your streak fall.\n\n🔥 ${profile.streak_days || 0} day streak\n⭐ ${profile.xp || 0} XP points\n📚 ${profile.total_books_read || 0} books read\n🎯 ${translatedLevel}\n${lastBookText ? `\nLast book read: ${lastBookText}` : ''}\n\nContinue reading: https://onepagebook.ai/home\n\nKeep your mind sharp, one book at a time!\n\nTo manage your notifications, visit: ${unsubscribeUrl}`,
                 html: `
                   <!DOCTYPE html>
                   <html>
@@ -301,7 +301,7 @@ serve(async (req) => {
                                 <table role="presentation" style="width: 100%; margin: 32px 0;">
                                   <tr>
                                     <td align="center">
-                                      <a href="https://onepagebook.com" style="display: inline-block; padding: 16px 32px; background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(139, 92, 246, 0.3);">
+                                      <a href="https://onepagebook.ai/home" style="display: inline-block; padding: 16px 32px; background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(139, 92, 246, 0.3);">
                                         📖 Continue Reading
                                       </a>
                                     </td>
@@ -329,7 +329,7 @@ serve(async (req) => {
               },
               es: {
                 subject: "📚 ¡Hora de tu lectura diaria!",
-                text: `¡Hola, ${userName}!\n\n¡Es hora de continuar tu viaje de aprendizaje! No dejes que tu racha caiga.\n\n🔥 ${profile.streak_days || 0} días de racha\n⭐ ${profile.xp || 0} puntos XP\n📚 ${profile.total_books_read || 0} libros leídos\n🎯 ${translatedLevel}\n${lastBookText ? `\nÚltimo libro leído: ${lastBookText}` : ''}\n\nContinúa leyendo: https://onepagebook.com\n\n¡Mantén tu mente afilada, un libro a la vez!\n\nPara gestionar tus notificaciones, visita: ${unsubscribeUrl}`,
+                text: `¡Hola, ${userName}!\n\n¡Es hora de continuar tu viaje de aprendizaje! No dejes que tu racha caiga.\n\n🔥 ${profile.streak_days || 0} días de racha\n⭐ ${profile.xp || 0} puntos XP\n📚 ${profile.total_books_read || 0} libros leídos\n🎯 ${translatedLevel}\n${lastBookText ? `\nÚltimo libro leído: ${lastBookText}` : ''}\n\nContinúa leyendo: https://onepagebook.ai/home\n\n¡Mantén tu mente afilada, un libro a la vez!\n\nPara gestionar tus notificaciones, visita: ${unsubscribeUrl}`,
                 html: `
                   <!DOCTYPE html>
                   <html>
@@ -394,7 +394,7 @@ serve(async (req) => {
                                 <table role="presentation" style="width: 100%; margin: 32px 0;">
                                   <tr>
                                     <td align="center">
-                                      <a href="https://onepagebook.com" style="display: inline-block; padding: 16px 32px; background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(139, 92, 246, 0.3);">
+                                      <a href="https://onepagebook.ai/home" style="display: inline-block; padding: 16px 32px; background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(139, 92, 246, 0.3);">
                                         📖 Continuar Leyendo
                                       </a>
                                     </td>
