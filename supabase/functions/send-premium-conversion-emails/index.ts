@@ -274,7 +274,281 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
         </html>
       `,
     },
+    day_10: {
+      subject: "🚨 ÚLTIMA CHANCE: 40% OFF expira hoje!",
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <style>
+            body { 
+              font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; 
+              line-height: 1.6; 
+              color: #2B1342;
+              background: linear-gradient(135deg, #F8F6FF 0%, #F0ECFF 100%);
+              margin: 0;
+              padding: 20px;
+            }
+            .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 30px rgba(220, 38, 38, 0.2); border: 3px solid #dc2626; }
+            .header { text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); }
+            .header h1 { color: #ffffff; font-size: 36px; font-weight: bold; margin: 0; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); }
+            .header p { color: #ffffff; font-size: 18px; margin: 10px 0 0 0; font-weight: 600; }
+            .content { background: #ffffff; padding: 30px; }
+            .content p { color: #2B1342; margin: 16px 0; font-size: 16px; }
+            .urgency-banner {
+              background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+              color: white;
+              padding: 25px;
+              border-radius: 12px;
+              text-align: center;
+              margin: 30px 0;
+              box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+              animation: pulse 2s infinite;
+            }
+            @keyframes pulse {
+              0%, 100% { transform: scale(1); }
+              50% { transform: scale(1.02); }
+            }
+            .urgency-banner h2 { margin: 0; font-size: 48px; font-weight: bold; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); }
+            .urgency-banner p { margin: 10px 0 0 0; font-size: 20px; font-weight: 600; }
+            .timer { font-size: 16px; margin-top: 15px; color: #fef2f2; font-weight: 600; }
+            .benefits { margin: 25px 0; background: #fef2f2; padding: 25px; border-radius: 12px; border-left: 4px solid #dc2626; }
+            .benefits h3 { color: #dc2626; margin-top: 0; font-size: 20px; }
+            .benefit-item { padding: 12px 0; color: #2B1342; font-size: 16px; font-weight: 500; }
+            .cta-button { 
+              display: inline-block; 
+              padding: 20px 50px; 
+              background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); 
+              color: #ffffff !important; 
+              text-decoration: none; 
+              border-radius: 12px; 
+              margin: 25px 0;
+              font-weight: bold;
+              font-size: 20px;
+              box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+            }
+            .final-warning { 
+              background: #fef2f2;
+              border: 2px solid #dc2626;
+              border-radius: 12px;
+              padding: 20px;
+              margin: 25px 0;
+              text-align: center;
+            }
+            .final-warning p {
+              color: #dc2626;
+              font-weight: bold;
+              font-size: 18px;
+              margin: 0;
+            }
+            .footer { text-align: center; padding: 30px 20px; background: #F8F6FF; color: #666; font-size: 13px; border-top: 2px solid #E6DEFF; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>🚨 ÚLTIMA CHANCE</h1>
+              <p>40% OFF expira HOJE</p>
+            </div>
+            <div class="content">
+              <p>Olá ${userName}!</p>
+              
+              <p style="font-size: 18px; font-weight: 600;">Esta é sua ÚLTIMA oportunidade! O desconto de 40% no primeiro mês Premium expira em algumas horas.</p>
+              
+              <div class="urgency-banner">
+                <h2>40% OFF</h2>
+                <p>NO PRIMEIRO MÊS</p>
+                <p class="timer">⏰ EXPIRA HOJE ÀS 23:59</p>
+              </div>
+              
+              <div class="benefits">
+                <h3>🔥 O que você está perdendo AGORA:</h3>
+                <div class="benefit-item">✅ Resumos ILIMITADOS (vs apenas 10 por mês)</div>
+                <div class="benefit-item">✅ Áudio profissional para TODOS os livros</div>
+                <div class="benefit-item">✅ Conquistas e gamificação exclusivas</div>
+                <div class="benefit-item">✅ Acesso prioritário a novos recursos</div>
+              </div>
+              
+              <p style="font-size: 17px; font-weight: 600; text-align: center;">Milhares de usuários já transformaram sua rotina de leitura. Não fique de fora!</p>
+              
+              <center>
+                <a href="${userLanguage === 'pt' ? 'https://buy.stripe.com/fZu28r50YbE76fuaKv3oA00?prefilled_promo_code=WELCOME40' : 'https://buy.stripe.com/7sY7sL2SQcIb6fu2dZ3oA02?prefilled_promo_code=WELCOME40'}" class="cta-button" style="display: inline-block; padding: 20px 50px; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: #ffffff !important; text-decoration: none; border-radius: 12px; margin: 25px 0; font-weight: bold; font-size: 20px; box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4); text-transform: uppercase; letter-spacing: 0.5px;">GARANTIR MEU DESCONTO</a>
+              </center>
+              
+              <div class="final-warning">
+                <p>⚠️ Este é o último lembrete que você receberá.</p>
+                <p>Após hoje, o desconto expira permanentemente.</p>
+              </div>
+              
+              <p style="text-align: center; font-size: 13px; color: #666; margin-top: 20px;">
+                Código WELCOME40 aplicado automaticamente
+              </p>
+            </div>
+            <div class="footer">
+              <p>Não perca esta oportunidade!<br>Equipe OnePageBook</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `,
+    },
   };
+
+  // Add English and Spanish translations
+  if (userLanguage === 'en') {
+    return {
+      day_3: { ...templates.day_3, subject: "✨ Discover the full potential of OnePageBook Premium" },
+      day_5: { ...templates.day_5, subject: "🎁 Special Premium offer just for you!" },
+      day_7: { ...templates.day_7, subject: "⏰ Last chance: Unlock all of OnePageBook + 40% OFF" },
+      day_10: {
+        subject: "🚨 LAST CHANCE: 40% OFF expires today!",
+        html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <style>
+              body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #2B1342; background: linear-gradient(135deg, #F8F6FF 0%, #F0ECFF 100%); margin: 0; padding: 20px; }
+              .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 30px rgba(220, 38, 38, 0.2); border: 3px solid #dc2626; }
+              .header { text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); }
+              .header h1 { color: #ffffff; font-size: 36px; font-weight: bold; margin: 0; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); }
+              .header p { color: #ffffff; font-size: 18px; margin: 10px 0 0 0; font-weight: 600; }
+              .content { background: #ffffff; padding: 30px; }
+              .content p { color: #2B1342; margin: 16px 0; font-size: 16px; }
+              .urgency-banner { background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: white; padding: 25px; border-radius: 12px; text-align: center; margin: 30px 0; box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4); animation: pulse 2s infinite; }
+              @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+              .urgency-banner h2 { margin: 0; font-size: 48px; font-weight: bold; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); }
+              .urgency-banner p { margin: 10px 0 0 0; font-size: 20px; font-weight: 600; }
+              .timer { font-size: 16px; margin-top: 15px; color: #fef2f2; font-weight: 600; }
+              .benefits { margin: 25px 0; background: #fef2f2; padding: 25px; border-radius: 12px; border-left: 4px solid #dc2626; }
+              .benefits h3 { color: #dc2626; margin-top: 0; font-size: 20px; }
+              .benefit-item { padding: 12px 0; color: #2B1342; font-size: 16px; font-weight: 500; }
+              .cta-button { display: inline-block; padding: 20px 50px; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: #ffffff !important; text-decoration: none; border-radius: 12px; margin: 25px 0; font-weight: bold; font-size: 20px; box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4); text-transform: uppercase; letter-spacing: 0.5px; }
+              .final-warning { background: #fef2f2; border: 2px solid #dc2626; border-radius: 12px; padding: 20px; margin: 25px 0; text-align: center; }
+              .final-warning p { color: #dc2626; font-weight: bold; font-size: 18px; margin: 0; }
+              .footer { text-align: center; padding: 30px 20px; background: #F8F6FF; color: #666; font-size: 13px; border-top: 2px solid #E6DEFF; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1>🚨 LAST CHANCE</h1>
+                <p>40% OFF expires TODAY</p>
+              </div>
+              <div class="content">
+                <p>Hello ${userName}!</p>
+                <p style="font-size: 18px; font-weight: 600;">This is your LAST opportunity! The 40% discount on your first Premium month expires in a few hours.</p>
+                <div class="urgency-banner">
+                  <h2>40% OFF</h2>
+                  <p>FIRST MONTH</p>
+                  <p class="timer">⏰ EXPIRES TODAY AT 11:59 PM</p>
+                </div>
+                <div class="benefits">
+                  <h3>🔥 What you're missing RIGHT NOW:</h3>
+                  <div class="benefit-item">✅ UNLIMITED summaries (vs just 10 per month)</div>
+                  <div class="benefit-item">✅ Professional audio for ALL books</div>
+                  <div class="benefit-item">✅ Exclusive achievements and gamification</div>
+                  <div class="benefit-item">✅ Priority access to new features</div>
+                </div>
+                <p style="font-size: 17px; font-weight: 600; text-align: center;">Thousands of users have already transformed their reading routine. Don't miss out!</p>
+                <center>
+                  <a href="https://buy.stripe.com/7sY7sL2SQcIb6fu2dZ3oA02?prefilled_promo_code=WELCOME40" class="cta-button" style="display: inline-block; padding: 20px 50px; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: #ffffff !important; text-decoration: none; border-radius: 12px; margin: 25px 0; font-weight: bold; font-size: 20px; box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4); text-transform: uppercase; letter-spacing: 0.5px;">CLAIM MY DISCOUNT</a>
+                </center>
+                <div class="final-warning">
+                  <p>⚠️ This is the last reminder you'll receive.</p>
+                  <p>After today, the discount expires permanently.</p>
+                </div>
+                <p style="text-align: center; font-size: 13px; color: #666; margin-top: 20px;">Code WELCOME40 applied automatically</p>
+              </div>
+              <div class="footer">
+                <p>Don't miss this opportunity!<br>OnePageBook Team</p>
+              </div>
+            </div>
+          </body>
+          </html>
+        `,
+      }
+    }[dayType] || templates[dayType];
+  }
+
+  if (userLanguage === 'es') {
+    return {
+      day_3: { ...templates.day_3, subject: "✨ Descubre todo el potencial de OnePageBook Premium" },
+      day_5: { ...templates.day_5, subject: "🎁 ¡Oferta Premium especial solo para ti!" },
+      day_7: { ...templates.day_7, subject: "⏰ Última oportunidad: Desbloquea todo OnePageBook + 40% OFF" },
+      day_10: {
+        subject: "🚨 ÚLTIMA OPORTUNIDAD: ¡40% OFF expira hoy!",
+        html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <style>
+              body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #2B1342; background: linear-gradient(135deg, #F8F6FF 0%, #F0ECFF 100%); margin: 0; padding: 20px; }
+              .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 30px rgba(220, 38, 38, 0.2); border: 3px solid #dc2626; }
+              .header { text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); }
+              .header h1 { color: #ffffff; font-size: 36px; font-weight: bold; margin: 0; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); }
+              .header p { color: #ffffff; font-size: 18px; margin: 10px 0 0 0; font-weight: 600; }
+              .content { background: #ffffff; padding: 30px; }
+              .content p { color: #2B1342; margin: 16px 0; font-size: 16px; }
+              .urgency-banner { background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: white; padding: 25px; border-radius: 12px; text-align: center; margin: 30px 0; box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4); animation: pulse 2s infinite; }
+              @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+              .urgency-banner h2 { margin: 0; font-size: 48px; font-weight: bold; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); }
+              .urgency-banner p { margin: 10px 0 0 0; font-size: 20px; font-weight: 600; }
+              .timer { font-size: 16px; margin-top: 15px; color: #fef2f2; font-weight: 600; }
+              .benefits { margin: 25px 0; background: #fef2f2; padding: 25px; border-radius: 12px; border-left: 4px solid #dc2626; }
+              .benefits h3 { color: #dc2626; margin-top: 0; font-size: 20px; }
+              .benefit-item { padding: 12px 0; color: #2B1342; font-size: 16px; font-weight: 500; }
+              .cta-button { display: inline-block; padding: 20px 50px; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: #ffffff !important; text-decoration: none; border-radius: 12px; margin: 25px 0; font-weight: bold; font-size: 20px; box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4); text-transform: uppercase; letter-spacing: 0.5px; }
+              .final-warning { background: #fef2f2; border: 2px solid #dc2626; border-radius: 12px; padding: 20px; margin: 25px 0; text-align: center; }
+              .final-warning p { color: #dc2626; font-weight: bold; font-size: 18px; margin: 0; }
+              .footer { text-align: center; padding: 30px 20px; background: #F8F6FF; color: #666; font-size: 13px; border-top: 2px solid #E6DEFF; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1>🚨 ÚLTIMA OPORTUNIDAD</h1>
+                <p>40% OFF expira HOY</p>
+              </div>
+              <div class="content">
+                <p>¡Hola ${userName}!</p>
+                <p style="font-size: 18px; font-weight: 600;">¡Esta es tu ÚLTIMA oportunidad! El descuento del 40% en tu primer mes Premium expira en pocas horas.</p>
+                <div class="urgency-banner">
+                  <h2>40% OFF</h2>
+                  <p>PRIMER MES</p>
+                  <p class="timer">⏰ EXPIRA HOY A LAS 23:59</p>
+                </div>
+                <div class="benefits">
+                  <h3>🔥 Lo que estás perdiendo AHORA MISMO:</h3>
+                  <div class="benefit-item">✅ Resúmenes ILIMITADOS (vs solo 10 por mes)</div>
+                  <div class="benefit-item">✅ Audio profesional para TODOS los libros</div>
+                  <div class="benefit-item">✅ Logros y gamificación exclusivos</div>
+                  <div class="benefit-item">✅ Acceso prioritario a nuevas funciones</div>
+                </div>
+                <p style="font-size: 17px; font-weight: 600; text-align: center;">Miles de usuarios ya transformaron su rutina de lectura. ¡No te quedes afuera!</p>
+                <center>
+                  <a href="https://buy.stripe.com/7sY7sL2SQcIb6fu2dZ3oA02?prefilled_promo_code=WELCOME40" class="cta-button" style="display: inline-block; padding: 20px 50px; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: #ffffff !important; text-decoration: none; border-radius: 12px; margin: 25px 0; font-weight: bold; font-size: 20px; box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4); text-transform: uppercase; letter-spacing: 0.5px;">RECLAMAR MI DESCUENTO</a>
+                </center>
+                <div class="final-warning">
+                  <p>⚠️ Este es el último recordatorio que recibirás.</p>
+                  <p>Después de hoy, el descuento expira permanentemente.</p>
+                </div>
+                <p style="text-align: center; font-size: 13px; color: #666; margin-top: 20px;">Código WELCOME40 aplicado automáticamente</p>
+              </div>
+              <div class="footer">
+                <p>¡No pierdas esta oportunidad!<br>Equipo OnePageBook</p>
+              </div>
+            </div>
+          </body>
+          </html>
+        `,
+      }
+    }[dayType] || templates[dayType];
+  }
 
   return templates[dayType];
 };
@@ -293,6 +567,7 @@ const handler = async (req: Request): Promise<Response> => {
       day_3: 0,
       day_5: 0,
       day_7: 0,
+      day_10: 0,
       errors: 0,
     };
 
@@ -333,7 +608,9 @@ const handler = async (req: Request): Promise<Response> => {
 
         // Check which email to send based on account age
         // Use >= to catch users even if cron timing doesn't align perfectly
-        if (accountAge >= 7) {
+        if (accountAge >= 10) {
+          emailType = "day_10";
+        } else if (accountAge >= 7) {
           emailType = "day_7";
         } else if (accountAge >= 5) {
           emailType = "day_5";
