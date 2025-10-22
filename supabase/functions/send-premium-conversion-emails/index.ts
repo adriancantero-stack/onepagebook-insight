@@ -400,9 +400,161 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
   // Add English and Spanish translations
   if (userLanguage === 'en') {
     return {
-      day_3: { ...templates.day_3, subject: "✨ Discover the full potential of OnePageBook Premium" },
-      day_5: { ...templates.day_5, subject: "🎁 Special Premium offer just for you!" },
-      day_7: { ...templates.day_7, subject: "⏰ Last chance: Unlock all of OnePageBook + 40% OFF" },
+      day_3: {
+        subject: "✨ Discover the full potential of OnePageBook Premium",
+        html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <style>
+              body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #2B1342; background: linear-gradient(135deg, #F8F6FF 0%, #F0ECFF 100%); margin: 0; padding: 20px; }
+              .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(124, 92, 255, 0.1); }
+              .header { text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #F8F6FF 0%, #E6DEFF 100%); }
+              .header h1 { color: #7C5CFF; font-size: 32px; font-weight: bold; margin: 0; }
+              .content { background: #ffffff; padding: 30px; }
+              .content p { color: #2B1342; margin: 16px 0; }
+              .benefits { margin: 25px 0; background: #F8F6FF; padding: 20px; border-radius: 12px; border-left: 4px solid #7C5CFF; }
+              .benefits h3 { color: #7C5CFF; margin-top: 0; }
+              .benefit-item { padding: 10px 0; color: #2B1342; }
+              .cta-button { display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #7C5CFF 0%, #6643FF 100%); color: white; text-decoration: none; border-radius: 12px; margin: 20px 0; font-weight: bold; font-size: 16px; box-shadow: 0 4px 15px rgba(124, 92, 255, 0.3); }
+              .footer { text-align: center; padding: 30px 20px; background: #F8F6FF; color: #666; font-size: 13px; border-top: 2px solid #E6DEFF; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1>✨ OnePageBook</h1>
+              </div>
+              <div class="content">
+                <p>Hello ${userName}!</p>
+                <p>We noticed you've been enjoying OnePageBook for 3 days. How about taking your experience to the next level?</p>
+                <div class="benefits">
+                  <h3>With OnePageBook Premium you get:</h3>
+                  <div class="benefit-item">🎯 Unlimited summaries every month</div>
+                  <div class="benefit-item">🎧 Audio generated for all summaries</div>
+                  <div class="benefit-item">📊 Advanced statistics and exclusive achievements</div>
+                  <div class="benefit-item">⚡ Priority access to new features</div>
+                </div>
+                <p><strong>Transform your reading journey now!</strong></p>
+                <center>
+                  <a href="${specialCheckoutUrlEnEs}" class="cta-button">Go Premium</a>
+                </center>
+              </div>
+              <div class="footer">
+                <p>Best regards,<br>OnePageBook Team</p>
+              </div>
+            </div>
+          </body>
+          </html>
+        `,
+      },
+      day_5: {
+        subject: "🎁 Special Premium offer just for you!",
+        html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <style>
+              body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #2B1342; background: linear-gradient(135deg, #F8F6FF 0%, #F0ECFF 100%); margin: 0; padding: 20px; }
+              .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(124, 92, 255, 0.1); }
+              .header { text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #F8F6FF 0%, #E6DEFF 100%); }
+              .header h1 { color: #7C5CFF; font-size: 32px; font-weight: bold; margin: 0; }
+              .content { background: #ffffff; padding: 30px; }
+              .content p { color: #2B1342; margin: 16px 0; }
+              .benefits { margin: 25px 0; background: #F8F6FF; padding: 20px; border-radius: 12px; border-left: 4px solid #7C5CFF; }
+              .benefits h3 { color: #7C5CFF; margin-top: 0; }
+              .benefit-item { padding: 10px 0; color: #2B1342; }
+              .cta-button { display: inline-block; padding: 16px 45px; background: linear-gradient(135deg, #7C5CFF 0%, #6643FF 100%); color: white; text-decoration: none; border-radius: 12px; margin: 20px 0; font-weight: bold; font-size: 16px; box-shadow: 0 4px 15px rgba(124, 92, 255, 0.3); }
+              .footer { text-align: center; padding: 30px 20px; background: #F8F6FF; color: #666; font-size: 13px; border-top: 2px solid #E6DEFF; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1>🎁 OnePageBook</h1>
+              </div>
+              <div class="content">
+                <p>Hello ${userName}!</p>
+                <p>You've been exploring OnePageBook for the last 5 days. We have a special opportunity for you!</p>
+                <div class="benefits">
+                  <h3>💎 Why our Premium users love it:</h3>
+                  <div class="benefit-item">- Unlimited summaries (vs 10 per month on free)</div>
+                  <div class="benefit-item">- Professional audio for all books</div>
+                  <div class="benefit-item">- Zero limits, maximum learning</div>
+                </div>
+                <p><strong>Thousands of readers are already accelerating their knowledge. Join us?</strong></p>
+                <center>
+                  <a href="${specialCheckoutUrlEnEs}" class="cta-button">Yes, I want Premium!</a>
+                </center>
+              </div>
+              <div class="footer">
+                <p>Read more, learn more!<br>OnePageBook Team</p>
+              </div>
+            </div>
+          </body>
+          </html>
+        `,
+      },
+      day_7: {
+        subject: "⏰ Last chance: Unlock all of OnePageBook + 40% OFF",
+        html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <style>
+              body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #2B1342; background: linear-gradient(135deg, #F8F6FF 0%, #F0ECFF 100%); margin: 0; padding: 20px; }
+              .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(124, 92, 255, 0.1); }
+              .header { text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #F8F6FF 0%, #E6DEFF 100%); }
+              .header h1 { color: #7C5CFF; font-size: 32px; font-weight: bold; margin: 0; }
+              .content { background: #ffffff; padding: 30px; }
+              .content p { color: #2B1342; margin: 16px 0; }
+              .discount-box { background: linear-gradient(135deg, #7C5CFF 0%, #6643FF 100%); color: white; padding: 30px; border-radius: 16px; margin: 30px 0; text-align: center; box-shadow: 0 8px 25px rgba(124, 92, 255, 0.3); }
+              .discount-box h2 { margin: 0; font-size: 56px; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); }
+              .discount-box p { margin: 10px 0 0 0; font-size: 22px; font-weight: 500; }
+              .discount-validity { font-size: 14px; margin-top: 20px; color: #F0ECFF; font-weight: 600; }
+              .benefits { margin: 25px 0; background: #F8F6FF; padding: 20px; border-radius: 12px; border-left: 4px solid #7C5CFF; }
+              .benefit-item { padding: 10px 0; color: #2B1342; }
+              .cta-button { display: inline-block; padding: 16px 45px; background: linear-gradient(135deg, #7C5CFF 0%, #6643FF 100%); color: #ffffff !important; text-decoration: none; border-radius: 12px; margin: 20px 0; font-weight: bold; font-size: 18px; box-shadow: 0 4px 15px rgba(124, 92, 255, 0.3); }
+              .urgency { color: #dc2626; font-weight: bold; padding: 15px; background: #fef2f2; border-radius: 8px; border-left: 4px solid #dc2626; margin: 25px 0; }
+              .footer { text-align: center; padding: 30px 20px; background: #F8F6FF; color: #666; font-size: 13px; border-top: 2px solid #E6DEFF; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1>⏰ OnePageBook</h1>
+              </div>
+              <div class="content">
+                <p>Hello ${userName}!</p>
+                <p>A week has passed and you're still with us - that's amazing! 🎉</p>
+                <p>But we noticed you're still limited to 10 summaries per month. Don't let your reading goals wait!</p>
+                <div class="discount-box">
+                  <h2>40% OFF</h2>
+                  <p>on your first Premium month!</p>
+                  <p class="discount-validity">⏰ Valid for only 7 days</p>
+                </div>
+                <div class="benefits">
+                  <div class="benefit-item">🚀 Premium users read 3x more books</div>
+                  <div class="benefit-item">📚 Unlimited access to the complete catalog</div>
+                  <div class="benefit-item">🎯 Exclusive achievements and gamification</div>
+                </div>
+                <p class="urgency">This is your last chance to receive this reminder. Knowledge doesn't wait!</p>
+                <center>
+                  <a href="${checkoutUrl}" class="cta-button" style="display: inline-block; padding: 16px 45px; background: linear-gradient(135deg, #7C5CFF 0%, #6643FF 100%); color: #ffffff !important; text-decoration: none; border-radius: 12px; margin: 20px 0; font-weight: bold; font-size: 18px; box-shadow: 0 4px 15px rgba(124, 92, 255, 0.3);">I Want Premium NOW</a>
+                </center>
+                <p style="text-align: center; font-size: 13px; color: #666; margin-top: 15px;">Discount automatically applied at checkout</p>
+              </div>
+              <div class="footer">
+                <p>Success on your journey!<br>OnePageBook Team</p>
+              </div>
+            </div>
+          </body>
+          </html>
+        `,
+      },
       day_10: {
         subject: "🚨 LAST CHANCE: 40% OFF expires today!",
         html: `
@@ -476,9 +628,161 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
 
   if (userLanguage === 'es') {
     return {
-      day_3: { ...templates.day_3, subject: "✨ Descubre todo el potencial de OnePageBook Premium" },
-      day_5: { ...templates.day_5, subject: "🎁 ¡Oferta Premium especial solo para ti!" },
-      day_7: { ...templates.day_7, subject: "⏰ Última oportunidad: Desbloquea todo OnePageBook + 40% OFF" },
+      day_3: {
+        subject: "✨ Descubre todo el potencial de OnePageBook Premium",
+        html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <style>
+              body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #2B1342; background: linear-gradient(135deg, #F8F6FF 0%, #F0ECFF 100%); margin: 0; padding: 20px; }
+              .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(124, 92, 255, 0.1); }
+              .header { text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #F8F6FF 0%, #E6DEFF 100%); }
+              .header h1 { color: #7C5CFF; font-size: 32px; font-weight: bold; margin: 0; }
+              .content { background: #ffffff; padding: 30px; }
+              .content p { color: #2B1342; margin: 16px 0; }
+              .benefits { margin: 25px 0; background: #F8F6FF; padding: 20px; border-radius: 12px; border-left: 4px solid #7C5CFF; }
+              .benefits h3 { color: #7C5CFF; margin-top: 0; }
+              .benefit-item { padding: 10px 0; color: #2B1342; }
+              .cta-button { display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #7C5CFF 0%, #6643FF 100%); color: white; text-decoration: none; border-radius: 12px; margin: 20px 0; font-weight: bold; font-size: 16px; box-shadow: 0 4px 15px rgba(124, 92, 255, 0.3); }
+              .footer { text-align: center; padding: 30px 20px; background: #F8F6FF; color: #666; font-size: 13px; border-top: 2px solid #E6DEFF; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1>✨ OnePageBook</h1>
+              </div>
+              <div class="content">
+                <p>¡Hola ${userName}!</p>
+                <p>Notamos que estás disfrutando de OnePageBook hace 3 días. ¿Qué tal llevar tu experiencia al siguiente nivel?</p>
+                <div class="benefits">
+                  <h3>Con OnePageBook Premium tienes:</h3>
+                  <div class="benefit-item">🎯 Resúmenes ilimitados todos los meses</div>
+                  <div class="benefit-item">🎧 Audio generado para todos los resúmenes</div>
+                  <div class="benefit-item">📊 Estadísticas avanzadas y logros exclusivos</div>
+                  <div class="benefit-item">⚡ Acceso prioritario a nuevas funciones</div>
+                </div>
+                <p><strong>¡Transforma tu viaje de lectura ahora!</strong></p>
+                <center>
+                  <a href="${specialCheckoutUrlEnEs}" class="cta-button">Quiero ser Premium</a>
+                </center>
+              </div>
+              <div class="footer">
+                <p>Saludos,<br>Equipo OnePageBook</p>
+              </div>
+            </div>
+          </body>
+          </html>
+        `,
+      },
+      day_5: {
+        subject: "🎁 ¡Oferta Premium especial solo para ti!",
+        html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <style>
+              body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #2B1342; background: linear-gradient(135deg, #F8F6FF 0%, #F0ECFF 100%); margin: 0; padding: 20px; }
+              .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(124, 92, 255, 0.1); }
+              .header { text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #F8F6FF 0%, #E6DEFF 100%); }
+              .header h1 { color: #7C5CFF; font-size: 32px; font-weight: bold; margin: 0; }
+              .content { background: #ffffff; padding: 30px; }
+              .content p { color: #2B1342; margin: 16px 0; }
+              .benefits { margin: 25px 0; background: #F8F6FF; padding: 20px; border-radius: 12px; border-left: 4px solid #7C5CFF; }
+              .benefits h3 { color: #7C5CFF; margin-top: 0; }
+              .benefit-item { padding: 10px 0; color: #2B1342; }
+              .cta-button { display: inline-block; padding: 16px 45px; background: linear-gradient(135deg, #7C5CFF 0%, #6643FF 100%); color: white; text-decoration: none; border-radius: 12px; margin: 20px 0; font-weight: bold; font-size: 16px; box-shadow: 0 4px 15px rgba(124, 92, 255, 0.3); }
+              .footer { text-align: center; padding: 30px 20px; background: #F8F6FF; color: #666; font-size: 13px; border-top: 2px solid #E6DEFF; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1>🎁 OnePageBook</h1>
+              </div>
+              <div class="content">
+                <p>¡Hola ${userName}!</p>
+                <p>Ya exploraste bastante OnePageBook en los últimos 5 días. ¡Tenemos una oportunidad especial para ti!</p>
+                <div class="benefits">
+                  <h3>💎 Por qué nuestros usuarios Premium lo aman:</h3>
+                  <div class="benefit-item">- Resúmenes ilimitados (vs 10 por mes en gratuito)</div>
+                  <div class="benefit-item">- Audio profesional para todos los libros</div>
+                  <div class="benefit-item">- Cero límites, máximo aprendizaje</div>
+                </div>
+                <p><strong>Miles de lectores ya están acelerando su conocimiento. ¿Vienes con nosotros?</strong></p>
+                <center>
+                  <a href="${specialCheckoutUrlEnEs}" class="cta-button">¡Sí, quiero Premium!</a>
+                </center>
+              </div>
+              <div class="footer">
+                <p>¡Lee más, aprende más!<br>Equipo OnePageBook</p>
+              </div>
+            </div>
+          </body>
+          </html>
+        `,
+      },
+      day_7: {
+        subject: "⏰ Última oportunidad: Desbloquea todo OnePageBook + 40% OFF",
+        html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <style>
+              body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #2B1342; background: linear-gradient(135deg, #F8F6FF 0%, #F0ECFF 100%); margin: 0; padding: 20px; }
+              .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(124, 92, 255, 0.1); }
+              .header { text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #F8F6FF 0%, #E6DEFF 100%); }
+              .header h1 { color: #7C5CFF; font-size: 32px; font-weight: bold; margin: 0; }
+              .content { background: #ffffff; padding: 30px; }
+              .content p { color: #2B1342; margin: 16px 0; }
+              .discount-box { background: linear-gradient(135deg, #7C5CFF 0%, #6643FF 100%); color: white; padding: 30px; border-radius: 16px; margin: 30px 0; text-align: center; box-shadow: 0 8px 25px rgba(124, 92, 255, 0.3); }
+              .discount-box h2 { margin: 0; font-size: 56px; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); }
+              .discount-box p { margin: 10px 0 0 0; font-size: 22px; font-weight: 500; }
+              .discount-validity { font-size: 14px; margin-top: 20px; color: #F0ECFF; font-weight: 600; }
+              .benefits { margin: 25px 0; background: #F8F6FF; padding: 20px; border-radius: 12px; border-left: 4px solid #7C5CFF; }
+              .benefit-item { padding: 10px 0; color: #2B1342; }
+              .cta-button { display: inline-block; padding: 16px 45px; background: linear-gradient(135deg, #7C5CFF 0%, #6643FF 100%); color: #ffffff !important; text-decoration: none; border-radius: 12px; margin: 20px 0; font-weight: bold; font-size: 18px; box-shadow: 0 4px 15px rgba(124, 92, 255, 0.3); }
+              .urgency { color: #dc2626; font-weight: bold; padding: 15px; background: #fef2f2; border-radius: 8px; border-left: 4px solid #dc2626; margin: 25px 0; }
+              .footer { text-align: center; padding: 30px 20px; background: #F8F6FF; color: #666; font-size: 13px; border-top: 2px solid #E6DEFF; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1>⏰ OnePageBook</h1>
+              </div>
+              <div class="content">
+                <p>¡Hola ${userName}!</p>
+                <p>Ha pasado una semana y continúas con nosotros - ¡eso es increíble! 🎉</p>
+                <p>Pero notamos que todavía estás limitado a 10 resúmenes por mes. ¡No dejes que tus objetivos de lectura esperen!</p>
+                <div class="discount-box">
+                  <h2>40% OFF</h2>
+                  <p>¡en tu primer mes Premium!</p>
+                  <p class="discount-validity">⏰ Válido por solo 7 días</p>
+                </div>
+                <div class="benefits">
+                  <div class="benefit-item">🚀 Los usuarios Premium leen 3x más libros</div>
+                  <div class="benefit-item">📚 Acceso ilimitado al catálogo completo</div>
+                  <div class="benefit-item">🎯 Logros y gamificación exclusivos</div>
+                </div>
+                <p class="urgency">¡Esta es tu última oportunidad de recibir este recordatorio. El conocimiento no espera!</p>
+                <center>
+                  <a href="${checkoutUrl}" class="cta-button" style="display: inline-block; padding: 16px 45px; background: linear-gradient(135deg, #7C5CFF 0%, #6643FF 100%); color: #ffffff !important; text-decoration: none; border-radius: 12px; margin: 20px 0; font-weight: bold; font-size: 18px; box-shadow: 0 4px 15px rgba(124, 92, 255, 0.3);">Quiero Premium AHORA</a>
+                </center>
+                <p style="text-align: center; font-size: 13px; color: #666; margin-top: 15px;">Descuento aplicado automáticamente en el checkout</p>
+              </div>
+              <div class="footer">
+                <p>¡Éxito en tu viaje!<br>Equipo OnePageBook</p>
+              </div>
+            </div>
+          </body>
+          </html>
+        `,
+      },
       day_10: {
         subject: "🚨 ÚLTIMA OPORTUNIDAD: ¡40% OFF expira hoy!",
         html: `
