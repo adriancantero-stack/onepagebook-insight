@@ -27,6 +27,8 @@ const PROMO_CODE = "WELCOME40";
 // Email templates in Portuguese
 const getEmailTemplate = (dayType: string, userName: string, userLanguage: string = "pt"): EmailTemplate => {
   const checkoutUrl = STRIPE_CHECKOUT_URLS[userLanguage] || STRIPE_CHECKOUT_URLS.pt;
+  // Special checkout URL for Portuguese day 3 and day 5 emails
+  const specialCheckoutUrlPt = "https://buy.stripe.com/fZu28r50YbE76fuaKv3oA00";
   const templates: Record<string, EmailTemplate> = {
     day_3: {
       subject: "✨ Descubra todo o potencial do OnePageBook Premium",
@@ -88,7 +90,7 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
               <p><strong>Transforme sua jornada de leitura agora!</strong></p>
               
               <center>
-                <a href="${checkoutUrl}" class="cta-button">Quero ser Premium</a>
+                <a href="${userLanguage === 'pt' ? specialCheckoutUrlPt : checkoutUrl}" class="cta-button">Quero ser Premium</a>
               </center>
             </div>
             <div class="footer">
@@ -158,7 +160,7 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
               <p><strong>Milhares de leitores já estão acelerando seu conhecimento. Você vem com a gente?</strong></p>
               
               <center>
-                <a href="${checkoutUrl}" class="cta-button">Sim, quero Premium!</a>
+                <a href="${userLanguage === 'pt' ? specialCheckoutUrlPt : checkoutUrl}" class="cta-button">Sim, quero Premium!</a>
               </center>
             </div>
             <div class="footer">
