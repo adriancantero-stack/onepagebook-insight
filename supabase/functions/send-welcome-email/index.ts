@@ -61,7 +61,7 @@ const getEmailContent = (language: string, userName: string): WelcomeEmailConten
       achievementsTitle: "🏆 Conquistas",
       achievementsDesc: "Desbloqueie conquistas especiais ao atingir marcos importantes! Cada conquista dá XP extra e mostra seu progresso.",
       ctaButton: "Começar Agora",
-      ctaUrl: "https://onepagebook.com.br/home",
+      ctaUrl: "https://onepagebook.ai/home",
       footer1: "Você está recebendo este email porque criou uma conta no OnePageBook.",
       footer2: "Para não perder nossas atualizações, adicione onboarding@resend.dev aos seus contatos.",
       addContactTitle: "📧 Adicione-nos aos Contatos",
@@ -91,7 +91,7 @@ const getEmailContent = (language: string, userName: string): WelcomeEmailConten
       achievementsTitle: "🏆 Achievements",
       achievementsDesc: "Unlock special achievements when you reach important milestones! Each achievement gives extra XP and shows your progress.",
       ctaButton: "Get Started",
-      ctaUrl: "https://onepagebook.com/home",
+      ctaUrl: "https://onepagebook.ai/home",
       footer1: "You're receiving this email because you created an account at OnePageBook.",
       footer2: "To not miss our updates, add onboarding@resend.dev to your contacts.",
       addContactTitle: "📧 Add Us to Contacts",
@@ -121,7 +121,7 @@ const getEmailContent = (language: string, userName: string): WelcomeEmailConten
       achievementsTitle: "🏆 Logros",
       achievementsDesc: "¡Desbloquea logros especiales al alcanzar hitos importantes! Cada logro otorga XP extra y muestra tu progreso.",
       ctaButton: "Comenzar Ahora",
-      ctaUrl: "https://onepagebook.com/home",
+      ctaUrl: "https://onepagebook.ai/home",
       footer1: "Estás recibiendo este correo porque creaste una cuenta en OnePageBook.",
       footer2: "Para no perderte nuestras actualizaciones, agrega onboarding@resend.dev a tus contactos.",
       addContactTitle: "📧 Agréganos a Contactos",
@@ -390,9 +390,9 @@ const generateEmailHTML = (content: WelcomeEmailContent): string => {
       <p>${content.footer1}</p>
       <p style="margin-top: 10px;">${content.footer2}</p>
       <p style="margin-top: 15px;">
-        <a href="https://onepagebook.com.br">OnePageBook</a> | 
-        <a href="https://onepagebook.com.br/terms">Termos</a> | 
-        <a href="https://onepagebook.com.br/privacy">Privacidade</a>
+        <a href="https://onepagebook.ai">OnePageBook</a> | 
+        <a href="https://onepagebook.ai/terms">Termos</a> | 
+        <a href="https://onepagebook.ai/privacy">Privacidade</a>
       </p>
     </div>
   </div>

@@ -138,7 +138,7 @@ serve(async (req) => {
 
             const translatedLevel = levelTranslations[language as keyof typeof levelTranslations]?.[profile.level as keyof typeof levelTranslations.pt] || profile.level;
 
-            const unsubscribeUrl = `https://onepagebook.com/settings?unsubscribe=true`;
+            const unsubscribeUrl = `https://onepagebook.ai/settings?unsubscribe=true`;
             
             const messages = {
               pt: {
