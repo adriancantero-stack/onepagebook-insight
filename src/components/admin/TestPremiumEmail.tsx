@@ -11,6 +11,7 @@ export const TestPremiumEmail = () => {
   const [email, setEmail] = useState('adrian.cantero1@gmail.com');
   const [language, setLanguage] = useState('pt');
   const [userName, setUserName] = useState('Leitor');
+  const [emailType, setEmailType] = useState('day_10');
   const [sending, setSending] = useState(false);
 
   const handleSendTest = async () => {
@@ -22,12 +23,13 @@ export const TestPremiumEmail = () => {
     setSending(true);
     try {
       const { data, error } = await supabase.functions.invoke('test-premium-email', {
-        body: { email, language, userName }
+        body: { email, language, userName, emailType }
       });
 
       if (error) throw error;
 
-      toast.success(`Email Premium de teste enviado para ${email}!`);
+      const dayLabel = emailType === 'day_10' ? 'Dia 10' : 'Dia 7';
+      toast.success(`Email Premium de teste (${dayLabel}) enviado para ${email}!`);
       console.log('Test premium email response:', data);
     } catch (error: any) {
       console.error('Error sending test premium email:', error);
@@ -45,10 +47,23 @@ export const TestPremiumEmail = () => {
           Testar Email Premium (40% OFF)
         </CardTitle>
         <CardDescription>
-          Visualize como ficará o email do Dia 7 com cupom WELCOME40
+          Visualize como ficará o email do Dia 7 ou Dia 10 com cupom WELCOME40
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Tipo de Email</label>
+          <Select value={emailType} onValueChange={setEmailType}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="day_7">📅 Dia 7 - Última chance (40% OFF)</SelectItem>
+              <SelectItem value="day_10">🚨 Dia 10 - URGENTE! Expira hoje</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
         <div className="space-y-2">
           <label className="text-sm font-medium">Email de Destino</label>
           <Input
@@ -86,7 +101,17 @@ export const TestPremiumEmail = () => {
         <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
           <p className="text-sm text-green-800">
             <strong>Cupom:</strong> WELCOME40 (40% OFF)<br />
-            <strong>Validade:</strong> 7 dias (mensagem de urgência)
+            {emailType === 'day_10' ? (
+              <>
+                <strong>Urgência:</strong> MÁXIMA - Último lembrete, expira hoje!<br />
+                <strong>Visual:</strong> Design vermelho com animação de pulso
+              </>
+            ) : (
+              <>
+                <strong>Validade:</strong> 7 dias (mensagem de urgência)<br />
+                <strong>Visual:</strong> Design roxo padrão
+              </>
+            )}
           </p>
         </div>
 

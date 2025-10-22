@@ -16,7 +16,214 @@ const STRIPE_CHECKOUT_URLS: Record<string, string> = {
 };
 const PROMO_CODE = "WELCOME40";
 
-const getTestEmailHTML = (userName: string, checkoutUrl: string, promoCode: string): string => {
+const getDay10EmailHTML = (userName: string, checkoutUrl: string, promoCode: string): string => {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+        body { 
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; 
+          line-height: 1.6; 
+          color: #2B1342;
+          background: linear-gradient(135deg, #F8F6FF 0%, #F0ECFF 100%);
+          margin: 0;
+          padding: 20px;
+        }
+        .container { 
+          max-width: 600px; 
+          margin: 0 auto; 
+          background: #ffffff; 
+          border-radius: 16px; 
+          overflow: hidden; 
+          box-shadow: 0 8px 30px rgba(220, 38, 38, 0.2); 
+          border: 3px solid #dc2626; 
+        }
+        .test-banner { 
+          background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); 
+          padding: 12px; 
+          text-align: center; 
+        }
+        .test-banner-text { 
+          color: #000; 
+          font-size: 14px; 
+          font-weight: bold; 
+          margin: 0; 
+        }
+        .header { 
+          text-align: center; 
+          padding: 30px 20px; 
+          background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); 
+        }
+        .header h1 { 
+          color: #ffffff; 
+          font-size: 36px; 
+          font-weight: bold; 
+          margin: 0; 
+          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); 
+        }
+        .header p { 
+          color: #ffffff; 
+          font-size: 18px; 
+          margin: 10px 0 0 0; 
+          font-weight: 600; 
+        }
+        .content { 
+          background: #ffffff; 
+          padding: 30px; 
+        }
+        .content p { 
+          color: #2B1342; 
+          margin: 16px 0; 
+          font-size: 16px; 
+        }
+        .urgency-banner {
+          background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+          color: white;
+          padding: 25px;
+          border-radius: 12px;
+          text-align: center;
+          margin: 30px 0;
+          box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+          animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.02); }
+        }
+        .urgency-banner h2 { 
+          margin: 0; 
+          font-size: 48px; 
+          font-weight: bold; 
+          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); 
+        }
+        .urgency-banner p { 
+          margin: 10px 0 0 0; 
+          font-size: 20px; 
+          font-weight: 600; 
+        }
+        .timer { 
+          font-size: 16px; 
+          margin-top: 15px; 
+          color: #fef2f2; 
+          font-weight: 600; 
+        }
+        .benefits { 
+          margin: 25px 0; 
+          background: #fef2f2; 
+          padding: 25px; 
+          border-radius: 12px; 
+          border-left: 4px solid #dc2626; 
+        }
+        .benefits h3 { 
+          color: #dc2626; 
+          margin-top: 0; 
+          font-size: 20px; 
+        }
+        .benefit-item { 
+          padding: 12px 0; 
+          color: #2B1342; 
+          font-size: 16px; 
+          font-weight: 500; 
+        }
+        .cta-button { 
+          display: inline-block; 
+          padding: 20px 50px; 
+          background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); 
+          color: #ffffff !important; 
+          text-decoration: none; 
+          border-radius: 12px; 
+          margin: 25px 0;
+          font-weight: bold;
+          font-size: 20px;
+          box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        .final-warning { 
+          background: #fef2f2;
+          border: 2px solid #dc2626;
+          border-radius: 12px;
+          padding: 20px;
+          margin: 25px 0;
+          text-align: center;
+        }
+        .final-warning p {
+          color: #dc2626;
+          font-weight: bold;
+          font-size: 18px;
+          margin: 0;
+        }
+        .code-info { 
+          background: linear-gradient(135deg, #F8F6FF 0%, #E6DEFF 100%);
+          padding: 20px;
+          border-radius: 12px;
+          font-size: 13px;
+          color: #2B1342;
+          margin: 25px 0;
+          border: 2px solid #D1C1FF;
+        }
+        .footer { 
+          text-align: center; 
+          padding: 30px 20px; 
+          background: #F8F6FF; 
+          color: #666; 
+          font-size: 13px; 
+          border-top: 2px solid #E6DEFF; 
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="test-banner">
+          <p class="test-banner-text">🧪 EMAIL DE TESTE - DIA 10</p>
+        </div>
+        <div class="header">
+          <h1>🚨 ÚLTIMA CHANCE</h1>
+          <p>40% OFF expira HOJE</p>
+        </div>
+        <div class="content">
+          <p>Olá ${userName}!</p>
+          <p style="font-size: 18px; font-weight: 600;">Esta é sua ÚLTIMA oportunidade! O desconto de 40% no primeiro mês Premium expira em algumas horas.</p>
+          <div class="urgency-banner">
+            <h2>40% OFF</h2>
+            <p>NO PRIMEIRO MÊS</p>
+            <p class="timer">⏰ EXPIRA HOJE ÀS 23:59</p>
+          </div>
+          <div class="benefits">
+            <h3>🔥 O que você está perdendo AGORA:</h3>
+            <div class="benefit-item">✅ Resumos ILIMITADOS (vs apenas 10 por mês)</div>
+            <div class="benefit-item">✅ Áudio profissional para TODOS os livros</div>
+            <div class="benefit-item">✅ Conquistas e gamificação exclusivas</div>
+            <div class="benefit-item">✅ Acesso prioritário a novos recursos</div>
+          </div>
+          <p style="font-size: 17px; font-weight: 600; text-align: center;">Milhares de usuários já transformaram sua rotina de leitura. Não fique de fora!</p>
+          <center>
+            <a href="${checkoutUrl}" class="cta-button">GARANTIR MEU DESCONTO</a>
+          </center>
+          <div class="final-warning">
+            <p>⚠️ Este é o último lembrete que você receberá.</p>
+            <p>Após hoje, o desconto expira permanentemente.</p>
+          </div>
+          <p style="text-align: center; font-size: 13px; color: #666; margin-top: 20px;">Código ${promoCode} aplicado automaticamente</p>
+          <div class="code-info">
+            <strong>📋 Info de teste:</strong><br />
+            <strong>Cupom:</strong> ${promoCode}<br />
+            <strong>Link:</strong> ${checkoutUrl}
+          </div>
+        </div>
+        <div class="footer">
+          <p>Não perca esta oportunidade!<br>Equipe OnePageBook</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+};
+
+const getDay7EmailHTML = (userName: string, checkoutUrl: string, promoCode: string): string => {
   return `
     <!DOCTYPE html>
     <html>
@@ -234,22 +441,28 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { email, language = "pt", userName = "Leitor" } = await req.json();
+    const { email, language = "pt", userName = "Leitor", emailType = "day_10" } = await req.json();
 
     if (!email) {
       throw new Error("Email is required");
     }
 
-    console.log(`🧪 Sending test email to ${email} in ${language}`);
+    console.log(`🧪 Sending test ${emailType} email to ${email} in ${language}`);
 
     const checkoutUrl = STRIPE_CHECKOUT_URLS[language] || STRIPE_CHECKOUT_URLS.pt;
-    const html = getTestEmailHTML(userName, checkoutUrl, PROMO_CODE);
+    const html = emailType === "day_10" 
+      ? getDay10EmailHTML(userName, checkoutUrl, PROMO_CODE)
+      : getDay7EmailHTML(userName, checkoutUrl, PROMO_CODE);
+    
+    const subject = emailType === "day_10"
+      ? "🧪 TESTE DIA 10 - ÚLTIMA CHANCE: 40% OFF expira hoje!"
+      : "🧪 TESTE DIA 7 - Última chance: 40% OFF no OnePageBook Premium";
 
     // Send email via Resend
     const { error: emailError, data } = await resend.emails.send({
       from: "OnePageBook <offers@send.onepagebook.ai>",
       to: [email],
-      subject: "🧪 TESTE - Última chance: 40% OFF no OnePageBook Premium",
+      subject,
       html,
     });
 
