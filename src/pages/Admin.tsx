@@ -231,7 +231,27 @@ const Admin = () => {
 
   const loadAnalyticsMetrics = async () => {
     setLoadingAnalytics(true);
+    
     try {
+      // Verify user session is active
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError) {
+        console.error("Session error:", sessionError);
+        toast.error("Erro de autenticação. Por favor, faça login novamente.");
+        navigate('/auth');
+        return;
+      }
+      
+      if (!session) {
+        console.error("No active session found");
+        toast.error("Sessão expirada. Por favor, faça login novamente.");
+        navigate('/auth');
+        return;
+      }
+
+      console.log("📊 Loading analytics metrics with active session...");
+
       // Fetch metrics for all three periods
       const [metrics24h, metrics7d, metrics30d] = await Promise.all([
         supabase.functions.invoke('get-analytics-metrics', {
@@ -245,19 +265,34 @@ const Admin = () => {
         })
       ]);
 
+      // Handle 24h metrics
       if (metrics24h.error) {
         console.error("Error loading 24h metrics:", metrics24h.error);
-        toast.error("Erro ao carregar métricas de 24h");
+        const errorData = metrics24h.error as any;
+        
+        if (errorData.context?.status === 401) {
+          toast.error("Sessão expirada. Por favor, faça login novamente.");
+          navigate('/auth');
+          return;
+        } else if (errorData.context?.status === 403) {
+          toast.error("Acesso negado. Você não tem permissão de admin.");
+          navigate('/');
+          return;
+        } else {
+          toast.error(`Erro ao carregar métricas de 24h: ${errorData.message || 'Erro desconhecido'}`);
+        }
       } else if (metrics24h.data?.metrics) {
         setAnalyticsMetrics24h(metrics24h.data.metrics);
       }
 
+      // Handle 7d metrics
       if (metrics7d.error) {
         console.error("Error loading 7d metrics:", metrics7d.error);
       } else if (metrics7d.data?.metrics) {
         setAnalyticsMetrics7d(metrics7d.data.metrics);
       }
 
+      // Handle 30d metrics
       if (metrics30d.error) {
         console.error("Error loading 30d metrics:", metrics30d.error);
       } else if (metrics30d.data?.metrics) {

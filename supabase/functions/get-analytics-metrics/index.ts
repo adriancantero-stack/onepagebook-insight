@@ -11,6 +11,8 @@ Deno.serve(async (req) => {
   }
 
   try {
+    console.log('📊 Analytics metrics request started');
+    
     const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
@@ -18,8 +20,14 @@ Deno.serve(async (req) => {
 
     // Verify admin access
     const authHeader = req.headers.get('Authorization');
+    console.log('🔐 Auth header present:', !!authHeader);
+    
     if (!authHeader) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      console.error('❌ No Authorization header found');
+      return new Response(JSON.stringify({ 
+        error: 'Unauthorized',
+        message: 'Missing Authorization header'
+      }), {
         status: 401,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -31,27 +39,67 @@ Deno.serve(async (req) => {
       { global: { headers: { Authorization: authHeader } } }
     );
 
-    const { data: { user } } = await supabase.auth.getUser();
+    console.log('🔍 Attempting to get user from token...');
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    
+    if (userError) {
+      console.error('❌ Error getting user:', userError);
+      return new Response(JSON.stringify({ 
+        error: 'Unauthorized',
+        message: 'Invalid or expired token',
+        details: userError.message
+      }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    
     if (!user) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      console.error('❌ No user found from token');
+      return new Response(JSON.stringify({ 
+        error: 'Unauthorized',
+        message: 'No user found'
+      }), {
         status: 401,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
+    console.log('✅ User authenticated:', user.id, user.email);
+
     // Check admin role
-    const { data: roles } = await supabaseAdmin
+    console.log('🔍 Checking admin role for user:', user.id);
+    const { data: roles, error: rolesError } = await supabaseAdmin
       .from('user_roles')
       .select('role')
       .eq('user_id', user.id);
 
+    if (rolesError) {
+      console.error('❌ Error checking roles:', rolesError);
+      return new Response(JSON.stringify({ 
+        error: 'Internal Server Error',
+        message: 'Error checking user roles'
+      }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    console.log('📋 User roles:', roles);
+
     const isAdmin = roles?.some(r => r.role === 'admin');
     if (!isAdmin) {
-      return new Response(JSON.stringify({ error: 'Forbidden' }), {
+      console.error('❌ User is not admin:', user.email);
+      return new Response(JSON.stringify({ 
+        error: 'Forbidden',
+        message: 'Admin access required'
+      }), {
         status: 403,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
+
+    console.log('✅ Admin access verified');
 
     const { period } = await req.json();
     
