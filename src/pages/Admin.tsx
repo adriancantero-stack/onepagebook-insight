@@ -1303,6 +1303,141 @@ const Admin = () => {
           </CardContent>
         </Card>
 
+        {/* Analytics Metrics Card */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-primary" />
+              Métricas de Comportamento do Usuário
+            </CardTitle>
+            <CardDescription>
+              Tracking de interações e jornada do usuário
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {loadingAnalytics ? (
+              <div className="space-y-2">
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-20 w-full" />
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {/* 24 Horas */}
+                <div>
+                  <h4 className="font-semibold mb-3 text-sm">Últimas 24 Horas</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Visitas Únicas</p>
+                      <p className="text-xl font-bold">{analyticsMetrics24h?.uniqueVisitors || 0}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Home → Explorar</p>
+                      <p className="text-xl font-bold">{analyticsMetrics24h?.homeExploreClicks || 0}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Home → Gerar</p>
+                      <p className="text-xl font-bold">{analyticsMetrics24h?.homeGenerateClicks || 0}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Áudios Gerados</p>
+                      <p className="text-xl font-bold">{analyticsMetrics24h?.audioGenerated || 0}</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Explorar → Pessoas</p>
+                      <p className="text-lg font-semibold">{analyticsMetrics24h?.explorePeopleClicks || 0}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Explorar → Categoria</p>
+                      <p className="text-lg font-semibold">{analyticsMetrics24h?.exploreCategoryClicks || 0}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Explorar → Busca</p>
+                      <p className="text-lg font-semibold">{analyticsMetrics24h?.exploreSearchClicks || 0}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 7 Dias */}
+                <div className="border-t pt-4">
+                  <h4 className="font-semibold mb-3 text-sm">Últimos 7 Dias</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Visitas Únicas</p>
+                      <p className="text-xl font-bold">{analyticsMetrics7d?.uniqueVisitors || 0}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Home → Explorar</p>
+                      <p className="text-xl font-bold">{analyticsMetrics7d?.homeExploreClicks || 0}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Home → Gerar</p>
+                      <p className="text-xl font-bold">{analyticsMetrics7d?.homeGenerateClicks || 0}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Áudios Gerados</p>
+                      <p className="text-xl font-bold">{analyticsMetrics7d?.audioGenerated || 0}</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Explorar → Pessoas</p>
+                      <p className="text-lg font-semibold">{analyticsMetrics7d?.explorePeopleClicks || 0}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Explorar → Categoria</p>
+                      <p className="text-lg font-semibold">{analyticsMetrics7d?.exploreCategoryClicks || 0}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Explorar → Busca</p>
+                      <p className="text-lg font-semibold">{analyticsMetrics7d?.exploreSearchClicks || 0}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 30 Dias */}
+                <div className="border-t pt-4">
+                  <h4 className="font-semibold mb-3 text-sm">Últimos 30 Dias</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Visitas Únicas</p>
+                      <p className="text-xl font-bold">{analyticsMetrics30d?.uniqueVisitors || 0}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Home → Explorar</p>
+                      <p className="text-xl font-bold">{analyticsMetrics30d?.homeExploreClicks || 0}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Home → Gerar</p>
+                      <p className="text-xl font-bold">{analyticsMetrics30d?.homeGenerateClicks || 0}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Áudios Gerados</p>
+                      <p className="text-xl font-bold">{analyticsMetrics30d?.audioGenerated || 0}</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Explorar → Pessoas</p>
+                      <p className="text-lg font-semibold">{analyticsMetrics30d?.explorePeopleClicks || 0}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Explorar → Categoria</p>
+                      <p className="text-lg font-semibold">{analyticsMetrics30d?.exploreCategoryClicks || 0}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Explorar → Busca</p>
+                      <p className="text-lg font-semibold">{analyticsMetrics30d?.exploreSearchClicks || 0}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
         {/* Language Distribution Card */}
         <Card>
           <CardHeader>
