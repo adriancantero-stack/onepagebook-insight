@@ -178,67 +178,51 @@ serve(async (req) => {
 
     console.log('Audio not in cache, generating new audio for text length:', text.length)
 
-    // Map language to the best ElevenLabs voice ID for each region
+    // Map language to the best OpenAI TTS voice for each region
     const voiceMap: { [key: string]: string } = {
-      'pt': 'XrExE9yKIg1WjnnlVkGX', // Matilda - warm, young female, works great for Brazilian Portuguese audiobooks
-      'en': '21m00Tcm4TlvDq8ikWAM', // Rachel - calm, natural American English female, most popular voice
-      'es': 'oWAxZDx7w5VEj9dCyTzz', // Grace - young American Southern female, optimized for Mexican/Latin American Spanish
+      'pt': 'nova', // Young, energetic female voice - great for Portuguese
+      'en': 'alloy', // Neutral, balanced voice
+      'es': 'nova', // Young, energetic female voice - works well for Spanish
     }
 
-    const voiceId = voiceMap[language] || 'XrExE9yKIg1WjnnlVkGX'
+    const voice = voiceMap[language] || 'nova'
 
-    // Get ElevenLabs API key
-    const ELEVEN_LABS_API_KEY = Deno.env.get('ELEVEN_LABS_API_KEY')
-    if (!ELEVEN_LABS_API_KEY) {
-      throw new Error('ELEVEN_LABS_API_KEY is not configured')
+    // Get OpenAI API key
+    const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY')
+    if (!OPENAI_API_KEY) {
+      throw new Error('OPENAI_API_KEY is not configured')
     }
 
-    // Split text into chunks if necessary (ElevenLabs has a 5000 char limit)
-    const textChunks = splitTextIntoChunks(text, 4500);
-    console.log(`Processing ${textChunks.length} chunk(s)`)
+    // Split text into chunks if necessary (OpenAI has a 4096 char limit)
+    const textChunks = splitTextIntoChunks(text, 4000);
+    console.log(`Processing ${textChunks.length} chunk(s) using OpenAI TTS`)
 
     const audioChunks: string[] = [];
 
-    // Generate speech for each chunk using ElevenLabs
+    // Generate speech for each chunk using OpenAI TTS
     for (let i = 0; i < textChunks.length; i++) {
       const chunk = textChunks[i];
-      console.log(`Calling ElevenLabs TTS API for chunk ${i + 1}/${textChunks.length} with voice ID:`, voiceId)
+      console.log(`Calling OpenAI TTS API for chunk ${i + 1}/${textChunks.length} with voice:`, voice)
       
-      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+      const response = await fetch('https://api.openai.com/v1/audio/speech', {
         method: 'POST',
         headers: {
-          'Accept': 'audio/mpeg',
-          'xi-api-key': ELEVEN_LABS_API_KEY,
+          'Authorization': `Bearer ${OPENAI_API_KEY}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          text: chunk,
-          model_id: 'eleven_multilingual_v2',
-          voice_settings: {
-            stability: 0.5,
-            similarity_boost: 0.75,
-          }
+          model: 'tts-1',
+          input: chunk,
+          voice: voice,
+          response_format: 'mp3',
+          speed: 1.0
         }),
       })
 
       if (!response.ok) {
         const errorText = await response.text()
-        console.error(`ElevenLabs API error for chunk ${i + 1}:`, response.status, errorText)
-        
-        // Parse error message to provide better feedback
-        let errorMessage = errorText;
-        try {
-          const errorJson = JSON.parse(errorText);
-          if (errorJson.detail?.status === 'quota_exceeded') {
-            errorMessage = 'QUOTA_EXCEEDED';
-          } else if (errorJson.detail?.message) {
-            errorMessage = errorJson.detail.message;
-          }
-        } catch (e) {
-          // Keep original error text if not JSON
-        }
-        
-        throw new Error(errorMessage)
+        console.error(`OpenAI TTS API error for chunk ${i + 1}:`, response.status, errorText)
+        throw new Error(`Failed to generate speech: ${errorText}`)
       }
 
       console.log(`Chunk ${i + 1} generated successfully`)
