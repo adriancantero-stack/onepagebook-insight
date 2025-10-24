@@ -26,6 +26,9 @@ export function ManualCoverUpload() {
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [coverFilter, setCoverFilter] = useState<'all' | 'with' | 'without'>('all');
+  const [editedTitle, setEditedTitle] = useState("");
+  const [editedAuthor, setEditedAuthor] = useState("");
+  const [savingMetadata, setSavingMetadata] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Load books with pagination and server-side search
@@ -83,6 +86,14 @@ export function ManualCoverUpload() {
     }, 300);
     return () => clearTimeout(t);
   }, [searchQuery, coverFilter]);
+
+  // Populate editable fields when book is selected
+  useEffect(() => {
+    if (selectedBook) {
+      setEditedTitle(selectedBook.title);
+      setEditedAuthor(selectedBook.author);
+    }
+  }, [selectedBook]);
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -145,6 +156,47 @@ export function ManualCoverUpload() {
       toast.error("Erro ao fazer upload da capa");
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleSaveMetadata = async () => {
+    if (!selectedBook) return;
+
+    // Validate fields
+    if (!editedTitle.trim() || !editedAuthor.trim()) {
+      toast.error("Título e autor não podem estar vazios");
+      return;
+    }
+
+    // Check if there are changes
+    if (editedTitle.trim() === selectedBook.title && editedAuthor.trim() === selectedBook.author) {
+      toast.info("Nenhuma alteração detectada");
+      return;
+    }
+
+    setSavingMetadata(true);
+    try {
+      const { error } = await supabase
+        .from("books")
+        .update({
+          title: editedTitle.trim(),
+          author: editedAuthor.trim(),
+          title_normalized: editedTitle.trim().toLowerCase(),
+          author_normalized: editedAuthor.trim().toLowerCase(),
+          updated_at: new Date().toISOString()
+        })
+        .eq("id", selectedBook.id);
+
+      if (error) throw error;
+
+      toast.success("Título e autor atualizados com sucesso!");
+      await loadBooksWithoutCovers(true);
+      setSelectedBook(null);
+    } catch (error) {
+      console.error("Erro ao salvar alterações:", error);
+      toast.error("Erro ao salvar alterações");
+    } finally {
+      setSavingMetadata(false);
     }
   };
 
@@ -288,9 +340,43 @@ export function ManualCoverUpload() {
           <div className="space-y-4 p-4 border rounded-lg bg-accent/50">
             <div>
               <Label className="text-base font-semibold">Livro Selecionado</Label>
-              <div className="mt-2 space-y-1">
-                <p className="font-medium">{selectedBook.title}</p>
-                <p className="text-sm text-muted-foreground">{selectedBook.author}</p>
+              <div className="mt-3 space-y-3">
+                <div className="space-y-2">
+                  <Label htmlFor="edit-title" className="text-sm">Título do Livro</Label>
+                  <Input
+                    id="edit-title"
+                    type="text"
+                    value={editedTitle}
+                    onChange={(e) => setEditedTitle(e.target.value)}
+                    placeholder="Digite o título..."
+                    disabled={savingMetadata}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit-author" className="text-sm">Autor do Livro</Label>
+                  <Input
+                    id="edit-author"
+                    type="text"
+                    value={editedAuthor}
+                    onChange={(e) => setEditedAuthor(e.target.value)}
+                    placeholder="Digite o autor..."
+                    disabled={savingMetadata}
+                  />
+                </div>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Badge variant="secondary">{selectedBook.lang.toUpperCase()}</Badge>
+                  <Badge variant={selectedBook.cover_url ? "default" : "destructive"}>
+                    {selectedBook.cover_url ? "✓ Com Capa" : "✗ Sem Capa"}
+                  </Badge>
+                </div>
+                <Button
+                  onClick={handleSaveMetadata}
+                  disabled={savingMetadata || (!editedTitle.trim() || !editedAuthor.trim())}
+                  className="w-full"
+                  size="sm"
+                >
+                  {savingMetadata ? "Salvando..." : "Salvar Alterações de Título/Autor"}
+                </Button>
               </div>
             </div>
 
