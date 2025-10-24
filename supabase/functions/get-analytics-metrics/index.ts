@@ -79,7 +79,12 @@ Deno.serve(async (req) => {
       .select('*')
       .gte('created_at', startTime.toISOString());
 
-    if (error) throw error;
+    if (error) {
+      console.error('Database error:', error);
+      throw error;
+    }
+
+    console.log(`Found ${events?.length || 0} events in period ${period}`);
 
     // Calculate metrics
     const metrics = {
@@ -99,6 +104,8 @@ Deno.serve(async (req) => {
       summariesGenerated: events?.filter(e => e.event_type === 'home_generate_click').length || 0,
       audioGenerated: events?.filter(e => e.event_type === 'audio_generated').length || 0,
     };
+
+    console.log('Calculated metrics:', metrics);
 
     // Daily breakdown for charts (for 7d and 30d periods)
     let dailyData = null;

@@ -245,17 +245,31 @@ const Admin = () => {
         })
       ]);
 
-      if (metrics24h.data?.metrics) {
+      if (metrics24h.error) {
+        console.error("Error loading 24h metrics:", metrics24h.error);
+        toast.error("Erro ao carregar métricas de 24h");
+      } else if (metrics24h.data?.metrics) {
         setAnalyticsMetrics24h(metrics24h.data.metrics);
       }
-      if (metrics7d.data?.metrics) {
+
+      if (metrics7d.error) {
+        console.error("Error loading 7d metrics:", metrics7d.error);
+      } else if (metrics7d.data?.metrics) {
         setAnalyticsMetrics7d(metrics7d.data.metrics);
       }
-      if (metrics30d.data?.metrics) {
+
+      if (metrics30d.error) {
+        console.error("Error loading 30d metrics:", metrics30d.error);
+      } else if (metrics30d.data?.metrics) {
         setAnalyticsMetrics30d(metrics30d.data.metrics);
+      }
+
+      if (metrics24h.data || metrics7d.data || metrics30d.data) {
+        toast.success("Métricas atualizadas!");
       }
     } catch (error) {
       console.error("Error loading analytics metrics:", error);
+      toast.error("Erro ao carregar métricas de analytics");
     } finally {
       setLoadingAnalytics(false);
     }
@@ -1290,13 +1304,25 @@ const Admin = () => {
         {/* Analytics Metrics Card */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-primary" />
-              Métricas de Comportamento do Usuário
-            </CardTitle>
-            <CardDescription>
-              Tracking de interações e jornada do usuário
-            </CardDescription>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5 text-primary" />
+                  Métricas de Comportamento do Usuário
+                </CardTitle>
+                <CardDescription>
+                  Tracking de interações e jornada do usuário
+                </CardDescription>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={loadAnalyticsMetrics}
+                disabled={loadingAnalytics}
+              >
+                <RefreshCw className={`h-4 w-4 ${loadingAnalytics ? 'animate-spin' : ''}`} />
+              </Button>
+            </div>
           </CardHeader>
           <CardContent>
             {loadingAnalytics ? (
