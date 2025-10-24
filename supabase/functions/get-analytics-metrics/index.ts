@@ -33,6 +33,21 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Extract token from Bearer header
+    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
+    if (!token) {
+      console.error('❌ No token found in Authorization header');
+      return new Response(JSON.stringify({ 
+        error: 'Unauthorized',
+        message: 'Invalid Authorization header format'
+      }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    console.log('🔑 Token extracted (first 10 chars):', token.substring(0, 10) + '...');
+
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? '',
@@ -40,7 +55,7 @@ Deno.serve(async (req) => {
     );
 
     console.log('🔍 Attempting to get user from token...');
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const { data: { user }, error: userError } = await supabase.auth.getUser(token);
     
     if (userError) {
       console.error('❌ Error getting user:', userError);

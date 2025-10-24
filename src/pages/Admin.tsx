@@ -255,13 +255,22 @@ const Admin = () => {
       // Fetch metrics for all three periods
       const [metrics24h, metrics7d, metrics30d] = await Promise.all([
         supabase.functions.invoke('get-analytics-metrics', {
-          body: { period: '24h' }
+          body: { period: '24h' },
+          headers: {
+            Authorization: `Bearer ${session.access_token}`
+          }
         }),
         supabase.functions.invoke('get-analytics-metrics', {
-          body: { period: '7d' }
+          body: { period: '7d' },
+          headers: {
+            Authorization: `Bearer ${session.access_token}`
+          }
         }),
         supabase.functions.invoke('get-analytics-metrics', {
-          body: { period: '30d' }
+          body: { period: '30d' },
+          headers: {
+            Authorization: `Bearer ${session.access_token}`
+          }
         })
       ]);
 
