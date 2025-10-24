@@ -689,18 +689,23 @@ const Summary = () => {
       if (error) {
         console.error('🚨 [TTS] Edge function error:', error);
         
-        // Handle specific error codes
-        if (error.message?.includes('429')) {
-          throw new Error(t("summary.audioError") + ': ' + 'Limite de requisições excedido. Tente novamente em alguns instantes.');
+        // Handle specific error messages and codes
+        const errorMsg = error.message || '';
+        
+        if (errorMsg.includes('QUOTA_EXCEEDED') || errorMsg.includes('quota_exceeded')) {
+          throw new Error('Limite de créditos do serviço de áudio excedido. Por favor, tente novamente mais tarde.');
         }
-        if (error.message?.includes('402')) {
-          throw new Error(t("summary.audioError") + ': ' + 'Créditos insuficientes.');
+        if (errorMsg.includes('429')) {
+          throw new Error('Limite de requisições excedido. Tente novamente em alguns instantes.');
         }
-        if (error.message?.includes('401')) {
-          throw new Error(t("summary.audioError") + ': ' + 'Erro de autenticação.');
+        if (errorMsg.includes('402')) {
+          throw new Error('Créditos insuficientes do serviço de áudio.');
+        }
+        if (errorMsg.includes('401') && !errorMsg.includes('quota')) {
+          throw new Error('Erro de autenticação do serviço de áudio.');
         }
         
-        throw new Error(error.message || 'Failed to generate audio');
+        throw new Error(errorMsg || 'Erro ao gerar áudio. Tente novamente.');
       }
 
       // Handle new URL-based format

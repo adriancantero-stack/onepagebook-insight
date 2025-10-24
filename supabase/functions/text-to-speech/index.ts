@@ -224,7 +224,21 @@ serve(async (req) => {
       if (!response.ok) {
         const errorText = await response.text()
         console.error(`ElevenLabs API error for chunk ${i + 1}:`, response.status, errorText)
-        throw new Error(`Failed to generate speech for chunk ${i + 1}: ${errorText}`)
+        
+        // Parse error message to provide better feedback
+        let errorMessage = errorText;
+        try {
+          const errorJson = JSON.parse(errorText);
+          if (errorJson.detail?.status === 'quota_exceeded') {
+            errorMessage = 'QUOTA_EXCEEDED';
+          } else if (errorJson.detail?.message) {
+            errorMessage = errorJson.detail.message;
+          }
+        } catch (e) {
+          // Keep original error text if not JSON
+        }
+        
+        throw new Error(errorMessage)
       }
 
       console.log(`Chunk ${i + 1} generated successfully`)
