@@ -816,6 +816,33 @@ export type Database = {
           },
         ]
       }
+      user_analytics_events: {
+        Row: {
+          created_at: string
+          event_data: Json | null
+          event_type: string
+          id: string
+          session_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_data?: Json | null
+          event_type: string
+          id?: string
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_data?: Json | null
+          event_type?: string
+          id?: string
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_audio_plays: {
         Row: {
           book_summary_id: string
@@ -1000,16 +1027,13 @@ export type Database = {
         }
         Returns: boolean
       }
-      increment_book_read: {
-        Args: { p_user_id: string }
-        Returns: undefined
-      }
+      increment_book_read: { Args: { p_user_id: string }; Returns: undefined }
       increment_summaries_generated: {
         Args: { p_user_id: string }
         Returns: undefined
       }
       merge_duplicate_books: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           book_author: string
           book_title: string
@@ -1017,14 +1041,8 @@ export type Database = {
           kept_book_id: string
         }[]
       }
-      normalize_cache_text: {
-        Args: { text_input: string }
-        Returns: string
-      }
-      normalize_text: {
-        Args: { "": string }
-        Returns: string
-      }
+      normalize_cache_text: { Args: { text_input: string }; Returns: string }
+      normalize_text: { Args: { "": string }; Returns: string }
       search_books: {
         Args: {
           result_limit?: number
@@ -1040,10 +1058,7 @@ export type Database = {
           title: string
         }[]
       }
-      unaccent: {
-        Args: { "": string }
-        Returns: string
-      }
+      unaccent: { Args: { "": string }; Returns: string }
       upsert_book: {
         Args: {
           p_asin?: string

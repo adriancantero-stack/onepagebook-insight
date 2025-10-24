@@ -56,6 +56,16 @@ interface DailyMetrics {
   summariesGeneratedLast24h: number;
 }
 
+interface AnalyticsMetrics {
+  uniqueVisitors: number;
+  homeExploreClicks: number;
+  homeGenerateClicks: number;
+  explorePeopleClicks: number;
+  exploreCategoryClicks: number;
+  exploreSearchClicks: number;
+  audioGenerated: number;
+}
+
 interface UserData {
   id: string;
   email: string;
@@ -124,6 +134,10 @@ const Admin = () => {
   const [isCompletingUserData, setIsCompletingUserData] = useState(false);
   const [incompleteUsersCount, setIncompleteUsersCount] = useState<number>(0);
   const [dailyMetrics, setDailyMetrics] = useState<DailyMetrics | null>(null);
+  const [analyticsMetrics24h, setAnalyticsMetrics24h] = useState<AnalyticsMetrics | null>(null);
+  const [analyticsMetrics7d, setAnalyticsMetrics7d] = useState<AnalyticsMetrics | null>(null);
+  const [analyticsMetrics30d, setAnalyticsMetrics30d] = useState<AnalyticsMetrics | null>(null);
+  const [loadingAnalytics, setLoadingAnalytics] = useState(false);
 
 
   useEffect(() => {
@@ -157,7 +171,11 @@ const Admin = () => {
       }
 
       setIsAdmin(true);
-      await Promise.all([loadAdminData(), loadDailyMetrics()]);
+      await Promise.all([
+        loadAdminData(), 
+        loadDailyMetrics(),
+        loadAnalyticsMetrics()
+      ]);
     } catch (error) {
       console.error("Error checking admin access:", error);
       navigate("/");
@@ -207,6 +225,38 @@ const Admin = () => {
       });
     } catch (error) {
       console.error("Error loading daily metrics:", error);
+    }
+  };
+
+  const loadAnalyticsMetrics = async () => {
+    setLoadingAnalytics(true);
+    try {
+      // Fetch metrics for all three periods
+      const [metrics24h, metrics7d, metrics30d] = await Promise.all([
+        supabase.functions.invoke('get-analytics-metrics', {
+          body: { period: '24h' }
+        }),
+        supabase.functions.invoke('get-analytics-metrics', {
+          body: { period: '7d' }
+        }),
+        supabase.functions.invoke('get-analytics-metrics', {
+          body: { period: '30d' }
+        })
+      ]);
+
+      if (metrics24h.data?.metrics) {
+        setAnalyticsMetrics24h(metrics24h.data.metrics);
+      }
+      if (metrics7d.data?.metrics) {
+        setAnalyticsMetrics7d(metrics7d.data.metrics);
+      }
+      if (metrics30d.data?.metrics) {
+        setAnalyticsMetrics30d(metrics30d.data.metrics);
+      }
+    } catch (error) {
+      console.error("Error loading analytics metrics:", error);
+    } finally {
+      setLoadingAnalytics(false);
     }
   };
 

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { trackEvent } from "@/lib/analyticsTracker";
 
 interface Book {
   id: string;
@@ -221,6 +222,7 @@ export const BookAutocomplete = ({
             </span>
             <button
               onClick={() => {
+                trackEvent('home_explore_click');
                 window.location.href = '/explore';
               }}
               className="text-primary hover:underline font-medium transition-colors"

@@ -28,6 +28,7 @@ import {
   Book
 } from "@/data/bookCatalog";
 import { supabase } from "@/integrations/supabase/client";
+import { trackEvent } from "@/lib/analyticsTracker";
 
 // Trending storage helpers
 const getTrendingData = (): Record<string, number> => {
@@ -69,7 +70,11 @@ const Explore = () => {
 
   // Create flat index filtered by current locale
   const flatIndex = useMemo(() => createFlatIndex(i18n.language), [i18n.language]);
+  
   useEffect(() => {
+    // Track page visit
+    trackEvent('page_visit', { page: 'explore' });
+    
     const fetchDataFromDB = async () => {
       const { count: dbBooksCount } = await supabase
         .from('books')
@@ -189,6 +194,8 @@ const Explore = () => {
   }, []);
 
   const handlePersonSelect = async (personId: string) => {
+    trackEvent('explore_people_click', { person_id: personId });
+    
     const person = featuredPeople.find(p => p.person_id === personId);
     if (!person) return;
 
@@ -251,6 +258,11 @@ const Explore = () => {
 
   const handleInputChange = (value: string) => {
     setQuery(value);
+    
+    // Track search interaction
+    if (value.length > 2) {
+      trackEvent('explore_search_click', { query: value });
+    }
 
     // Clear previous debounce timer
     if (debounceTimerRef.current) {
@@ -544,6 +556,7 @@ const Explore = () => {
               <button
                 key={category.id}
                 onClick={() => {
+                  trackEvent('explore_category_click', { category_id: category.id });
                   setSelectedCategory(category.id);
                   setQuery("");
                   setIsOpen(false);

@@ -21,6 +21,7 @@ import {
 } from "@/lib/usageManager";
 import { getCachedSummary } from "@/lib/cacheUtils";
 import type { AuthUser, GenStep } from "@/types";
+import { trackEvent } from "@/lib/analyticsTracker";
 
 interface GenState {
   open: boolean;
@@ -95,6 +96,9 @@ const Home = () => {
   };
 
   useEffect(() => {
+    // Track page visit
+    trackEvent('page_visit', { page: 'home' });
+    
     // Listen first to avoid missing auth events after OAuth redirect
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
@@ -484,7 +488,10 @@ const Home = () => {
             )}
 
             <Button
-              onClick={handleGenerateSummary}
+              onClick={() => {
+                trackEvent('home_generate_click');
+                handleGenerateSummary();
+              }}
               className="w-full h-14 text-base font-medium bg-[#7B61FF] hover:bg-[#6951E6] rounded-xl transition-all duration-200"
               disabled={loading}
             >

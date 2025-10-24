@@ -28,6 +28,7 @@ import { BuyOnAmazonButton } from "@/components/BuyOnAmazonButton";
 import { SummaryFeedback } from "@/components/SummaryFeedback";
 import { useXP } from "@/hooks/useXP";
 import { LearningEnhancement } from "@/components/LearningEnhancement";
+import { trackEvent } from "@/lib/analyticsTracker";
 
 const Summary = () => {
   const { t, i18n } = useTranslation();
@@ -102,6 +103,9 @@ const Summary = () => {
   }, [relatedBooks]);
 
   useEffect(() => {
+    // Track page visit
+    trackEvent('page_visit', { page: 'summary' });
+    
     loadSummary();
   }, [id]);
 
@@ -749,6 +753,9 @@ const Summary = () => {
 
           // Increment counter only if audio was newly generated (not cached)
           if (!data.cached) {
+            // Track audio generation
+            trackEvent('audio_generated');
+            
             const { data: subscription } = await supabase
               .from("user_subscriptions")
               .select("*, subscription_plans(*)")
