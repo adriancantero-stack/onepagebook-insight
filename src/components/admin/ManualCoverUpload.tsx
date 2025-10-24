@@ -181,8 +181,6 @@ export function ManualCoverUpload() {
         .update({
           title: editedTitle.trim(),
           author: editedAuthor.trim(),
-          title_normalized: editedTitle.trim().toLowerCase(),
-          author_normalized: editedAuthor.trim().toLowerCase(),
           updated_at: new Date().toISOString()
         })
         .eq("id", selectedBook.id);
