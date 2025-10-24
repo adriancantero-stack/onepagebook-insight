@@ -1269,36 +1269,19 @@ const Admin = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Download className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">Livros Importados</span>
-                  </div>
-                  <Badge variant="secondary" className="text-lg px-3 py-1">
-                    {dailyMetrics?.booksImportedLast24h || 0}
-                  </Badge>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Download className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-medium">Livros Importados</span>
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  Novos livros adicionados ao catálogo via importação automática
-                </p>
+                <Badge variant="secondary" className="text-lg px-3 py-1">
+                  {dailyMetrics?.booksImportedLast24h || 0}
+                </Badge>
               </div>
-              
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">Resumos Gerados</span>
-                  </div>
-                  <Badge variant="secondary" className="text-lg px-3 py-1">
-                    {dailyMetrics?.summariesGeneratedLast24h || 0}
-                  </Badge>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Resumos criados pelos usuários nas últimas 24 horas
-                </p>
-              </div>
+              <p className="text-xs text-muted-foreground">
+                Novos livros adicionados ao catálogo via importação automática
+              </p>
             </div>
           </CardContent>
         </Card>
@@ -1680,8 +1663,8 @@ const Admin = () => {
               </div>
             </div>
 
-            {/* Summary, Cover, and Audio Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t">
+            {/* Summary, Cover, Audio and Resumos Gerados Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t">
               <div className="space-y-2">
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-xs md:text-sm font-medium">Livros com Resumo</p>
@@ -1719,6 +1702,22 @@ const Admin = () => {
                   <p className="text-xs md:text-sm text-muted-foreground">Total</p>
                   <span className="text-xs text-muted-foreground shrink-0">
                     {stats?.totalAudios || 0} arquivos
+                  </span>
+                </div>
+                <Progress 
+                  value={100} 
+                  className="h-2"
+                />
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-xs md:text-sm font-medium">Resumos Gerados</p>
+                  <Badge variant="secondary" className="shrink-0">{dailyMetrics?.summariesGeneratedLast24h || 0}</Badge>
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-xs md:text-sm text-muted-foreground">Últimas 24 horas</p>
+                  <span className="text-xs text-muted-foreground shrink-0">
+                    Pelos usuários
                   </span>
                 </div>
                 <Progress 
