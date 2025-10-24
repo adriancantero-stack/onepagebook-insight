@@ -64,6 +64,7 @@ interface AnalyticsMetrics {
   exploreCategoryClicks: number;
   exploreSearchClicks: number;
   audioGenerated: number;
+  summariesGenerated: number;
 }
 
 interface UserData {
@@ -1309,7 +1310,7 @@ const Admin = () => {
                 {/* 24 Horas */}
                 <div>
                   <h4 className="font-semibold mb-3 text-sm">Últimas 24 Horas</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                     <div className="space-y-1">
                       <p className="text-xs text-muted-foreground">Visitas Únicas</p>
                       <p className="text-xl font-bold">{analyticsMetrics24h?.uniqueVisitors || 0}</p>
@@ -1321,6 +1322,10 @@ const Admin = () => {
                     <div className="space-y-1">
                       <p className="text-xs text-muted-foreground">Home → Gerar</p>
                       <p className="text-xl font-bold">{analyticsMetrics24h?.homeGenerateClicks || 0}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Resumos Gerados</p>
+                      <p className="text-xl font-bold">{analyticsMetrics24h?.summariesGenerated || 0}</p>
                     </div>
                     <div className="space-y-1">
                       <p className="text-xs text-muted-foreground">Áudios Gerados</p>
@@ -1346,7 +1351,7 @@ const Admin = () => {
                 {/* 7 Dias */}
                 <div className="border-t pt-4">
                   <h4 className="font-semibold mb-3 text-sm">Últimos 7 Dias</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                     <div className="space-y-1">
                       <p className="text-xs text-muted-foreground">Visitas Únicas</p>
                       <p className="text-xl font-bold">{analyticsMetrics7d?.uniqueVisitors || 0}</p>
@@ -1358,6 +1363,10 @@ const Admin = () => {
                     <div className="space-y-1">
                       <p className="text-xs text-muted-foreground">Home → Gerar</p>
                       <p className="text-xl font-bold">{analyticsMetrics7d?.homeGenerateClicks || 0}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Resumos Gerados</p>
+                      <p className="text-xl font-bold">{analyticsMetrics7d?.summariesGenerated || 0}</p>
                     </div>
                     <div className="space-y-1">
                       <p className="text-xs text-muted-foreground">Áudios Gerados</p>
@@ -1383,7 +1392,7 @@ const Admin = () => {
                 {/* 30 Dias */}
                 <div className="border-t pt-4">
                   <h4 className="font-semibold mb-3 text-sm">Últimos 30 Dias</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                     <div className="space-y-1">
                       <p className="text-xs text-muted-foreground">Visitas Únicas</p>
                       <p className="text-xl font-bold">{analyticsMetrics30d?.uniqueVisitors || 0}</p>
@@ -1395,6 +1404,10 @@ const Admin = () => {
                     <div className="space-y-1">
                       <p className="text-xs text-muted-foreground">Home → Gerar</p>
                       <p className="text-xl font-bold">{analyticsMetrics30d?.homeGenerateClicks || 0}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground">Resumos Gerados</p>
+                      <p className="text-xl font-bold">{analyticsMetrics30d?.summariesGenerated || 0}</p>
                     </div>
                     <div className="space-y-1">
                       <p className="text-xs text-muted-foreground">Áudios Gerados</p>
@@ -1663,8 +1676,8 @@ const Admin = () => {
               </div>
             </div>
 
-            {/* Summary, Cover, Audio and Resumos Gerados Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t">
+            {/* Summary, Cover, and Audio Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t">
               <div className="space-y-2">
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-xs md:text-sm font-medium">Livros com Resumo</p>
@@ -1702,22 +1715,6 @@ const Admin = () => {
                   <p className="text-xs md:text-sm text-muted-foreground">Total</p>
                   <span className="text-xs text-muted-foreground shrink-0">
                     {stats?.totalAudios || 0} arquivos
-                  </span>
-                </div>
-                <Progress 
-                  value={100} 
-                  className="h-2"
-                />
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between gap-2">
-                  <p className="text-xs md:text-sm font-medium">Resumos Gerados</p>
-                  <Badge variant="secondary" className="shrink-0">{dailyMetrics?.summariesGeneratedLast24h || 0}</Badge>
-                </div>
-                <div className="flex items-center justify-between gap-2">
-                  <p className="text-xs md:text-sm text-muted-foreground">Últimas 24 horas</p>
-                  <span className="text-xs text-muted-foreground shrink-0">
-                    Pelos usuários
                   </span>
                 </div>
                 <Progress 

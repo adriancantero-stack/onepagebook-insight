@@ -95,7 +95,8 @@ Deno.serve(async (req) => {
       exploreCategoryClicks: events?.filter(e => e.event_type === 'explore_category_click').length || 0,
       exploreSearchClicks: events?.filter(e => e.event_type === 'explore_search_click').length || 0,
       
-      // Audio generation
+      // Summaries and Audio generation
+      summariesGenerated: events?.filter(e => e.event_type === 'home_generate_click').length || 0,
       audioGenerated: events?.filter(e => e.event_type === 'audio_generated').length || 0,
     };
 
