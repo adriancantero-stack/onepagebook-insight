@@ -178,54 +178,118 @@ serve(async (req) => {
 
     console.log('Audio not in cache, generating new audio for text length:', text.length)
 
-    // Map language to the best OpenAI TTS voice for each region
-    const voiceMap: { [key: string]: string } = {
-      'pt': 'nova', // Young, energetic female voice - great for Portuguese
-      'en': 'alloy', // Neutral, balanced voice
-      'es': 'nova', // Young, energetic female voice - works well for Spanish
-    }
-
-    const voice = voiceMap[language] || 'nova'
-
-    // Get OpenAI API key
-    const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY')
-    if (!OPENAI_API_KEY) {
-      throw new Error('OPENAI_API_KEY is not configured')
-    }
-
-    // Split text into chunks if necessary (OpenAI has a 4096 char limit)
+    // Split text into chunks (prepare for both APIs)
     const textChunks = splitTextIntoChunks(text, 4000);
-    console.log(`Processing ${textChunks.length} chunk(s) using OpenAI TTS`)
-
     const audioChunks: string[] = [];
+    
+    // Get API keys
+    const ELEVEN_LABS_API_KEY = Deno.env.get('ELEVEN_LABS_API_KEY')
+    const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY')
+    
+    if (!ELEVEN_LABS_API_KEY && !OPENAI_API_KEY) {
+      throw new Error('Neither ELEVEN_LABS_API_KEY nor OPENAI_API_KEY is configured')
+    }
 
-    // Generate speech for each chunk using OpenAI TTS
+    let useElevenLabs = !!ELEVEN_LABS_API_KEY;
+    let elevenLabsQuotaExceeded = false;
+
+    // Voice mappings for both services
+    const elevenLabsVoiceMap: { [key: string]: string } = {
+      'pt': 'XrExE9yKIg1WjnnlVkGX', // Matilda
+      'en': '21m00Tcm4TlvDq8ikWAM', // Rachel
+      'es': 'oWAxZDx7w5VEj9dCyTzz', // Grace
+    }
+    
+    const openAIVoiceMap: { [key: string]: string } = {
+      'pt': 'nova',
+      'en': 'alloy',
+      'es': 'nova',
+    }
+
+    console.log(`Processing ${textChunks.length} chunk(s). Will try ${useElevenLabs ? 'ElevenLabs first, fallback to OpenAI' : 'OpenAI only'}`)
+
+    // Generate speech for each chunk with automatic fallback
     for (let i = 0; i < textChunks.length; i++) {
       const chunk = textChunks[i];
-      console.log(`Calling OpenAI TTS API for chunk ${i + 1}/${textChunks.length} with voice:`, voice)
+      let response: Response | null = null;
       
-      const response = await fetch('https://api.openai.com/v1/audio/speech', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${OPENAI_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'tts-1',
-          input: chunk,
-          voice: voice,
-          response_format: 'mp3',
-          speed: 1.0
-        }),
-      })
+      // Try ElevenLabs first if available and not quota exceeded
+      if (useElevenLabs && !elevenLabsQuotaExceeded) {
+        const voiceId = elevenLabsVoiceMap[language] || 'XrExE9yKIg1WjnnlVkGX';
+        console.log(`Attempting ElevenLabs for chunk ${i + 1}/${textChunks.length} with voice ID:`, voiceId)
+        
+        try {
+          response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+            method: 'POST',
+            headers: {
+              'Accept': 'audio/mpeg',
+              'xi-api-key': ELEVEN_LABS_API_KEY!,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              text: chunk,
+              model_id: 'eleven_multilingual_v2',
+              voice_settings: {
+                stability: 0.5,
+                similarity_boost: 0.75,
+              }
+            }),
+          })
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        console.error(`OpenAI TTS API error for chunk ${i + 1}:`, response.status, errorText)
-        throw new Error(`Failed to generate speech: ${errorText}`)
+          // Check for quota errors
+          if (!response.ok) {
+            const errorText = await response.text()
+            
+            // Check if it's a quota error
+            if (response.status === 401 || response.status === 429 || errorText.includes('quota_exceeded')) {
+              console.log('⚠️ ElevenLabs quota exceeded, switching to OpenAI for remaining chunks')
+              elevenLabsQuotaExceeded = true;
+              response = null; // Force OpenAI fallback
+            } else {
+              throw new Error(`ElevenLabs error: ${errorText}`)
+            }
+          } else {
+            console.log(`✅ Chunk ${i + 1} generated with ElevenLabs`)
+          }
+        } catch (error) {
+          console.error(`ElevenLabs error for chunk ${i + 1}:`, error)
+          console.log('Falling back to OpenAI for this chunk')
+          response = null;
+        }
       }
+      
+      // Use OpenAI if ElevenLabs failed or isn't available
+      if (!response && OPENAI_API_KEY) {
+        const voice = openAIVoiceMap[language] || 'nova';
+        console.log(`Using OpenAI TTS for chunk ${i + 1}/${textChunks.length} with voice:`, voice)
+        
+        response = await fetch('https://api.openai.com/v1/audio/speech', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${OPENAI_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'tts-1',
+            input: chunk,
+            voice: voice,
+            response_format: 'mp3',
+            speed: 1.0
+          }),
+        })
 
-      console.log(`Chunk ${i + 1} generated successfully`)
+        if (!response.ok) {
+          const errorText = await response.text()
+          console.error(`OpenAI TTS error for chunk ${i + 1}:`, response.status, errorText)
+          throw new Error(`Failed to generate speech with both services: ${errorText}`)
+        }
+        
+        console.log(`✅ Chunk ${i + 1} generated with OpenAI`)
+      }
+      
+      if (!response || !response.ok) {
+        throw new Error(`Failed to generate audio for chunk ${i + 1}`)
+      }
 
       // Convert audio buffer to base64 safely
       const arrayBuffer = await response.arrayBuffer()
