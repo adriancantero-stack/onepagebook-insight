@@ -100,6 +100,25 @@ serve(async (req) => {
               continue;
             }
 
+            // Check if user was created less than 24 hours ago
+            const userCreatedAt = new Date(user.created_at);
+            const hoursSinceCreation = (Date.now() - userCreatedAt.getTime()) / (1000 * 60 * 60);
+
+            if (hoursSinceCreation < 24) {
+              totalSkipped++;
+              console.log(`⏭️ User ${user.email} created ${hoursSinceCreation.toFixed(1)}h ago (< 24h), skipping (${totalSkipped} skipped)`);
+              
+              // Log for audit purposes
+              await supabase.from('daily_reminder_log').insert({
+                user_id: profile.id,
+                email: user.email,
+                sent_date: today,
+                success: true,
+                error_message: `User created less than 24h ago (${hoursSinceCreation.toFixed(1)}h)`
+              });
+              continue;
+            }
+
             // Check if user read today
             const hasReadToday = profile.last_read_date === today;
 
