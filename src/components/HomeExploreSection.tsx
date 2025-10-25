@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Card } from "@/components/ui/card";
@@ -7,6 +7,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { trackEvent } from "@/lib/analyticsTracker";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface Book {
   id: string;
@@ -26,7 +33,55 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
   const [loadingMore, setLoadingMore] = useState(false);
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<"popularity" | "alpha">("popularity");
+  const [dbCategories, setDbCategories] = useState<{ id: string; name: string }[]>([]);
   const LIMIT = 15;
+
+  // Fetch categories from database
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const { data: cats } = await supabase
+        .from('book_categories')
+        .select('key, name_pt, name_en, name_es')
+        .eq('is_active', true)
+        .order('display_order', { ascending: true });
+
+      const mapped = (cats || []).map((c: any) => {
+        const name =
+          i18n.language === 'en' ? c.name_en :
+          i18n.language === 'es' ? c.name_es :
+          c.name_pt;
+        return { id: c.key, name };
+      });
+      setDbCategories(mapped);
+    };
+    fetchCategories();
+  }, [i18n.language]);
+
+  // Sort categories alphabetically
+  const sortedCategories = useMemo(() => {
+    return [...dbCategories].sort((a, b) => {
+      return a.name.localeCompare(b.name, i18n.language);
+    });
+  }, [dbCategories, i18n.language]);
+
+  // Helper to capitalize title correctly
+  const capitalizeTitle = (text: string) => {
+    return text.split(' ').map(word => {
+      if (word.toLowerCase() === 'e') return 'e';
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    }).join(' ');
+  };
+
+  const getTitle = () => {
+    const titles = {
+      pt: 'Explore Livros Populares e Recomendados',
+      es: 'Explora Libros Populares y Recomendados',
+      en: 'Explore Popular and Recommended Books'
+    };
+    return capitalizeTitle(titles[i18n.language as keyof typeof titles] || titles.en);
+  };
 
   useEffect(() => {
     const fetchPopularBooks = async () => {
@@ -36,13 +91,25 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
       setHasMore(true);
       
       try {
-        const { data, error } = await supabase
+        let query = supabase
           .from('books')
-          .select('id, title, author, cover_url')
+          .select('id, title, author, cover_url, category')
           .eq('lang', i18n.language)
-          .eq('is_active', true)
-          .order('popularity', { ascending: false })
-          .range(0, LIMIT - 1);
+          .eq('is_active', true);
+
+        // Apply category filter if selected
+        if (selectedCategory) {
+          query = query.eq('category', selectedCategory);
+        }
+
+        // Apply sorting
+        if (sortBy === 'popularity') {
+          query = query.order('popularity', { ascending: false });
+        } else {
+          query = query.order('title', { ascending: true });
+        }
+
+        const { data, error } = await query.range(0, LIMIT - 1);
 
         if (!error && data) {
           setBooks(data);
@@ -57,20 +124,32 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
     };
 
     fetchPopularBooks();
-  }, [i18n.language]);
+  }, [i18n.language, selectedCategory, sortBy]);
 
   const loadMoreBooks = async () => {
     if (loadingMore || !hasMore) return;
     
     setLoadingMore(true);
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('books')
-        .select('id, title, author, cover_url')
+        .select('id, title, author, cover_url, category')
         .eq('lang', i18n.language)
-        .eq('is_active', true)
-        .order('popularity', { ascending: false })
-        .range(offset, offset + LIMIT - 1);
+        .eq('is_active', true);
+
+      // Apply category filter if selected
+      if (selectedCategory) {
+        query = query.eq('category', selectedCategory);
+      }
+
+      // Apply sorting
+      if (sortBy === 'popularity') {
+        query = query.order('popularity', { ascending: false });
+      } else {
+        query = query.order('title', { ascending: true });
+      }
+
+      const { data, error } = await query.range(offset, offset + LIMIT - 1);
 
       if (!error && data) {
         setBooks(prev => [...prev, ...data]);
@@ -97,9 +176,7 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
     return (
       <section className="mt-16 mb-12">
         <h2 className="text-2xl sm:text-3xl font-semibold text-center mb-8 text-foreground">
-          {i18n.language === 'pt' ? 'Explore livros populares e recomendados' :
-           i18n.language === 'es' ? 'Explora libros populares y recomendados' :
-           'Explore popular and recommended books'}
+          {getTitle()}
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {Array.from({ length: 15 }).map((_, i) => (
@@ -118,10 +195,60 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
   return (
     <section className="mt-16 mb-12 animate-fade-in">
       <h2 className="text-2xl sm:text-3xl font-semibold text-center mb-8 text-foreground">
-        {i18n.language === 'pt' ? 'Explore livros populares e recomendados' :
-         i18n.language === 'es' ? 'Explora libros populares y recomendados' :
-         'Explore popular and recommended books'}
+        {getTitle()}
       </h2>
+
+      {/* Category Chips */}
+      <div className="mb-6 flex items-center gap-2 overflow-x-auto scrollbar-hide pb-2">
+        <div className="flex gap-1.5 sm:gap-2 flex-nowrap mx-auto">
+          <button
+            onClick={() => {
+              trackEvent('home_category_click', { category_id: 'all' });
+              setSelectedCategory(null);
+            }}
+            className={`px-2.5 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-200 ${
+              selectedCategory === null
+                ? 'bg-[#1D1D1F] text-white'
+                : 'bg-[#F5F5F7] text-[#1D1D1F] hover:bg-[#1D1D1F] hover:text-white'
+            }`}
+          >
+            {i18n.language === 'pt' ? 'Todos' : i18n.language === 'es' ? 'Todos' : 'All'}
+          </button>
+          {sortedCategories.map(category => (
+            <button
+              key={category.id}
+              onClick={() => {
+                trackEvent('home_category_click', { category_id: category.id });
+                setSelectedCategory(category.id);
+              }}
+              className={`px-2.5 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-200 ${
+                selectedCategory === category.id
+                  ? 'bg-[#1D1D1F] text-white'
+                  : 'bg-[#F5F5F7] text-[#1D1D1F] hover:bg-[#1D1D1F] hover:text-white'
+              }`}
+            >
+              {category.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Sort Filter */}
+      <div className="flex items-center gap-2 mb-6">
+        <Select value={sortBy} onValueChange={(v: any) => setSortBy(v)}>
+          <SelectTrigger className="w-full sm:w-[200px] text-sm border-[#E5E5EA] bg-white hover:border-[#1D1D1F] transition-colors">
+            <SelectValue placeholder={i18n.language === 'pt' ? 'Ordenar' : i18n.language === 'es' ? 'Ordenar' : 'Sort'} />
+          </SelectTrigger>
+          <SelectContent className="bg-white border-[#E5E5EA]">
+            <SelectItem value="popularity">
+              {i18n.language === 'pt' ? 'Mais populares' : i18n.language === 'es' ? 'Más populares' : 'Most popular'}
+            </SelectItem>
+            <SelectItem value="alpha">
+              {i18n.language === 'pt' ? 'Alfabética' : i18n.language === 'es' ? 'Alfabético' : 'Alphabetical'}
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
       
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
         {books.map((book) => (

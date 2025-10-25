@@ -14,6 +14,7 @@ export type AnalyticsEvent =
   | 'page_visit'
   | 'home_explore_click'
   | 'home_generate_click'
+  | 'home_category_click'
   | 'explore_people_click'
   | 'explore_category_click'
   | 'explore_search_click'
