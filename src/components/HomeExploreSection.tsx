@@ -101,13 +101,13 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
            i18n.language === 'es' ? 'Explora libros populares y recomendados' :
            'Explore popular and recommended books'}
         </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {Array.from({ length: 15 }).map((_, i) => (
-            <Card key={i} className="p-4 space-y-3 border-border/50 bg-card/50">
+            <Card key={i} className="p-2 space-y-2 border-border/50 bg-card/50">
               <Skeleton className="w-full aspect-[2/3] rounded-lg" />
-              <Skeleton className="h-5 w-3/4" />
-              <Skeleton className="h-4 w-1/2" />
-              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-3 w-1/2" />
+              <Skeleton className="h-8 w-full" />
             </Card>
           ))}
         </div>
@@ -123,11 +123,11 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
          'Explore popular and recommended books'}
       </h2>
       
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
         {books.map((book) => (
           <Card 
             key={book.id}
-            className="group p-4 space-y-3 border-border/50 bg-card/50 hover:bg-card transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+            className="group p-2 space-y-2 border-border/50 bg-card/50 hover:bg-card transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
           >
             <div className="relative overflow-hidden rounded-lg bg-muted">
               <OptimizedImage
@@ -138,18 +138,18 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
               />
             </div>
             
-            <div className="space-y-1 min-h-[60px]">
-              <h3 className="font-semibold text-sm leading-tight line-clamp-2 text-foreground">
+            <div className="space-y-0.5 min-h-[40px]">
+              <h3 className="font-semibold text-xs leading-tight line-clamp-2 text-foreground">
                 {book.title}
               </h3>
-              <p className="text-xs text-muted-foreground line-clamp-1">
+              <p className="text-[10px] text-muted-foreground line-clamp-1">
                 {book.author}
               </p>
             </div>
             
             <Button
               onClick={() => handleSummarize(book)}
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl text-sm font-medium transition-all duration-200 hover:shadow-md"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-xs font-medium py-1.5 h-auto transition-all duration-200 hover:shadow-md"
             >
               {i18n.language === 'pt' ? 'Resumir agora' :
                i18n.language === 'es' ? 'Resumir ahora' :
