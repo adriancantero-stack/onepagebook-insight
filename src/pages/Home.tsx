@@ -453,8 +453,8 @@ const Home = () => {
       </div>
       <FloatingHeader onLogout={handleLogout} showNavigation={false} />
 
-      <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-12 xl:px-24">
-        <header className="w-full text-center pt-8 sm:pt-12 pb-4 sm:pb-6">
+      <main className="mx-auto max-w-4xl px-2 sm:px-6 lg:px-12 xl:px-24 w-full">
+        <header className="w-full text-center pt-6 sm:pt-12 pb-3 sm:pb-6">
           {isPremium && (
             <div className="flex items-center justify-center gap-1.5 bg-gradient-to-r from-[#7B61FF]/10 to-[#9D8CFF]/10 border border-[#7B61FF]/20 px-3 py-1.5 rounded-full mb-3 inline-flex">
               <Crown className="w-4 h-4 text-[#7B61FF]" fill="#7B61FF" />
@@ -471,8 +471,8 @@ const Home = () => {
           </p>
         </header>
 
-        <div className="mx-auto mt-6 sm:mt-8 max-w-2xl w-full">
-          <Card className="p-4 sm:p-8 md:p-10 border-transparent rounded-2xl shadow-sm bg-lilac-50">
+        <div className="mx-auto mt-4 sm:mt-8 max-w-2xl w-full">
+          <Card className="p-3 sm:p-8 md:p-10 border-transparent rounded-2xl shadow-sm bg-lilac-50">
             <div className="space-y-6">
             <div>
               <BookAutocomplete
