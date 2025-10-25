@@ -178,15 +178,15 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
         <h2 className="text-2xl sm:text-3xl font-semibold text-center mb-8 text-foreground">
           {getTitle()}
         </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
-          {Array.from({ length: 15 }).map((_, i) => (
-            <Card key={i} className="p-1.5 sm:p-2 space-y-1.5 sm:space-y-2 border-border/50 bg-card/50">
-              <Skeleton className="w-full aspect-[2/3] rounded-lg" />
-              <Skeleton className="h-3 sm:h-4 w-3/4" />
-              <Skeleton className="h-2.5 sm:h-3 w-1/2" />
-              <Skeleton className="h-7 sm:h-8 w-full" />
-            </Card>
-          ))}
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4">
+        {Array.from({ length: 15 }).map((_, i) => (
+          <Card key={i} className="p-1 sm:p-2 space-y-1 sm:space-y-2 border-border/50 bg-card/50">
+            <Skeleton className="w-full aspect-[2/3] rounded-md" />
+            <Skeleton className="h-2.5 sm:h-4 w-3/4" />
+            <Skeleton className="h-2 sm:h-3 w-1/2" />
+            <Skeleton className="h-6 sm:h-8 w-full" />
+          </Card>
+        ))}
         </div>
       </section>
     );
@@ -250,13 +250,13 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
         </Select>
       </div>
       
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4">
         {books.map((book) => (
           <Card 
             key={book.id}
-            className="group p-1.5 sm:p-2 space-y-1.5 sm:space-y-2 border-border/50 bg-card/50 hover:bg-card transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+            className="group p-1 sm:p-2 space-y-1 sm:space-y-2 border-border/50 bg-card/50 hover:bg-card transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
           >
-            <div className="relative overflow-hidden rounded-lg bg-muted">
+            <div className="relative overflow-hidden rounded-md bg-muted">
               <OptimizedImage
                 src={book.cover_url || "/book-placeholder.png"}
                 alt={`${book.title} cover`}
@@ -265,18 +265,18 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
               />
             </div>
             
-            <div className="space-y-0.5 min-h-[30px] sm:min-h-[40px]">
-              <h3 className="font-semibold text-[10px] sm:text-xs leading-tight line-clamp-2 text-foreground">
+            <div className="space-y-0.5 min-h-[24px] sm:min-h-[40px]">
+              <h3 className="font-semibold text-[9px] sm:text-xs leading-tight line-clamp-2 text-foreground">
                 {book.title}
               </h3>
-              <p className="text-[9px] sm:text-[10px] text-muted-foreground line-clamp-1">
+              <p className="text-[8px] sm:text-[10px] text-muted-foreground line-clamp-1">
                 {book.author}
               </p>
             </div>
             
             <Button
               onClick={() => handleSummarize(book)}
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-[10px] sm:text-xs font-medium py-1 sm:py-1.5 h-auto transition-all duration-200 hover:shadow-md"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-md text-[9px] sm:text-xs font-medium py-0.5 sm:py-1.5 h-auto transition-all duration-200 hover:shadow-md"
             >
               {i18n.language === 'pt' ? 'Resumir agora' :
                i18n.language === 'es' ? 'Resumir ahora' :
