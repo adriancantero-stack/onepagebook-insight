@@ -12,6 +12,7 @@ import { UpgradeModal } from "@/components/UpgradeModal";
 import { BookAutocomplete } from "@/components/BookAutocomplete";
 import { FloatingHeader } from "@/components/FloatingHeader";
 import { BookDetailsModal } from "@/components/BookDetailsModal";
+import { HomeExploreSection } from "@/components/HomeExploreSection";
 
 import { 
   loadUsage, 
@@ -196,7 +197,7 @@ const Home = () => {
     }
   }, [location]);
 
-  const handleBookSelect = (selectedBookId: string | null, title: string, author: string, source?: 'catalog' | 'history') => {
+  const handleBookSelect = (selectedBookId: string | null, title: string, author: string, source?: 'catalog' | 'history' | 'home_explore') => {
     setBookId(selectedBookId);
     setBookTitle(title);
     
@@ -207,6 +208,15 @@ const Home = () => {
     if (source === 'history' && selectedBookId) {
       console.log('✅ Navigating to existing summary from history:', selectedBookId);
       navigate(`/summary/${selectedBookId}`);
+      return;
+    }
+    
+    // If from home_explore section, auto-generate the summary
+    if (source === 'home_explore' && selectedBookId && author) {
+      console.log('✅ Auto-generating summary from home explore:', { title, author, selectedBookId });
+      setBookAuthor(author);
+      // Trigger generation immediately with the values
+      handleGenerateSummary(title, author, selectedBookId);
       return;
     }
     
@@ -225,8 +235,12 @@ const Home = () => {
     setBookId(null);
   };
 
-  const handleGenerateSummary = async () => {
-    if (!bookTitle.trim()) {
+  const handleGenerateSummary = async (overrideTitle?: string, overrideAuthor?: string, overrideBookId?: string | null) => {
+    const finalTitle = overrideTitle || bookTitle;
+    const finalAuthor = overrideAuthor || bookAuthor;
+    const finalBookId = overrideBookId !== undefined ? overrideBookId : bookId;
+
+    if (!finalTitle.trim()) {
       toast({
         variant: "destructive",
         title: t("toast.error"),
@@ -236,12 +250,12 @@ const Home = () => {
     }
 
     // If no author, ask for details
-    if (!bookAuthor.trim()) {
+    if (!finalAuthor.trim()) {
       console.log('⚠️ Missing author, showing modal');
       setShowDetailsModal(true);
       return;
     }
-    console.log('✅ Ready to generate:', { bookTitle, bookAuthor, bookId });
+    console.log('✅ Ready to generate:', { finalTitle, finalAuthor, finalBookId });
 
     // Ensure user is authenticated
     const { data: { session } } = await supabase.auth.getSession();
@@ -260,7 +274,7 @@ const Home = () => {
 
     try {
       // Check cache first to avoid regenerating
-      const cachedSummary = await getCachedSummary(bookTitle, bookAuthor, i18n.language);
+      const cachedSummary = await getCachedSummary(finalTitle, finalAuthor, i18n.language);
       
       if (cachedSummary) {
         console.log('✅ Found cached summary, redirecting...');
@@ -303,9 +317,9 @@ const Home = () => {
 
       const { data, error } = await supabase.functions.invoke("generate-summary", {
         body: {
-          bookId,
-          bookTitle,
-          bookAuthor,
+          bookId: finalBookId,
+          bookTitle: finalTitle,
+          bookAuthor: finalAuthor,
           language: i18n.language,
         },
         headers: {
@@ -511,6 +525,11 @@ const Home = () => {
           </div>
         </Card>
         </div>
+
+        {/* Explore Section */}
+        <HomeExploreSection 
+          onBookSelect={(bookId, title, author) => handleBookSelect(bookId, title, author, 'home_explore')} 
+        />
       </main>
 
       <Footer />

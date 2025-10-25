@@ -17,6 +17,8 @@ export type AnalyticsEvent =
   | 'explore_people_click'
   | 'explore_category_click'
   | 'explore_search_click'
+  | 'explore_click'
+  | 'book_click'
   | 'audio_generated';
 
 export interface AnalyticsEventData {
