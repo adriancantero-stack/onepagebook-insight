@@ -183,17 +183,26 @@ const Home = () => {
     return () => clearInterval(rotator);
   }, [genState.open, genState.step, i18n.language]);
 
-  // Load book data from Explore page navigation
+  // Load book data from Explore page navigation or related books with auto-generation
   useEffect(() => {
     if (location.state?.bookTitle) {
       const title = location.state.bookTitle;
       const author = location.state.bookAuthor || "";
+      const bookIdFromState = location.state.bookId || null;
+      const autoGenerate = location.state.autoGenerate || false;
       
       setBookTitle(title);
       setBookAuthor(author);
+      setBookId(bookIdFromState);
       
       // Clear the state after loading to prevent re-triggering
       window.history.replaceState({}, document.title);
+      
+      // Auto-generate if requested (from related books)
+      if (autoGenerate && author) {
+        console.log('✅ Auto-generating summary from related books:', { title, author, bookIdFromState });
+        handleGenerateSummary(title, author, bookIdFromState);
+      }
     }
   }, [location]);
 

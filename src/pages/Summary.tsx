@@ -67,10 +67,10 @@ const Summary = () => {
     if (booksInLocale.length === 0) return [];
     
     const shuffled = [...booksInLocale].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, 2);
+    return shuffled.slice(0, 4);
   }, [summary, i18n.language]);
 
-  // Fetch covers for related books from database
+  // Fetch covers and IDs for related books from database
   useEffect(() => {
     const fetchCovers = async () => {
       if (relatedBooks.length === 0) {
@@ -82,7 +82,7 @@ const Summary = () => {
         relatedBooks.map(async (book: Book) => {
           const { data } = await supabase
             .from("books")
-            .select("cover_url")
+            .select("id, cover_url")
             .eq("title", book.title)
             .eq("author", book.author)
             .eq("lang", book.locale)
@@ -91,6 +91,7 @@ const Summary = () => {
 
           return {
             ...book,
+            bookId: data?.id || null,
             cover: data?.cover_url || "/book-placeholder.png"
           };
         })
@@ -949,15 +950,22 @@ const Summary = () => {
             <div className="mt-8 sm:mt-10 md:mt-12 pt-8 sm:pt-10 border-t border-[#E5E5EA]">
               <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 sm:mb-6 text-[#1D1D1F] tracking-tight">{t("summary.relatedBooks")}</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 md:gap-6">
-                {relatedBooksWithCovers.map((book: Book, index: number) => (
+                {relatedBooksWithCovers.map((book: any, index: number) => (
                   <Card 
                     key={index}
                     className="p-4 sm:p-6 border-[#E5E5EA] rounded-2xl hover:shadow-lg hover:scale-[1.02] transition-all duration-200 cursor-pointer"
-                    onClick={() => navigate("/home", { state: { bookTitle: book.title, bookAuthor: book.author } })}
+                    onClick={() => navigate("/home", { 
+                      state: { 
+                        bookTitle: book.title, 
+                        bookAuthor: book.author,
+                        bookId: book.bookId,
+                        autoGenerate: true 
+                      } 
+                    })}
                   >
                     <div className="flex flex-col sm:flex-row items-start gap-4">
                       <img
-                        src={(book as any).cover || "/book-placeholder.png"}
+                        src={book.cover || "/book-placeholder.png"}
                         alt={book.title}
                         className="w-full sm:w-16 h-48 sm:h-24 object-contain rounded-lg shrink-0"
                         onError={(e) => {
