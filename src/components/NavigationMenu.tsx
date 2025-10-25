@@ -13,7 +13,6 @@ import {
   MoreVertical, 
   BookOpen, 
   History, 
-  Compass,
   Crown,
   HelpCircle,
   Mail,
@@ -60,11 +59,6 @@ export const NavigationMenu = ({ onLogout }: NavigationMenuProps) => {
       icon: Award,
       label: t("achievements.title"),
       onClick: () => navigate("/achievements"),
-    },
-    {
-      icon: Compass,
-      label: t("header.explore"),
-      onClick: () => navigate("/explore"),
     },
     {
       icon: History,
