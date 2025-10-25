@@ -36,7 +36,7 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<"popularity" | "alpha">("popularity");
   const [dbCategories, setDbCategories] = useState<{ id: string; name: string }[]>([]);
-  const LIMIT = 15;
+  const LIMIT = 21;
 
   // Fetch categories from database
   useEffect(() => {
@@ -178,8 +178,8 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
         <h2 className="text-2xl sm:text-3xl font-semibold text-center mb-8 text-foreground">
           {getTitle()}
         </h2>
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4">
-        {Array.from({ length: 15 }).map((_, i) => (
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-2 sm:gap-4">
+        {Array.from({ length: 21 }).map((_, i) => (
           <Card key={i} className="p-1 sm:p-2 space-y-1 sm:space-y-2 border-border/50 bg-card/50">
             <Skeleton className="w-full aspect-[2/3] rounded-md" />
             <Skeleton className="h-2.5 sm:h-4 w-3/4" />
@@ -250,7 +250,7 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
         </Select>
       </div>
       
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-2 sm:gap-4">
         {books.map((book) => (
           <Card 
             key={book.id}
