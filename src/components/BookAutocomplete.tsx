@@ -217,23 +217,14 @@ export const BookAutocomplete = ({
         />
         {!hideExploreLink && (
           <div className="text-xs text-center px-1 flex items-center justify-center gap-1.5 flex-wrap">
-            <span className="text-muted-foreground/60">
-              {lang === "en" ? "Don't know the title? " : lang === "es" ? "¿No sabes el título? " : "Não sabe o título? "}
+            <span className="text-muted-foreground/80">
+              {lang === "en" 
+                ? `Don't know the title? Browse our catalog with ${booksCount !== null ? booksCount.toLocaleString() : ''} books!`
+                : lang === "es" 
+                ? `¿No sabes el título? Explora nuestro catálogo con ${booksCount !== null ? booksCount.toLocaleString() : ''} libros!`
+                : `Não sabe o título? Explore nosso catálogo com ${booksCount !== null ? booksCount.toLocaleString() : ''} livros!`
+              }
             </span>
-            <button
-              onClick={() => {
-                trackEvent('home_explore_click');
-                window.location.href = '/explore';
-              }}
-              className="text-primary hover:underline font-medium transition-colors"
-            >
-              {lang === "en" ? "Browse catalog" : lang === "es" ? "Explorar catálogo" : "Explorar catálogo"}
-            </button>
-            {booksCount !== null && (
-              <span className="text-muted-foreground/80 font-semibold">
-                +{booksCount.toLocaleString()} {lang === "en" ? "books!" : lang === "es" ? "libros!" : "livros!"}
-              </span>
-            )}
           </div>
         )}
       </div>
