@@ -104,10 +104,10 @@ const Welcome = () => {
       sessionStorage.setItem('ga_signed', '1');
     }
 
-    // Auto-redirect after 5 seconds
+    // Auto-redirect after 3 seconds
     const timer = setTimeout(() => {
-      navigate("/");
-    }, 5000);
+      navigate("/home");
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, [navigate]);
@@ -151,14 +151,14 @@ const Welcome = () => {
         {/* CTA Button */}
         <div className="pt-4 space-y-4">
           <Button 
-            onClick={() => navigate("/")} 
+            onClick={() => navigate("/home")} 
             className="w-full h-12 sm:h-14 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full text-base sm:text-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
           >
             {t("welcome.cta") || "Começar a usar"}
           </Button>
           
           <p className="text-xs text-muted-foreground font-normal">
-            {t("welcome.redirect") || "Redirecionando automaticamente em 5 segundos..."}
+            {t("welcome.redirect") || "Redirecionando automaticamente em 3 segundos..."}
           </p>
         </div>
       </div>
