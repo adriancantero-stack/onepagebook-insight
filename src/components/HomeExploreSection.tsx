@@ -21,13 +21,20 @@ interface HomeExploreSectionProps {
 
 export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) => {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const LIMIT = 15;
 
   useEffect(() => {
     const fetchPopularBooks = async () => {
       setLoading(true);
+      setBooks([]);
+      setOffset(0);
+      setHasMore(true);
+      
       try {
         const { data, error } = await supabase
           .from('books')
@@ -35,10 +42,12 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
           .eq('lang', i18n.language)
           .eq('is_active', true)
           .order('popularity', { ascending: false })
-          .limit(12);
+          .range(0, LIMIT - 1);
 
         if (!error && data) {
           setBooks(data);
+          setHasMore(data.length === LIMIT);
+          setOffset(LIMIT);
         }
       } catch (error) {
         console.error('Error fetching books:', error);
@@ -49,6 +58,31 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
 
     fetchPopularBooks();
   }, [i18n.language]);
+
+  const loadMoreBooks = async () => {
+    if (loadingMore || !hasMore) return;
+    
+    setLoadingMore(true);
+    try {
+      const { data, error } = await supabase
+        .from('books')
+        .select('id, title, author, cover_url')
+        .eq('lang', i18n.language)
+        .eq('is_active', true)
+        .order('popularity', { ascending: false })
+        .range(offset, offset + LIMIT - 1);
+
+      if (!error && data) {
+        setBooks(prev => [...prev, ...data]);
+        setHasMore(data.length === LIMIT);
+        setOffset(prev => prev + LIMIT);
+      }
+    } catch (error) {
+      console.error('Error loading more books:', error);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
 
   const handleSummarize = (book: Book) => {
     trackEvent('book_click', { 
@@ -67,8 +101,8 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
            i18n.language === 'es' ? 'Explora libros populares y recomendados' :
            'Explore popular and recommended books'}
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {Array.from({ length: 8 }).map((_, i) => (
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+          {Array.from({ length: 15 }).map((_, i) => (
             <Card key={i} className="p-4 space-y-3 border-border/50 bg-card/50">
               <Skeleton className="w-full aspect-[2/3] rounded-lg" />
               <Skeleton className="h-5 w-3/4" />
@@ -89,7 +123,7 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
          'Explore popular and recommended books'}
       </h2>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
         {books.map((book) => (
           <Card 
             key={book.id}
@@ -125,20 +159,26 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
         ))}
       </div>
 
-      <div className="text-center mt-10">
-        <Button
-          onClick={() => {
-            trackEvent('explore_click', { source: 'home_explore_section' });
-            navigate('/explore');
-          }}
-          variant="outline"
-          className="px-8 py-6 text-base border-border/50 hover:border-primary/50 hover:bg-accent/50 rounded-xl transition-all duration-200"
-        >
-          {i18n.language === 'pt' ? 'Ver catálogo completo' :
-           i18n.language === 'es' ? 'Ver catálogo completo' :
-           'View full catalog'}
-        </Button>
-      </div>
+      {hasMore && (
+        <div className="text-center mt-10">
+          <Button
+            onClick={loadMoreBooks}
+            disabled={loadingMore}
+            variant="outline"
+            className="px-8 py-6 text-base border-border/50 hover:border-primary/50 hover:bg-accent/50 rounded-xl transition-all duration-200"
+          >
+            {loadingMore ? (
+              i18n.language === 'pt' ? 'Carregando...' :
+              i18n.language === 'es' ? 'Cargando...' :
+              'Loading...'
+            ) : (
+              i18n.language === 'pt' ? 'Ver mais' :
+              i18n.language === 'es' ? 'Ver más' :
+              'View more'
+            )}
+          </Button>
+        </div>
+      )}
     </section>
   );
 };
