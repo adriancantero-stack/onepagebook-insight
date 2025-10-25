@@ -82,9 +82,13 @@ const App = () => (
             <Route path="/en2" element={<LandingB lang="en" />} />
             <Route path="/home" element={<Home />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/login" element={<Auth />} />
             <Route path="/pt/auth" element={<Auth />} />
             <Route path="/es/auth" element={<Auth />} />
             <Route path="/en/auth" element={<Auth />} />
+            <Route path="/pt/login" element={<Auth />} />
+            <Route path="/es/login" element={<Auth />} />
+            <Route path="/en/login" element={<Auth />} />
             <Route path="/welcome" element={<Welcome />} />
             <Route path="/premium-welcome" element={<PremiumWelcome />} />
             <Route path="/summary/:id" element={<Summary />} />

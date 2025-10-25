@@ -5,17 +5,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
-import { BookOpen } from "lucide-react";
-import { LanguageSelector } from "@/components/LanguageSelector";
-import Footer from "@/components/Footer";
-import { Separator } from "@/components/ui/separator";
+import { BookOpen, Globe } from "lucide-react";
 import { useABTest } from "@/hooks/useABTest";
 const Auth = () => {
-  const {
-    t
-  } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -23,8 +18,18 @@ const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState<string>("");
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [showEmailModal, setShowEmailModal] = useState(false);
   const navigate = useNavigate();
   const { trackConversion } = useABTest();
+
+  // Detect and set language on mount
+  useEffect(() => {
+    const browserLang = navigator.language.split('-')[0];
+    const supportedLangs = ['pt', 'en', 'es'];
+    if (supportedLangs.includes(browserLang) && i18n.language !== browserLang) {
+      i18n.changeLanguage(browserLang);
+    }
+  }, [i18n]);
   useEffect(() => {
     supabase.auth.getSession().then(({
       data: {
@@ -136,130 +141,222 @@ const Auth = () => {
     }
   };
 
-  return <div className="min-h-screen flex flex-col bg-lilac-50">
-      <div className="flex-1 flex items-center justify-center px-6 sm:px-12 py-8 sm:py-12">
-        <div className="absolute top-4 right-4">
-          <LanguageSelector />
-        </div>
-        
-        <Card className="w-full max-w-lg border-background rounded-2xl shadow-sm p-6 sm:p-10 bg-lilac-50">
-        <CardHeader className="text-center space-y-4">
-          <div className="flex justify-center">
-            <div className="flex items-center gap-2">
-              <BookOpen className="w-10 h-10 text-primary" />
-              <h1 className="text-3xl font-bold font-poppins bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent tracking-tight">OnePageBook</h1>
-            </div>
-          </div>
-          <p className="text-base font-medium text-primary">{t("auth.tagline")}</p>
-          <p className="text-lg text-muted-foreground leading-relaxed max-w-md mx-auto">
-            {t("hero.sub")}
-          </p>
-          <CardDescription className="text-base text-muted-foreground">
-            {t("auth.subtitle")}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <Button 
-            type="button"
-            variant="outline" 
-            className="w-full h-11 sm:h-12 rounded-xl border-border hover:bg-[#4285F4] hover:text-white transition-all duration-200 text-sm sm:text-base"
-            onClick={handleGoogleSignIn}
-            disabled={googleLoading}
-          >
-            <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-            </svg>
-            <span className="truncate">{googleLoading ? t("auth.signingIn") : t("auth.continueWithGoogle")}</span>
-          </Button>
-          
-          <p className="text-xs text-muted-foreground text-center">
-            {t("auth.googlePrivacy")}
-          </p>
-          
-          <div className="relative">
-            <Separator className="bg-border" />
-            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-3 text-sm text-muted-foreground">
-              {t("auth.orDivider")}
-            </span>
-          </div>
+  const getContent = () => {
+    const lang = i18n.language;
+    
+    const content = {
+      pt: {
+        headline: "Entre e descubra o poder de aprender em minutos.",
+        subtext: "Acesse com um clique e comece agora.",
+        googleButton: "Entrar com Google",
+        emailLink: "Prefere e-mail?",
+        emailLinkAction: "Entrar com e-mail",
+        noAccount: "Não tem conta?",
+        createFree: "Criar grátis",
+        emailModalTitle: "Entrar com e-mail",
+        emailModalDesc: "Preencha seus dados para acessar",
+      },
+      en: {
+        headline: "Sign in and unlock the power of learning in minutes.",
+        subtext: "Access with one click and start now.",
+        googleButton: "Sign in with Google",
+        emailLink: "Prefer email?",
+        emailLinkAction: "Sign in with email",
+        noAccount: "Don't have an account?",
+        createFree: "Create free",
+        emailModalTitle: "Sign in with email",
+        emailModalDesc: "Fill in your details to access",
+      },
+      es: {
+        headline: "Inicia sesión y descubre el poder de aprender en minutos.",
+        subtext: "Accede con un clic y comienza ahora.",
+        googleButton: "Iniciar sesión con Google",
+        emailLink: "¿Prefieres correo?",
+        emailLinkAction: "Iniciar con correo",
+        noAccount: "¿No tienes cuenta?",
+        createFree: "Crear gratis",
+        emailModalTitle: "Iniciar con correo",
+        emailModalDesc: "Completa tus datos para acceder",
+      }
+    };
 
-          <form onSubmit={handleAuth} className="space-y-4">
+    return content[lang as keyof typeof content] || content.en;
+  };
+
+  const cycleLanguage = () => {
+    const languages = ['pt', 'en', 'es'];
+    const currentIndex = languages.indexOf(i18n.language);
+    const nextIndex = (currentIndex + 1) % languages.length;
+    i18n.changeLanguage(languages[nextIndex]);
+  };
+
+  const content = getContent();
+
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#faf7ff] px-4 py-8 relative animate-fade-in">
+      {/* Logo */}
+      <div className="flex items-center gap-3 mb-8 animate-scale-in">
+        <BookOpen className="w-8 h-8 text-primary" />
+        <h1 className="text-2xl font-semibold text-foreground">OnePageBook</h1>
+      </div>
+
+      {/* Main Content Card */}
+      <div className="w-full max-w-md space-y-8 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+        {/* Headline */}
+        <div className="text-center space-y-3">
+          <h2 className="text-3xl sm:text-4xl font-semibold text-foreground leading-tight">
+            {content.headline}
+          </h2>
+          <p className="text-base text-muted-foreground">
+            {content.subtext}
+          </p>
+        </div>
+
+        {/* Google Button - Primary CTA */}
+        <Button
+          type="button"
+          onClick={handleGoogleSignIn}
+          disabled={googleLoading}
+          className="w-full h-14 bg-[#9B6BFF] hover:bg-[#8855FF] text-white rounded-2xl text-base font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
+        >
+          <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="white"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="white"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="white"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="white"/>
+          </svg>
+          {googleLoading ? (
+            <span className="animate-pulse">{i18n.language === 'pt' ? 'Entrando...' : i18n.language === 'es' ? 'Entrando...' : 'Signing in...'}</span>
+          ) : content.googleButton}
+        </Button>
+
+        {/* Email Alternative - Minimalist */}
+        <div className="text-center">
+          <p className="text-sm text-muted-foreground">
+            {content.emailLink}{' '}
+            <button
+              onClick={() => setShowEmailModal(true)}
+              className="text-primary hover:text-primary/80 font-medium underline underline-offset-4 transition-colors"
+            >
+              {content.emailLinkAction}
+            </button>
+          </p>
+        </div>
+
+        {/* Create Account Footer */}
+        <div className="text-center pt-4">
+          <p className="text-sm text-muted-foreground">
+            {content.noAccount}{' '}
+            <button
+              onClick={handleGoogleSignIn}
+              className="text-primary hover:text-primary/80 font-semibold transition-colors"
+            >
+              {content.createFree} →
+            </button>
+          </p>
+        </div>
+      </div>
+
+      {/* Language Selector - Discrete */}
+      <button
+        onClick={cycleLanguage}
+        className="absolute bottom-6 right-6 flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group"
+      >
+        <Globe className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+        <span className="uppercase font-medium">{i18n.language}</span>
+      </button>
+
+      {/* Email Login Modal */}
+      <Dialog open={showEmailModal} onOpenChange={setShowEmailModal}>
+        <DialogContent className="sm:max-w-md bg-background rounded-2xl border-border/50">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-semibold text-center">{content.emailModalTitle}</DialogTitle>
+            <DialogDescription className="text-center text-muted-foreground">
+              {content.emailModalDesc}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <form onSubmit={handleAuth} className="space-y-4 mt-4">
             {isSignUp && (
               <div className="space-y-2">
-                <Label htmlFor="fullName" className="text-sm font-medium text-foreground">{t("auth.fullName")}</Label>
-                <Input 
-                  id="fullName" 
-                  type="text" 
-                  value={fullName} 
-                  onChange={e => setFullName(e.target.value)} 
-                  required 
-                  className="h-11 sm:h-12 rounded-xl border-input focus:border-primary transition-all text-base bg-white"
+                <Label htmlFor="fullName" className="text-sm font-medium">
+                  {i18n.language === 'pt' ? 'Nome completo' : i18n.language === 'es' ? 'Nombre completo' : 'Full name'}
+                </Label>
+                <Input
+                  id="fullName"
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  required
+                  className="h-11 rounded-xl border-input focus:border-primary bg-background"
                 />
               </div>
             )}
+            
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium text-foreground">{t("auth.email")}</Label>
-              <Input 
-                id="email" 
-                type="email" 
-                value={email} 
-                onChange={e => setEmail(e.target.value)} 
-                required 
-                className="h-11 sm:h-12 rounded-xl border-input focus:border-primary transition-all text-base bg-white"
+              <Label htmlFor="email" className="text-sm font-medium">
+                {i18n.language === 'pt' ? 'E-mail' : i18n.language === 'es' ? 'Correo' : 'Email'}
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="h-11 rounded-xl border-input focus:border-primary bg-background"
               />
             </div>
+            
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-medium text-foreground">{t("auth.password")}</Label>
-              <Input 
-                id="password" 
-                type="password" 
-                value={password} 
-                onChange={e => setPassword(e.target.value)} 
-                required 
-                minLength={6} 
-                className="h-11 sm:h-12 rounded-xl border-input focus:border-primary transition-all text-base bg-white"
+              <Label htmlFor="password" className="text-sm font-medium">
+                {i18n.language === 'pt' ? 'Senha' : i18n.language === 'es' ? 'Contraseña' : 'Password'}
+              </Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={6}
+                className="h-11 rounded-xl border-input focus:border-primary bg-background"
               />
             </div>
-            <Button 
-              type="submit" 
-              className="w-full h-11 sm:h-12 bg-primary hover:bg-primary/90 rounded-xl text-primary-foreground font-medium transition-all duration-200 text-sm sm:text-base" 
-              disabled={loading || !email || !password || (isSignUp && !fullName)}
-            >
-              {loading 
-                ? t("auth.loading") 
-                : isSignUp 
-                  ? t("auth.startFree") 
-                  : t("auth.login")
-              }
-            </Button>
+
             {error && (
               <p className="text-sm text-red-500 text-center">{error}</p>
             )}
+
+            <Button
+              type="submit"
+              className="w-full h-11 bg-primary hover:bg-primary/90 rounded-xl text-primary-foreground font-medium transition-all"
+              disabled={loading || !email || !password || (isSignUp && !fullName)}
+            >
+              {loading
+                ? (i18n.language === 'pt' ? 'Carregando...' : i18n.language === 'es' ? 'Cargando...' : 'Loading...')
+                : isSignUp
+                  ? (i18n.language === 'pt' ? 'Criar conta' : i18n.language === 'es' ? 'Crear cuenta' : 'Create account')
+                  : (i18n.language === 'pt' ? 'Entrar' : i18n.language === 'es' ? 'Entrar' : 'Sign in')}
+            </Button>
+
             <div className="text-center">
-              <Button
+              <button
                 type="button"
-                variant="link"
                 onClick={() => {
                   setIsSignUp(!isSignUp);
                   setError("");
                 }}
-                className="text-sm text-primary hover:text-primary/90"
+                className="text-sm text-primary hover:text-primary/80 font-medium transition-colors"
               >
-                {isSignUp 
-                  ? t("auth.haveAccount") 
-                  : t("auth.noAccount")
-                }
-              </Button>
+                {isSignUp
+                  ? (i18n.language === 'pt' ? 'Já tem conta? Entrar' : i18n.language === 'es' ? '¿Ya tienes cuenta? Entrar' : 'Already have an account? Sign in')
+                  : (i18n.language === 'pt' ? 'Não tem conta? Criar' : i18n.language === 'es' ? '¿No tienes cuenta? Crear' : "Don't have an account? Create")}
+              </button>
             </div>
           </form>
-        </CardContent>
-      </Card>
-      </div>
-      
-      <Footer />
-    </div>;
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
 };
+
 export default Auth;
