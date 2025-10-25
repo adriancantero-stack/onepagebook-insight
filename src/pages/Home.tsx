@@ -453,26 +453,26 @@ const Home = () => {
       </div>
       <FloatingHeader onLogout={handleLogout} showNavigation={false} />
 
-      <main className="mx-auto max-w-4xl px-6 sm:px-12 lg:px-24 xl:px-32">
-        <header className="w-full text-center pt-12 pb-6">
+      <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-12 xl:px-24">
+        <header className="w-full text-center pt-8 sm:pt-12 pb-4 sm:pb-6">
           {isPremium && (
             <div className="flex items-center justify-center gap-1.5 bg-gradient-to-r from-[#7B61FF]/10 to-[#9D8CFF]/10 border border-[#7B61FF]/20 px-3 py-1.5 rounded-full mb-3 inline-flex">
               <Crown className="w-4 h-4 text-[#7B61FF]" fill="#7B61FF" />
               <span className="text-sm font-medium text-[#7B61FF]">Premium</span>
             </div>
           )}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight animate-fade-in text-[#1D1D1F]">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-semibold tracking-tight animate-fade-in text-[#1D1D1F]">
             OnePageBook
           </h1>
-          <p className="mt-4 text-lg sm:text-xl text-[#86868B] leading-relaxed">
+          <p className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl text-[#86868B] leading-relaxed">
             {i18n.language === 'pt' ? 'Seu livro em uma página.' : 
              i18n.language === 'es' ? 'Tu libro en una página.' : 
              'Your book on one page.'}
           </p>
         </header>
 
-        <div className="mx-auto mt-8 max-w-2xl w-full">
-          <Card className="p-8 sm:p-10 border-transparent rounded-2xl shadow-sm bg-lilac-50">
+        <div className="mx-auto mt-6 sm:mt-8 max-w-2xl w-full">
+          <Card className="p-4 sm:p-8 md:p-10 border-transparent rounded-2xl shadow-sm bg-lilac-50">
             <div className="space-y-6">
             <div>
               <BookAutocomplete
