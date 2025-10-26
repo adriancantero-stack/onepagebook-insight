@@ -154,7 +154,7 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
               
               <div class="benefits">
                 <h3>💎 Por que nossos usuários Premium amam:</h3>
-                <div class="benefit-item">- Resumos ilimitados (vs 10 por mês no gratuito)</div>
+                <div class="benefit-item">- Resumos ilimitados (vs 3 por mês no gratuito)</div>
                 <div class="benefit-item">- Áudio profissional para todos os livros</div>
                 <div class="benefit-item">- Zero limites, máximo aprendizado</div>
               </div>
@@ -242,7 +242,7 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
               
               <p>Uma semana se passou e você continua conosco - isso é incrível! 🎉</p>
               
-              <p>Mas percebemos que você ainda está limitado a 10 resumos por mês. Não deixe seus objetivos de leitura esperarem!</p>
+              <p>Mas percebemos que você ainda está limitado a 3 resumos por mês. Não deixe seus objetivos de leitura esperarem!</p>
               
               <div class="discount-box">
                 <h2>40% OFF</h2>
@@ -366,7 +366,7 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
               
               <div class="benefits">
                 <h3>🔥 O que você está perdendo AGORA:</h3>
-                <div class="benefit-item">✅ Resumos ILIMITADOS (vs apenas 10 por mês)</div>
+                <div class="benefit-item">✅ Resumos ILIMITADOS (vs apenas 3 por mês)</div>
                 <div class="benefit-item">✅ Áudio profissional para TODOS os livros</div>
                 <div class="benefit-item">✅ Conquistas e gamificação exclusivas</div>
                 <div class="benefit-item">✅ Acesso prioritário a novos recursos</div>
@@ -480,7 +480,7 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
                 <p>You've been exploring OnePageBook for the last 5 days. We have a special opportunity for you!</p>
                 <div class="benefits">
                   <h3>💎 Why our Premium users love it:</h3>
-                  <div class="benefit-item">- Unlimited summaries (vs 10 per month on free)</div>
+                  <div class="benefit-item">- Unlimited summaries (vs 3 per month on free)</div>
                   <div class="benefit-item">- Professional audio for all books</div>
                   <div class="benefit-item">- Zero limits, maximum learning</div>
                 </div>
@@ -530,7 +530,7 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
               <div class="content">
                 <p>Hello ${userName}!</p>
                 <p>A week has passed and you're still with us - that's amazing! 🎉</p>
-                <p>But we noticed you're still limited to 10 summaries per month. Don't let your reading goals wait!</p>
+                <p>But we noticed you're still limited to 3 summaries per month. Don't let your reading goals wait!</p>
                 <div class="discount-box">
                   <h2>40% OFF</h2>
                   <p>on your first Premium month!</p>
@@ -600,7 +600,7 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
                 </div>
                 <div class="benefits">
                   <h3>🔥 What you're missing RIGHT NOW:</h3>
-                  <div class="benefit-item">✅ UNLIMITED summaries (vs just 10 per month)</div>
+                  <div class="benefit-item">✅ UNLIMITED summaries (vs just 3 per month)</div>
                   <div class="benefit-item">✅ Professional audio for ALL books</div>
                   <div class="benefit-item">✅ Exclusive achievements and gamification</div>
                   <div class="benefit-item">✅ Priority access to new features</div>
@@ -708,7 +708,7 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
                 <p>Ya exploraste bastante OnePageBook en los últimos 5 días. ¡Tenemos una oportunidad especial para ti!</p>
                 <div class="benefits">
                   <h3>💎 Por qué nuestros usuarios Premium lo aman:</h3>
-                  <div class="benefit-item">- Resúmenes ilimitados (vs 10 por mes en gratuito)</div>
+                  <div class="benefit-item">- Resúmenes ilimitados (vs 3 por mes en gratuito)</div>
                   <div class="benefit-item">- Audio profesional para todos los libros</div>
                   <div class="benefit-item">- Cero límites, máximo aprendizaje</div>
                 </div>
@@ -758,7 +758,7 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
               <div class="content">
                 <p>¡Hola ${userName}!</p>
                 <p>Ha pasado una semana y continúas con nosotros - ¡eso es increíble! 🎉</p>
-                <p>Pero notamos que todavía estás limitado a 10 resúmenes por mes. ¡No dejes que tus objetivos de lectura esperen!</p>
+                <p>Pero notamos que todavía estás limitado a 3 resúmenes por mes. ¡No dejes que tus objetivos de lectura esperen!</p>
                 <div class="discount-box">
                   <h2>40% OFF</h2>
                   <p>¡en tu primer mes Premium!</p>
@@ -828,7 +828,7 @@ const getEmailTemplate = (dayType: string, userName: string, userLanguage: strin
                 </div>
                 <div class="benefits">
                   <h3>🔥 Lo que estás perdiendo AHORA MISMO:</h3>
-                  <div class="benefit-item">✅ Resúmenes ILIMITADOS (vs solo 10 por mes)</div>
+                  <div class="benefit-item">✅ Resúmenes ILIMITADOS (vs solo 3 por mes)</div>
                   <div class="benefit-item">✅ Audio profesional para TODOS los libros</div>
                   <div class="benefit-item">✅ Logros y gamificación exclusivos</div>
                   <div class="benefit-item">✅ Acceso prioritario a nuevas funciones</div>

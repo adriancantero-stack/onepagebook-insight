@@ -194,7 +194,7 @@ const getDay10EmailHTML = (userName: string, checkoutUrl: string, promoCode: str
           </div>
           <div class="benefits">
             <h3>🔥 O que você está perdendo AGORA:</h3>
-            <div class="benefit-item">✅ Resumos ILIMITADOS (vs apenas 10 por mês)</div>
+            <div class="benefit-item">✅ Resumos ILIMITADOS (vs apenas 3 por mês)</div>
             <div class="benefit-item">✅ Áudio profissional para TODOS os livros</div>
             <div class="benefit-item">✅ Conquistas e gamificação exclusivas</div>
             <div class="benefit-item">✅ Acesso prioritário a novos recursos</div>
@@ -390,7 +390,7 @@ const getDay7EmailHTML = (userName: string, checkoutUrl: string, promoCode: stri
           </p>
           
           <p class="text">
-            Mas percebemos que você ainda está limitado a 10 resumos por mês. Não deixe seus objetivos de leitura esperarem!
+            Mas percebemos que você ainda está limitado a 3 resumos por mês. Não deixe seus objetivos de leitura esperarem!
           </p>
           
           <div class="discount-box">
