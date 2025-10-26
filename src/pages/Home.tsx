@@ -526,9 +526,14 @@ const Home = () => {
               )}
             </Button>
 
-            <p className="text-sm text-center text-[#86868B] mt-4">
-              {t("home.freeInfo")} · <span className="text-[#7B61FF] font-medium">{t("home.premiumInfo")}</span>
-            </p>
+            <div className="text-sm text-center mt-4 space-y-2">
+              <p className="text-[#555555]">
+                <span className="text-base">🌱</span> {t("home.freeInfo")}
+              </p>
+              <p className="text-[#7B61FF] font-medium">
+                <span className="text-base">🚀</span> {t("home.premiumInfo")}
+              </p>
+            </div>
           </div>
         </Card>
         </div>
