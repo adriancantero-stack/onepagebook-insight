@@ -51,7 +51,7 @@ export const es = {
           role: "Emprendedor"
         },
         testimonial2: {
-          text: "Creé el hábito de aprender 1 idea por día. Mi vida cambió.",
+          text: "Ahora recuerdo lo que leí semanas después.",
           author: "María García",
           role: "Diseñadora"
         },

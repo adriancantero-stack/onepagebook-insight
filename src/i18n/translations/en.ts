@@ -51,7 +51,7 @@ export const en = {
           role: "Entrepreneur"
         },
         testimonial2: {
-          text: "I created the habit of learning 1 idea per day. My life changed.",
+          text: "Now I remember what I read weeks later.",
           author: "Sarah Mitchell",
           role: "Designer"
         },
