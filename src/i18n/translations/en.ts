@@ -210,7 +210,7 @@ export const en = {
     "home.bookAuthor": "Author (optional)",
     "home.bookAuthorPlaceholder": "e.g. James Clear",
     "home.generateButton": "Create Summary",
-    "home.button": "Create Summary",
+    "home.button": "Create Summary + Flashcards",
     "home.generating": "Generating...",
     "home.note": "Free plan: 3 summaries/month + 3 audios/month",
     "home.freeInfo": "Free plan: 3 summaries/month + 3 audios/month",

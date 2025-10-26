@@ -159,7 +159,7 @@ export const pt = {
     "home.bookAuthor": "Autor (opcional)",
     "home.bookAuthorPlaceholder": "Ex: James Clear",
     "home.generateButton": "Gerar Resumo",
-    "home.button": "Gerar Resumo",
+    "home.button": "Gerar Resumo + Flashcards",
     "home.generating": "Gerando...",
     "home.note": "Plano Gratuito: 3 resumos/mês + 3 áudios/mês",
     "home.freeInfo": "Plano Gratuito: 3 resumos/mês + 3 áudios/mês",
