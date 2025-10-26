@@ -43,7 +43,7 @@ export const pt = {
       },
       languages: { title: "Disponível em 3 idiomas", global: "Leitores em 47 países já usam o OnePageBook para aprender mais rápido e reter o que leem." },
       testimonials: { title: "O que leitores dizem", weeklyCount: "resumos gerados esta semana" },
-      footer: { tagline: "Aprenda mais rápido, leia mais livros, transforme conhecimento em ação", rights: "Todos os direitos reservados" },
+      footer: { tagline: "Crie o hábito de aprender, lembrar e aplicar — de verdade.", rights: "Todos os direitos reservados" },
       finalCta: {
         badge: "Junte-se a milhares de leitores",
         headline: "Transforme sua forma de aprender — para sempre.",

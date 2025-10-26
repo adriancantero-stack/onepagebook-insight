@@ -93,7 +93,7 @@ export const es = {
           cta: "Suscribirse ahora"
         }
       },
-      footer: { tagline: "Aprende más rápido, lee más libros, transforma conocimiento en acción", rights: "Todos los derechos reservados" },
+      footer: { tagline: "Crea el hábito de aprender, recordar y aplicar — de verdad.", rights: "Todos los derechos reservados" },
       finalCta: {
         badge: "Únete a miles de lectores",
         headline: "Transforma tu forma de aprender — para siempre.",

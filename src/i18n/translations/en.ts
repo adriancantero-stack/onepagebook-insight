@@ -93,7 +93,7 @@ export const en = {
           cta: "Subscribe now"
         }
       },
-      footer: { tagline: "Learn faster, read more books, transform knowledge into action", rights: "All rights reserved" },
+      footer: { tagline: "Build the habit of learning, remembering, and applying — for real.", rights: "All rights reserved" },
       finalCta: {
         badge: "Join thousands of readers",
         headline: "Transform the way you learn — forever.",
