@@ -36,9 +36,9 @@ export const es = {
       },
       howItWorks: {
         title: "Cómo funciona",
-        step1: { title: "Elige el libro o pega el título", description: "Navega por nuestra biblioteca o busca cualquier libro" },
-        step2: { title: "La IA analiza y resume el contenido", description: "Nuestra IA procesa el libro y extrae los insights esenciales" },
-        step3: { title: "Lees, escuchas o descargas el resumen", description: "Recibe en formato de lectura o audio, listo para usar" },
+        step1: { title: "Elige el libro", description: "Navega por nuestra biblioteca o busca cualquier libro" },
+        step2: { title: "La IA crea el resumen y genera los flashcards", description: "Nuestra IA procesa el libro y lo transforma en contenido de aprendizaje" },
+        step3: { title: "Aprendes, revisas y memorizas — a tu ritmo", description: "Estudia cuando y como quieras, con repetición inteligente" },
         cta: "Generar mi primer resumen gratis"
       },
       languages: { title: "Disponible en 3 idiomas", global: "Lectores en 47 países ya usan OnePageBook" },

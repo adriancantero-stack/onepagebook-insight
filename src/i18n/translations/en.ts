@@ -36,9 +36,9 @@ export const en = {
       },
       howItWorks: {
         title: "How it works",
-        step1: { title: "Choose the book or paste the title", description: "Browse our library or search for any book" },
-        step2: { title: "AI analyzes and summarizes the content", description: "Our AI processes the book and extracts essential insights" },
-        step3: { title: "You read, listen or download the summary", description: "Receive in reading or audio format, ready to use" },
+        step1: { title: "Choose the book", description: "Browse our library or search for any book" },
+        step2: { title: "AI creates the summary and generates flashcards", description: "Our AI processes the book and transforms it into learning content" },
+        step3: { title: "You learn, review, and memorize — at your own pace", description: "Study when and how you want, with intelligent repetition" },
         cta: "Generate my first free summary"
       },
       languages: { title: "Available in 3 languages", global: "Readers in 47 countries already use OnePageBook" },
