@@ -26,7 +26,7 @@ export const pt = {
         ctaPrimary: "Começar agora — é grátis",
         ctaSecondary: "Ver como funciona",
         socialProof: "+5.000 resumos gerados por leitores em todo o mundo",
-        visual: { book: "Livro", ai: "IA", summary: "Resumo" }
+        visual: { book: "Livro", ai: "IA", summary: "Resumo, Flash Cards e Exemplos Práticos" }
       },
       benefits: {
         title: "Por que usar o OnePageBook?",
