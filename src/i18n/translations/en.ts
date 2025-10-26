@@ -41,7 +41,7 @@ export const en = {
         step3: { title: "You learn, review, and memorize — at your own pace", description: "Study when and how you want, with intelligent repetition" },
         cta: "Generate my first free summary"
       },
-      languages: { title: "Available in 3 languages", global: "Readers in 47 countries already use OnePageBook" },
+      languages: { title: "Available in 3 languages", global: "Readers in 47 countries already use OnePageBook to learn faster and retain what they read." },
       testimonials: { 
         title: "What readers say", 
         weeklyCount: "summaries generated this week",

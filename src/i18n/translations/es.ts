@@ -41,7 +41,7 @@ export const es = {
         step3: { title: "Aprendes, revisas y memorizas — a tu ritmo", description: "Estudia cuando y como quieras, con repetición inteligente" },
         cta: "Generar mi primer resumen gratis"
       },
-      languages: { title: "Disponible en 3 idiomas", global: "Lectores en 47 países ya usan OnePageBook" },
+      languages: { title: "Disponible en 3 idiomas", global: "Lectores en 47 países ya usan OnePageBook para aprender más rápido y retener lo que leen." },
       testimonials: { 
         title: "Lo que dicen los lectores", 
         weeklyCount: "resúmenes generados esta semana",
