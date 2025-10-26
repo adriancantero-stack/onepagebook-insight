@@ -40,6 +40,10 @@ export const LandingPricing = ({ onCTA }: LandingPricingProps) => {
                 <Check className="h-5 w-5 shrink-0 text-primary" />
                 <span>{t("landing.plans.free.feature3")}</span>
               </li>
+              <li className="flex items-start gap-2">
+                <Check className="h-5 w-5 shrink-0 text-primary" />
+                <span>{t("landing.plans.free.feature4")}</span>
+              </li>
             </ul>
             <Button onClick={onCTA} variant="outline" className="w-full">
               {t("landing.plans.free.cta")}

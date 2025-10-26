@@ -463,6 +463,7 @@ export const pt = {
     "landing.plans.free.feature1": "3 resumos grátis",
     "landing.plans.free.feature2": "3 áudios grátis",
     "landing.plans.free.feature3": "Acesso à biblioteca básica",
+    "landing.plans.free.feature4": "30 flashcards",
     "landing.plans.free.cta": "Começar grátis",
     "landing.plans.premium.title": "Premium",
     "landing.plans.premium.badge": "Recomendado",

@@ -75,6 +75,7 @@ export const en = {
           feature1: "3 free summaries",
           feature2: "3 free audios",
           feature3: "Access to basic library",
+          feature4: "30 flashcards",
           cta: "Start free"
         },
         premium: {
