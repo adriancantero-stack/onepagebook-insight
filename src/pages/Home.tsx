@@ -474,9 +474,7 @@ const Home = () => {
             OnePageBook
           </h1>
           <p className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl text-[#86868B] leading-relaxed">
-            {i18n.language === 'pt' ? 'Seu livro em uma página.' : 
-             i18n.language === 'es' ? 'Tu libro en una página.' : 
-             'Your book on one page.'}
+            Aprenda e Memorize o Essencial — em Minutos.
           </p>
         </header>
 
