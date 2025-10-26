@@ -96,8 +96,8 @@ export const es = {
       footer: { tagline: "Aprende más rápido, lee más libros, transforma conocimiento en acción", rights: "Todos los derechos reservados" },
       finalCta: {
         badge: "Únete a miles de lectores",
-        headline: "Transforma tu forma de aprender hoy",
-        subtext: "📚 No basta con leer. Necesitas entender. Recordar. Y aplicar. Conviértete en 1% mejor cada día. En menos de 10 minutos.",
+        headline: "Transforma tu forma de aprender — para siempre.",
+        subtext: "Leer es bueno. Aprender y recordar es mejor. Conviértete en 1% mejor cada día con el poder de la IA y los flashcards inteligentes.",
         cta: "Comenzar ahora — es gratis",
         free: "Gratis para comenzar",
         noCard: "Sin tarjeta de crédito",
