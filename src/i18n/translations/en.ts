@@ -30,9 +30,9 @@ export const en = {
       },
       benefits: {
         title: "Why use OnePageBook?",
-        ai: { title: "AI that understands the entire book", description: "Generates real summaries, not just generic synopses" },
-        time: { title: "Save hours", description: "Read the essentials of each book in 3 minutes" },
-        multilingual: { title: "Multilingual and accessible", description: "Portuguese, English and Spanish — choose your language" }
+        ai: { title: "AI that understands and teaches", description: "AI summarizes and transforms content into flashcards that help you retain the essentials of each book." },
+        time: { title: "Fast and lasting learning", description: "Read, practice, and memorize in minutes with an intelligent spaced repetition method inspired by Anki." },
+        multilingual: { title: "Multilingual and accessible", description: "Portuguese, English, and Spanish — study in the language you want, with learning that truly sticks." }
       },
       howItWorks: {
         title: "How it works",

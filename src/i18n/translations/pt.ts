@@ -30,9 +30,9 @@ export const pt = {
       },
       benefits: {
         title: "Por que usar o OnePageBook?",
-        ai: { title: "IA que entende o livro inteiro", description: "Gera resumos reais, não apenas sinopses genéricas" },
-        time: { title: "Economize horas", description: "Leia o essencial de cada livro em 3 minutos" },
-        multilingual: { title: "Multilíngue e acessível", description: "Português, Inglês e Espanhol — escolha seu idioma" }
+        ai: { title: "IA que entende e ensina", description: "A IA resume e transforma o conteúdo em flashcards que ajudam você a reter o essencial de cada livro." },
+        time: { title: "Aprendizado rápido e duradouro", description: "Leia, pratique e memorize em minutos com o método de repetição inteligente inspirado em Anki." },
+        multilingual: { title: "Multilíngue e acessível", description: "Português, inglês e espanhol — estude no idioma que quiser, com aprendizado que realmente fica." }
       },
       howItWorks: {
         title: "Como funciona",
