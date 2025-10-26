@@ -154,7 +154,6 @@ Questions should test understanding of the book's key concepts and practices.`;
       const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${Deno.env.get('LOVABLE_API_KEY')}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -316,7 +315,6 @@ Examples should be realistic, varied, and cover different aspects of the book.`;
       const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${Deno.env.get('LOVABLE_API_KEY')}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
