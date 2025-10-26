@@ -86,7 +86,7 @@ serve(async (req) => {
         : 'You are an expert in creating educational flashcards for content retention.';
 
       const userPrompt = language === 'pt'
-        ? `Crie 8 flashcards (perguntas e respostas) para fixar o conteúdo deste livro:
+        ? `Crie 10 flashcards (perguntas e respostas) para fixar o conteúdo deste livro:
 
 Título: ${summary.book_title}
 Autor: ${summary.book_author}
@@ -108,7 +108,7 @@ Retorne APENAS um JSON array no formato:
 
 As perguntas devem testar a compreensão dos conceitos chave e práticas do livro.`
         : language === 'es'
-        ? `Crea 8 flashcards (preguntas y respuestas) para fijar el contenido de este libro:
+        ? `Crea 10 flashcards (preguntas y respuestas) para fijar el contenido de este libro:
 
 Título: ${summary.book_title}
 Autor: ${summary.book_author}
@@ -129,7 +129,7 @@ Devuelve SOLO un JSON array en el formato:
 ]
 
 Las preguntas deben probar la comprensión de los conceptos clave y prácticas del libro.`
-        : `Create 8 flashcards (questions and answers) to retain the content of this book:
+        : `Create 10 flashcards (questions and answers) to retain the content of this book:
 
 Title: ${summary.book_title}
 Author: ${summary.book_author}

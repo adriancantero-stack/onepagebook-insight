@@ -16,7 +16,7 @@ interface LearningEnhancementProps {
 export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => {
   const { t } = useTranslation();
   console.log('🎯 LearningEnhancement mounted with summaryId:', summaryId);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [flashcards, setFlashcards] = useState<any[] | null>(null);
   const [examples, setExamples] = useState<any[] | null>(null);
   const [loadingFlashcards, setLoadingFlashcards] = useState(false);
