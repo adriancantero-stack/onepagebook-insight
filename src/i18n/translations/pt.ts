@@ -22,7 +22,7 @@ export const pt = {
     landing: {
       hero: {
         headline: "Aprenda qualquer livro em minutos — e memorize o que realmente importa.",
-        subheadline: "Obtenha resumos inteligentes com IA — grátis e em 3 idiomas",
+        subheadline: "A IA do OnePageBook transforma cada leitura em aprendizado real — com flashcards inteligentes que ajudam você a lembrar e aplicar o conhecimento no dia a dia.",
         ctaPrimary: "Começar agora — é grátis",
         ctaSecondary: "Ver como funciona",
         socialProof: "+5.000 resumos gerados por leitores em todo o mundo",
