@@ -72,8 +72,8 @@ export const es = {
           title: "Gratuito",
           price: "$0",
           period: "/mes",
-          feature1: "10 resúmenes gratis",
-          feature2: "10 audios gratis",
+          feature1: "3 resúmenes gratis",
+          feature2: "3 audios gratis",
           feature3: "Acceso a biblioteca básica",
           cta: "Comenzar gratis"
         },
