@@ -300,14 +300,14 @@ const Home = () => {
       const { data: subscription } = await supabase
         .from("user_subscriptions")
         .select("*, subscription_plans(*)")
-        .eq("user_id", user.id)
-        .single();
+        .eq("user_id", session.user.id)
+        .maybeSingle();
 
       const plan = subscription?.subscription_plans;
       
       // Check limits only for free users
       if (plan?.type === "free") {
-        const usage = ensureMonth(await loadUsage(user.id));
+        const usage = ensureMonth(await loadUsage(session.user.id));
         
         if (!canUseSummary(usage)) {
           setShowUpgradeModal(true);
@@ -343,7 +343,7 @@ const Home = () => {
 
       // Increment counter only on success for free users
       if (plan?.type === "free") {
-        const used = await incrementSummary(user.id);
+        const used = await incrementSummary(session.user.id);
         toast({
           title: t("limit.toasts.summary.ok").replace("{used}", String(used)),
         });
