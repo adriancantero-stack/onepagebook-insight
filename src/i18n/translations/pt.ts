@@ -161,12 +161,12 @@ export const pt = {
     "home.generateButton": "Gerar Resumo",
     "home.button": "Gerar Resumo",
     "home.generating": "Gerando...",
-    "home.note": "Plano Gratuito: 10 resumos/mês + 10 áudios/mês",
-    "home.freeInfo": "Plano Gratuito: 10 resumos/mês + 10 áudios/mês",
+    "home.note": "Plano Gratuito: 3 resumos/mês + 3 áudios/mês",
+    "home.freeInfo": "Plano Gratuito: 3 resumos/mês + 3 áudios/mês",
     "home.premiumInfo": "Premium: resumos e áudios ilimitados",
-    "home.freeLimit": "Plano Gratuito: 10 resumos por mês",
+    "home.freeLimit": "Plano Gratuito: 3 resumos por mês",
     "home.premiumUnlimited": "Premium: Resumos ilimitados",
-    "hero.trust": "Grátis: 10 resumos + 10 áudios/mês",
+    "hero.trust": "Grátis: 3 resumos + 3 áudios/mês",
     
     // Auth
     "auth.title": "Bem-vindo",
@@ -195,7 +195,7 @@ export const pt = {
     "welcome.title": "Bem-vindo ao OnePageBook!",
     "welcome.description": "Sua conta foi criada com sucesso. Você já pode começar a gerar resumos de livros.",
     "welcome.freeplan": "Plano Gratuito Ativado",
-    "welcome.limits": "10 resumos + 10 áudios por mês",
+    "welcome.limits": "3 resumos + 3 áudios por mês",
     "welcome.cta": "Começar a usar",
     "welcome.redirect": "Redirecionando automaticamente em 5 segundos...",
     
@@ -283,8 +283,8 @@ export const pt = {
     "plans.free.name": "Gratuito",
     "plans.free.price.monthly": "R$ 0/mês",
     "plans.free.bullets": [
-      "10 resumos/mês",
-      "10 áudios completos/mês",
+      "3 resumos/mês",
+      "3 áudios completos/mês",
       "Suporte básico"
     ],
     "plans.free.cta": "Começar grátis",
@@ -331,10 +331,10 @@ export const pt = {
     "toast.audioGenerated": "Áudio gerado!",
     
     // Limits
-    "limit.toasts.summary.ok": "Resumo gerado! Você usou {used}/10 neste mês.",
-    "limit.toasts.summary.hard": "Você atingiu o limite de 10 resumos deste mês.",
-    "limit.toasts.audio.ok": "Áudio gerado! Você usou {used}/10 neste mês.",
-    "limit.toasts.audio.hard": "Você atingiu o limite de 10 áudios deste mês.",
+    "limit.toasts.summary.ok": "Resumo gerado! Você usou {used}/3 neste mês.",
+    "limit.toasts.summary.hard": "Você atingiu o limite de 3 resumos deste mês.",
+    "limit.toasts.audio.ok": "Áudio gerado! Você usou {used}/3 neste mês.",
+    "limit.toasts.audio.hard": "Você atingiu o limite de 3 áudios deste mês.",
     "limit.cta.upgrade": "Assinar Premium",
     "limit.modal.title": "Você chegou ao limite do plano Gratuito",
     "limit.modal.body": "No plano Premium você tem resumos e áudios ilimitados, exportação em PDF, histórico e tradução instantânea.",
