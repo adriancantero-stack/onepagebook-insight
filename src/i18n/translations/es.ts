@@ -21,7 +21,7 @@ export const es = {
     // Landing Page
     landing: {
       hero: {
-        headline: "Aprende cualquier libro en minutos",
+        headline: "Aprende cualquier libro en minutos — y memoriza lo que realmente importa.",
         subheadline: "Obtén resúmenes inteligentes con IA — gratis y en 3 idiomas",
         ctaPrimary: "Comenzar ahora — es gratis",
         ctaSecondary: "Ver cómo funciona",
