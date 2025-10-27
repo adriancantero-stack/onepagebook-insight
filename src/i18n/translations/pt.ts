@@ -497,7 +497,7 @@ export const pt = {
     "faq.q1": "O que é o OnePageBook?",
     "faq.a1": "Um gerador de resumos em 1 página com ideias-chave, aplicações práticas e áudio opcional, em PT/EN/ES.",
     "faq.q2": "O plano gratuito inclui o quê?",
-    "faq.a2": "Até 10 resumos/mês e 10 áudios/mês por usuário. O Premium remove limites e libera extras.",
+    "faq.a2": "Até 3 resumos/mês e 3 áudios/mês por usuário. O Premium remove limites e libera extras.",
     "faq.q3": "Quais idiomas o app suporta?",
     "faq.a3": "Português do Brasil, Inglês e Espanhol LATAM. Você pode alternar na interface.",
     "faq.q4": "Como o app encontra título e autor corretos?",

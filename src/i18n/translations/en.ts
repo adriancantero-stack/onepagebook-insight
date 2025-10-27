@@ -464,7 +464,7 @@ export const en = {
     "faq.q1": "What is OnePageBook?",
     "faq.a1": "A one-page book summarizer with key ideas, practical steps, and optional audio in EN/PT/ES.",
     "faq.q2": "What's included in the Free plan?",
-    "faq.a2": "Up to 10 summaries/month and 10 audios/month per user. Premium removes limits and adds extras.",
+    "faq.a2": "Up to 3 summaries/month and 3 audios/month per user. Premium removes limits and adds extras.",
     "faq.q3": "Which languages are supported?",
     "faq.a3": "Brazilian Portuguese, English, and LATAM Spanish. You can switch in the UI.",
     "faq.q4": "How do you ensure the correct title and author?",

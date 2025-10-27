@@ -464,7 +464,7 @@ export const es = {
     "faq.q1": "¿Qué es OnePageBook?",
     "faq.a1": "Un resumidor de libros en 1 página con ideas clave, pasos prácticos y audio opcional en ES/PT/EN.",
     "faq.q2": "¿Qué incluye el plan Gratis?",
-    "faq.a2": "Hasta 5 resúmenes/mes y 5 audios/mes por usuario. Premium quita límites y añade extras.",
+    "faq.a2": "Hasta 3 resúmenes/mes y 3 audios/mes por usuario. Premium quita límites y añade extras.",
     "faq.q3": "¿Qué idiomas soporta?",
     "faq.a3": "Portugués de Brasil, Inglés y Español LATAM. Puedes cambiarlo en la interfaz.",
     "faq.q4": "¿Cómo aseguran título y autor correctos?",
