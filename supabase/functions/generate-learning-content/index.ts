@@ -46,34 +46,91 @@ serve(async (req) => {
       );
     }
 
-    // Check if summary exists and belongs to user
-    const { data: summary, error: summaryError } = await supabase
+    // Fetch summary without user restriction
+    const { data: originalSummary, error: summaryError } = await supabase
       .from('book_summaries')
       .select('*')
       .eq('id', summaryId)
-      .eq('user_id', user.id)
       .single();
 
-    if (summaryError || !summary) {
+    if (summaryError || !originalSummary) {
       return new Response(
-        JSON.stringify({ error: 'Summary not found or access denied' }),
+        JSON.stringify({ error: 'Summary not found' }),
         { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    const language = summary.language || 'pt';
+    let workingSummaryId = summaryId;
+    let cloned = false;
+
+    // If summary doesn't belong to user, clone it
+    if (originalSummary.user_id !== user.id) {
+      console.log(`[generate-learning-content] Cloning summary ${summaryId} for user ${user.id}`);
+      
+      const { data: clone, error: cloneError } = await supabase
+        .from('book_summaries')
+        .insert({
+          user_id: user.id,
+          book_title: originalSummary.book_title,
+          book_author: originalSummary.book_author,
+          canonical_title: originalSummary.canonical_title,
+          canonical_author: originalSummary.canonical_author,
+          year: originalSummary.year,
+          summary_text: originalSummary.summary_text,
+          key_ideas: originalSummary.key_ideas,
+          main_ideas: originalSummary.main_ideas,
+          actions: originalSummary.actions,
+          practical_applications: originalSummary.practical_applications,
+          routine: originalSummary.routine,
+          plan_7_days: originalSummary.plan_7_days,
+          metrics: originalSummary.metrics,
+          pitfalls: originalSummary.pitfalls,
+          one_liner: originalSummary.one_liner,
+          closing: originalSummary.closing,
+          language: originalSummary.language,
+          theme: originalSummary.theme,
+          user_title: originalSummary.user_title,
+          user_author: originalSummary.user_author,
+          asin: originalSummary.asin,
+          cover_url: originalSummary.cover_url,
+          source: originalSummary.source,
+        })
+        .select()
+        .single();
+
+      if (cloneError || !clone) {
+        console.error('Error cloning summary:', cloneError);
+        return new Response(
+          JSON.stringify({ error: 'Failed to clone summary' }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      workingSummaryId = clone.id;
+      cloned = true;
+      console.log(`[generate-learning-content] Cloned to new summary ${workingSummaryId}`);
+    }
+
+    // Fetch the working summary
+    const { data: summary } = await supabase
+      .from('book_summaries')
+      .select('*')
+      .eq('id', workingSummaryId)
+      .single();
+
+    const language = summary?.language || 'pt';
 
     if (type === 'flashcards') {
       // Check if flashcards already exist
       const { data: existing, error: existingError } = await supabase
         .from('book_flashcards')
         .select('*')
-        .eq('book_summary_id', summaryId)
+        .eq('book_summary_id', workingSummaryId)
         .order('card_order');
 
       if (!existingError && existing && existing.length > 0) {
         return new Response(
-          JSON.stringify({ flashcards: existing, cached: true }),
+          JSON.stringify({ flashcards: existing, cached: true, summaryId: workingSummaryId, cloned }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
@@ -192,7 +249,7 @@ Questions should test understanding of the book's key concepts and practices.`;
 
       // Save flashcards to database
       const flashcardsToInsert = flashcardsData.map((card: any, index: number) => ({
-        book_summary_id: summaryId,
+        book_summary_id: workingSummaryId,
         question: card.question,
         answer: card.answer,
         card_order: index,
@@ -212,16 +269,16 @@ Questions should test understanding of the book's key concepts and practices.`;
       }
 
       return new Response(
-        JSON.stringify({ flashcards: savedFlashcards, cached: false }),
+        JSON.stringify({ flashcards: savedFlashcards, cached: false, summaryId: workingSummaryId, cloned }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
     if (type === 'examples') {
       // Check if examples already exist
-      if (summary.practical_examples) {
+      if (summary?.practical_examples) {
         return new Response(
-          JSON.stringify({ examples: summary.practical_examples, cached: true }),
+          JSON.stringify({ examples: summary.practical_examples, cached: true, summaryId: workingSummaryId, cloned }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
@@ -357,7 +414,7 @@ Examples should be realistic, varied, and cover different aspects of the book.`;
       const { error: updateError } = await supabase
         .from('book_summaries')
         .update({ practical_examples: examples })
-        .eq('id', summaryId);
+        .eq('id', workingSummaryId);
 
       if (updateError) {
         console.error('Error saving examples:', updateError);
@@ -368,7 +425,7 @@ Examples should be realistic, varied, and cover different aspects of the book.`;
       }
 
       return new Response(
-        JSON.stringify({ examples, cached: false }),
+        JSON.stringify({ examples, cached: false, summaryId: workingSummaryId, cloned }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }

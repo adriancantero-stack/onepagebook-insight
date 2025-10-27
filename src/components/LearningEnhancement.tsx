@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible";
@@ -15,6 +16,7 @@ interface LearningEnhancementProps {
 
 export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   console.log('🎯 LearningEnhancement mounted with summaryId:', summaryId);
   const [isOpen, setIsOpen] = useState(true);
   const [flashcards, setFlashcards] = useState<any[] | null>(null);
@@ -39,7 +41,14 @@ export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => 
 
       setFlashcards(data.flashcards);
       
-      if (!data.cached) {
+      // If summary was cloned, redirect to the new summary
+      if (data.summaryId && data.summaryId !== summaryId) {
+        toast({
+          title: t("summary.flashcardsGenerated"),
+          description: "Resumo adicionado à sua conta."
+        });
+        navigate(`/summary/${data.summaryId}`, { replace: true });
+      } else if (!data.cached) {
         toast({
           title: t("summary.flashcardsGenerated"),
           description: t("summary.flashcardsDesc", { count: data.flashcards.length })
@@ -73,7 +82,14 @@ export const LearningEnhancement = ({ summaryId }: LearningEnhancementProps) => 
 
       setExamples(data.examples);
       
-      if (!data.cached) {
+      // If summary was cloned, redirect to the new summary
+      if (data.summaryId && data.summaryId !== summaryId) {
+        toast({
+          title: t("summary.examplesGenerated"),
+          description: "Resumo adicionado à sua conta."
+        });
+        navigate(`/summary/${data.summaryId}`, { replace: true });
+      } else if (!data.cached) {
         toast({
           title: t("summary.examplesGenerated"),
           description: t("summary.examplesDesc", { count: data.examples.length })
