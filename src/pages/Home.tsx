@@ -474,7 +474,7 @@ const Home = () => {
             OnePageBook
           </h1>
           <p className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl text-[#86868B] leading-relaxed">
-            Aprenda e Memorize o Essencial — em Minutos.
+            {t("home.tagline")}
           </p>
         </header>
 

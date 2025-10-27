@@ -13,6 +13,12 @@ export const pt = {
       all_people_subtitle: "Explore recomendações de líderes e pensadores influentes",
       no_people: "Nenhuma pessoa encontrada"
     },
+    
+    // Home
+    home: {
+      tagline: "Aprenda e Memorize o Essencial — em Minutos."
+    },
+    
     // Header
     "header.history": "Histórico",
     "header.premium": "Premium",

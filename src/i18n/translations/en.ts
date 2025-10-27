@@ -13,6 +13,12 @@ export const en = {
       all_people_subtitle: "Explore recommendations from influential leaders and thinkers",
       no_people: "No people found"
     },
+    
+    // Home
+    home: {
+      tagline: "Learn and Memorize the Essentials — in Minutes."
+    },
+    
     // Header
     "header.history": "History",
     "header.premium": "Premium",
