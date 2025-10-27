@@ -2309,53 +2309,79 @@ const Admin = () => {
           </CardContent>
         </Card>
 
-        {/* Charts */}
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Crescimento de Usuários (Últimos 30 dias)</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={userGrowth}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="users" stroke="hsl(var(--primary))" strokeWidth={2} />
-                </LineChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Distribuição de Planos</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={planDistribution}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, value }) => `${name}: ${value}`}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {planDistribution.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </div>
-
+        {/* All Users Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Users className="h-5 w-5" />
+              Todos os Usuários ({users.length})
+            </CardTitle>
+            <CardDescription>
+              Lista completa de usuários cadastrados na plataforma
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Nome</TableHead>
+                    <TableHead>Plano</TableHead>
+                    <TableHead>Resumos</TableHead>
+                    <TableHead>Cadastro</TableHead>
+                    <TableHead>Idioma</TableHead>
+                    <TableHead>Origem</TableHead>
+                    <TableHead>País</TableHead>
+                    <TableHead className="text-right">Ações</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {users.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell className="font-medium">{user.email}</TableCell>
+                      <TableCell>{user.full_name || '-'}</TableCell>
+                      <TableCell>
+                        <Badge variant={user.plan_type === 'premium' ? 'default' : 'secondary'}>
+                          {user.plan_type}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{user.summaries_count}</TableCell>
+                      <TableCell>
+                        {new Date(user.created_at).toLocaleDateString('pt-BR')}
+                      </TableCell>
+                      <TableCell>{user.signup_language?.toUpperCase() || '-'}</TableCell>
+                      <TableCell className="text-xs">{user.signup_path || '-'}</TableCell>
+                      <TableCell>{user.signup_country?.toUpperCase() || '-'}</TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex gap-2 justify-end">
+                          {user.plan_type !== 'premium' && (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleUpgradeToPremium(user.id, user.email, user.plan_type)}
+                              disabled={upgradingUserId === user.id}
+                            >
+                              {upgradingUserId === user.id ? "Liberando..." : "Liberar Premium"}
+                            </Button>
+                          )}
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => handleDeleteUser(user.id, user.email)}
+                            disabled={deletingUserId === user.id}
+                          >
+                            {deletingUserId === user.id ? "Excluindo..." : "Excluir"}
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Invalid Books Review Modal */}
         {showInvalidBooksModal && (
