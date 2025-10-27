@@ -219,10 +219,10 @@ export const BookAutocomplete = ({
           <div className="text-xs text-center px-1 flex items-center justify-center gap-1.5 flex-wrap">
             <span className="text-muted-foreground/80">
               {lang === "en" 
-                ? `Don't know the title? Browse our catalog with ${booksCount !== null ? booksCount.toLocaleString() : ''} books!`
+                ? <>Don't know the title? Browse our catalog with <strong className="font-bold">{booksCount !== null ? booksCount.toLocaleString() : ''}</strong> books!</>
                 : lang === "es" 
-                ? `¿No sabes el título? Explora nuestro catálogo con ${booksCount !== null ? booksCount.toLocaleString() : ''} libros!`
-                : `Não sabe o título? Explore nosso catálogo com ${booksCount !== null ? booksCount.toLocaleString() : ''} livros!`
+                ? <>¿No sabes el título? Explora nuestro catálogo con <strong className="font-bold">{booksCount !== null ? booksCount.toLocaleString() : ''}</strong> libros!</>
+                : <>Não sabe o título? Explore nosso catálogo com <strong className="font-bold">{booksCount !== null ? booksCount.toLocaleString() : ''}</strong> livros!</>
               }
             </span>
           </div>
