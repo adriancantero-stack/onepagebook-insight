@@ -162,7 +162,7 @@ export const pt = {
     "home.button": "Gerar Resumo + Flashcards",
     "home.generating": "Gerando...",
     "home.note": "Plano Gratuito: 3 resumos/mês + 3 áudios/mês",
-    "home.freeInfo": "Free: experimente o poder da IA com 3 livros por mês",
+    "home.freeInfo": "Free: Experimente o Poder da IA com 3 Livros por Mês",
     "home.premiumInfo": "Premium: aprenda sem limites — resumos, áudios e flashcards infinitos",
     "home.freeLimit": "Plano Gratuito: 3 resumos por mês",
     "home.premiumUnlimited": "Premium: Resumos ilimitados",
