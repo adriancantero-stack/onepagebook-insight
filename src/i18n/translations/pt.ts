@@ -163,7 +163,7 @@ export const pt = {
     "home.generating": "Gerando...",
     "home.note": "Plano Gratuito: 3 resumos/mês + 3 áudios/mês",
     "home.freeInfo": "Free: Experimente o Poder da IA com 3 Livros por Mês",
-    "home.premiumInfo": "Premium: aprenda sem limites — resumos, áudios e flashcards infinitos",
+    "home.premiumInfo": "Premium: Aprenda sem Limites — Resumos, Áudios e Flashcards Infinitos",
     "home.freeLimit": "Plano Gratuito: 3 resumos por mês",
     "home.premiumUnlimited": "Premium: Resumos ilimitados",
     "hero.trust": "Grátis: 3 resumos + 3 áudios/mês",
