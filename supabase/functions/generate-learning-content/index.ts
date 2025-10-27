@@ -151,18 +151,19 @@ Return ONLY a JSON array in the format:
 
 Questions should test understanding of the book's key concepts and practices.`;
 
-      const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+      const aiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${Deno.env.get('LOVABLE_API_KEY')}`,
+          'Authorization': `Bearer ${Deno.env.get('OPENAI_API_KEY')}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'google/gemini-2.5-flash',
+          model: 'gpt-5-mini-2025-08-07',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: userPrompt }
           ],
+          max_completion_tokens: 2000,
         }),
       });
 
@@ -313,18 +314,19 @@ Return ONLY a JSON array in the format:
 
 Examples should be realistic, varied, and cover different aspects of the book.`;
 
-      const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+      const aiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${Deno.env.get('LOVABLE_API_KEY')}`,
+          'Authorization': `Bearer ${Deno.env.get('OPENAI_API_KEY')}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'google/gemini-2.5-flash',
+          model: 'gpt-5-mini-2025-08-07',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: userPrompt }
           ],
+          max_completion_tokens: 3000,
         }),
       });
 
