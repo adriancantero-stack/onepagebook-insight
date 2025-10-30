@@ -23,28 +23,28 @@ export const ProfileStats = ({ totalBooksRead, totalSummariesGenerated, streakDa
       label: t('profile.summariesGenerated'),
       value: totalSummariesGenerated,
       color: 'from-primary to-purple-500',
-      bgColor: 'bg-lilac-100'
+      bgColor: 'bg-primary/10'
     },
     {
       icon: Book,
       label: t('profile.booksRead'),
       value: totalBooksRead,
-      color: 'from-lilac-400 to-lilac-500',
-      bgColor: 'bg-lilac-50'
+      color: 'from-primary to-purple-400',
+      bgColor: 'bg-primary/10'
     },
     {
       icon: Flame,
       label: t('profile.currentStreak'),
       value: streakDays,
       color: 'from-orange-400 to-red-500',
-      bgColor: 'bg-orange-50'
+      bgColor: 'bg-orange-500/10'
     },
     {
       icon: Clock,
       label: t('profile.memberSince'),
       value: daysSinceMember,
       color: 'from-blue-400 to-purple-500',
-      bgColor: 'bg-blue-50'
+      bgColor: 'bg-blue-500/10'
     }
   ];
 
@@ -53,7 +53,7 @@ export const ProfileStats = ({ totalBooksRead, totalSummariesGenerated, streakDa
       {stats.map((stat, index) => (
         <Card
           key={index}
-          className="bg-white/70 backdrop-blur-md border-lilac-100 hover:shadow-lg transition-all duration-300 hover:scale-105"
+          className="bg-card/70 backdrop-blur-md border-border hover:shadow-lg transition-all duration-300 hover:scale-105"
         >
           <CardContent className="p-4">
             <div className="flex items-center gap-3">

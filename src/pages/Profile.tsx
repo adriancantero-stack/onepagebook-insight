@@ -105,14 +105,14 @@ export default function Profile() {
         </div>
 
         {/* Main Profile Card */}
-        <Card className="max-w-4xl mx-auto mb-6 sm:mb-8 bg-white/70 backdrop-blur-md border-lilac-200 shadow-xl">
+        <Card className="max-w-4xl mx-auto mb-6 sm:mb-8 bg-card/70 backdrop-blur-md border-border shadow-xl">
           <CardContent className="p-4 sm:p-6 md:p-8">
             <div className="flex flex-col items-center gap-4 sm:gap-6">
               {/* Avatar */}
               <div className="relative">
-                <Avatar className="h-20 w-20 sm:h-24 sm:w-24 border-4 border-lilac-200 shadow-lg">
+                <Avatar className="h-20 w-20 sm:h-24 sm:w-24 border-4 border-border shadow-lg">
                   <AvatarImage src={profile.photo_url} className="object-cover" />
-                  <AvatarFallback className="bg-gradient-to-br from-lilac-400 to-purple-500 text-white text-xl sm:text-2xl font-poppins">
+                  <AvatarFallback className="bg-gradient-to-br from-primary to-purple-500 text-white text-xl sm:text-2xl font-poppins">
                     {profile.full_name?.charAt(0).toUpperCase() || 'U'}
                   </AvatarFallback>
                 </Avatar>
@@ -158,7 +158,7 @@ export default function Profile() {
                     variant="outline"
                     size="sm"
                     onClick={() => navigate('/achievements')}
-                    className="border-lilac-200 hover:bg-lilac-50 w-full sm:w-auto text-xs sm:text-sm"
+                    className="border-border hover:bg-accent w-full sm:w-auto text-xs sm:text-sm"
                   >
                     <Trophy className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
                     {t('profile.viewAchievements')}
@@ -167,7 +167,7 @@ export default function Profile() {
                     variant="outline"
                     size="sm"
                     onClick={() => navigate('/settings')}
-                    className="border-lilac-200 hover:bg-lilac-50 w-full sm:w-auto text-xs sm:text-sm"
+                    className="border-border hover:bg-accent w-full sm:w-auto text-xs sm:text-sm"
                   >
                     <Settings className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
                     {t('profile.settings')}
@@ -189,7 +189,7 @@ export default function Profile() {
         </div>
 
         {/* Recent Achievements */}
-        <Card className="max-w-4xl mx-auto bg-white/70 backdrop-blur-md border-lilac-200">
+        <Card className="max-w-4xl mx-auto bg-card/70 backdrop-blur-md border-border">
           <CardHeader>
             <CardTitle className="font-poppins flex items-center gap-2">
               <Trophy className="h-5 w-5 text-premium-gold" />
@@ -199,7 +199,7 @@ export default function Profile() {
           <CardContent>
             {achievementsLoading ? (
               <div className="flex justify-center py-8">
-                <Loader2 className="h-6 w-6 animate-spin text-lilac-500" />
+                <Loader2 className="h-6 w-6 animate-spin text-primary" />
               </div>
             ) : userAchievements.length === 0 ? (
               <div className="text-center py-6 sm:py-8 text-muted-foreground">
@@ -223,7 +223,7 @@ export default function Profile() {
                 <Button
                   variant="outline"
                   onClick={() => navigate('/achievements')}
-                  className="border-lilac-200 hover:bg-lilac-50"
+                  className="border-border hover:bg-accent"
                 >
                   {t('profile.viewAllAchievements')}
                 </Button>

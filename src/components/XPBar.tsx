@@ -40,7 +40,7 @@ export const XPBar = ({ currentXP, level, showDetails = true }: XPBarProps) => {
       )}
 
       {/* Progress Bar */}
-      <div className="relative h-3 w-full overflow-hidden rounded-full bg-lilac-100">
+      <div className="relative h-3 w-full overflow-hidden rounded-full bg-muted/50">
         <div
           className={`h-full bg-gradient-to-r ${levelInfo.gradient} transition-all duration-500 ease-out relative overflow-hidden`}
           style={{ width: `${progress}%` }}
