@@ -1,15 +1,34 @@
-import { Moon, Sun, Monitor } from "lucide-react";
+import { Moon, Sun, Clock } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useEffect } from "react";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
 
+  // Auto theme logic based on time of day
+  useEffect(() => {
+    if (theme === "auto") {
+      const updateThemeByTime = () => {
+        const hour = new Date().getHours();
+        // Between 6 AM and 6 PM = light mode
+        // Between 6 PM and 6 AM = dark mode
+        const shouldBeDark = hour >= 18 || hour < 6;
+        document.documentElement.classList.toggle("dark", shouldBeDark);
+      };
+
+      updateThemeByTime();
+      // Check every minute if time-based theme should change
+      const interval = setInterval(updateThemeByTime, 60000);
+      return () => clearInterval(interval);
+    }
+  }, [theme]);
+
   const themes = [
     { value: "light", icon: Sun, label: "Claro" },
     { value: "dark", icon: Moon, label: "Escuro" },
-    { value: "system", icon: Monitor, label: "Sistema" },
+    { value: "auto", icon: Clock, label: "Automático" },
   ];
 
   return (

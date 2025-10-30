@@ -65,7 +65,7 @@ const LoadingFallback = () => (
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <ThemeProvider attribute="class" defaultTheme="auto" enableSystem={false}>
       <TooltipProvider>
         <ErrorBoundary>
           <Toaster />

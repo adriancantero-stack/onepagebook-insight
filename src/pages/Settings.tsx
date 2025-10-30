@@ -377,7 +377,7 @@ export default function Settings() {
                 Tema do aplicativo
               </Label>
               <p className="text-sm text-muted-foreground">
-                Escolha o tema que melhor se adapta ao seu estilo
+                Escolha entre tema claro, escuro ou automático (muda baseado na hora do dia: 6h-18h = claro, 18h-6h = escuro)
               </p>
               <ThemeToggle />
             </div>
