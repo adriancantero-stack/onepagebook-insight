@@ -56,8 +56,8 @@ export const AchievementCard = ({
       className={`
         relative overflow-hidden transition-all duration-300 hover:scale-[1.02]
         ${unlocked
-          ? 'bg-white/70 backdrop-blur-md border-lilac-200 shadow-lg shadow-lilac-100/50'
-          : 'bg-gray-50/50 backdrop-blur-sm border-gray-200 opacity-60'
+          ? 'bg-card/70 backdrop-blur-md border-border shadow-lg'
+          : 'bg-muted/30 backdrop-blur-sm border-border opacity-60'
         }
       `}
     >
@@ -68,15 +68,15 @@ export const AchievementCard = ({
             className={`
               flex h-12 w-12 items-center justify-center rounded-full text-2xl
               ${unlocked
-                ? 'bg-gradient-to-br from-lilac-400 to-purple-500 shadow-md'
-                : 'bg-gray-200'
+                ? 'bg-gradient-to-br from-primary to-purple-500 shadow-md'
+                : 'bg-muted'
               }
             `}
           >
             {unlocked ? (
               icon || '🏆'
             ) : (
-              <Lock className="h-5 w-5 text-gray-400" />
+              <Lock className="h-5 w-5 text-muted-foreground" />
             )}
           </div>
 
@@ -91,7 +91,7 @@ export const AchievementCard = ({
                   onClick={handleShare}
                   size="sm"
                   variant="ghost"
-                  className="h-8 w-8 p-0 shrink-0 hover:bg-lilac-100 hover:text-lilac-600 transition-colors"
+                  className="h-8 w-8 p-0 shrink-0 hover:bg-accent hover:text-primary transition-colors"
                   title={t('achievements.shareOnSocial')}
                 >
                   <Share2 className="h-4 w-4" />
@@ -104,7 +104,7 @@ export const AchievementCard = ({
               </p>
             )}
             <div className="flex items-center gap-2 pt-1">
-              <span className={`text-xs font-medium ${unlocked ? 'text-lilac-600' : 'text-gray-400'}`}>
+              <span className={`text-xs font-medium ${unlocked ? 'text-primary' : 'text-muted-foreground'}`}>
                 +{xp_reward} XP
               </span>
               {unlocked && unlocked_at && (
@@ -118,7 +118,7 @@ export const AchievementCard = ({
 
         {/* Shine effect for unlocked */}
         {unlocked && (
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-foreground/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
         )}
       </CardContent>
     </Card>
