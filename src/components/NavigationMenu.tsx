@@ -91,7 +91,7 @@ export const NavigationMenu = ({ onLogout }: NavigationMenuProps) => {
         <Button 
           variant="ghost" 
           size="icon"
-          className="hover:bg-accent group"
+          className="hover:bg-transparent group"
         >
           {/* Mobile: 3 dots */}
           <MoreVertical className="h-5 w-5 md:hidden text-foreground group-hover:text-primary transition-colors" />
