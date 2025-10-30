@@ -193,7 +193,7 @@ const Auth = () => {
   const content = getContent();
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#faf7ff] px-4 py-8 relative animate-fade-in">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4 py-8 relative animate-fade-in">
       {/* Logo */}
       <div className="flex items-center gap-3 mb-8 animate-scale-in">
         <BookOpen className="w-8 h-8 text-primary" />
@@ -217,7 +217,7 @@ const Auth = () => {
           type="button"
           onClick={handleGoogleSignIn}
           disabled={googleLoading}
-          className="w-full h-14 bg-[#9B6BFF] hover:bg-[#8855FF] text-white rounded-2xl text-base font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
+          className="w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl text-base font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
         >
           <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="white"/>
