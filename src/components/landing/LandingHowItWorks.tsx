@@ -10,7 +10,7 @@ export const LandingHowItWorks = ({ onCTA }: LandingHowItWorksProps) => {
   const { t } = useTranslation();
 
   return (
-    <section id="how-it-works" className="container mx-auto px-6 py-16 sm:px-12 sm:py-24 lg:px-24 bg-gradient-to-b from-lilac-50/50 to-white">
+    <section id="how-it-works" className="container mx-auto px-6 py-16 sm:px-12 sm:py-24 lg:px-24 bg-gradient-to-b from-muted/30 to-background">
       <h2 className="mb-16 text-center text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
         {t("landing.howItWorks.title")}
       </h2>
@@ -18,7 +18,7 @@ export const LandingHowItWorks = ({ onCTA }: LandingHowItWorksProps) => {
       <div className="grid gap-12 md:grid-cols-3 mb-12">
         <div className="group space-y-6 text-center">
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-primary to-purple-600 transition-all group-hover:scale-110 shadow-lg">
-            <Search className="h-10 w-10 text-white" />
+            <Search className="h-10 w-10 text-primary-foreground" />
           </div>
           <div className="space-y-2">
             <div className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-muted text-sm font-bold text-foreground mb-2">1</div>
@@ -29,7 +29,7 @@ export const LandingHowItWorks = ({ onCTA }: LandingHowItWorksProps) => {
 
         <div className="group space-y-6 text-center">
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-primary to-purple-600 transition-all group-hover:scale-110 shadow-lg">
-            <Sparkles className="h-10 w-10 text-white" />
+            <Sparkles className="h-10 w-10 text-primary-foreground" />
           </div>
           <div className="space-y-2">
             <div className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-muted text-sm font-bold text-foreground mb-2">2</div>
@@ -40,7 +40,7 @@ export const LandingHowItWorks = ({ onCTA }: LandingHowItWorksProps) => {
 
         <div className="group space-y-6 text-center">
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-primary to-purple-600 transition-all group-hover:scale-110 shadow-lg">
-            <Download className="h-10 w-10 text-white" />
+            <Download className="h-10 w-10 text-primary-foreground" />
           </div>
           <div className="space-y-2">
             <div className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-muted text-sm font-bold text-foreground mb-2">3</div>
