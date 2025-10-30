@@ -470,9 +470,9 @@ const Home = () => {
               <span className="text-sm font-medium text-[#7B61FF]">Premium</span>
             </div>
           )}
-          <h1 className="text-3xl sm:text-4xl md:text-6xl font-semibold tracking-tight animate-fade-in text-[#1D1D1F]">
-            OnePageBook
-          </h1>
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-semibold tracking-tight animate-fade-in text-foreground">
+              OnePageBook
+            </h1>
           <p className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl text-[#86868B] leading-relaxed">
             {t("home.tagline")}
           </p>
