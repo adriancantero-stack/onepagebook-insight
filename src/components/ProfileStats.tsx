@@ -1,5 +1,5 @@
 import { Card, CardContent } from '@/components/ui/card';
-import { Book, Flame, Clock } from 'lucide-react';
+import { BookOpen, Flame, Calendar, Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 interface ProfileStatsProps {
@@ -19,18 +19,18 @@ export const ProfileStats = ({ totalBooksRead, totalSummariesGenerated, streakDa
 
   const stats = [
     {
-      icon: Book,
+      icon: Sparkles,
       label: t('profile.summariesGenerated'),
       value: totalSummariesGenerated,
       color: 'from-primary to-purple-500',
       bgColor: 'bg-primary/10'
     },
     {
-      icon: Book,
+      icon: BookOpen,
       label: t('profile.booksRead'),
       value: totalBooksRead,
-      color: 'from-primary to-purple-400',
-      bgColor: 'bg-primary/10'
+      color: 'from-emerald-400 to-teal-500',
+      bgColor: 'bg-emerald-500/10'
     },
     {
       icon: Flame,
@@ -40,10 +40,10 @@ export const ProfileStats = ({ totalBooksRead, totalSummariesGenerated, streakDa
       bgColor: 'bg-orange-500/10'
     },
     {
-      icon: Clock,
+      icon: Calendar,
       label: t('profile.memberSince'),
       value: daysSinceMember,
-      color: 'from-blue-400 to-purple-500',
+      color: 'from-blue-400 to-indigo-500',
       bgColor: 'bg-blue-500/10'
     }
   ];
@@ -58,8 +58,8 @@ export const ProfileStats = ({ totalBooksRead, totalSummariesGenerated, streakDa
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               {/* Icon */}
-              <div className={`p-3 rounded-full ${stat.bgColor}`}>
-                <stat.icon className={`h-5 w-5 bg-gradient-to-br ${stat.color} bg-clip-text text-transparent`} />
+              <div className={`p-3 rounded-full ${stat.bgColor} animate-scale-in`}>
+                <stat.icon className={`h-5 w-5 bg-gradient-to-br ${stat.color} bg-clip-text`} strokeWidth={2.5} />
               </div>
 
               {/* Value and Label */}
