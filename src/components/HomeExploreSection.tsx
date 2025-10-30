@@ -236,10 +236,10 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
       {/* Sort Filter */}
       <div className="flex items-center gap-2 mb-6">
         <Select value={sortBy} onValueChange={(v: any) => setSortBy(v)}>
-          <SelectTrigger className="w-full sm:w-[200px] text-sm border-[#E5E5EA] bg-white hover:border-[#1D1D1F] transition-colors">
+          <SelectTrigger className="w-full sm:w-[200px] text-sm border-input bg-background hover:border-primary transition-colors">
             <SelectValue placeholder={i18n.language === 'pt' ? 'Ordenar' : i18n.language === 'es' ? 'Ordenar' : 'Sort'} />
           </SelectTrigger>
-          <SelectContent className="bg-white border-[#E5E5EA]">
+          <SelectContent className="bg-popover border-border">
             <SelectItem value="popularity">
               {i18n.language === 'pt' ? 'Mais populares' : i18n.language === 'es' ? 'Más populares' : 'Most popular'}
             </SelectItem>
