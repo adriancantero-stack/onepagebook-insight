@@ -810,8 +810,8 @@ const Summary = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>{t("summary.loading")}</p>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-foreground">{t("summary.loading")}</p>
       </div>
     );
   }
@@ -819,10 +819,10 @@ const Summary = () => {
   if (!summary) return null;
 
   return (
-    <div className="min-h-screen bg-lilac-50 flex flex-col">
-      <header className="border-b border-lilac-200 bg-white/80 backdrop-blur-sm">
+    <div className="min-h-screen bg-background flex flex-col">
+      <header className="border-b border-border bg-card/80 backdrop-blur-sm">
         <div className="container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-5 flex items-center justify-between relative">
-          <Button variant="ghost" onClick={() => navigate("/")} size="sm" className="hover:bg-lilac-100 rounded-xl transition-all duration-200">
+          <Button variant="ghost" onClick={() => navigate("/")} size="sm" className="hover:bg-accent rounded-xl transition-all duration-200">
             <ArrowLeft className="w-4 h-4 mr-1 sm:mr-2" />
             <span className="hidden sm:inline">Home</span>
           </Button>
@@ -835,8 +835,8 @@ const Summary = () => {
       </header>
 
       <main className="container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-12 sm:py-16 max-w-5xl flex-1">
-        <Card className="p-4 sm:p-8 md:p-12 border-lilac-200 rounded-2xl shadow-sm bg-white">
-          <div className="flex items-start gap-4 sm:gap-5 mb-6 sm:mb-8 pb-8 border-b border-lilac-200">
+        <Card className="p-4 sm:p-8 md:p-12 border-border rounded-2xl shadow-sm bg-card">
+          <div className="flex items-start gap-4 sm:gap-5 mb-6 sm:mb-8 pb-8 border-b border-border">
             <div className="w-16 h-24 sm:w-20 sm:h-28 rounded-xl overflow-hidden shadow-md flex-shrink-0">
               <img 
                 src={bookCover || '/book-placeholder.png'} 
@@ -872,14 +872,14 @@ const Summary = () => {
 
           {/* Audio Player Section - appears above buttons after generation */}
           {isGeneratingAudio && (
-            <div className="mt-6 sm:mt-8 md:mt-10 pt-6 sm:pt-8 border-t border-[#E5E5EA] animate-fade-in">
+            <div className="mt-6 sm:mt-8 md:mt-10 pt-6 sm:pt-8 border-t border-border animate-fade-in">
               <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin text-[#7B61FF]" />
-                <h3 className="text-lg sm:text-xl font-semibold text-[#1D1D1F]">
+                <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin text-primary" />
+                <h3 className="text-lg sm:text-xl font-semibold text-foreground">
                   {t("summary.generating")}...
                 </h3>
               </div>
-              <div className="space-y-2 sm:space-y-3 p-4 sm:p-6 bg-[#F5F5F7] rounded-2xl">
+              <div className="space-y-2 sm:space-y-3 p-4 sm:p-6 bg-muted rounded-2xl">
                 <Skeleton className="h-12 sm:h-16 w-full rounded-xl" />
                 <Skeleton className="h-3 sm:h-4 w-3/4 rounded-xl" />
               </div>
@@ -887,8 +887,8 @@ const Summary = () => {
           )}
 
           {showAudioPlayer && audioSrc && (
-            <div className="mt-6 sm:mt-8 md:mt-10 pt-6 sm:pt-8 border-t border-[#E5E5EA] animate-fade-in">
-              <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-[#1D1D1F]">
+            <div className="mt-6 sm:mt-8 md:mt-10 pt-6 sm:pt-8 border-t border-border animate-fade-in">
+              <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-foreground">
                 🔊 {t("summary.audioPlayer")}
               </h3>
               <AudioPlayer 
@@ -897,33 +897,33 @@ const Summary = () => {
             </div>
           )}
 
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-6 sm:mt-8 md:mt-10 pt-6 sm:pt-8 border-t border-[#E5E5EA] w-full">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-6 sm:mt-8 md:mt-10 pt-6 sm:pt-8 border-t border-border w-full">
             <Button 
               onClick={handleListenSummary} 
               disabled={isGeneratingAudio}
-              className="flex-1 min-w-[140px] sm:min-w-[160px] bg-white text-[#1D1D1F] border border-[#E5E5EA] hover:bg-[#7B61FF] hover:text-white hover:border-[#7B61FF] rounded-xl transition-all duration-200 text-sm sm:text-base px-4 sm:px-5 py-6 group"
+              className="flex-1 min-w-[140px] sm:min-w-[160px] bg-card text-foreground border border-border hover:bg-primary hover:text-primary-foreground hover:border-primary rounded-xl transition-all duration-200 text-sm sm:text-base px-4 sm:px-5 py-6 group"
             >
               {isGeneratingAudio ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-1 sm:mr-2 shrink-0 animate-spin group-hover:text-white" />
+                  <Loader2 className="w-4 h-4 mr-1 sm:mr-2 shrink-0 animate-spin group-hover:text-primary-foreground" />
                   <span className="truncate">{t("summary.generating")}</span>
                 </>
               ) : (
                 <>
-                  <Volume2 className="w-4 h-4 mr-1 sm:mr-2 shrink-0 group-hover:text-white" />
+                  <Volume2 className="w-4 h-4 mr-1 sm:mr-2 shrink-0 group-hover:text-primary-foreground" />
                   <span className="truncate">{t("summary.listen")}</span>
                 </>
               )}
             </Button>
-            <Button onClick={handleCopy} variant="outline" className="flex-1 min-w-[140px] sm:min-w-[160px] border-[#E5E5EA] rounded-xl hover:bg-blue-500 hover:text-white transition-all duration-200 text-sm sm:text-base px-4 sm:px-5 py-6 group">
+            <Button onClick={handleCopy} variant="outline" className="flex-1 min-w-[140px] sm:min-w-[160px] border-border rounded-xl hover:bg-blue-500 hover:text-white transition-all duration-200 text-sm sm:text-base px-4 sm:px-5 py-6 group">
               <Copy className="w-4 h-4 mr-1 sm:mr-2 shrink-0 group-hover:text-white" />
               <span className="truncate">{t("summary.copy")}</span>
             </Button>
-            <Button onClick={handleDownload} variant="outline" className="flex-1 min-w-[140px] sm:min-w-[160px] border-[#E5E5EA] rounded-xl hover:bg-red-500 hover:text-white transition-all duration-200 text-sm sm:text-base px-4 sm:px-5 py-6 group">
+            <Button onClick={handleDownload} variant="outline" className="flex-1 min-w-[140px] sm:min-w-[160px] border-border rounded-xl hover:bg-red-500 hover:text-white transition-all duration-200 text-sm sm:text-base px-4 sm:px-5 py-6 group">
               <Download className="w-4 h-4 mr-1 sm:mr-2 shrink-0 group-hover:text-white" />
               <span className="truncate">{t("summary.download")}</span>
             </Button>
-            <Button onClick={handleShare} variant="outline" className="flex-1 min-w-[140px] sm:min-w-[160px] border-[#E5E5EA] rounded-xl hover:bg-[#25D366] hover:text-white transition-all duration-200 text-sm sm:text-base px-4 sm:px-5 py-6 group">
+            <Button onClick={handleShare} variant="outline" className="flex-1 min-w-[140px] sm:min-w-[160px] border-border rounded-xl hover:bg-[#25D366] hover:text-white transition-all duration-200 text-sm sm:text-base px-4 sm:px-5 py-6 group">
               <Share2 className="w-4 h-4 mr-1 sm:mr-2 shrink-0 group-hover:text-white" />
               <span className="truncate">{t("summary.share")}</span>
             </Button>
@@ -947,13 +947,13 @@ const Summary = () => {
 
           {/* Related Books Section */}
           {relatedBooksWithCovers.length > 0 && (
-            <div className="mt-8 sm:mt-10 md:mt-12 pt-8 sm:pt-10 border-t border-[#E5E5EA]">
-              <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 sm:mb-6 text-[#1D1D1F] tracking-tight">{t("summary.relatedBooks")}</h3>
+            <div className="mt-8 sm:mt-10 md:mt-12 pt-8 sm:pt-10 border-t border-border">
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 sm:mb-6 text-foreground tracking-tight">{t("summary.relatedBooks")}</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 md:gap-6">
                 {relatedBooksWithCovers.map((book: any, index: number) => (
                   <Card 
                     key={index}
-                    className="p-4 sm:p-6 border-[#E5E5EA] rounded-2xl hover:shadow-lg hover:scale-[1.02] transition-all duration-200 cursor-pointer"
+                    className="p-4 sm:p-6 border-border rounded-2xl hover:shadow-lg hover:scale-[1.02] transition-all duration-200 cursor-pointer"
                     onClick={() => navigate("/home", { 
                       state: { 
                         bookTitle: book.title, 
@@ -973,9 +973,9 @@ const Summary = () => {
                         }}
                       />
                       <div className="flex-1 min-w-0 w-full">
-                        <h4 className="font-semibold text-base mb-2 line-clamp-2 text-[#1D1D1F]">{book.title}</h4>
-                        <p className="text-sm text-[#86868B] mb-3 line-clamp-1">{book.author}</p>
-                        <Button size="sm" variant="ghost" className="h-8 text-sm px-3 hover:bg-[#7B61FF] hover:text-white rounded-lg transition-all duration-200 w-full sm:w-auto">
+                        <h4 className="font-semibold text-base mb-2 line-clamp-2 text-foreground">{book.title}</h4>
+                        <p className="text-sm text-muted-foreground mb-3 line-clamp-1">{book.author}</p>
+                        <Button size="sm" variant="ghost" className="h-8 text-sm px-3 hover:bg-primary hover:text-primary-foreground rounded-lg transition-all duration-200 w-full sm:w-auto">
                           {t("summary.summarize")}
                         </Button>
                       </div>
