@@ -34,7 +34,7 @@ export const FloatingHeader = ({ onLogout, showNavigation = true }: FloatingHead
 
   return (
     <header className="w-full max-w-4xl mx-auto pt-2 sm:pt-4 px-2 sm:px-4">
-      <div className="px-2 sm:px-6 py-2 sm:py-3 flex items-center justify-between bg-card/80 backdrop-blur-sm border border-border rounded-2xl gap-1 sm:gap-2">
+      <div className="px-2 sm:px-6 py-2 sm:py-3 flex items-center justify-between bg-card/50 backdrop-blur-sm rounded-2xl gap-1 sm:gap-2 border-0">
         <div className="flex-1 min-w-0">
           {showNavigation && (
             <Button 
@@ -51,7 +51,7 @@ export const FloatingHeader = ({ onLogout, showNavigation = true }: FloatingHead
         {showNavigation && (
           <div className="flex items-center gap-1.5 sm:gap-3 justify-center flex-shrink-0">
             <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-            <span className="font-bold font-poppins text-xs sm:text-sm bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent whitespace-nowrap">OnePageBook</span>
+            <span className="font-bold font-poppins text-xs sm:text-sm text-foreground whitespace-nowrap">OnePageBook</span>
             {isPremium && (
               <div className="hidden sm:flex items-center gap-1.5 bg-gradient-to-r from-primary/10 to-purple-500/10 border border-primary/30 px-2.5 py-1 rounded-full shadow-sm">
                 <Crown className="w-3.5 h-3.5 text-primary" fill="currentColor" />
