@@ -408,16 +408,46 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { userId } = await req.json();
+    const { userId, force } = await req.json();
 
     if (!userId) {
       throw new Error("User ID is required");
     }
 
-    console.log(`📧 Sending welcome email to user: ${userId}`);
+    console.log(`📧 Sending welcome email to user: ${userId}${force ? ' (FORCED)' : ''}`);
 
     // Initialize Supabase client
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // SAFEGUARD: Check if email was already sent recently (last 24h) unless forced
+    if (!force) {
+      const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+      const { data: recentEmail } = await supabase
+        .from("welcome_emails_queue")
+        .select("id, sent_at, email")
+        .eq("user_id", userId)
+        .not("sent_at", "is", null)
+        .gte("sent_at", twentyFourHoursAgo)
+        .order("sent_at", { ascending: false })
+        .limit(1)
+        .single();
+
+      if (recentEmail) {
+        console.log(`⏭️ Skipping: Welcome email already sent to user ${userId} in the last 24h`);
+        return new Response(
+          JSON.stringify({ 
+            success: false, 
+            skipped: true,
+            message: "Email already sent in the last 24 hours. Use force: true to override.",
+            lastSentAt: recentEmail.sent_at 
+          }),
+          { 
+            status: 200, 
+            headers: { ...corsHeaders, "Content-Type": "application/json" } 
+          }
+        );
+      }
+    }
 
     // Get user data
     const { data: { user }, error: authError } = await supabase.auth.admin.getUserById(userId);
@@ -463,6 +493,7 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error(`Resend API error: ${JSON.stringify(result)}`);
     }
 
+    console.log(`📧 Resend email ID: ${result.id}`);
     console.log(`✅ Welcome email sent successfully to ${user.email}`);
 
     return new Response(

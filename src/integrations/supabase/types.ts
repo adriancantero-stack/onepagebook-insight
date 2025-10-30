@@ -938,6 +938,7 @@ export type Database = {
           full_name: string | null
           id: string
           language: string | null
+          processing_at: string | null
           sent_at: string | null
           user_id: string
         }
@@ -948,6 +949,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           language?: string | null
+          processing_at?: string | null
           sent_at?: string | null
           user_id: string
         }
@@ -958,6 +960,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           language?: string | null
+          processing_at?: string | null
           sent_at?: string | null
           user_id?: string
         }

@@ -413,11 +413,15 @@ const handler = async (req: Request): Promise<Response> => {
     // Initialize Supabase client
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Get pending welcome emails (not sent yet)
+    // Get pending welcome emails with optimistic locking
+    // Only get items that are not being processed (processing_at is null or timed out after 5 minutes)
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+    
     const { data: pendingEmails, error: fetchError } = await supabase
       .from("welcome_emails_queue")
       .select("*")
       .is("sent_at", null)
+      .or(`processing_at.is.null,processing_at.lt.${fiveMinutesAgo}`)
       .order("created_at", { ascending: true })
       .limit(50); // Process max 50 per run
 
@@ -437,13 +441,34 @@ const handler = async (req: Request): Promise<Response> => {
 
     let sentCount = 0;
     let failedCount = 0;
+    let skippedCount = 0;
 
     for (const emailRecord of pendingEmails) {
       try {
+        // CRITICAL: Optimistic lock - try to claim this record
+        // Only update if processing_at is still null (prevents race conditions)
+        const { data: claimedRecord, error: claimError } = await supabase
+          .from("welcome_emails_queue")
+          .update({ processing_at: new Date().toISOString() })
+          .eq("id", emailRecord.id)
+          .is("processing_at", null)
+          .is("sent_at", null)
+          .select()
+          .single();
+
+        if (claimError || !claimedRecord) {
+          // Another instance claimed this record, skip it
+          console.log(`⏭️ Record ${emailRecord.id} already claimed by another instance, skipping`);
+          skippedCount++;
+          continue;
+        }
+
+        console.log(`🔒 Claimed record ${emailRecord.id} for processing`);
+
         const userName = emailRecord.full_name || emailRecord.email.split("@")[0] || "Usuário";
         const userLanguage = emailRecord.language || "pt";
 
-        console.log(`Sending welcome email to ${emailRecord.email} (${userLanguage})...`);
+        console.log(`📨 Sending welcome email to ${emailRecord.email} (${userLanguage})...`);
 
         // Get email content
         const content = getEmailContent(userLanguage, userName);
@@ -470,6 +495,8 @@ const handler = async (req: Request): Promise<Response> => {
           throw new Error(`Resend API error: ${JSON.stringify(result)}`);
         }
 
+        console.log(`📧 Resend email ID: ${result.id}`);
+
         // Mark as sent
         await supabase
           .from("welcome_emails_queue")
@@ -482,10 +509,13 @@ const handler = async (req: Request): Promise<Response> => {
       } catch (emailError: any) {
         console.error(`❌ Failed to send email to ${emailRecord.email}:`, emailError);
         
-        // Update with error
+        // Update with error and reset processing_at to allow retry
         await supabase
           .from("welcome_emails_queue")
-          .update({ error_message: emailError.message })
+          .update({ 
+            error_message: emailError.message,
+            processing_at: null // Reset lock to allow retry
+          })
           .eq("id", emailRecord.id);
 
         failedCount++;
@@ -495,7 +525,7 @@ const handler = async (req: Request): Promise<Response> => {
       await new Promise(resolve => setTimeout(resolve, 100));
     }
 
-    console.log(`📊 Welcome emails processed: ${sentCount} sent, ${failedCount} failed`);
+    console.log(`📊 Welcome emails processed: ${sentCount} sent, ${failedCount} failed, ${skippedCount} skipped (already claimed)`);
 
     return new Response(
       JSON.stringify({ 
@@ -503,6 +533,7 @@ const handler = async (req: Request): Promise<Response> => {
         processed: pendingEmails.length,
         sent: sentCount,
         failed: failedCount,
+        skipped: skippedCount,
         message: `Processed ${pendingEmails.length} welcome emails` 
       }),
       { 
