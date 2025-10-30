@@ -563,8 +563,8 @@ const Explore = () => {
                 }}
                 className={`px-2.5 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-200 ${
                   selectedCategory === category.id
-                    ? 'bg-[#1D1D1F] text-white'
-                    : 'bg-[#F5F5F7] text-[#1D1D1F] hover:bg-[#1D1D1F] hover:text-white'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-muted text-foreground hover:bg-primary hover:text-primary-foreground'
                 }`}
               >
                 {category.name}
@@ -576,7 +576,7 @@ const Explore = () => {
           <button
             onClick={handleRandomBook}
             disabled={allBooks.length === 0}
-            className="ml-auto p-1.5 sm:p-2 rounded-full bg-[#F5F5F7] hover:bg-[#1D1D1F] hover:text-white transition-all duration-200 shrink-0 disabled:opacity-50"
+            className="ml-auto p-1.5 sm:p-2 rounded-full bg-muted hover:bg-primary hover:text-primary-foreground transition-all duration-200 shrink-0 disabled:opacity-50"
             title={t("explore.random")}
           >
             <Shuffle className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
@@ -586,10 +586,10 @@ const Explore = () => {
         {/* Sort - Condensed */}
         <div className="flex items-center gap-2 mb-4 sm:mb-8">
           <Select value={sortBy} onValueChange={(v: any) => setSortBy(v)}>
-            <SelectTrigger className="w-full sm:w-[200px] text-sm border-[#E5E5EA] bg-white hover:border-[#1D1D1F] transition-colors">
+            <SelectTrigger className="w-full sm:w-[200px] text-sm border-input bg-background hover:border-primary transition-colors">
               <SelectValue placeholder={t("sort.label")} />
             </SelectTrigger>
-            <SelectContent className="bg-white border-[#E5E5EA]">
+            <SelectContent className="bg-popover border-border">
               <SelectItem value="recommended">{t("sort.recommended")}</SelectItem>
               <SelectItem value="trending">{t("sort.trending")}</SelectItem>
               <SelectItem value="alpha">{t("sort.alpha")}</SelectItem>
@@ -606,7 +606,7 @@ const Explore = () => {
             return (
               <Card 
                 key={`${book.title}-${index}`}
-                className="p-3 sm:p-5 flex flex-col h-full border-[#E5E5EA] hover:shadow-lg hover:scale-[1.02] transition-all duration-200 ease-in-out bg-white group"
+                className="p-3 sm:p-5 flex flex-col h-full border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200 ease-in-out bg-card group"
               >
                 {/* Book Cover */}
                 <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
