@@ -284,8 +284,8 @@ export default function Settings() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-lilac-50 flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-lilac-500" />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -347,7 +347,7 @@ export default function Settings() {
                 <Button 
                   onClick={handleNicknameUpdate}
                   disabled={isSavingNickname || !nickname.trim()}
-                  className="bg-lilac-500 hover:bg-lilac-600"
+                  className="bg-primary hover:bg-primary/90"
                 >
                   {isSavingNickname ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -448,7 +448,7 @@ export default function Settings() {
               <Button 
                 onClick={handleNotificationUpdate}
                 disabled={isSavingNotifications}
-                className="w-full bg-lilac-500 hover:bg-lilac-600"
+                className="w-full bg-primary hover:bg-primary/90"
               >
                 {isSavingNotifications ? (
                   <>
@@ -496,7 +496,7 @@ export default function Settings() {
                   type="button"
                   disabled={isUploading}
                   onClick={() => document.getElementById('photo-upload')?.click()}
-                  className="bg-lilac-500 hover:bg-lilac-600"
+                  className="bg-primary hover:bg-primary/90"
                 >
                   {isUploading ? (
                     <Loader2 className="h-4 w-4 animate-spin" />

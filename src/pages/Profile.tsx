@@ -75,22 +75,22 @@ export default function Profile() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-lilac-50 flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-lilac-500" />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-lilac-50 flex items-center justify-center">
-        <p>{t('profile.profileNotFound')}</p>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-foreground">{t('profile.profileNotFound')}</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-lilac-50">
+    <div className="min-h-screen bg-background">
       <FloatingHeader />
       
       <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 pt-20 sm:pt-24">
