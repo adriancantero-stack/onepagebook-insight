@@ -6,6 +6,7 @@ import { GlobalAchievementNotification } from "@/components/GlobalAchievementNot
 import { GlobalXPCelebration } from "@/components/GlobalXPCelebration";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { ThemeProvider } from "next-themes";
 import { lazy, Suspense } from "react";
 
 // Eager load critical routes
@@ -64,13 +65,14 @@ const LoadingFallback = () => (
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <ErrorBoundary>
-        <Toaster />
-        <Sonner />
-        <GlobalAchievementNotification />
-        <GlobalXPCelebration />
-        <BrowserRouter>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <TooltipProvider>
+        <ErrorBoundary>
+          <Toaster />
+          <Sonner />
+          <GlobalAchievementNotification />
+          <GlobalXPCelebration />
+          <BrowserRouter>
           <Suspense fallback={<LoadingFallback />}>
             <Routes>
             <Route path="/" element={<LandingRedirect />} />
@@ -123,9 +125,10 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
-      </BrowserRouter>
-      </ErrorBoundary>
-    </TooltipProvider>
+          </BrowserRouter>
+        </ErrorBoundary>
+      </TooltipProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 

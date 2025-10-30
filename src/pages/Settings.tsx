@@ -8,9 +8,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
-import { Loader2, Upload, ArrowLeft, Bell, Clock } from 'lucide-react';
+import { Loader2, Upload, ArrowLeft, Bell, Clock, Palette } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const PRESET_AVATARS = [
   { id: 'funny-1', url: '/avatars/funny-1.png', category: 'funny' },
@@ -297,7 +298,7 @@ export default function Settings() {
   const cuteAvatars = PRESET_AVATARS.filter(a => a.category === 'cute');
 
   return (
-    <div className="min-h-screen bg-lilac-50">
+    <div className="min-h-screen bg-background">
       <FloatingHeader />
       
       <div className="container mx-auto px-4 py-8 pt-24 max-w-4xl">
@@ -320,7 +321,7 @@ export default function Settings() {
         </div>
 
         {/* Nickname Section */}
-        <Card className="bg-white/70 backdrop-blur-md border-lilac-200 shadow-xl mb-6">
+        <Card className="bg-card backdrop-blur-md border-border shadow-xl mb-6">
           <CardHeader>
             <CardTitle className="font-poppins">Nickname</CardTitle>
           </CardHeader>
@@ -362,8 +363,29 @@ export default function Settings() {
           </CardContent>
         </Card>
 
+        {/* Theme Section */}
+        <Card className="bg-card backdrop-blur-md border-border shadow-xl mb-6">
+          <CardHeader>
+            <CardTitle className="font-poppins flex items-center gap-2">
+              <Palette className="h-5 w-5" />
+              Aparência
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label className="text-base font-medium">
+                Tema do aplicativo
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                Escolha o tema que melhor se adapta ao seu estilo
+              </p>
+              <ThemeToggle />
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Notifications Section */}
-        <Card className="bg-white/70 backdrop-blur-md border-lilac-200 shadow-xl mb-6">
+        <Card className="bg-card backdrop-blur-md border-border shadow-xl mb-6">
           <CardHeader>
             <CardTitle className="font-poppins flex items-center gap-2">
               <Bell className="h-5 w-5" />
@@ -441,7 +463,7 @@ export default function Settings() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white/70 backdrop-blur-md border-lilac-200 shadow-xl">
+        <Card className="bg-card backdrop-blur-md border-border shadow-xl">
           <CardHeader>
             <CardTitle className="font-poppins">Foto de Perfil</CardTitle>
           </CardHeader>
