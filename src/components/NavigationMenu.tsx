@@ -91,12 +91,12 @@ export const NavigationMenu = ({ onLogout }: NavigationMenuProps) => {
         <Button 
           variant="ghost" 
           size="icon"
-          className="hover:bg-transparent group"
+          className="hover:bg-accent group"
         >
           {/* Mobile: 3 dots */}
-          <MoreVertical className="h-5 w-5 md:hidden group-hover:text-primary" />
+          <MoreVertical className="h-5 w-5 md:hidden text-foreground group-hover:text-primary transition-colors" />
           {/* Desktop: 3 lines */}
-          <Menu className="h-5 w-5 hidden md:block group-hover:text-primary" />
+          <Menu className="h-5 w-5 hidden md:block text-foreground group-hover:text-primary transition-colors" />
         </Button>
       </DropdownMenuTrigger>
       
