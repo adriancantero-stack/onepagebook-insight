@@ -4,7 +4,7 @@ export const LandingBenefits = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="container mx-auto px-6 py-16 sm:px-12 sm:py-24 lg:px-24 bg-white">
+    <section className="container mx-auto px-6 py-16 sm:px-12 sm:py-24 lg:px-24 bg-card">
       <h2 className="mb-16 text-center text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
         {t("landing.benefits.title")}
       </h2>
