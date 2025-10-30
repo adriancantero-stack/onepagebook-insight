@@ -32,7 +32,7 @@ export function ThemeToggle() {
   ];
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-1.5 sm:gap-2">
       {themes.map(({ value, icon: Icon, label }) => (
         <Button
           key={value}
@@ -40,14 +40,14 @@ export function ThemeToggle() {
           size="default"
           onClick={() => setTheme(value)}
           className={cn(
-            "flex-1 gap-2 transition-all",
+            "flex-1 gap-1.5 sm:gap-2 transition-all px-2 sm:px-4",
             theme === value
               ? "bg-primary text-primary-foreground border-primary"
               : "hover:bg-accent hover:text-accent-foreground"
           )}
         >
-          <Icon className="h-4 w-4" />
-          {label}
+          <Icon className="h-4 w-4 flex-shrink-0" />
+          <span className="text-xs sm:text-sm truncate">{label}</span>
         </Button>
       ))}
     </div>
