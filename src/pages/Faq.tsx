@@ -83,7 +83,7 @@ const Faq = () => {
   }, [t, jsonLd]);
 
   return (
-    <div className="min-h-screen bg-lilac-50 flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <FloatingHeader />
 
       <main className="flex-1 container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-16 max-w-4xl">
@@ -96,12 +96,12 @@ const Faq = () => {
               placeholder={t("faq.search.placeholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 h-14 rounded-xl border-lilac-200 bg-white text-base"
+              className="pl-12 h-14 rounded-xl border-border bg-card text-base"
             />
           </div>
 
           {filteredFaqs.length === 0 ? (
-            <Card className="p-10 text-center border-lilac-200 rounded-2xl bg-white">
+            <Card className="p-10 text-center border-border rounded-2xl bg-card">
               <p className="text-muted-foreground text-lg">{t("faq.empty")}</p>
             </Card>
           ) : (
@@ -110,7 +110,7 @@ const Faq = () => {
                 <AccordionItem
                   key={index}
                   value={`item-${index}`}
-                  className="border border-lilac-200 rounded-xl px-6 hover:shadow-md transition-all duration-200 bg-white"
+                  className="border border-border rounded-xl px-6 hover:shadow-md transition-all duration-200 bg-card"
                 >
                   <AccordionTrigger className="text-left hover:no-underline py-5">
                     <span className="font-medium text-foreground">{faq.q}</span>
@@ -123,7 +123,7 @@ const Faq = () => {
             </Accordion>
           )}
 
-          <Card className="mt-12 p-10 text-center bg-lilac-100 border-lilac-200 rounded-2xl">
+          <Card className="mt-12 p-10 text-center bg-muted border-border rounded-2xl">
             <p className="text-lg sm:text-xl mb-6 text-muted-foreground leading-relaxed">{t("faq.cta.contact")}</p>
             <Button asChild className="bg-primary hover:bg-primary/90 rounded-xl px-8 py-6 text-base font-medium transition-all duration-200">
               <Link to="/contact">{t("faq.contact")}</Link>

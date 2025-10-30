@@ -34,17 +34,17 @@ const Contact = () => {
   const content = getMessage();
 
   return (
-    <div className="min-h-screen bg-lilac-50 flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <FloatingHeader />
 
       <main className="flex-1 container mx-auto px-4 py-12 max-w-2xl">
         <div className="text-center mb-12">
           <Mail className="w-16 h-16 mx-auto mb-4 text-primary" />
-          <h1 className="text-4xl font-bold font-poppins mb-4">{content.title}</h1>
+          <h1 className="text-4xl font-bold font-poppins mb-4 text-foreground">{content.title}</h1>
           <p className="text-lg text-muted-foreground">{content.message}</p>
         </div>
 
-        <Card className="p-8 border-lilac-200 shadow-sm bg-white">
+        <Card className="p-8 border-border shadow-sm bg-card">
           <div className="text-center space-y-6">
             <a 
               href={`mailto:${contactEmail}`}

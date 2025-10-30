@@ -65,8 +65,8 @@ const Plans = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>{t("plans.loading")}</p>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-foreground">{t("plans.loading")}</p>
       </div>
     );
   }
@@ -74,7 +74,7 @@ const Plans = () => {
   const isPremium = currentPlan?.subscription_plans?.type === "premium";
 
   return (
-    <div className="min-h-screen bg-lilac-50 flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <FloatingHeader />
 
       <main className="container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-12 sm:py-20 flex-1">
@@ -83,12 +83,12 @@ const Plans = () => {
           <p className="text-lg text-muted-foreground">Escolha o plano ideal para você</p>
           
           {/* Billing Toggle */}
-          <div className="inline-flex items-center gap-2 bg-lilac-100 p-1 rounded-xl mt-6">
+          <div className="inline-flex items-center gap-2 bg-muted p-1 rounded-xl mt-6">
             <button
               onClick={() => setBillingCycle("monthly")}
               className={`px-5 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
                 billingCycle === "monthly"
-                  ? "bg-white text-foreground shadow-sm"
+                  ? "bg-card text-foreground shadow-sm"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -98,8 +98,8 @@ const Plans = () => {
               onClick={() => setBillingCycle("yearly")}
               className={`px-5 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
                 billingCycle === "yearly"
-                  ? "bg-white text-[#1D1D1F] shadow-sm"
-                  : "text-[#86868B] hover:text-[#1D1D1F]"
+                  ? "bg-card text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {t("plans.toggle.yearly")}
@@ -110,36 +110,36 @@ const Plans = () => {
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {/* Free Plan */}
           <Card 
-            className={`p-10 border-[#E5E5EA] rounded-2xl transition-all duration-200 hover:shadow-lg ${
-              currentPlan?.subscription_plans?.type === "free" ? "border-[#7B61FF] shadow-md" : ""
+            className={`p-10 bg-card border-border rounded-2xl transition-all duration-200 hover:shadow-lg ${
+              currentPlan?.subscription_plans?.type === "free" ? "border-primary shadow-md" : ""
             }`}
             role="region"
             aria-label={t("plans.free.name")}
           >
             <div className="text-center mb-8">
-              <h3 className="text-2xl font-semibold mb-3 text-[#1D1D1F]">{t("plans.free.name")}</h3>
-              <div className="text-5xl font-semibold mb-2 text-[#1D1D1F]">
+              <h3 className="text-2xl font-semibold mb-3 text-foreground">{t("plans.free.name")}</h3>
+              <div className="text-5xl font-semibold mb-2 text-foreground">
                 {t("plans.free.price.monthly")}
               </div>
-              <p className="text-[#86868B]">Para começar</p>
+              <p className="text-muted-foreground">Para começar</p>
             </div>
 
             <ul className="space-y-4 mb-8">
               {(t("plans.free.bullets", { returnObjects: true }) as string[]).map((bullet: string, index: number) => (
                 <li key={index} className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-[#7B61FF] shrink-0 mt-0.5" />
-                  <span className="text-[#1D1D1F]">{bullet}</span>
+                  <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                  <span className="text-foreground">{bullet}</span>
                 </li>
               ))}
             </ul>
 
             {currentPlan?.subscription_plans?.type === "free" ? (
-              <Button className="w-full py-6 bg-[#F5F5F7] text-[#86868B] hover:bg-[#F5F5F7] cursor-default" disabled>
+              <Button className="w-full py-6 bg-muted text-muted-foreground hover:bg-muted cursor-default" disabled>
                 {t("plans.currentPlan")}
               </Button>
             ) : (
               <Button 
-                className="w-full py-6 bg-white text-[#7B61FF] border-2 border-[#7B61FF] hover:bg-[#7B61FF] hover:text-white transition-all rounded-xl" 
+                className="w-full py-6 bg-card text-primary border-2 border-primary hover:bg-primary hover:text-primary-foreground transition-all rounded-xl" 
                 onClick={() => handlePlanSelect("free", "monthly")}
               >
                 {t("plans.free.cta")}
@@ -149,47 +149,47 @@ const Plans = () => {
 
           {/* Premium Plan */}
           <Card 
-            className={`p-10 relative border-[#7B61FF] rounded-2xl transition-all duration-200 hover:shadow-xl ${
+            className={`p-10 relative bg-card border-primary rounded-2xl transition-all duration-200 hover:shadow-xl ${
               isPremium ? "shadow-lg" : "shadow-md"
             }`}
             role="region"
             aria-label={t("plans.premium.name")}
           >
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#7B61FF] text-white px-6 py-2 rounded-full text-sm font-semibold flex items-center gap-2 shadow-sm">
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-6 py-2 rounded-full text-sm font-semibold flex items-center gap-2 shadow-sm">
               <Crown className="w-4 h-4" />
               {t("plans.badge")}
             </div>
 
             <div className="text-center mb-8">
-              <h3 className="text-2xl font-semibold mb-3 text-[#1D1D1F]">{t("plans.premium.name")}</h3>
-              <div className="text-5xl font-semibold mb-2 text-[#1D1D1F]">
+              <h3 className="text-2xl font-semibold mb-3 text-foreground">{t("plans.premium.name")}</h3>
+              <div className="text-5xl font-semibold mb-2 text-foreground">
                 {billingCycle === "monthly" 
                   ? t("plans.premium.price.monthly")
                   : t("plans.premium.price.yearly")
                 }
               </div>
               {billingCycle === "yearly" && (
-                <p className="text-sm text-[#7B61FF] font-medium">{t("plans.premium.hint")}</p>
+                <p className="text-sm text-primary font-medium">{t("plans.premium.hint")}</p>
               )}
-              <p className="text-[#86868B] mt-2">Ilimitado</p>
+              <p className="text-muted-foreground mt-2">Ilimitado</p>
             </div>
 
             <ul className="space-y-4 mb-8">
               {(t("plans.premium.bullets", { returnObjects: true }) as string[]).map((bullet: string, index: number) => (
                 <li key={index} className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-[#7B61FF] shrink-0 mt-0.5" />
-                  <span className={`text-[#1D1D1F] ${index < 2 ? "font-semibold" : ""}`}>{bullet}</span>
+                  <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                  <span className={`text-foreground ${index < 2 ? "font-semibold" : ""}`}>{bullet}</span>
                 </li>
               ))}
             </ul>
 
             {isPremium ? (
-              <Button className="w-full py-6 bg-[#F5F5F7] text-[#86868B] hover:bg-[#F5F5F7] cursor-default" disabled>
+              <Button className="w-full py-6 bg-muted text-muted-foreground hover:bg-muted cursor-default" disabled>
                 {t("plans.currentPlan")}
               </Button>
             ) : (
               <Button 
-                className="w-full py-6 bg-[#7B61FF] hover:bg-[#6951E6] text-white border-none shadow-sm transition-all rounded-xl" 
+                className="w-full py-6 bg-primary hover:bg-primary/90 text-primary-foreground border-none shadow-sm transition-all rounded-xl"
                 onClick={async () => {
                   const { data: { user } } = await supabase.auth.getUser();
                   const userId = user?.id || '';
@@ -215,7 +215,7 @@ const Plans = () => {
 
         {/* Trust Line */}
         <div className="text-center mt-16">
-          <p className="text-sm text-[#86868B]">
+          <p className="text-sm text-muted-foreground">
             Cancele quando quiser · Garantia de 7 dias · Acesso imediato
           </p>
         </div>
