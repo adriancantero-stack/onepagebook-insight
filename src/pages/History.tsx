@@ -55,8 +55,8 @@ const History = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>{t("history.loading")}</p>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-foreground">{t("history.loading")}</p>
       </div>
     );
   }
@@ -64,7 +64,7 @@ const History = () => {
   const isFree = subscription?.subscription_plans?.type === "free";
 
   return (
-    <div className="min-h-screen bg-lilac-50 flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <FloatingHeader />
 
       <main className="container mx-auto px-6 sm:px-12 lg:px-24 xl:px-32 py-8 sm:py-12 flex-1">
@@ -86,8 +86,8 @@ const History = () => {
 
 
         {summaries.length === 0 ? (
-          <Card className="p-8 sm:p-16 text-center border-lilac-200 rounded-2xl bg-white">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-lilac-100 mb-6">
+          <Card className="p-8 sm:p-16 text-center border-border rounded-2xl bg-card/70">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-6">
               <BookOpen className="w-8 h-8 text-primary" />
             </div>
             <p className="text-foreground font-medium text-lg mb-2">
@@ -108,7 +108,7 @@ const History = () => {
             {summaries.map((summary) => (
               <Card
                 key={summary.id}
-                className="p-4 sm:p-6 hover:shadow-lg transition-all duration-200 border-lilac-200 rounded-xl bg-white"
+                className="p-4 sm:p-6 hover:shadow-lg transition-all duration-200 border-border rounded-xl bg-card"
               >
                 <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
                   <div className="p-3 bg-primary/10 rounded-xl shrink-0">
@@ -131,7 +131,7 @@ const History = () => {
                     onClick={() => navigate(`/summary/${summary.id}`)}
                     variant="outline" 
                     size="sm"
-                    className="w-full sm:w-auto shrink-0 border-lilac-200 hover:border-primary hover:bg-primary hover:text-white transition-all"
+                    className="w-full sm:w-auto shrink-0 border-border hover:bg-accent transition-all"
                   >
                     {t("history.viewSummary")}
                   </Button>
