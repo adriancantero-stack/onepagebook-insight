@@ -5,6 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 interface Top10SectionProps {
   onBookSelect: (bookId: string, title: string, author: string) => void;
@@ -20,6 +21,7 @@ interface Book {
 }
 
 export const Top10Section = ({ onBookSelect, language }: Top10SectionProps) => {
+  const { t } = useTranslation();
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -69,7 +71,7 @@ export const Top10Section = ({ onBookSelect, language }: Top10SectionProps) => {
   if (loading) {
     return (
       <section className="py-12">
-        <h2 className="text-3xl font-bold mb-8 px-4">Top 10 Mais Populares</h2>
+        <h2 className="text-3xl font-bold mb-8 px-4">{t("home.top10Title")}</h2>
         <div className="flex gap-4 px-4 overflow-hidden">
           {[...Array(10)].map((_, i) => (
             <Skeleton key={i} className="w-[180px] sm:w-[200px] md:w-[220px] aspect-[2/3] flex-shrink-0 rounded-lg" />
@@ -83,7 +85,7 @@ export const Top10Section = ({ onBookSelect, language }: Top10SectionProps) => {
 
   return (
     <section className="py-12">
-      <h2 className="text-3xl font-bold mb-8 px-4">Top 10 Mais Populares</h2>
+      <h2 className="text-3xl font-bold mb-8 px-4">{t("home.top10Title")}</h2>
       
       <div className="relative group px-4">
         {/* Navigation Buttons */}

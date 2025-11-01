@@ -16,7 +16,8 @@ export const es = {
     
     // Home
     home: {
-      tagline: "Aprende y Memoriza lo Esencial — en Minutos."
+      tagline: "Aprende y Memoriza lo Esencial — en Minutos.",
+      top10Title: "Top 10 Más Populares"
     },
     
     // Header
