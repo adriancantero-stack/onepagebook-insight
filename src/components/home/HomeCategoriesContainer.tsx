@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CategoryCarousel } from "./CategoryCarousel";
 import { useTranslation } from "react-i18next";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface HomeCategoriesContainerProps {
   onBookSelect: (bookId: string, title: string, author: string) => void;
@@ -17,13 +18,18 @@ interface Category {
   display_order: number;
 }
 
+const CATEGORIES_PER_LOAD = 6;
+
 export const HomeCategoriesContainer = ({
   onBookSelect,
   language,
 }: HomeCategoriesContainerProps) => {
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [allCategories, setAllCategories] = useState<Category[]>([]);
+  const [displayedCategories, setDisplayedCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const { i18n } = useTranslation();
+  const observerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -35,13 +41,45 @@ export const HomeCategoriesContainer = ({
         .order("display_order", { ascending: true });
 
       if (!error && data) {
-        setCategories(data);
+        setAllCategories(data);
+        setDisplayedCategories(data.slice(0, CATEGORIES_PER_LOAD));
       }
       setLoading(false);
     };
 
     fetchCategories();
   }, []);
+
+  const loadMoreCategories = useCallback(() => {
+    if (loadingMore || displayedCategories.length >= allCategories.length) return;
+    
+    setLoadingMore(true);
+    setTimeout(() => {
+      const nextBatch = allCategories.slice(
+        displayedCategories.length,
+        displayedCategories.length + CATEGORIES_PER_LOAD
+      );
+      setDisplayedCategories(prev => [...prev, ...nextBatch]);
+      setLoadingMore(false);
+    }, 300);
+  }, [allCategories, displayedCategories.length, loadingMore]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMoreCategories();
+        }
+      },
+      { threshold: 0.1, rootMargin: "200px" }
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [loadMoreCategories]);
 
   const getCategoryName = (category: Category) => {
     const lang = i18n.language;
@@ -67,9 +105,11 @@ export const HomeCategoriesContainer = ({
     );
   }
 
+  const hasMore = displayedCategories.length < allCategories.length;
+
   return (
     <div className="max-w-7xl mx-auto">
-      {categories.map((category) => (
+      {displayedCategories.map((category) => (
         <CategoryCarousel
           key={category.id}
           categoryKey={category.key}
@@ -78,6 +118,21 @@ export const HomeCategoriesContainer = ({
           language={language}
         />
       ))}
+      
+      {hasMore && (
+        <div ref={observerRef} className="py-8">
+          {loadingMore && (
+            <div className="px-4">
+              <Skeleton className="h-8 w-48 mb-4" />
+              <div className="flex gap-4 overflow-hidden">
+                {[...Array(6)].map((_, j) => (
+                  <Skeleton key={j} className="w-[150px] sm:w-[180px] md:w-[200px] aspect-[2/3] flex-shrink-0" />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
