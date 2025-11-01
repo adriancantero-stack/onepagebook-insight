@@ -341,6 +341,12 @@ const Admin = () => {
           subscription_plans(type)
         `);
 
+      // Get total summaries count (not limited by default 1000 records)
+      const { count: totalSummaries } = await supabase
+        .from("book_summaries")
+        .select("*", { count: 'exact', head: true });
+
+      // Get summaries data for active users calculation
       const { data: summariesData } = await supabase
         .from("book_summaries")
         .select("user_id");
@@ -353,7 +359,6 @@ const Admin = () => {
       }, {}) || {};
       
       const activeUsers = Object.keys(summariesByUser).length;
-      const totalSummaries = summariesData?.length || 0;
 
       const planCounts = subscriptionsData?.reduce((acc: any, curr: any) => {
         const planType = curr.subscription_plans?.type || "free";
