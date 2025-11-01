@@ -13,6 +13,8 @@ import { BookAutocomplete } from "@/components/BookAutocomplete";
 import { FloatingHeader } from "@/components/FloatingHeader";
 import { BookDetailsModal } from "@/components/BookDetailsModal";
 import { HomeExploreSection } from "@/components/HomeExploreSection";
+import { Top10Section } from "@/components/home/Top10Section";
+import { HomeCategoriesContainer } from "@/components/home/HomeCategoriesContainer";
 
 import { 
   loadUsage, 
@@ -538,10 +540,24 @@ const Home = () => {
         </Card>
         </div>
 
-        {/* Explore Section */}
-        <HomeExploreSection 
-          onBookSelect={(bookId, title, author) => handleBookSelect(bookId, title, author, 'home_explore')} 
+        {/* Top 10 Section */}
+        <Top10Section 
+          onBookSelect={(bookId, title, author) => 
+            handleBookSelect(bookId, title, author, 'home_explore')
+          }
+          language={i18n.language}
         />
+
+        {/* Categories Carousels */}
+        <HomeCategoriesContainer
+          onBookSelect={(bookId, title, author) => 
+            handleBookSelect(bookId, title, author, 'home_explore')
+          }
+          language={i18n.language}
+        />
+
+        {/* Keep HomeExploreSection as backup - commented out */}
+        {/* <HomeExploreSection onBookSelect={(bookId, title, author) => handleBookSelect(bookId, title, author, 'home_explore')} /> */}
       </main>
 
       <Footer />
