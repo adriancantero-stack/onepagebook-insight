@@ -32,8 +32,7 @@ export const HomeCategoriesContainer = ({
         .from("book_categories")
         .select("id, key, name_pt, name_en, name_es, display_order")
         .eq("is_active", true)
-        .order("display_order", { ascending: true })
-        .limit(8);
+        .order("display_order", { ascending: true });
 
       if (!error && data) {
         setCategories(data);
