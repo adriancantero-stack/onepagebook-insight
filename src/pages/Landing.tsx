@@ -2,6 +2,7 @@ import { useEffect, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { BookOpen } from "lucide-react";
+import { useTheme } from "next-themes";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import Footer from "@/components/Footer";
 import { useSEO } from "@/hooks/useSEO";
@@ -25,6 +26,7 @@ const Landing = ({ lang }: LandingProps) => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const { trackConversion } = useABTest();
+  const { theme, setTheme } = useTheme();
 
   const seoConfigs = {
     pt: {
@@ -56,6 +58,18 @@ const Landing = ({ lang }: LandingProps) => {
     i18n.changeLanguage(lang);
     localStorage.setItem("language", lang);
   }, [lang, i18n]);
+
+  // Force light theme on landing pages
+  useEffect(() => {
+    const previousTheme = theme;
+    setTheme("light");
+    
+    return () => {
+      if (previousTheme) {
+        setTheme(previousTheme);
+      }
+    };
+  }, []);
 
   const handleCTA = () => {
     trackConversion('cta_click');
