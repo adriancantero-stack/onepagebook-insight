@@ -1498,10 +1498,10 @@ const Admin = () => {
               </div>
             ) : (
               <div className="space-y-6">
-                {/* 24 Horas */}
+                 {/* 24 Horas */}
                 <div>
                   <h4 className="font-semibold mb-3 text-sm">Últimas 24 Horas</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
                     <div className="space-y-1">
                       <p className="text-xs text-muted-foreground">Visitas Únicas</p>
                       <p className="text-xl font-bold">{analyticsMetrics24h?.uniqueVisitors || 0}</p>
@@ -1539,10 +1539,10 @@ const Admin = () => {
                   </div>
                 </div>
 
-                {/* 7 Dias */}
+                 {/* 7 Dias */}
                 <div className="border-t pt-4">
                   <h4 className="font-semibold mb-3 text-sm">Últimos 7 Dias</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
                     <div className="space-y-1">
                       <p className="text-xs text-muted-foreground">Visitas Únicas</p>
                       <p className="text-xl font-bold">{analyticsMetrics7d?.uniqueVisitors || 0}</p>
@@ -1580,10 +1580,10 @@ const Admin = () => {
                   </div>
                 </div>
 
-                {/* 30 Dias */}
+                 {/* 30 Dias */}
                 <div className="border-t pt-4">
                   <h4 className="font-semibold mb-3 text-sm">Últimos 30 Dias</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
                     <div className="space-y-1">
                       <p className="text-xs text-muted-foreground">Visitas Únicas</p>
                       <p className="text-xl font-bold">{analyticsMetrics30d?.uniqueVisitors || 0}</p>
@@ -1637,7 +1637,7 @@ const Admin = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">🇧🇷 Português</span>
@@ -1847,16 +1847,16 @@ const Admin = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto -mx-2 px-2">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-12">#</TableHead>
-                    <TableHead>Livro</TableHead>
-                    <TableHead>Autor</TableHead>
-                    <TableHead>Idioma</TableHead>
-                    <TableHead>Usuário</TableHead>
-                    <TableHead>Data</TableHead>
+                    <TableHead className="w-8 md:w-12">#</TableHead>
+                    <TableHead className="min-w-[120px]">Livro</TableHead>
+                    <TableHead className="min-w-[100px]">Autor</TableHead>
+                    <TableHead className="min-w-[60px]">Idioma</TableHead>
+                    <TableHead className="min-w-[100px]">Usuário</TableHead>
+                    <TableHead className="min-w-[120px]">Data</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -1867,14 +1867,14 @@ const Admin = () => {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    latestBooks.map((book, index) => (
+                     latestBooks.map((book, index) => (
                       <TableRow key={index}>
-                        <TableCell className="font-medium text-foreground">{index + 1}</TableCell>
-                        <TableCell className="font-medium">{book.book_title}</TableCell>
-                        <TableCell>{book.book_author}</TableCell>
-                        <TableCell className="uppercase">{book.language}</TableCell>
-                        <TableCell>{book.user_name}</TableCell>
-                        <TableCell>
+                        <TableCell className="font-medium text-foreground text-xs md:text-sm">{index + 1}</TableCell>
+                        <TableCell className="font-medium text-xs md:text-sm">{book.book_title}</TableCell>
+                        <TableCell className="text-xs md:text-sm">{book.book_author}</TableCell>
+                        <TableCell className="uppercase text-xs md:text-sm">{book.language}</TableCell>
+                        <TableCell className="text-xs md:text-sm">{book.user_name}</TableCell>
+                        <TableCell className="text-xs md:text-sm whitespace-nowrap">
                           {new Date(book.created_at).toLocaleDateString('pt-BR', {
                             day: '2-digit',
                             month: '2-digit',
@@ -2211,10 +2211,10 @@ const Admin = () => {
                 </div>
               )}
 
-              {/* Cover Check Result */}
+               {/* Cover Check Result */}
               {booksWithoutCovers !== null && !isGeneratingCovers && (
-                <div className="space-y-3 p-4 rounded-lg border bg-muted/50">
-                  <p className="text-lg font-semibold text-center">
+                <div className="space-y-3 p-3 md:p-4 rounded-lg border bg-muted/50">
+                  <p className="text-base md:text-lg font-semibold text-center">
                     {booksWithoutCovers === 0 
                       ? "✅ Todos os livros têm capas!"
                       : `📚 ${booksWithoutCovers} livros sem capas encontrados`}
@@ -2224,10 +2224,10 @@ const Admin = () => {
                     <Button
                       onClick={handleGenerateCovers}
                       disabled={isGeneratingCovers}
-                      className="w-full gap-2"
+                      className="w-full gap-2 text-sm md:text-base"
                       size="lg"
                     >
-                      <ImagePlus className="w-5 h-5" />
+                      <ImagePlus className="w-4 h-4 md:w-5 md:h-5" />
                       Iniciar Geração de Capas
                     </Button>
                   )}
@@ -2253,18 +2253,18 @@ const Admin = () => {
                 </div>
               )}
 
-              {/* Manual Cover Upload and Email Test Section */}
-              <div className="mt-6 grid gap-6 md:grid-cols-2">
+               {/* Manual Cover Upload and Email Test Section */}
+              <div className="mt-6 grid gap-4 md:gap-6 grid-cols-1 lg:grid-cols-2">
                 <ManualCoverUpload />
                 <div className="space-y-6">
                   <TestEmailNotification />
                   <TestPremiumEmail />
                   <TestWelcomeEmail />
                   
-                  {/* Daily Reminders Test */}
+                   {/* Daily Reminders Test */}
                   <Card>
                     <CardHeader>
-                      <CardTitle className="flex items-center gap-2 text-base">
+                      <CardTitle className="flex items-center gap-2 text-sm md:text-base">
                         📧 Testar Lembretes Diários
                       </CardTitle>
                       <CardDescription className="text-xs">
@@ -2274,7 +2274,7 @@ const Admin = () => {
                     <CardContent>
                       <Button
                         onClick={() => navigate('/admin/test-reminders')}
-                        className="w-full gap-2"
+                        className="w-full gap-2 text-xs md:text-sm"
                       >
                         Ir para Teste de Lembretes
                       </Button>
@@ -2283,10 +2283,10 @@ const Admin = () => {
                 </div>
               </div>
 
-              {/* Summary Check Result */}
+               {/* Summary Check Result */}
               {booksWithoutSummaries !== null && !batchGenerating && (
-                <div className="space-y-3 p-4 rounded-lg border bg-muted/50">
-                  <p className="text-lg font-semibold text-center">
+                <div className="space-y-3 p-3 md:p-4 rounded-lg border bg-muted/50">
+                  <p className="text-base md:text-lg font-semibold text-center">
                     {booksWithoutSummaries === 0 
                       ? "✅ Todos os livros têm resumos!"
                       : `📚 ${booksWithoutSummaries} livros sem resumos encontrados`}
@@ -2296,10 +2296,10 @@ const Admin = () => {
                     <Button
                       onClick={handleBatchGenerateSummaries}
                       disabled={batchGenerating}
-                      className="w-full gap-2"
+                      className="w-full gap-2 text-sm md:text-base"
                       size="lg"
                     >
-                      <Sparkles className="w-5 h-5" />
+                      <Sparkles className="w-4 h-4 md:w-5 md:h-5" />
                       Iniciar Geração de Resumos
                     </Button>
                   )}
@@ -2333,22 +2333,23 @@ const Admin = () => {
                 </div>
               )}
 
-              {/* Invalid Books Section */}
+               {/* Invalid Books Section */}
               {validationResults && validationResults.invalid > 0 && (
-                <div className="p-4 rounded-lg border border-red-200 bg-red-50 dark:bg-red-950/20 space-y-3">
+                <div className="p-3 md:p-4 rounded-lg border border-red-200 bg-red-50 dark:bg-red-950/20 space-y-3">
                   <div className="flex items-center gap-2">
-                    <span className="text-red-600 font-semibold text-lg">⚠️ {validationResults.invalid} livros inválidos detectados</span>
+                    <span className="text-red-600 font-semibold text-sm md:text-lg">⚠️ {validationResults.invalid} livros inválidos detectados</span>
                   </div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs md:text-sm text-muted-foreground">
                     Estes livros não foram encontrados no Google Books e podem ter informações incorretas. 
                     Você pode revisá-los manualmente ou removê-los do catálogo.
                   </p>
-                  <div className="flex gap-2 mt-3">
-                    <Button 
+                  <div className="flex flex-col sm:flex-row gap-2 mt-3">
+                     <Button 
                       variant="outline"
                       size="sm"
                       onClick={handleLoadInvalidBooks}
                       disabled={isLoadingInvalidBooks}
+                      className="flex-1 sm:flex-none text-xs md:text-sm"
                     >
                       {isLoadingInvalidBooks ? "Carregando..." : "Revisar Manualmente"}
                     </Button>
@@ -2377,6 +2378,7 @@ const Admin = () => {
                           }
                         }
                       }}
+                      className="flex-1 sm:flex-none text-xs md:text-sm"
                     >
                       Remover Todos Inválidos
                     </Button>
@@ -2418,38 +2420,38 @@ const Admin = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto -mx-2 px-2">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Nome</TableHead>
-                    <TableHead>Plano</TableHead>
-                    <TableHead>Resumos</TableHead>
-                    <TableHead>Cadastro</TableHead>
-                    <TableHead>Idioma</TableHead>
-                    <TableHead>Origem</TableHead>
-                    <TableHead>País</TableHead>
-                    <TableHead className="text-right">Ações</TableHead>
+                    <TableHead className="min-w-[180px]">Email</TableHead>
+                    <TableHead className="min-w-[120px]">Nome</TableHead>
+                    <TableHead className="min-w-[80px]">Plano</TableHead>
+                    <TableHead className="min-w-[80px]">Resumos</TableHead>
+                    <TableHead className="min-w-[100px]">Cadastro</TableHead>
+                    <TableHead className="min-w-[70px]">Idioma</TableHead>
+                    <TableHead className="min-w-[100px]">Origem</TableHead>
+                    <TableHead className="min-w-[70px]">País</TableHead>
+                    <TableHead className="text-right min-w-[200px]">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {users.map((user) => (
+                   {users.map((user) => (
                     <TableRow key={user.id}>
-                      <TableCell className="font-medium">{user.email}</TableCell>
-                      <TableCell>{user.full_name || '-'}</TableCell>
+                      <TableCell className="font-medium text-xs md:text-sm">{user.email}</TableCell>
+                      <TableCell className="text-xs md:text-sm">{user.full_name || '-'}</TableCell>
                       <TableCell>
-                        <Badge variant={user.plan_type === 'premium' ? 'default' : 'secondary'}>
+                        <Badge variant={user.plan_type === 'premium' ? 'default' : 'secondary'} className="text-xs">
                           {user.plan_type}
                         </Badge>
                       </TableCell>
-                      <TableCell>{user.summaries_count}</TableCell>
-                      <TableCell>
+                      <TableCell className="text-xs md:text-sm">{user.summaries_count}</TableCell>
+                      <TableCell className="text-xs md:text-sm whitespace-nowrap">
                         {new Date(user.created_at).toLocaleDateString('pt-BR')}
                       </TableCell>
-                      <TableCell>{user.signup_language?.toUpperCase() || '-'}</TableCell>
+                      <TableCell className="text-xs md:text-sm">{user.signup_language?.toUpperCase() || '-'}</TableCell>
                       <TableCell className="text-xs">{user.signup_path || '-'}</TableCell>
-                      <TableCell>{user.signup_country?.toUpperCase() || '-'}</TableCell>
+                      <TableCell className="text-xs md:text-sm">{user.signup_country?.toUpperCase() || '-'}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex gap-2 justify-end">
                           {user.plan_type !== 'premium' && (
@@ -2458,6 +2460,7 @@ const Admin = () => {
                               variant="outline"
                               onClick={() => handleUpgradeToPremium(user.id, user.email, user.plan_type)}
                               disabled={upgradingUserId === user.id}
+                              className="text-xs whitespace-nowrap"
                             >
                               {upgradingUserId === user.id ? "Liberando..." : "Liberar Premium"}
                             </Button>
@@ -2467,6 +2470,7 @@ const Admin = () => {
                             variant="destructive"
                             onClick={() => handleDeleteUser(user.id, user.email)}
                             disabled={deletingUserId === user.id}
+                            className="text-xs whitespace-nowrap"
                           >
                             {deletingUserId === user.id ? "Excluindo..." : "Excluir"}
                           </Button>
@@ -2480,12 +2484,12 @@ const Admin = () => {
           </CardContent>
         </Card>
 
-        {/* Invalid Books Review Modal */}
+         {/* Invalid Books Review Modal */}
         {showInvalidBooksModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <Card className="w-full max-w-4xl max-h-[80vh] overflow-hidden flex flex-col">
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-2 md:p-4">
+            <Card className="w-full max-w-4xl max-h-[90vh] md:max-h-[80vh] overflow-hidden flex flex-col">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center justify-between text-base md:text-lg">
                   <span>Revisar Livros Inválidos ({invalidBooks.length})</span>
                   <Button 
                     variant="ghost" 
@@ -2495,33 +2499,34 @@ const Admin = () => {
                     ✕
                   </Button>
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-xs md:text-sm">
                   Revise cada livro e decida se deseja mantê-lo ou removê-lo do catálogo
                 </CardDescription>
               </CardHeader>
-              <CardContent className="overflow-y-auto flex-1">
+              <CardContent className="overflow-y-auto flex-1 px-2 md:px-6">
                 {invalidBooks.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground">
+                  <div className="text-center py-8 text-muted-foreground text-sm md:text-base">
                     ✅ Todos os livros foram revisados!
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-3 md:space-y-4">
                     {invalidBooks.map((book) => (
                       <div 
                         key={book.id}
-                        className="p-4 border rounded-lg bg-muted/50 flex items-center justify-between gap-4"
+                        className="p-3 md:p-4 border rounded-lg bg-muted/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 md:gap-4"
                       >
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-lg">{book.title}</h3>
-                          <p className="text-sm text-muted-foreground">
+                        <div className="flex-1 w-full sm:w-auto">
+                          <h3 className="font-semibold text-sm md:text-lg">{book.title}</h3>
+                          <p className="text-xs md:text-sm text-muted-foreground">
                             Autor: {book.author} | Idioma: {book.lang.toUpperCase()}
                           </p>
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 w-full sm:w-auto">
                           <Button
                             variant="outline"
                             size="sm"
                             onClick={() => handleKeepInvalidBook(book.id)}
+                            className="flex-1 sm:flex-none text-xs"
                           >
                             Manter
                           </Button>
@@ -2529,6 +2534,7 @@ const Admin = () => {
                             variant="destructive"
                             size="sm"
                             onClick={() => handleRemoveInvalidBook(book.id)}
+                            className="flex-1 sm:flex-none text-xs"
                           >
                             Remover
                           </Button>
