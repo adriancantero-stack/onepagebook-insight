@@ -331,7 +331,8 @@ const Admin = () => {
           signup_language,
           signup_path,
           signup_country,
-          preferred_language
+          preferred_language,
+          total_summaries_generated
         `);
 
       const { data: subscriptionsData } = await supabase
@@ -441,7 +442,7 @@ const Admin = () => {
       const usersWithData = profilesData?.map(profile => {
         const subscription = subscriptionsData?.find(s => s.user_id === profile.id);
         const planType = subscription?.subscription_plans?.type || "free";
-        const summariesCount = summariesByUser[profile.id] || 0;
+        const summariesCount = profile.total_summaries_generated || 0;
         const authUser = authUsers.find((u: any) => u.id === profile.id);
 
         return {
