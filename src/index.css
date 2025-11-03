@@ -109,6 +109,10 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
 
+    /* Chart colors */
+    --chart-1: 260 70% 65%;
+    --chart-2: 160 80% 68%;
+
     --sidebar-background: 270 50% 98%;
     --sidebar-foreground: 270 20% 15%;
     --sidebar-primary: 260 70% 65%;
@@ -148,6 +152,11 @@ All colors MUST be HSL.
     --border: 270 25% 22%;
     --input: 270 25% 22%;
     --ring: 260 70% 65%;
+
+    /* Chart colors */
+    --chart-1: 260 70% 65%;
+    --chart-2: 160 80% 68%;
+
     --sidebar-background: 270 30% 12%;
     --sidebar-foreground: 270 10% 95%;
     --sidebar-primary: 260 70% 65%;
