@@ -79,6 +79,12 @@ interface UserData {
   signup_country?: string;
 }
 
+interface LatestBook {
+  book_title: string;
+  user_name: string;
+  created_at: string;
+}
+
 const Admin = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -139,6 +145,7 @@ const Admin = () => {
   const [analyticsMetrics7d, setAnalyticsMetrics7d] = useState<AnalyticsMetrics | null>(null);
   const [analyticsMetrics30d, setAnalyticsMetrics30d] = useState<AnalyticsMetrics | null>(null);
   const [loadingAnalytics, setLoadingAnalytics] = useState(false);
+  const [latestBooks, setLatestBooks] = useState<LatestBook[]>([]);
 
 
   useEffect(() => {
@@ -394,6 +401,25 @@ const Admin = () => {
       const { count: audiosCount } = await supabase
         .from("book_audio")
         .select("*", { count: 'exact', head: true });
+
+      // Get latest 10 books generated
+      const { data: latestBooksData } = await supabase
+        .from("book_summaries")
+        .select(`
+          book_title,
+          created_at,
+          profiles!inner(full_name)
+        `)
+        .order("created_at", { ascending: false })
+        .limit(10);
+
+      const latestBooksFormatted = latestBooksData?.map(book => ({
+        book_title: book.book_title,
+        user_name: (book.profiles as any)?.full_name || "N/A",
+        created_at: book.created_at,
+      })) || [];
+
+      setLatestBooks(latestBooksFormatted);
 
       setStats({
         totalUsers,
@@ -1797,6 +1823,57 @@ const Admin = () => {
               <p className="text-sm text-muted-foreground mt-1">
                 {stats?.premiumUsers} de {stats?.totalUsers} usuários converteram para Premium
               </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Latest Books Generated */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5" />
+              Últimos 10 Livros Gerados
+            </CardTitle>
+            <CardDescription>
+              Resumos mais recentes criados pelos usuários
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Livro</TableHead>
+                    <TableHead>Usuário</TableHead>
+                    <TableHead>Data</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {latestBooks.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={3} className="text-center text-muted-foreground">
+                        Nenhum livro gerado ainda
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    latestBooks.map((book, index) => (
+                      <TableRow key={index}>
+                        <TableCell className="font-medium">{book.book_title}</TableCell>
+                        <TableCell>{book.user_name}</TableCell>
+                        <TableCell>
+                          {new Date(book.created_at).toLocaleDateString('pt-BR', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
             </div>
           </CardContent>
         </Card>
