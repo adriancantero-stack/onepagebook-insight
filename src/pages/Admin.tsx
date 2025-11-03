@@ -1869,7 +1869,7 @@ const Admin = () => {
                   ) : (
                     latestBooks.map((book, index) => (
                       <TableRow key={index}>
-                        <TableCell className="font-medium">{index + 1}</TableCell>
+                        <TableCell className="font-medium text-foreground">{index + 1}</TableCell>
                         <TableCell className="font-medium">{book.book_title}</TableCell>
                         <TableCell>{book.book_author}</TableCell>
                         <TableCell className="uppercase">{book.language}</TableCell>
