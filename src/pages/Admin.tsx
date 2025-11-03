@@ -402,7 +402,8 @@ const Admin = () => {
         .from("book_audio")
         .select("*", { count: 'exact', head: true });
 
-      // Get latest 10 books generated
+      // Get latest 10 books generated (excluding current admin user)
+      const { data: { user: currentUser } } = await supabase.auth.getUser();
       const { data: latestBooksData } = await supabase
         .from("book_summaries")
         .select(`
@@ -410,6 +411,7 @@ const Admin = () => {
           created_at,
           profiles!inner(full_name)
         `)
+        .neq("user_id", currentUser?.id || "")
         .order("created_at", { ascending: false })
         .limit(10);
 
