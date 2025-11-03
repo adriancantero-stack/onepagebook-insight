@@ -81,6 +81,8 @@ interface UserData {
 
 interface LatestBook {
   book_title: string;
+  book_author: string;
+  language: string;
   user_name: string;
   created_at: string;
 }
@@ -408,6 +410,8 @@ const Admin = () => {
         .from("book_summaries")
         .select(`
           book_title,
+          book_author,
+          language,
           created_at,
           profiles!inner(full_name)
         `)
@@ -417,6 +421,8 @@ const Admin = () => {
 
       const latestBooksFormatted = latestBooksData?.map(book => ({
         book_title: book.book_title,
+        book_author: book.book_author || "Desconhecido",
+        language: book.language || "pt",
         user_name: (book.profiles as any)?.full_name || "N/A",
         created_at: book.created_at,
       })) || [];
@@ -1845,7 +1851,10 @@ const Admin = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead className="w-12">#</TableHead>
                     <TableHead>Livro</TableHead>
+                    <TableHead>Autor</TableHead>
+                    <TableHead>Idioma</TableHead>
                     <TableHead>Usuário</TableHead>
                     <TableHead>Data</TableHead>
                   </TableRow>
@@ -1853,14 +1862,17 @@ const Admin = () => {
                 <TableBody>
                   {latestBooks.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={3} className="text-center text-muted-foreground">
+                      <TableCell colSpan={6} className="text-center text-muted-foreground">
                         Nenhum livro gerado ainda
                       </TableCell>
                     </TableRow>
                   ) : (
                     latestBooks.map((book, index) => (
                       <TableRow key={index}>
+                        <TableCell className="font-medium">{index + 1}</TableCell>
                         <TableCell className="font-medium">{book.book_title}</TableCell>
+                        <TableCell>{book.book_author}</TableCell>
+                        <TableCell className="uppercase">{book.language}</TableCell>
                         <TableCell>{book.user_name}</TableCell>
                         <TableCell>
                           {new Date(book.created_at).toLocaleDateString('pt-BR', {
