@@ -79,7 +79,7 @@ export const CategoryCarousel = ({
         <h3 className="text-2xl font-semibold mb-4 px-4">{categoryName}</h3>
         <div className="flex gap-4 px-4 overflow-hidden">
           {[...Array(6)].map((_, i) => (
-            <Skeleton key={i} className="w-[150px] sm:w-[180px] md:w-[200px] aspect-[2/3] flex-shrink-0 rounded-md" />
+            <Skeleton key={i} className="w-[120px] sm:w-[144px] md:w-[160px] aspect-[2/3] flex-shrink-0 rounded-md" />
           ))}
         </div>
       </section>
@@ -123,7 +123,7 @@ export const CategoryCarousel = ({
               <div
                 key={book.id}
                 onClick={() => onBookSelect(book.id, book.title, book.author)}
-                className="w-[150px] sm:w-[180px] md:w-[200px] flex-shrink-0 cursor-pointer group/card"
+                className="w-[120px] sm:w-[144px] md:w-[160px] flex-shrink-0 cursor-pointer group/card"
               >
                 <div className="aspect-[2/3] rounded-md shadow hover:scale-105 transition-transform overflow-hidden mb-2">
                   {book.cover_url ? (

@@ -74,7 +74,7 @@ export const Top10Section = ({ onBookSelect, language }: Top10SectionProps) => {
         <h2 className="text-3xl font-bold mb-8 px-4">{t("home.top10Title")}</h2>
         <div className="flex gap-4 px-4 overflow-hidden">
           {[...Array(10)].map((_, i) => (
-            <Skeleton key={i} className="w-[180px] sm:w-[200px] md:w-[220px] aspect-[2/3] flex-shrink-0 rounded-lg" />
+            <Skeleton key={i} className="w-[144px] sm:w-[160px] md:w-[176px] aspect-[2/3] flex-shrink-0 rounded-lg" />
           ))}
         </div>
       </section>
@@ -118,7 +118,7 @@ export const Top10Section = ({ onBookSelect, language }: Top10SectionProps) => {
               <div
                 key={book.id}
                 onClick={() => onBookSelect(book.id, book.title, book.author)}
-                className="w-[180px] sm:w-[200px] md:w-[220px] flex-shrink-0 cursor-pointer group/card"
+                className="w-[144px] sm:w-[160px] md:w-[176px] flex-shrink-0 cursor-pointer group/card"
               >
                 <div className="aspect-[2/3] relative overflow-hidden rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all mb-2">
                   {book.cover_url ? (

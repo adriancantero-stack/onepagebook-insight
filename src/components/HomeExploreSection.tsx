@@ -178,7 +178,7 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
         <h2 className="text-2xl sm:text-3xl font-semibold text-center mb-8 text-foreground">
           {getTitle()}
         </h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-2 sm:gap-4">
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-8 gap-2 sm:gap-4">
         {Array.from({ length: 24 }).map((_, i) => (
           <Card key={i} className="p-1 sm:p-2 space-y-1 sm:space-y-2 border-border/50 bg-card/50">
             <Skeleton className="w-full aspect-[2/3] rounded-md" />
@@ -250,7 +250,7 @@ export const HomeExploreSection = ({ onBookSelect }: HomeExploreSectionProps) =>
         </Select>
       </div>
       
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-2 sm:gap-4">
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-8 gap-2 sm:gap-4">
         {books.map((book) => (
           <Card 
             key={book.id}
