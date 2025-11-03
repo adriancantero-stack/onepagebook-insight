@@ -123,29 +123,31 @@ export const CategoryCarousel = ({
               <div
                 key={book.id}
                 onClick={() => onBookSelect(book.id, book.title, book.author)}
-                className="w-[150px] sm:w-[180px] md:w-[200px] aspect-[2/3] flex-shrink-0 rounded-md shadow hover:scale-105 transition-transform cursor-pointer overflow-hidden group/card"
+                className="w-[150px] sm:w-[180px] md:w-[200px] flex-shrink-0 cursor-pointer group/card"
               >
-                {book.cover_url ? (
-                  <OptimizedImage
-                    src={book.cover_url}
-                    alt={book.title}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-muted flex items-center justify-center p-2">
-                    <span className="text-muted-foreground text-xs text-center line-clamp-3">
-                      {book.title}
-                    </span>
-                  </div>
-                )}
+                <div className="aspect-[2/3] rounded-md shadow hover:scale-105 transition-transform overflow-hidden mb-2">
+                  {book.cover_url ? (
+                    <OptimizedImage
+                      src={book.cover_url}
+                      alt={book.title}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-muted flex items-center justify-center p-2">
+                      <span className="text-muted-foreground text-xs text-center line-clamp-3">
+                        {book.title}
+                      </span>
+                    </div>
+                  )}
+                </div>
                 
-                {/* Hover Info */}
-                <div className="absolute inset-0 bg-black/70 opacity-0 group-hover/card:opacity-100 transition-opacity flex flex-col justify-end p-2">
-                  <h4 className="text-white font-semibold text-xs line-clamp-2 mb-1">
+                {/* Book Info - Always Visible */}
+                <div className="px-1">
+                  <h4 className="font-semibold text-xs line-clamp-2 mb-1">
                     {book.title}
                   </h4>
-                  <p className="text-white/80 text-xs line-clamp-1">{book.author}</p>
+                  <p className="text-muted-foreground text-xs line-clamp-1">{book.author}</p>
                 </div>
               </div>
             ))}

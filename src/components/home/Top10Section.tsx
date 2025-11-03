@@ -118,35 +118,37 @@ export const Top10Section = ({ onBookSelect, language }: Top10SectionProps) => {
               <div
                 key={book.id}
                 onClick={() => onBookSelect(book.id, book.title, book.author)}
-                className="w-[180px] sm:w-[200px] md:w-[220px] aspect-[2/3] flex-shrink-0 relative overflow-hidden rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all cursor-pointer group/card"
+                className="w-[180px] sm:w-[200px] md:w-[220px] flex-shrink-0 cursor-pointer group/card"
               >
-                {book.cover_url ? (
-                  <OptimizedImage
-                    src={book.cover_url}
-                    alt={book.title}
-                    className="w-full h-full object-cover"
-                    loading="eager"
-                    priority={index < 5}
-                  />
-                ) : (
-                  <div className="w-full h-full bg-muted flex items-center justify-center">
-                    <span className="text-muted-foreground text-sm text-center px-2">
-                      {book.title}
-                    </span>
+                <div className="aspect-[2/3] relative overflow-hidden rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all mb-2">
+                  {book.cover_url ? (
+                    <OptimizedImage
+                      src={book.cover_url}
+                      alt={book.title}
+                      className="w-full h-full object-cover"
+                      loading="eager"
+                      priority={index < 5}
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-muted flex items-center justify-center">
+                      <span className="text-muted-foreground text-sm text-center px-2">
+                        {book.title}
+                      </span>
+                    </div>
+                  )}
+                  
+                  {/* Number Badge */}
+                  <div className="absolute top-2 left-2 w-14 h-14 bg-gradient-to-br from-primary to-primary/80 text-primary-foreground font-bold text-4xl flex items-center justify-center rounded-md shadow-lg">
+                    {index + 1}
                   </div>
-                )}
-                
-                {/* Number Badge */}
-                <div className="absolute top-2 left-2 w-14 h-14 bg-gradient-to-br from-primary to-primary/80 text-primary-foreground font-bold text-4xl flex items-center justify-center rounded-md shadow-lg">
-                  {index + 1}
                 </div>
 
-                {/* Hover Overlay */}
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/card:opacity-100 transition-opacity flex flex-col justify-end p-3">
-                  <h3 className="text-white font-semibold text-sm line-clamp-2 mb-1">
+                {/* Book Info - Always Visible */}
+                <div className="px-1">
+                  <h3 className="font-semibold text-sm line-clamp-2 mb-1">
                     {book.title}
                   </h3>
-                  <p className="text-white/80 text-xs line-clamp-1">{book.author}</p>
+                  <p className="text-muted-foreground text-xs line-clamp-1">{book.author}</p>
                 </div>
               </div>
             ))}
