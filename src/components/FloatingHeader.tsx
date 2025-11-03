@@ -34,7 +34,7 @@ export const FloatingHeader = ({ onLogout, showNavigation = true }: FloatingHead
 
   return (
     <header className="w-full max-w-4xl mx-auto pt-2 sm:pt-4 px-2 sm:px-4">
-      <div className="px-2 sm:px-6 py-2 sm:py-3 flex items-center justify-between bg-card/50 backdrop-blur-sm rounded-2xl gap-1 sm:gap-2 border-0">
+      <div className="px-2 sm:px-6 py-2 sm:py-3 flex items-center justify-between bg-background rounded-2xl gap-1 sm:gap-2 border-0">
         <div className="flex-1 min-w-0">
           {showNavigation && (
             <Button 
