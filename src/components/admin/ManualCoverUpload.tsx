@@ -217,15 +217,55 @@ export function ManualCoverUpload() {
     }
   };
 
+  const handleDeleteSelectedBook = async () => {
+    if (!selectedBook) {
+      toast.error("Selecione um livro primeiro");
+      return;
+    }
+
+    setDeduplicating(true);
+    try {
+      const { error } = await supabase
+        .from("books")
+        .update({ is_active: false, updated_at: new Date().toISOString() })
+        .eq("id", selectedBook.id);
+
+      if (error) throw error;
+
+      toast.success("Livro excluído com sucesso!");
+      await loadBooksWithoutCovers(true);
+      setSelectedBook(null);
+    } catch (error) {
+      console.error("Erro ao excluir livro:", error);
+      toast.error("Erro ao excluir livro");
+    } finally {
+      setDeduplicating(false);
+      setShowDeduplicationDialog(false);
+    }
+  };
+
   const handleDeduplicateBooks = async () => {
     setDeduplicating(true);
     try {
       const { data, error } = await supabase.rpc("merge_duplicate_books");
       if (error) throw error;
-      if (data && data.length > 0) { setDeduplicationResults(data); toast.success(`${data.length} grupo(s) de duplicados mesclados!`); loadBooksWithoutCovers(true); }
-      else { toast.info("Nenhum livro duplicado encontrado"); setDeduplicationResults([]); }
-    } catch (error) { console.error("Erro:", error); toast.error("Erro ao excluir duplicados"); }
-    finally { setDeduplicating(false); setShowDeduplicationDialog(false); }
+      if (data && data.length > 0) { 
+        setDeduplicationResults(data); 
+        toast.success(`${data.length} grupo(s) de duplicados mesclados!`); 
+        loadBooksWithoutCovers(true); 
+      }
+      else { 
+        toast.info("Nenhum livro duplicado encontrado"); 
+        setDeduplicationResults([]); 
+      }
+    } catch (error) { 
+      console.error("Erro:", error); 
+      toast.error("Erro ao excluir duplicados"); 
+    }
+    finally { 
+      setDeduplicating(false); 
+      setShowDeduplicationDialog(false); 
+    }
   };
 
   return (<>
@@ -270,15 +310,17 @@ export function ManualCoverUpload() {
                   </Button>
                 </div>
                 <div className="flex gap-2">
-                  <Button 
-                    onClick={() => setShowDeduplicationDialog(true)} 
-                    disabled={deduplicating} 
-                    variant="destructive" 
-                    size="sm"
-                  >
-                    <Trash2 className={`w-3 h-3 mr-2 ${deduplicating ? 'animate-pulse' : ''}`} />
-                    Excluir Duplicados
-                  </Button>
+                  {selectedBook && (
+                    <Button 
+                      onClick={() => setShowDeduplicationDialog(true)} 
+                      disabled={deduplicating} 
+                      variant="destructive" 
+                      size="sm"
+                    >
+                      <Trash2 className={`w-3 h-3 mr-2 ${deduplicating ? 'animate-pulse' : ''}`} />
+                      Excluir Selecionado
+                    </Button>
+                  )}
                   <Button 
                     variant="outline" 
                     size="sm" 
@@ -310,8 +352,17 @@ export function ManualCoverUpload() {
                       }`} 
                       onClick={() => setSelectedBook(book)}
                     >
-                      <div className="flex items-center justify-between">
-                        <div>
+                      <div className="flex items-center gap-3">
+                        {book.cover_url && (
+                          <div className="w-12 h-16 flex-shrink-0 rounded overflow-hidden border">
+                            <img 
+                              src={book.cover_url} 
+                              alt={book.title} 
+                              className="w-full h-full object-cover" 
+                            />
+                          </div>
+                        )}
+                        <div className="flex-1">
                           <p className="font-medium">{book.title}</p>
                           <p className="text-sm text-muted-foreground">{book.author}</p>
                         </div>
@@ -413,6 +464,25 @@ export function ManualCoverUpload() {
     </Card>
     {deduplicationResults.length > 0 && <Card className="mt-4"><CardHeader><CardTitle>Resultados</CardTitle><CardDescription>{deduplicationResults.length} grupo(s) mesclados</CardDescription></CardHeader>
     <CardContent><div className="space-y-3">{deduplicationResults.map((r, i) => <div key={i} className="flex items-center justify-between p-3 bg-muted rounded-lg"><div><p className="font-medium">{r.book_title}</p><p className="text-sm text-muted-foreground">{r.book_author}</p></div><Badge variant="secondary">{r.deleted_count} removido(s)</Badge></div>)}</div></CardContent></Card>}
-    <AlertDialog open={showDeduplicationDialog} onOpenChange={setShowDeduplicationDialog}><AlertDialogContent><AlertDialogHeader><AlertDialogTitle>Excluir Duplicados?</AlertDialogTitle><AlertDialogDescription>Identifica e mescla duplicados por título/autor. Ação irreversível.</AlertDialogDescription></AlertDialogHeader><AlertDialogFooter><AlertDialogCancel>Cancelar</AlertDialogCancel><AlertDialogAction onClick={handleDeduplicateBooks} disabled={deduplicating}>{deduplicating ? "Processando..." : "Confirmar"}</AlertDialogAction></AlertDialogFooter></AlertDialogContent></AlertDialog>
+    <AlertDialog open={showDeduplicationDialog} onOpenChange={setShowDeduplicationDialog}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Excluir Livro Selecionado?</AlertDialogTitle>
+          <AlertDialogDescription>
+            {selectedBook && (
+              <>
+                Tem certeza que deseja excluir "{selectedBook.title}" de {selectedBook.author}? Esta ação é irreversível.
+              </>
+            )}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <AlertDialogAction onClick={handleDeleteSelectedBook} disabled={deduplicating}>
+            {deduplicating ? "Excluindo..." : "Confirmar Exclusão"}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   </>);
 }
