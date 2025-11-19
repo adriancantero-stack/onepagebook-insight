@@ -245,28 +245,50 @@ export function ManualCoverUpload() {
                   onChange={(e) => setSearchQuery(e.target.value)} 
                 />
               </div>
-              <div className="flex gap-2">
-                <Button 
-                  variant={coverFilter === 'all' ? 'default' : 'outline'} 
-                  size="sm" 
-                  onClick={() => setCoverFilter('all')}
-                >
-                  Todos
-                </Button>
-                <Button 
-                  variant={coverFilter === 'with' ? 'default' : 'outline'} 
-                  size="sm" 
-                  onClick={() => setCoverFilter('with')}
-                >
-                  Com Capa
-                </Button>
-                <Button 
-                  variant={coverFilter === 'without' ? 'default' : 'outline'} 
-                  size="sm" 
-                  onClick={() => setCoverFilter('without')}
-                >
-                  Sem Capa
-                </Button>
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex gap-2">
+                  <Button 
+                    variant={coverFilter === 'all' ? 'default' : 'outline'} 
+                    size="sm" 
+                    onClick={() => setCoverFilter('all')}
+                  >
+                    Todos
+                  </Button>
+                  <Button 
+                    variant={coverFilter === 'with' ? 'default' : 'outline'} 
+                    size="sm" 
+                    onClick={() => setCoverFilter('with')}
+                  >
+                    Com Capa
+                  </Button>
+                  <Button 
+                    variant={coverFilter === 'without' ? 'default' : 'outline'} 
+                    size="sm" 
+                    onClick={() => setCoverFilter('without')}
+                  >
+                    Sem Capa
+                  </Button>
+                </div>
+                <div className="flex gap-2">
+                  <Button 
+                    onClick={() => setShowDeduplicationDialog(true)} 
+                    disabled={deduplicating} 
+                    variant="destructive" 
+                    size="sm"
+                  >
+                    <Trash2 className={`w-3 h-3 mr-2 ${deduplicating ? 'animate-pulse' : ''}`} />
+                    Excluir Duplicados
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => loadBooksWithoutCovers(true)} 
+                    disabled={loading}
+                  >
+                    <RefreshCw className="h-3 w-3 mr-2" />
+                    Atualizar
+                  </Button>
+                </div>
               </div>
             </div>
 
@@ -276,29 +298,7 @@ export function ManualCoverUpload() {
               </div>
             ) : (
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-muted-foreground">Selecione um livro</p>
-                  <div className="flex gap-2">
-                    <Button 
-                      onClick={() => setShowDeduplicationDialog(true)} 
-                      disabled={deduplicating} 
-                      variant="outline" 
-                      size="sm"
-                    >
-                      <Trash2 className={`w-3 h-3 mr-2 ${deduplicating ? 'animate-pulse' : ''}`} />
-                      Excluir Duplicados
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => loadBooksWithoutCovers(true)} 
-                      disabled={loading}
-                    >
-                      <RefreshCw className="h-3 w-3 mr-2" />
-                      Atualizar
-                    </Button>
-                  </div>
-                </div>
+                <p className="text-sm text-muted-foreground">Selecione um livro para editar</p>
                 <div className="grid gap-2 max-h-96 overflow-y-auto border rounded-lg p-4">
                   {filteredBooks.map((book) => (
                     <div 
