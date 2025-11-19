@@ -230,22 +230,187 @@ export function ManualCoverUpload() {
 
   return (<>
     <Card><CardHeader><CardTitle className="flex items-center gap-2"><ImageIcon className="h-5 w-5" />Upload/Trocar Capas de Livros</CardTitle><CardDescription>Busque e gerencie capas - {filteredBooks.length} livros</CardDescription></CardHeader>
-    <CardContent className="space-y-6">{loading ? <div className="text-center py-8 text-muted-foreground">Carregando...</div> : <>
-    <div className="space-y-4"><div className="space-y-2"><Label htmlFor="book-search">Buscar Livro</Label><Input id="book-search" placeholder="Digite título ou autor..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} /></div>
-    <div className="flex gap-2"><Button variant={coverFilter === 'all' ? 'default' : 'outline'} size="sm" onClick={() => setCoverFilter('all')}>Todos</Button><Button variant={coverFilter === 'with' ? 'default' : 'outline'} size="sm" onClick={() => setCoverFilter('with')}>Com Capa</Button><Button variant={coverFilter === 'without' ? 'default' : 'outline'} size="sm" onClick={() => setCoverFilter('without')}>Sem Capa</Button></div></div>
-    {filteredBooks.length === 0 ? <div className="text-center py-8 text-muted-foreground">Nenhum livro encontrado</div> : <div className="space-y-4">
-    <div className="flex items-center justify-between"><p className="text-sm text-muted-foreground">Selecione um livro</p><div className="flex gap-2">
-    <Button onClick={() => setShowDeduplicationDialog(true)} disabled={deduplicating} variant="outline" size="sm"><Trash2 className={`w-3 h-3 mr-2 ${deduplicating ? 'animate-pulse' : ''}`} />Excluir Duplicados</Button>
-    <Button variant="outline" size="sm" onClick={() => loadBooksWithoutCovers(true)} disabled={loading}><RefreshCw className="h-3 w-3 mr-2" />Atualizar</Button></div></div>
-    <div className="grid gap-2 max-h-96 overflow-y-auto border rounded-lg p-4">{filteredBooks.map((book) => (<div key={book.id} className={`p-3 rounded-lg border cursor-pointer transition-colors ${selectedBook?.id === book.id ? 'bg-primary/10 border-primary' : 'hover:bg-muted'}`} onClick={() => setSelectedBook(book)}><div className="flex items-center justify-between"><div><p className="font-medium">{book.title}</p><p className="text-sm text-muted-foreground">{book.author}</p></div><div className="flex items-center gap-2"><Badge variant="outline" className="text-xs">{book.lang.toUpperCase()}</Badge>{book.cover_url ? <Badge variant="secondary" className="text-xs">✅ Com Capa</Badge> : <Badge variant="destructive" className="text-xs">❌ Sem Capa</Badge>}</div></div></div>))}</div>
-    {hasMore && <Button onClick={() => loadBooksWithoutCovers(false)} disabled={loading} variant="outline" className="w-full">{loading ? "Carregando..." : "Carregar Mais"}</Button>}</div>}</>
-    {selectedBook && <div className="space-y-4 p-4 border rounded-lg bg-muted/50"><div className="flex items-center justify-between"><h3 className="font-semibold">Livro Selecionado</h3><Badge>{selectedBook.lang.toUpperCase()}</Badge></div>
-    <div className="space-y-3"><div><Label htmlFor="edit-title">Título</Label><Input id="edit-title" value={editedTitle} onChange={(e) => setEditedTitle(e.target.value)} /></div>
-    <div><Label htmlFor="edit-author">Autor</Label><Input id="edit-author" value={editedAuthor} onChange={(e) => setEditedAuthor(e.target.value)} /></div>
-    <Button onClick={handleSaveMetadata} disabled={savingMetadata} className="w-full" size="sm">{savingMetadata ? "Salvando..." : "Salvar Alterações"}</Button></div>
-    {selectedBook.cover_url && <div><Label className="text-sm">Capa Atual</Label><div className="mt-2 w-32 h-44 border rounded overflow-hidden"><img src={selectedBook.cover_url} alt={selectedBook.title} className="w-full h-full object-cover" /></div></div>}
-    <div><Label htmlFor="cover-upload">Nova Capa (máx 2MB)</Label><div className="mt-2"><Input id="cover-upload" ref={fileInputRef} type="file" accept="image/*" onChange={handleFileSelect} disabled={uploading} />{uploading && <p className="text-sm text-muted-foreground mt-2 flex items-center gap-2"><Upload className="h-4 w-4 animate-pulse" />Enviando...</p>}</div></div></div>}
-    </CardContent></Card>
+      <CardContent className="space-y-6">
+        {loading ? (
+          <div className="text-center py-8 text-muted-foreground">Carregando...</div>
+        ) : (
+          <>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="book-search">Buscar Livro</Label>
+                <Input 
+                  id="book-search" 
+                  placeholder="Digite título ou autor..." 
+                  value={searchQuery} 
+                  onChange={(e) => setSearchQuery(e.target.value)} 
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button 
+                  variant={coverFilter === 'all' ? 'default' : 'outline'} 
+                  size="sm" 
+                  onClick={() => setCoverFilter('all')}
+                >
+                  Todos
+                </Button>
+                <Button 
+                  variant={coverFilter === 'with' ? 'default' : 'outline'} 
+                  size="sm" 
+                  onClick={() => setCoverFilter('with')}
+                >
+                  Com Capa
+                </Button>
+                <Button 
+                  variant={coverFilter === 'without' ? 'default' : 'outline'} 
+                  size="sm" 
+                  onClick={() => setCoverFilter('without')}
+                >
+                  Sem Capa
+                </Button>
+              </div>
+            </div>
+
+            {filteredBooks.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                Nenhum livro encontrado
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-muted-foreground">Selecione um livro</p>
+                  <div className="flex gap-2">
+                    <Button 
+                      onClick={() => setShowDeduplicationDialog(true)} 
+                      disabled={deduplicating} 
+                      variant="outline" 
+                      size="sm"
+                    >
+                      <Trash2 className={`w-3 h-3 mr-2 ${deduplicating ? 'animate-pulse' : ''}`} />
+                      Excluir Duplicados
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => loadBooksWithoutCovers(true)} 
+                      disabled={loading}
+                    >
+                      <RefreshCw className="h-3 w-3 mr-2" />
+                      Atualizar
+                    </Button>
+                  </div>
+                </div>
+                <div className="grid gap-2 max-h-96 overflow-y-auto border rounded-lg p-4">
+                  {filteredBooks.map((book) => (
+                    <div 
+                      key={book.id} 
+                      className={`p-3 rounded-lg border cursor-pointer transition-colors ${
+                        selectedBook?.id === book.id 
+                          ? 'bg-primary/10 border-primary' 
+                          : 'hover:bg-muted'
+                      }`} 
+                      onClick={() => setSelectedBook(book)}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium">{book.title}</p>
+                          <p className="text-sm text-muted-foreground">{book.author}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline" className="text-xs">
+                            {book.lang.toUpperCase()}
+                          </Badge>
+                          {book.cover_url ? (
+                            <Badge variant="secondary" className="text-xs">✅ Com Capa</Badge>
+                          ) : (
+                            <Badge variant="destructive" className="text-xs">❌ Sem Capa</Badge>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {hasMore && (
+                  <Button 
+                    onClick={() => loadBooksWithoutCovers(false)} 
+                    disabled={loading} 
+                    variant="outline" 
+                    className="w-full"
+                  >
+                    {loading ? "Carregando..." : "Carregar Mais"}
+                  </Button>
+                )}
+              </div>
+            )}
+          </>
+        )}
+
+        {selectedBook && (
+          <div className="space-y-4 p-4 border rounded-lg bg-muted/50">
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold">Livro Selecionado</h3>
+              <Badge>{selectedBook.lang.toUpperCase()}</Badge>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <Label htmlFor="edit-title">Título</Label>
+                <Input 
+                  id="edit-title" 
+                  value={editedTitle} 
+                  onChange={(e) => setEditedTitle(e.target.value)} 
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-author">Autor</Label>
+                <Input 
+                  id="edit-author" 
+                  value={editedAuthor} 
+                  onChange={(e) => setEditedAuthor(e.target.value)} 
+                />
+              </div>
+              <Button 
+                onClick={handleSaveMetadata} 
+                disabled={savingMetadata} 
+                className="w-full" 
+                size="sm"
+              >
+                {savingMetadata ? "Salvando..." : "Salvar Alterações"}
+              </Button>
+            </div>
+            {selectedBook.cover_url && (
+              <div>
+                <Label className="text-sm">Capa Atual</Label>
+                <div className="mt-2 w-32 h-44 border rounded overflow-hidden">
+                  <img 
+                    src={selectedBook.cover_url} 
+                    alt={selectedBook.title} 
+                    className="w-full h-full object-cover" 
+                  />
+                </div>
+              </div>
+            )}
+            <div>
+              <Label htmlFor="cover-upload">Nova Capa (máx 2MB)</Label>
+              <div className="mt-2">
+                <Input 
+                  id="cover-upload" 
+                  ref={fileInputRef} 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleFileSelect} 
+                  disabled={uploading} 
+                />
+                {uploading && (
+                  <p className="text-sm text-muted-foreground mt-2 flex items-center gap-2">
+                    <Upload className="h-4 w-4 animate-pulse" />
+                    Enviando...
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
     {deduplicationResults.length > 0 && <Card className="mt-4"><CardHeader><CardTitle>Resultados</CardTitle><CardDescription>{deduplicationResults.length} grupo(s) mesclados</CardDescription></CardHeader>
     <CardContent><div className="space-y-3">{deduplicationResults.map((r, i) => <div key={i} className="flex items-center justify-between p-3 bg-muted rounded-lg"><div><p className="font-medium">{r.book_title}</p><p className="text-sm text-muted-foreground">{r.book_author}</p></div><Badge variant="secondary">{r.deleted_count} removido(s)</Badge></div>)}</div></CardContent></Card>}
     <AlertDialog open={showDeduplicationDialog} onOpenChange={setShowDeduplicationDialog}><AlertDialogContent><AlertDialogHeader><AlertDialogTitle>Excluir Duplicados?</AlertDialogTitle><AlertDialogDescription>Identifica e mescla duplicados por título/autor. Ação irreversível.</AlertDialogDescription></AlertDialogHeader><AlertDialogFooter><AlertDialogCancel>Cancelar</AlertDialogCancel><AlertDialogAction onClick={handleDeduplicateBooks} disabled={deduplicating}>{deduplicating ? "Processando..." : "Confirmar"}</AlertDialogAction></AlertDialogFooter></AlertDialogContent></AlertDialog>
