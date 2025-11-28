@@ -388,9 +388,6 @@ const Home = () => {
       setTimeout(() => {
         setGenState({ open: false, step: "error", message: "" });
       }, 3000);
-      setTimeout(() => {
-        setGenState({ open: false, step: "error", message: "" });
-      }, 3000);
     } finally {
       setLoading(false);
     }
