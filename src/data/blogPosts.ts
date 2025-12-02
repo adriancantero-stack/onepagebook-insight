@@ -525,7 +525,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: '4',
     slug: 'mindset-a-nova-psicologia-do-sucesso',
-    title: 'Mindset: Como Uma Mudança Interna Pode Transformar Seus Resultados',
+    title: 'Mindset: Como Uma Mudança Interna Pode Transformar Seus Resultados (Resumo Completo 2025)',
     excerpt: 'Descubra como o livro Mindset, de Carol S. Dweck, revela a diferença entre o mindset fixo e o de crescimento, e como isso define seu sucesso.',
     content: `
       <div class="space-y-8 text-lg leading-relaxed text-slate-700 dark:text-slate-300">
@@ -751,7 +751,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: '5',
     slug: 'mindset-the-new-psychology-of-success',
-    title: 'Mindset: The New Psychology of Success (Summary)',
+    title: 'Mindset: The New Psychology of Success (2025 Complete Summary)',
     excerpt: 'Discover how the book Mindset by Carol S. Dweck reveals the difference between fixed and growth mindsets, and how it defines your success.',
     content: `
       <div class="space-y-8 text-lg leading-relaxed text-slate-700 dark:text-slate-300">
@@ -977,7 +977,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: '6',
     slug: 'mindset-la-nueva-psicologia-del-exito',
-    title: 'Mindset: La Nueva Psicología del Éxito (Resumen)',
+    title: 'Mindset: La Nueva Psicología del Éxito (Resumen Completo 2025)',
     excerpt: 'Descubre cómo el libro Mindset, de Carol S. Dweck, revela la diferencia entre el mindset fijo y el de crecimiento, y cómo eso define tu éxito.',
     content: `
       <div class="space-y-8 text-lg leading-relaxed text-slate-700 dark:text-slate-300">
