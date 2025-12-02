@@ -39,7 +39,10 @@ const Admin = lazy(() => import("./pages/Admin"));
 const PopulateBooks = lazy(() => import("./pages/PopulateBooks"));
 const CurationPeople = lazy(() => import("./pages/CurationPeople"));
 const DeduplicateBooks = lazy(() => import("./pages/DeduplicateBooks"));
+
 const NotFound = lazy(() => import("./pages/NotFound"));
+const BlogIndex = lazy(() => import("./pages/Blog/BlogIndex"));
+const BlogPost = lazy(() => import("./pages/Blog/BlogPost"));
 
 // Optimized QueryClient for better performance
 const queryClient = new QueryClient({
@@ -73,58 +76,64 @@ const App = () => (
           <GlobalAchievementNotification />
           <GlobalXPCelebration />
           <BrowserRouter>
-          <Suspense fallback={<LoadingFallback />}>
-            <Routes>
-            <Route path="/" element={<LandingRedirect />} />
-            <Route path="/pt" element={<Landing lang="pt" />} />
-            <Route path="/es" element={<Landing lang="es" />} />
-            <Route path="/en" element={<Landing lang="en" />} />
-            <Route path="/pt2" element={<LandingB lang="pt" />} />
-            <Route path="/es2" element={<LandingB lang="es" />} />
-            <Route path="/en2" element={<LandingB lang="en" />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/login" element={<Auth />} />
-            <Route path="/pt/auth" element={<Auth />} />
-            <Route path="/es/auth" element={<Auth />} />
-            <Route path="/en/auth" element={<Auth />} />
-            <Route path="/pt/login" element={<Auth />} />
-            <Route path="/es/login" element={<Auth />} />
-            <Route path="/en/login" element={<Auth />} />
-            <Route path="/welcome" element={<Welcome />} />
-            <Route path="/premium-welcome" element={<PremiumWelcome />} />
-            <Route path="/summary/:id" element={<Summary />} />
-            <Route path="/history" element={<History />} />
-            <Route path="/plans" element={<Plans />} />
-            <Route path="/explore" element={<Explore />} />
-            <Route path="/demo" element={<Demo />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/achievements" element={<Achievements />} />
-            <Route path="/ranking" element={<Ranking />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/faq" element={<Faq />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/pt/terms" element={<Terms />} />
-            <Route path="/pt/privacy" element={<Privacy />} />
-            <Route path="/pt/faq" element={<Faq />} />
-            <Route path="/es/terms" element={<Terms />} />
-            <Route path="/es/privacy" element={<Privacy />} />
-            <Route path="/es/faq" element={<Faq />} />
-            <Route path="/en/terms" element={<Terms />} />
-            <Route path="/en/privacy" element={<Privacy />} />
-            <Route path="/en/faq" element={<Faq />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/admin/ab-test" element={<ABTestDashboard />} />
-            <Route path="/admin/test-reminders" element={<TestReminders />} />
-            <Route path="/populate-books" element={<PopulateBooks />} />
-            <Route path="/curation/people" element={<CurationPeople />} />
-            <Route path="/deduplicate-books" element={<DeduplicateBooks />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes>
+                <Route path="/" element={<LandingRedirect />} />
+                <Route path="/pt" element={<Landing lang="pt" />} />
+                <Route path="/es" element={<Landing lang="es" />} />
+                <Route path="/en" element={<Landing lang="en" />} />
+                <Route path="/pt2" element={<LandingB lang="pt" />} />
+                <Route path="/es2" element={<LandingB lang="es" />} />
+                <Route path="/en2" element={<LandingB lang="en" />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/login" element={<Auth />} />
+                <Route path="/pt/auth" element={<Auth />} />
+                <Route path="/es/auth" element={<Auth />} />
+                <Route path="/en/auth" element={<Auth />} />
+                <Route path="/pt/login" element={<Auth />} />
+                <Route path="/es/login" element={<Auth />} />
+                <Route path="/en/login" element={<Auth />} />
+                <Route path="/welcome" element={<Welcome />} />
+                <Route path="/premium-welcome" element={<PremiumWelcome />} />
+                <Route path="/summary/:id" element={<Summary />} />
+                <Route path="/history" element={<History />} />
+                <Route path="/plans" element={<Plans />} />
+                <Route path="/explore" element={<Explore />} />
+                <Route path="/demo" element={<Demo />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/achievements" element={<Achievements />} />
+                <Route path="/ranking" element={<Ranking />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/faq" element={<Faq />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/pt/terms" element={<Terms />} />
+                <Route path="/pt/privacy" element={<Privacy />} />
+                <Route path="/pt/faq" element={<Faq />} />
+                <Route path="/es/terms" element={<Terms />} />
+                <Route path="/es/privacy" element={<Privacy />} />
+                <Route path="/es/faq" element={<Faq />} />
+                <Route path="/en/terms" element={<Terms />} />
+                <Route path="/en/privacy" element={<Privacy />} />
+                <Route path="/en/faq" element={<Faq />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/admin/ab-test" element={<ABTestDashboard />} />
+                <Route path="/admin/test-reminders" element={<TestReminders />} />
+                <Route path="/populate-books" element={<PopulateBooks />} />
+                <Route path="/curation/people" element={<CurationPeople />} />
+
+                <Route path="/deduplicate-books" element={<DeduplicateBooks />} />
+
+                {/* Blog Routes */}
+                <Route path="/:lang/blog" element={<BlogIndex />} />
+                <Route path="/:lang/blog/:slug" element={<BlogPost />} />
+
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
           </BrowserRouter>
         </ErrorBoundary>
       </TooltipProvider>
