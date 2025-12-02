@@ -37,7 +37,7 @@ function createSlug(title: string, author: string): string {
 
 function getBookPath(lang: string, title: string, author: string): string {
   const slug = createSlug(title, author);
-  
+
   switch (lang) {
     case 'pt':
       return `/pt/livro/${slug}`;
@@ -102,6 +102,46 @@ Deno.serve(async (req) => {
       { path: '/pt/faq', priority: '0.4', changefreq: 'monthly' },
       { path: '/en/faq', priority: '0.4', changefreq: 'monthly' },
       { path: '/es/faq', priority: '0.4', changefreq: 'monthly' },
+      // Blog index pages
+      { path: '/pt/blog', priority: '0.9', changefreq: 'weekly' },
+      { path: '/en/blog', priority: '0.9', changefreq: 'weekly' },
+      { path: '/es/blog', priority: '0.9', changefreq: 'weekly' },
+    ];
+
+    // Blog posts (static content from blogPosts.ts)
+    const blogPosts = [
+      // Atomic Habits
+      { path: '/pt/blog/habitos-atomicos', priority: '0.8', changefreq: 'monthly' },
+      { path: '/en/blog/atomic-habits', priority: '0.8', changefreq: 'monthly' },
+      { path: '/es/blog/habitos-atomicos', priority: '0.8', changefreq: 'monthly' },
+      // Mindset
+      { path: '/pt/blog/mindset-a-nova-psicologia-do-sucesso', priority: '0.8', changefreq: 'monthly' },
+      { path: '/en/blog/mindset-the-new-psychology-of-success', priority: '0.8', changefreq: 'monthly' },
+      { path: '/es/blog/mindset-la-nueva-psicologia-del-exito', priority: '0.8', changefreq: 'monthly' },
+      // The Power of Habit
+      { path: '/pt/blog/o-poder-do-habito', priority: '0.8', changefreq: 'monthly' },
+      { path: '/en/blog/the-power-of-habit', priority: '0.8', changefreq: 'monthly' },
+      { path: '/es/blog/el-poder-del-habito', priority: '0.8', changefreq: 'monthly' },
+      // The Subtle Art
+      { path: '/pt/blog/a-sutil-arte-de-ligar-o-foda-se', priority: '0.8', changefreq: 'monthly' },
+      { path: '/en/blog/the-subtle-art-of-not-giving-a-fck', priority: '0.8', changefreq: 'monthly' },
+      { path: '/es/blog/el-sutil-arte-de-que-te-importe-un-carajo', priority: '0.8', changefreq: 'monthly' },
+      // Rich Dad Poor Dad
+      { path: '/pt/blog/pai-rico-pai-pobre', priority: '0.8', changefreq: 'monthly' },
+      { path: '/en/blog/rich-dad-poor-dad', priority: '0.8', changefreq: 'monthly' },
+      { path: '/es/blog/padre-rico-padre-pobre', priority: '0.8', changefreq: 'monthly' },
+      // The Richest Man in Babylon
+      { path: '/pt/blog/o-homem-mais-rico-da-babilonia', priority: '0.8', changefreq: 'monthly' },
+      { path: '/en/blog/the-richest-man-in-babylon', priority: '0.8', changefreq: 'monthly' },
+      { path: '/es/blog/el-hombre-mas-rico-de-babilonia', priority: '0.8', changefreq: 'monthly' },
+      // How to Win Friends
+      { path: '/pt/blog/como-fazer-amigos-e-influenciar-pessoas', priority: '0.8', changefreq: 'monthly' },
+      { path: '/en/blog/how-to-win-friends-and-influence-people', priority: '0.8', changefreq: 'monthly' },
+      { path: '/es/blog/como-ganar-amigos-e-influir-sobre-las-personas', priority: '0.8', changefreq: 'monthly' },
+      // 12 Rules for Life
+      { path: '/pt/blog/12-regras-para-a-vida', priority: '0.8', changefreq: 'monthly' },
+      { path: '/en/blog/12-rules-for-life', priority: '0.8', changefreq: 'monthly' },
+      { path: '/es/blog/12-reglas-para-la-vida', priority: '0.8', changefreq: 'monthly' },
     ];
 
     // Build XML
@@ -111,21 +151,21 @@ Deno.serve(async (req) => {
     // Add landing pages with hreflang tags
     for (const page of landingPages) {
       const langs = ['pt', 'en', 'es'] as const;
-      
+
       for (const lang of langs) {
         xml += '  <url>\n';
         xml += `    <loc>${baseUrl}${page[lang]}</loc>\n`;
         xml += `    <lastmod>${today}</lastmod>\n`;
         xml += `    <changefreq>${page.changefreq}</changefreq>\n`;
         xml += `    <priority>${page.priority}</priority>\n`;
-        
+
         // Add hreflang links for all language versions
         for (const altLang of langs) {
           xml += `    <xhtml:link rel="alternate" hreflang="${altLang}" href="${baseUrl}${page[altLang]}" />\n`;
         }
         // Add x-default pointing to Portuguese
         xml += `    <xhtml:link rel="alternate" hreflang="x-default" href="${baseUrl}/pt" />\n`;
-        
+
         xml += '  </url>\n';
       }
     }
@@ -140,12 +180,22 @@ Deno.serve(async (req) => {
       xml += '  </url>\n';
     }
 
+    // Add blog posts
+    for (const post of blogPosts) {
+      xml += '  <url>\n';
+      xml += `    <loc>${baseUrl}${post.path}</loc>\n`;
+      xml += `    <lastmod>${today}</lastmod>\n`;
+      xml += `    <changefreq>${post.changefreq}</changefreq>\n`;
+      xml += `    <priority>${post.priority}</priority>\n`;
+      xml += '  </url>\n';
+    }
+
     // Add dynamic book routes
     if (books && books.length > 0) {
       for (const book of books as Book[]) {
         const path = getBookPath(book.lang, book.title, book.author);
         const lastmod = formatDate(book.updated_at);
-        
+
         xml += '  <url>\n';
         xml += `    <loc>${baseUrl}${xmlEscape(path)}</loc>\n`;
         xml += `    <lastmod>${lastmod}</lastmod>\n`;
