@@ -397,7 +397,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Total Users**: 5,000+
 - **Summaries Generated**: 10,000+
-- **Books in Catalog**: 500+
+- **Books in Catalog**: 4000+
 - **Languages Supported**: 3
 - **Edge Functions**: 30+
 - **Database Migrations**: 86
