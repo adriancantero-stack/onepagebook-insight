@@ -1,10 +1,11 @@
 import { useParams, Link, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { BookOpen, Calendar, User, ArrowLeft, Share2 } from "lucide-react";
+import { BookOpen, Calendar, User, ArrowLeft, Share2, Loader2 } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import Footer from "@/components/Footer";
 import { useSEO } from "@/hooks/useSEO";
-import { getPostBySlug } from "@/data/blogPosts";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 
 const BlogPost = () => {
@@ -14,15 +15,37 @@ const BlogPost = () => {
     // Validate lang
     const currentLang = (lang === 'pt' || lang === 'es' || lang === 'en') ? lang : 'en';
 
-    const post = getPostBySlug(currentLang, slug || '');
+    const { data: post, isLoading } = useQuery({
+        queryKey: ['blog-post', slug, currentLang],
+        queryFn: async () => {
+            const { data, error } = await supabase
+                .from('blog_posts')
+                .select('*')
+                .eq('slug', slug)
+                .eq('language', currentLang)
+                .single();
+            
+            if (error) throw error;
+            return data;
+        },
+        enabled: !!slug
+    });
 
     useSEO({
-        title: post ? `${post.title} - OnePageBook Blog` : 'Post Not Found',
-        description: post?.excerpt || '',
+        title: post ? `${post.meta_title || post.title} - OnePageBook Blog` : (isLoading ? 'Carregando...' : 'Post Not Found'),
+        description: post?.meta_description || post?.excerpt || '',
         lang: currentLang,
         path: `/${currentLang}/blog/${slug}`,
-        imageUrl: post?.coverImage
+        imageUrl: post?.featured_image
     });
+
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            </div>
+        );
+    }
 
     if (!post) {
         return <Navigate to={`/${currentLang}/blog`} replace />;
@@ -43,7 +66,7 @@ const BlogPost = () => {
     };
 
     return (
-        <div className="min-h-screen bg-background font-sans">
+        <div className="min-h-screen bg-background font-sans flex flex-col">
             {/* Header */}
             <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                 <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -68,16 +91,16 @@ const BlogPost = () => {
             </header>
 
             {/* Main Content */}
-            <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow">
                 <article className="max-w-3xl mx-auto">
                     {/* Post Header */}
                     <header className="mb-10 text-center">
                         <div className="flex items-center justify-center gap-2 mb-6">
-                            {post.tags.map(tag => (
-                                <span key={tag} className="inline-flex items-center rounded-full border border-transparent bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
-                                    {tag}
+                            {post.category && (
+                                <span className="inline-flex items-center rounded-full border border-transparent bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+                                    {post.category}
                                 </span>
-                            ))}
+                            )}
                         </div>
 
                         <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6 text-foreground leading-tight">
@@ -87,7 +110,7 @@ const BlogPost = () => {
                         <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
                             <span className="flex items-center gap-2">
                                 <Calendar className="h-4 w-4" />
-                                {post.date}
+                                {new Date(post.published_at).toLocaleDateString(currentLang === 'pt' ? 'pt-BR' : currentLang === 'es' ? 'es-ES' : 'en-US')}
                             </span>
                             <span className="flex items-center gap-2">
                                 <User className="h-4 w-4" />
@@ -97,10 +120,10 @@ const BlogPost = () => {
                     </header>
 
                     {/* Cover Image (if exists) */}
-                    {post.coverImage && (
+                    {post.featured_image && (
                         <div className="mb-10 rounded-xl overflow-hidden shadow-lg">
                             <img
-                                src={post.coverImage}
+                                src={post.featured_image}
                                 alt={post.title}
                                 className="w-full h-auto object-cover max-h-[500px]"
                             />
