@@ -21,7 +21,7 @@ const BlogIndex = () => {
                 .from('blog_posts')
                 .select('*')
                 .eq('language', currentLang)
-                .order('published_at', { ascending: false });
+                .order('created_at', { ascending: false });
             
             if (error) throw error;
             return data;
@@ -85,7 +85,7 @@ const BlogIndex = () => {
                                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
                                         <span className="flex items-center gap-1">
                                             <Calendar className="h-4 w-4" />
-                                            {new Date(post.published_at).toLocaleDateString(currentLang === 'pt' ? 'pt-BR' : currentLang === 'es' ? 'es-ES' : 'en-US')}
+                                            {new Date(post.created_at).toLocaleDateString(currentLang === 'pt' ? 'pt-BR' : currentLang === 'es' ? 'es-ES' : 'en-US')}
                                         </span>
                                         <span className="flex items-center gap-1">
                                             <User className="h-4 w-4" />

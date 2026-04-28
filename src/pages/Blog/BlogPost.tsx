@@ -110,7 +110,7 @@ const BlogPost = () => {
                         <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
                             <span className="flex items-center gap-2">
                                 <Calendar className="h-4 w-4" />
-                                {new Date(post.published_at).toLocaleDateString(currentLang === 'pt' ? 'pt-BR' : currentLang === 'es' ? 'es-ES' : 'en-US')}
+                                {new Date(post.created_at).toLocaleDateString(currentLang === 'pt' ? 'pt-BR' : currentLang === 'es' ? 'es-ES' : 'en-US')}
                             </span>
                             <span className="flex items-center gap-2">
                                 <User className="h-4 w-4" />
